@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/intro_page.dart';
 import 'package:sizer/sizer.dart';
 
@@ -10,6 +12,7 @@ class SelectLanguagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    LocalsController localsController = Get.find();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -64,15 +67,20 @@ class SelectLanguagePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: 0.7 * w,
-                      height: 45.0.sp,
-                      decoration: BoxDecoration(
-                        color: Color(0xff2F6782),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                  Container(
+                    width: 0.7 * w,
+                    height: 45.0.sp,
+                    decoration: BoxDecoration(
+                      color: Color(0xff2F6782),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        localsController.SetArabicLocale();
+                        logError(Localizations.localeOf(context).languageCode);
+                        Get.to(() => IntroPage(),
+                            transition: Transition.rightToLeft);
+                      },
                       child: Center(
                         child: Text(
                           "العربية",
@@ -88,18 +96,19 @@ class SelectLanguagePage extends StatelessWidget {
                   SizedBox(
                     height: 15.0.sp,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => IntroPage(),
-                          transition: Transition.rightToLeft);
-                    },
-                    child: Container(
-                      width: 0.7 * w,
-                      height: 45.0.sp,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Color(0xffB1B1B1), width: 2),
-                      ),
+                  Container(
+                    width: 0.7 * w,
+                    height: 45.0.sp,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0xffB1B1B1), width: 2),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        localsController.SetEnglishLocale();
+                        Get.to(() => IntroPage(),
+                            transition: Transition.rightToLeft);
+                      },
                       child: Center(
                         child: Text(
                           "English",

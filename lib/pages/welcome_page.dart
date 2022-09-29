@@ -47,7 +47,7 @@ class WelcomePage extends StatelessWidget {
               height: 25.0.sp,
             ),
             Text(
-              "Welcome",
+              "welcome".tr,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 25.0.sp,
@@ -85,7 +85,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    "Login",
+                    "login".tr,
                     style: TextStyle(
                       color: Color(0xff2F6782),
                       fontSize: 18.0.sp,
@@ -108,7 +108,7 @@ class WelcomePage extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    "Sign Up",
+                    "signup".tr,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0.sp,

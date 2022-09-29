@@ -2,6 +2,8 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/locals.dart';
 import 'package:safqa/pages/home.dart';
 import 'package:sizer/sizer.dart';
 
@@ -31,11 +33,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    LocalsController localsController = Get.put(LocalsController());
     return Sizer(
       builder: (BuildContext context, Orientation orientation,
               DeviceType deviceType) =>
           GetMaterialApp(
         debugShowCheckedModeBanner: false,
+        locale: localsController.currenetLocale,
+        translations: LocaleString(),
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.indigo,

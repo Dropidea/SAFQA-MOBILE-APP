@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _rememberMeFlag = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   void toggleObsecure() {
     _obsecureflag = !_obsecureflag;
@@ -97,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "Login",
+                              "login".tr,
                               style: TextStyle(
                                   color: Color(0xff2F6782),
                                   fontSize: 20.0.sp,
@@ -107,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                       Form(
-                        autovalidateMode: AutovalidateMode.always,
+                        key: formKey,
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 40),
                           child: Column(
@@ -119,13 +120,13 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(fontSize: 15.0.sp),
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.email_outlined),
-                                  hintText: "Email",
+                                  hintText: "email".tr,
                                   hintStyle: TextStyle(fontSize: 15.0.sp),
                                 ),
                                 validator: (String? value) =>
                                     EmailValidator.validate(value!)
                                         ? null
-                                        : "Please enter a valid email",
+                                        : "please_enter_a_valid_email".tr,
                               ),
                               SizedBox(
                                 height: 5.0.sp,
@@ -142,13 +143,14 @@ class _LoginPageState extends State<LoginPage> {
                                     icon: Icon(Icons.remove_red_eye),
                                     onPressed: toggleObsecure,
                                   ),
-                                  hintText: "Email",
+                                  hintText: "password".tr,
                                   hintStyle: TextStyle(fontSize: 15.0.sp),
                                 ),
                                 validator: (String? value) {
                                   if ((!(value!.length > 5) &&
                                       value.isNotEmpty)) {
-                                    return "Password should contain more than 5 characters";
+                                    return "password_should_contain_more_than_5_characters"
+                                        .tr;
                                   }
                                   return null;
                                 },
@@ -165,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                       logSuccess("Forgot Your Password?");
                                     },
                                     child: Text(
-                                      "Forgot your password?",
+                                      "forget_pass".tr,
                                       style: TextStyle(
                                         color: Color(0xff00A7B3),
                                       ),
@@ -203,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                       width: 10,
                                     ),
                                     Text(
-                                      "Remember me",
+                                      "remember".tr,
                                       style: TextStyle(fontSize: 17.0.sp),
                                     )
                                   ],
@@ -212,18 +214,22 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(
                                 height: 10.0.sp,
                               ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  width: 0.7 * w,
-                                  height: 40.0.sp,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff2F6782),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
+                              Container(
+                                width: 0.7 * w,
+                                height: 40.0.sp,
+                                decoration: BoxDecoration(
+                                  color: Color(0xff2F6782),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    final isValid =
+                                        formKey.currentState!.validate();
+                                    if (!isValid) return;
+                                  },
                                   child: Center(
                                     child: Text(
-                                      "login",
+                                      "login".tr,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18.0.sp,
@@ -237,12 +243,12 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 5.0.sp,
                               ),
                               Text(
-                                "Or using fast login by fingerprint",
+                                "or_using_fast_login_by_fingerprint".tr,
                                 style: TextStyle(
                                     color: Color(0xff2F6782),
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w500,
-                                    decorationThickness: 6,
+                                    decorationThickness: 15,
                                     fontSize: 12.0.sp),
                               ),
                               SizedBox(
@@ -251,11 +257,11 @@ class _LoginPageState extends State<LoginPage> {
                               Align(
                                 child: Container(
                                   width: 80.0.sp,
-                                  height: 100.0.sp,
+                                  height: 80.0.sp,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage(
-                                        "assets/images/logo/logo.png",
+                                        "assets/images/finger-print.png",
                                       ),
                                       fit: BoxFit.cover,
                                     ),
@@ -266,13 +272,13 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 10.0.sp,
                               ),
                               Text(
-                                "Don't have an account?",
+                                "dont_have_account".tr,
                                 style: TextStyle(fontSize: 13.0.sp),
                               ),
                               GestureDetector(
                                 onTap: () => Get.to(() => SignUpPage()),
                                 child: Text(
-                                  "Create an account",
+                                  "create_an_account".tr,
                                   style: TextStyle(
                                     color: Color(0xff00A7B3),
                                     decoration: TextDecoration.underline,

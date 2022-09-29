@@ -20,6 +20,8 @@ class CompleteSignUpPage extends StatefulWidget {
 class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   SignUpController _signUpController = Get.put(SignUpController());
   PageController _pageController = PageController();
+  final formKey = GlobalKey<FormState>();
+
   bool _agreeFlag = false;
   final defaultPinTheme = PinTheme(
     fieldWidth: 18,
@@ -126,6 +128,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         child: Theme(
                             data: Theme.of(context),
                             child: Form(
+                              key: formKey,
                               child: MyStepper(
                                 type: MyStepperType.horizontal,
                                 onStepContinue: continued,

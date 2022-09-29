@@ -61,12 +61,20 @@ class _IntroPageState extends State<IntroPage> {
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        "Skip",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Color(0xff2F6782),
-                          fontSize: 22.0.sp,
+                      child: InkWell(
+                        onTap: () {
+                          this._pageController.jumpToPage(4);
+                          _currentPageNotifier.value = 4;
+                          flag = true;
+                          setState(() {});
+                        },
+                        child: Text(
+                          "skip".tr,
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Color(0xff2F6782),
+                            fontSize: 22.0.sp,
+                          ),
                         ),
                       ),
                     )
@@ -118,7 +126,7 @@ class _IntroPageState extends State<IntroPage> {
                           ),
                           child: Center(
                             child: Text(
-                              "Let's Start",
+                              'start'.tr,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.0.sp,
