@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/signup.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _rememberMeFlag = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  LoginController _loginController = Get.find();
   final formKey = GlobalKey<FormState>();
 
   void toggleObsecure() {
@@ -222,10 +224,18 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+
                                     final isValid =
                                         formKey.currentState!.validate();
                                     if (!isValid) return;
+
+                                    await _loginController.login(
+                                        _emailController.text,
+                                        _passwordController.text,
+                                        _rememberMeFlag);
                                   },
                                   child: Center(
                                     child: Text(
@@ -272,7 +282,7 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 10.0.sp,
                               ),
                               Text(
-                                "dont_have_account".tr,
+                                "dont_have_an_account".tr,
                                 style: TextStyle(fontSize: 13.0.sp),
                               ),
                               GestureDetector(

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-// TODO(dragostis): Missing functionality:
-//   * mobile horizontal mode with adding/removing steps
-//   * alternative labeling
-//   * stepper feedback in the case of high-latency interactions
 
 /// The state of a [MyStep] which is used to control the style of the circle and
 /// text.

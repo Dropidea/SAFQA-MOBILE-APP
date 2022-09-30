@@ -56,30 +56,32 @@ class _IntroPageState extends State<IntroPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: InkWell(
-                        onTap: () {
-                          this._pageController.jumpToPage(4);
-                          _currentPageNotifier.value = 4;
-                          flag = true;
-                          setState(() {});
-                        },
-                        child: Text(
-                          "skip".tr,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Color(0xff2F6782),
-                            fontSize: 22.0.sp,
-                          ),
-                        ),
+                flag
+                    ? Container()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: InkWell(
+                              onTap: () {
+                                this._pageController.jumpToPage(4);
+                                _currentPageNotifier.value = 4;
+                                flag = true;
+                                setState(() {});
+                              },
+                              child: Text(
+                                "skip".tr,
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Color(0xff2F6782),
+                                  fontSize: 22.0.sp,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
                 Container(
                   width: w,
                   height: 1.7 * h / 3,
