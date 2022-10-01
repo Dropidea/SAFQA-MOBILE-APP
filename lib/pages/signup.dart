@@ -106,9 +106,8 @@ class SignUpPage extends StatelessWidget {
     return FutureBuilder(
         future: _signUpController.getGlobalData(),
         builder: (context, snp) {
-          var countries = snp.data['country'];
-
           if (snp.connectionState == ConnectionState.done) {
+            var countries = snp.data['country'];
             return Column(
               children: [
                 Row(
@@ -134,9 +133,14 @@ class SignUpPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Align(
                         child: Container(
-                          margin: EdgeInsets.only(bottom: index == 4 ? 20 : 0),
+                          margin: EdgeInsets.only(
+                              bottom: index == countries.length - 1 ? 20 : 0),
                           child: GestureDetector(
-                            onTap: () => _pageController.jumpToPage(1),
+                            onTap: () {
+                              _signUpController.dataToRegister['country_id'] =
+                                  index + 1;
+                              _pageController.jumpToPage(1);
+                            },
                             child: Card(
                               elevation: 10,
                               shape: RoundedRectangleBorder(
@@ -210,90 +214,83 @@ class SignUpPage extends StatelessWidget {
         });
   }
 
-  Column _signUpPage2(double w, double h) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Select Your Business Type",
-                style: TextStyle(
-                  fontSize: 16.0.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 20.0.sp,
-        ),
-        GestureDetector(
-          onTap: () => Get.to(() => CompleteSignUpPage()),
-          child: Card(
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Container(
-              width: 0.5 * w,
-              height: 0.25 * h,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image(
-                    image: AssetImage("assets/images/licomp.png"),
-                  ),
-                  SizedBox(
-                    height: 5.0.sp,
-                  ),
-                  Text(
-                    "Licensed Company",
-                    style: TextStyle(
-                      fontSize: 16.0.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10.0.sp,
-        ),
-        Card(
-          elevation: 10,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Container(
-            width: 0.5 * w,
-            height: 0.25 * h,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+  Widget _signUpPage2(double w, double h) {
+    return FutureBuilder(
+        future: _signUpController.getGlobalData(),
+        builder: (context, snp) {
+          if (snp.connectionState == ConnectionState.done) {
+            var businessTypes = snp.data['business_type'];
+            return Column(
               children: [
-                Image(
-                  image: AssetImage("assets/images/home_business.png"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Select Your Business Type",
+                        style: TextStyle(
+                          fontSize: 16.0.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: 5.0.sp,
+                  height: 20.0.sp,
                 ),
-                Text(
-                  "Home Business",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0.sp,
+                Expanded(
+                  child: ListView.separated(
+                    itemBuilder: (context, index) => Align(
+                      child: GestureDetector(
+                        onTap: () {
+                          _signUpController.dataToRegister['business_type_id'] =
+                              index + 1;
+                          Get.to(() => CompleteSignUpPage());
+                        },
+                        child: Card(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: Container(
+                            width: 0.5 * w,
+                            height: 0.25 * h,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage("assets/images/licomp.png"),
+                                ),
+                                SizedBox(
+                                  height: 5.0.sp,
+                                ),
+                                Text(
+                                  businessTypes[index]['name_en'],
+                                  style: TextStyle(
+                                    fontSize: 16.0.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    itemCount: 2,
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 10.0.sp,
+                    ),
                   ),
                 ),
               ],
-            ),
-          ),
-        )
-      ],
-    );
+            );
+          } else
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+        });
   }
 }

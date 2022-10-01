@@ -148,14 +148,14 @@ class _LoginPageState extends State<LoginPage> {
                                   hintText: "password".tr,
                                   hintStyle: TextStyle(fontSize: 15.0.sp),
                                 ),
-                                validator: (String? value) {
-                                  if ((!(value!.length > 5) &&
-                                      value.isNotEmpty)) {
-                                    return "password_should_contain_more_than_5_characters"
-                                        .tr;
-                                  }
-                                  return null;
-                                },
+                                // validator: (String? value) {
+                                //   if ((!(value!.length > 5) &&
+                                //       value.isNotEmpty)) {
+                                //     return "password_should_contain_more_than_5_characters"
+                                //         .tr;
+                                //   }
+                                //   return null;
+                                // },
                               ),
                               SizedBox(
                                 height: 10.0.sp,

@@ -4,8 +4,8 @@ import 'package:safqa/pages/home_page.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
-class SignInDonePage extends StatelessWidget {
-  const SignInDonePage({super.key});
+class SignUpDonePage extends StatelessWidget {
+  const SignUpDonePage({super.key});
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;

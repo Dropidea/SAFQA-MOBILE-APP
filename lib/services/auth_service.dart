@@ -31,4 +31,29 @@ class AuthService {
       return null;
     }
   }
+
+  Future register(data) async {
+    try {
+      var res = await _dio.post(EndPoints.baseURL + EndPoints.registerEndPoint,
+          data: data);
+      var jsonRes = res.data;
+      logSuccess("register success");
+      return null;
+    } on DioError catch (e) {
+      // Map<String, dynamic> x = json.decode(
+      //   json.encode(e.response!.data[0].toString()),
+      // );
+      Map<String, dynamic> obj = e.response!.data;
+
+      return obj;
+      // Get.showSnackbar(GetSnackBar(
+      //   duration: Duration(milliseconds: 2000),
+      //   backgroundColor: Colors.red,
+      //   message: e.response!.data['error'] +
+      //       " " +
+      //       e.response!.statusCode!.toString(),
+      // ));
+      // return e.response!.data;
+    }
+  }
 }

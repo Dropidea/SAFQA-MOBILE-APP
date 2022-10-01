@@ -7,15 +7,24 @@ class SignUpTextField extends StatelessWidget {
     this.prefixIcon,
     this.keyBoardType,
     this.obsecureText = false,
+    this.readOnly = false,
     this.prefix,
+    this.validator,
+    this.onchanged,
+    this.initialValue,
+    this.controller,
   });
 
   final String hintText;
   final Widget? prefixIcon;
   final Widget? prefix;
   final TextInputType? keyBoardType;
-
+  final String? Function(String? s)? validator;
+  final String? initialValue;
+  final TextEditingController? controller;
+  final Function(String? s)? onchanged;
   bool obsecureText = false;
+  bool readOnly = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +43,12 @@ class SignUpTextField extends StatelessWidget {
             prefixIcon: prefixIcon,
             prefix: prefix,
           ),
+          validator: validator,
           obscureText: obsecureText,
+          initialValue: initialValue,
+          onChanged: onchanged,
+          readOnly: readOnly,
+          controller: controller,
         ),
       ),
     );

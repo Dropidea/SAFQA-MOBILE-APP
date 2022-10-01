@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -18,7 +19,7 @@ class CompleteSignUpPage extends StatefulWidget {
 }
 
 class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
-  SignUpController _signUpController = Get.put(SignUpController());
+  SignUpController _signUpController = Get.find();
   PageController _pageController = PageController();
   final formKey = GlobalKey<FormState>();
 
@@ -70,7 +71,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
               ),
             ),
             width: w,
-            height: 0.9 * h,
+            height: h,
             child: Column(
               children: [
                 Row(
@@ -128,6 +129,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         child: Theme(
                             data: Theme.of(context),
                             child: Form(
+                              autovalidateMode: AutovalidateMode.always,
                               key: formKey,
                               child: MyStepper(
                                 type: MyStepperType.horizontal,
@@ -160,9 +162,53 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                                               Color(0xff2D5571),
                                                           borderRadius: 20,
                                                           text: "Send",
-                                                          func: () {
-                                                            Get.to(() =>
-                                                                SignInDonePage());
+                                                          func: () async {
+                                                            formKey
+                                                                .currentState!
+                                                                .validate();
+                                                            var res = await _signUpController
+                                                                .register(
+                                                                    _signUpController
+                                                                        .dataToRegister);
+
+                                                            if (res == null)
+                                                              Get.to(() =>
+                                                                  SignUpDonePage());
+                                                            else {
+                                                              if (res.containsKey("email") ||
+                                                                  res.containsKey(
+                                                                      "phone_number_manager") ||
+                                                                  res.containsKey(
+                                                                      "full_name") ||
+                                                                  res.containsKey(
+                                                                      "password") ||
+                                                                  res.containsKey(
+                                                                      "password_confirmation"))
+                                                                _currentStep =
+                                                                    2;
+                                                              else if (res
+                                                                      .containsKey(
+                                                                          "phone_number") ||
+                                                                  res.containsKey(
+                                                                      "company_name") ||
+                                                                  res.containsKey(
+                                                                      "name_en") ||
+                                                                  res.containsKey(
+                                                                      "name_ar") ||
+                                                                  res.containsKey(
+                                                                      "category_id") ||
+                                                                  res.containsKey(
+                                                                      "work_email"))
+                                                                _currentStep =
+                                                                    2;
+                                                              else
+                                                                _currentStep =
+                                                                    1;
+                                                              setState(() {});
+                                                              formKey
+                                                                  .currentState!
+                                                                  .validate();
+                                                            }
                                                           },
                                                           textSize: 15.0.sp)
                                                     ],
@@ -467,12 +513,21 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 children: [
                   SignUpTextField(
                     hintText: "Legal Company Name",
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['company_name'] = s!;
+                    },
                   ),
                   SignUpTextField(
                     hintText: "Company Brand Name (EN)",
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['name_en'] = s!;
+                    },
                   ),
                   SignUpTextField(
                     hintText: "Company Brand Name (AR)",
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['ar'] = s!;
+                    },
                   ),
                   Container(
                       margin: EdgeInsets.symmetric(vertical: 5),
@@ -496,25 +551,50 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                               },
                             ),
                             hintText: 'Company Phone Number',
-                          ))
-                      // IntlPhoneField(
-                      //   textAlignVertical: TextAlignVertical.center,
-                      //   decoration: InputDecoration(
-                      //     hintText: 'Company Phone Number',
-                      //     border: InputBorder.none,
-                      //   ),
-                      //   initialCountryCode: '+1',
-                      //   onChanged: (phone) {
-                      //     print(phone.completeNumber);
-                      //   },
-                      // ),
-                      ),
+                          ))),
                   SignUpTextField(
                     hintText: "Company Email",
                     keyBoardType: TextInputType.emailAddress,
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['work_email'] = s!;
+                    },
                   ),
-                  SignUpTextField(
-                    hintText: "Categories",
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: new BorderRadius.circular(10.0),
+                    ),
+                    child: Obx(
+                      () {
+                        List categories =
+                            _signUpController.globalData['category'];
+                        List<String> ids = categories
+                            .map<String>((e) => e['id'].toString())
+                            .toList();
+                        List<String> categoryNames = categories
+                            .map<String>((e) => e['name'].toString())
+                            .toList();
+                        return DropdownButtonFormField<String>(
+                          decoration: InputDecoration(border: InputBorder.none),
+                          items: ids
+                              .map((e) => DropdownMenuItem<String>(
+                                    child: Text(categoryNames[ids.indexOf(e)]),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          value: ids[_signUpController.selectedCategoryDrop],
+                          onChanged: (value) {
+                            _signUpController.SelectCategoryDrop(
+                                ids.indexOf(value!));
+
+                            _signUpController.dataToRegister['category_id'] =
+                                value;
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -531,20 +611,30 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 primary: false,
                 children: [
                   SignUpTextField(
-                    hintText: "Legal Company Name",
+                    hintText: "Bank Account Name",
+                    onchanged: (s) => _signUpController
+                        .dataToRegister['bank_account_ame'] = s!,
                   ),
                   SignUpTextField(
                     hintText: "Company Brand Name (EN)",
+                    onchanged: (s) =>
+                        _signUpController.dataToRegister['bank_name'] = s!,
                   ),
                   SignUpTextField(
                     hintText: "Bank Name",
+                    onchanged: (s) =>
+                        _signUpController.dataToRegister['bank_name'] = s!,
                   ),
                   SignUpTextField(
                     hintText: "Account Number",
                     keyBoardType: TextInputType.number,
+                    onchanged: (s) =>
+                        _signUpController.dataToRegister['account_number'] = s!,
                   ),
                   SignUpTextField(
                     hintText: "IBAN",
+                    onchanged: (s) =>
+                        _signUpController.dataToRegister['iban'] = s!,
                   ),
                 ],
               ),
@@ -562,10 +652,24 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 children: [
                   SignUpTextField(
                     hintText: "Manager Full Name",
+                    onchanged: (s) =>
+                        _signUpController.dataToRegister['full_name'] = s!,
                   ),
                   SignUpTextField(
                     hintText: "Email",
                     keyBoardType: TextInputType.emailAddress,
+                    onchanged: (s) =>
+                        _signUpController.dataToRegister['email'] = s!,
+                    validator: (s) {
+                      if (!EmailValidator.validate(s!))
+                        return "please_enter_a_valid_email".tr;
+                      else if (_signUpController.errors == null)
+                        return null;
+                      else if (_signUpController.errors.containsKey('email')) {
+                        return _signUpController.errors['email'][0].toString();
+                      } else
+                        return null;
+                    },
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
@@ -589,6 +693,19 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                 _signUpController.SelectDrop(value!);
                               },
                             ),
+                            onchanged: (s) {
+                              _signUpController
+                                  .dataToRegister['phone_number_manager'] = s!;
+                            },
+                            validator: (s) {
+                              if (_signUpController.errors == null) return null;
+                              return _signUpController.errors
+                                      .containsKey("phone_number_manager")
+                                  ? _signUpController
+                                      .errors['phone_number_manager'][0]
+                                      .toString()
+                                  : null;
+                            },
                             hintText: 'Manager Mobile Number',
                           )),
                       // IntlPhoneField(
@@ -607,13 +724,64 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                   SignUpTextField(
                     hintText: "Password",
                     obsecureText: true,
+                    onchanged: (s) =>
+                        _signUpController.dataToRegister['password'] = s!,
+                    validator: (s) {
+                      return _signUpController.errors.containsKey("password")
+                          ? _signUpController.errors['password'][0]
+                          : null;
+                    },
                   ),
                   SignUpTextField(
                     hintText: "Confirm Password",
                     obsecureText: true,
+                    validator: (s) {
+                      return _signUpController.errors
+                              .containsKey("password_confirmation")
+                          ? _signUpController.errors['password_confirmation'][0]
+                          : null;
+                    },
+                    onchanged: (s) => _signUpController
+                        .dataToRegister['password_confirmation'] = s!,
                   ),
-                  SignUpTextField(
-                    hintText: "Nationality",
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: new BorderRadius.circular(10.0),
+                    ),
+                    child: Obx(() {
+                      List countries = _signUpController.globalData['country'];
+                      List<String> ids = countries
+                          .map<String>(
+                            (e) => e['id'].toString(),
+                          )
+                          .toList();
+                      List<String> countriesNames = countries
+                          .map<String>(
+                            (e) => e['name_en'].toString(),
+                          )
+                          .toList();
+                      return DropdownButtonFormField<String>(
+                        decoration: InputDecoration(border: InputBorder.none),
+                        items: countriesNames
+                            .map((e) => DropdownMenuItem<String>(
+                                  child: Text(e),
+                                  value: e,
+                                ))
+                            .toList(),
+                        value: countriesNames[
+                            _signUpController.selectedNationalityDrop],
+                        onChanged: (value) {
+                          _signUpController.SelectNationalityDrop(
+                              countriesNames.indexOf(value!));
+
+                          _signUpController.dataToRegister['nationality_id'] =
+                              ids.indexOf(value);
+                        },
+                      );
+                    }),
                   ),
                 ],
               ),
