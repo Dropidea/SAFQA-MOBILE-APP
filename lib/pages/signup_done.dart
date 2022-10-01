@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:safqa/pages/home_page.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
-class SignUpDonePage extends StatelessWidget {
-  const SignUpDonePage({super.key});
+class SignInDonePage extends StatelessWidget {
+  const SignInDonePage({super.key});
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -68,16 +70,16 @@ class SignUpDonePage extends StatelessWidget {
             SizedBox(
               height: 80.0.sp,
             ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 0.7 * w,
-                height: 45.0.sp,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white.withOpacity(0.1),
-                  border: Border.all(color: Colors.white, width: 1.5),
-                ),
+            Container(
+              width: 0.7 * w,
+              height: 45.0.sp,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white.withOpacity(0.1),
+                border: Border.all(color: Colors.white, width: 1.5),
+              ),
+              child: InkWell(
+                onTap: () => Get.to(() => HomePage()),
                 child: Center(
                   child: Text(
                     "Home Page",

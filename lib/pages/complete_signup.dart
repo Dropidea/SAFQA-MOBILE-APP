@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:safqa/controllers/signupController.dart';
+import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/signup_done.dart';
 // import 'package:pinput/pinput.dart';
 import 'package:safqa/widgets/my_button.dart';
@@ -70,7 +70,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
               ),
             ),
             width: w,
-            height: h + 100,
+            height: 0.9 * h,
             child: Column(
               children: [
                 Row(
@@ -162,7 +162,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                                           text: "Send",
                                                           func: () {
                                                             Get.to(() =>
-                                                                SignUpDonePage());
+                                                                SignInDonePage());
                                                           },
                                                           textSize: 15.0.sp)
                                                     ],
@@ -460,60 +460,64 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   List<MyStep> stepList() => [
         MyStep(
             title: myLabel(0, 'Company information'),
-            content: Column(
-              children: [
-                SignUpTextField(
-                  hintText: "Legal Company Name",
-                ),
-                SignUpTextField(
-                  hintText: "Company Brand Name (EN)",
-                ),
-                SignUpTextField(
-                  hintText: "Company Brand Name (AR)",
-                ),
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: new BorderRadius.circular(10.0),
-                    ),
-                    child: Obx(() => SignUpTextField(
-                          keyBoardType: TextInputType.number,
-                          prefixIcon: DropdownButton<String>(
-                            items: _signUpController.drops
-                                .map((e) => DropdownMenuItem<String>(
-                                      child: Text(e),
-                                      value: e,
-                                    ))
-                                .toList(),
-                            value: _signUpController.selectedDrop,
-                            onChanged: (value) {
-                              _signUpController.SelectDrop(value!);
-                            },
-                          ),
-                          hintText: 'Company Phone Number',
-                        ))
-                    // IntlPhoneField(
-                    //   textAlignVertical: TextAlignVertical.center,
-                    //   decoration: InputDecoration(
-                    //     hintText: 'Company Phone Number',
-                    //     border: InputBorder.none,
-                    //   ),
-                    //   initialCountryCode: '+1',
-                    //   onChanged: (phone) {
-                    //     print(phone.completeNumber);
-                    //   },
-                    // ),
-                    ),
-                SignUpTextField(
-                  hintText: "Company Email",
-                  keyBoardType: TextInputType.emailAddress,
-                ),
-                SignUpTextField(
-                  hintText: "Categories",
-                ),
-              ],
+            content: SizedBox(
+              height: 50.0.h,
+              child: ListView(
+                primary: false,
+                children: [
+                  SignUpTextField(
+                    hintText: "Legal Company Name",
+                  ),
+                  SignUpTextField(
+                    hintText: "Company Brand Name (EN)",
+                  ),
+                  SignUpTextField(
+                    hintText: "Company Brand Name (AR)",
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: new BorderRadius.circular(10.0),
+                      ),
+                      child: Obx(() => SignUpTextField(
+                            keyBoardType: TextInputType.number,
+                            prefixIcon: DropdownButton<String>(
+                              items: _signUpController.drops
+                                  .map((e) => DropdownMenuItem<String>(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              value: _signUpController.selectedDrop,
+                              onChanged: (value) {
+                                _signUpController.SelectDrop(value!);
+                              },
+                            ),
+                            hintText: 'Company Phone Number',
+                          ))
+                      // IntlPhoneField(
+                      //   textAlignVertical: TextAlignVertical.center,
+                      //   decoration: InputDecoration(
+                      //     hintText: 'Company Phone Number',
+                      //     border: InputBorder.none,
+                      //   ),
+                      //   initialCountryCode: '+1',
+                      //   onChanged: (phone) {
+                      //     print(phone.completeNumber);
+                      //   },
+                      // ),
+                      ),
+                  SignUpTextField(
+                    hintText: "Company Email",
+                    keyBoardType: TextInputType.emailAddress,
+                  ),
+                  SignUpTextField(
+                    hintText: "Categories",
+                  ),
+                ],
+              ),
             ),
             isActive: _currentStep >= 0,
             state: _currentStep >= 0
@@ -521,25 +525,29 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 : MyStepState.disabled),
         MyStep(
             title: myLabel(1, 'Bank Account Details'),
-            content: Column(
-              children: [
-                SignUpTextField(
-                  hintText: "Legal Company Name",
-                ),
-                SignUpTextField(
-                  hintText: "Company Brand Name (EN)",
-                ),
-                SignUpTextField(
-                  hintText: "Bank Name",
-                ),
-                SignUpTextField(
-                  hintText: "Account Number",
-                  keyBoardType: TextInputType.number,
-                ),
-                SignUpTextField(
-                  hintText: "IBAN",
-                ),
-              ],
+            content: SizedBox(
+              height: 50.0.h,
+              child: ListView(
+                primary: false,
+                children: [
+                  SignUpTextField(
+                    hintText: "Legal Company Name",
+                  ),
+                  SignUpTextField(
+                    hintText: "Company Brand Name (EN)",
+                  ),
+                  SignUpTextField(
+                    hintText: "Bank Name",
+                  ),
+                  SignUpTextField(
+                    hintText: "Account Number",
+                    keyBoardType: TextInputType.number,
+                  ),
+                  SignUpTextField(
+                    hintText: "IBAN",
+                  ),
+                ],
+              ),
             ),
             isActive: _currentStep >= 1,
             state: _currentStep >= 1
@@ -547,64 +555,68 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 : MyStepState.disabled),
         MyStep(
             title: myLabel(2, 'Company Manager User Login Information'),
-            content: Column(
-              children: [
-                SignUpTextField(
-                  hintText: "Manager Full Name",
-                ),
-                SignUpTextField(
-                  hintText: "Email",
-                  keyBoardType: TextInputType.emailAddress,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: new BorderRadius.circular(10.0),
+            content: SizedBox(
+              height: 50.0.h,
+              child: ListView(
+                primary: false,
+                children: [
+                  SignUpTextField(
+                    hintText: "Manager Full Name",
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10, top: 5),
-                    child: Obx(() => SignUpTextField(
-                          keyBoardType: TextInputType.number,
-                          prefixIcon: DropdownButton<String>(
-                            items: _signUpController.drops
-                                .map((e) => DropdownMenuItem<String>(
-                                      child: Text(e),
-                                      value: e,
-                                    ))
-                                .toList(),
-                            value: _signUpController.selectedDrop,
-                            onChanged: (value) {
-                              _signUpController.SelectDrop(value!);
-                            },
-                          ),
-                          hintText: 'Manager Mobile Number',
-                        )),
-                    // IntlPhoneField(
-                    //   textAlignVertical: TextAlignVertical.center,
-                    //   decoration: InputDecoration(
-                    //     hintText: 'Manager Mobile Number',
-                    //     border: InputBorder.none,
-                    //   ),
-                    //   initialCountryCode: '+1',
-                    //   onChanged: (phone) {
-                    //     print(phone.completeNumber);
-                    //   },
-                    // ),
+                  SignUpTextField(
+                    hintText: "Email",
+                    keyBoardType: TextInputType.emailAddress,
                   ),
-                ),
-                SignUpTextField(
-                  hintText: "Password",
-                  obsecureText: true,
-                ),
-                SignUpTextField(
-                  hintText: "Confirm Password",
-                  obsecureText: true,
-                ),
-                SignUpTextField(
-                  hintText: "Nationality",
-                ),
-              ],
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: new BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+                      child: Obx(() => SignUpTextField(
+                            keyBoardType: TextInputType.number,
+                            prefixIcon: DropdownButton<String>(
+                              items: _signUpController.drops
+                                  .map((e) => DropdownMenuItem<String>(
+                                        child: Text(e),
+                                        value: e,
+                                      ))
+                                  .toList(),
+                              value: _signUpController.selectedDrop,
+                              onChanged: (value) {
+                                _signUpController.SelectDrop(value!);
+                              },
+                            ),
+                            hintText: 'Manager Mobile Number',
+                          )),
+                      // IntlPhoneField(
+                      //   textAlignVertical: TextAlignVertical.center,
+                      //   decoration: InputDecoration(
+                      //     hintText: 'Manager Mobile Number',
+                      //     border: InputBorder.none,
+                      //   ),
+                      //   initialCountryCode: '+1',
+                      //   onChanged: (phone) {
+                      //     print(phone.completeNumber);
+                      //   },
+                      // ),
+                    ),
+                  ),
+                  SignUpTextField(
+                    hintText: "Password",
+                    obsecureText: true,
+                  ),
+                  SignUpTextField(
+                    hintText: "Confirm Password",
+                    obsecureText: true,
+                  ),
+                  SignUpTextField(
+                    hintText: "Nationality",
+                  ),
+                ],
+              ),
             ),
             isActive: _currentStep >= 2,
             state: _currentStep >= 2
@@ -612,89 +624,93 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 : MyStepState.disabled),
         MyStep(
             title: myLabel(3, 'Send OPT'),
-            content: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 15.0.sp),
-                  child: Text(
-                    "We've almost done!",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20.0.sp),
+            content: SizedBox(
+              height: 50.0.h,
+              child: ListView(
+                primary: false,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 10, bottom: 15.0.sp),
+                    child: Text(
+                      "We've almost done!",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0.sp),
+                    ),
                   ),
-                ),
-                SignUpTextField(
-                  hintText: "00201084433369",
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 25,
-                        height: 30,
-                        child: Checkbox(
-                          activeColor: Color(0xff00A7B3),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5.0),
-                            ),
-                          ), // Rounded Checkbox
-                          onChanged: (value) {
-                            _agreeFlag = value!;
-                            setState(() {});
-                          },
-                          value: _agreeFlag,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: RichText(
-                          softWrap: true,
-                          text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                text:
-                                    'By clicking on send OPT button, you agree that you are not acting as a fundraiser, Your activities are in compliance with the rules and regulations of your country and I agree to receive promotional content and special offers via email .You can unsubscribe anytime.You agree to ',
-                                style: TextStyle(
-                                  color: Color(0xff858585),
-                                  fontSize: 12.0.sp,
-                                ),
+                  SignUpTextField(
+                    hintText: "00201084433369",
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 25,
+                          height: 30,
+                          child: Checkbox(
+                            activeColor: Color(0xff00A7B3),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
                               ),
-                              TextSpan(
-                                text: 'Terms of Use',
-                                style: TextStyle(
-                                  color: Color(0xff00A7B3),
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 12.0.sp,
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' and ',
-                                style: TextStyle(
-                                  color: Color(0xff858585),
-                                  fontSize: 12.0.sp,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'Privacy Policy.',
-                                style: TextStyle(
-                                  color: Color(0xff00A7B3),
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 12.0.sp,
-                                ),
-                              ),
-                            ],
+                            ), // Rounded Checkbox
+                            onChanged: (value) {
+                              _agreeFlag = value!;
+                              setState(() {});
+                            },
+                            value: _agreeFlag,
                           ),
                         ),
-                      )
-                    ],
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: RichText(
+                            softWrap: true,
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      'By clicking on send OPT button, you agree that you are not acting as a fundraiser, Your activities are in compliance with the rules and regulations of your country and I agree to receive promotional content and special offers via email .You can unsubscribe anytime.You agree to ',
+                                  style: TextStyle(
+                                    color: Color(0xff858585),
+                                    fontSize: 12.0.sp,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Terms of Use',
+                                  style: TextStyle(
+                                    color: Color(0xff00A7B3),
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 12.0.sp,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' and ',
+                                  style: TextStyle(
+                                    color: Color(0xff858585),
+                                    fontSize: 12.0.sp,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Privacy Policy.',
+                                  style: TextStyle(
+                                    color: Color(0xff00A7B3),
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 12.0.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             isActive: _currentStep >= 3,
             state: _currentStep >= 3
