@@ -61,6 +61,7 @@ class SelectLanguagePage extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: 0.07 * h),
                     child: Text(
                       "Please choose the language",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xff5D5E60),
                         fontSize: 20.0.sp,

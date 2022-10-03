@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/pages/home_page.dart';
+import 'package:safqa/pages/login.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
@@ -79,7 +79,7 @@ class SignUpDonePage extends StatelessWidget {
                 border: Border.all(color: Colors.white, width: 1.5),
               ),
               child: InkWell(
-                onTap: () => Get.to(() => HomePage()),
+                onTap: () => Get.to(() => LoginPage()),
                 child: Center(
                   child: Text(
                     "Home Page",

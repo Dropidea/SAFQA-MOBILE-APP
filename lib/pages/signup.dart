@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/complete_signup.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -106,6 +107,10 @@ class SignUpPage extends StatelessWidget {
     return FutureBuilder(
         future: _signUpController.getGlobalData(),
         builder: (context, snp) {
+          if (!snp.hasData)
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           if (snp.connectionState == ConnectionState.done) {
             var countries = snp.data['country'];
             return Column(
@@ -139,6 +144,7 @@ class SignUpPage extends StatelessWidget {
                             onTap: () {
                               _signUpController.dataToRegister['country_id'] =
                                   index + 1;
+                              logSuccess(countries[index]["name_en"]);
                               _pageController.jumpToPage(1);
                             },
                             child: Card(
@@ -158,6 +164,7 @@ class SignUpPage extends StatelessWidget {
                                     ),
                                     Text(
                                       countries[index]['name_en'],
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 16.0.sp,
                                         fontWeight: FontWeight.w500,
@@ -247,6 +254,7 @@ class SignUpPage extends StatelessWidget {
                         onTap: () {
                           _signUpController.dataToRegister['business_type_id'] =
                               index + 1;
+                          logSuccess(index + 1);
                           Get.to(() => CompleteSignUpPage());
                         },
                         child: Card(
@@ -268,6 +276,7 @@ class SignUpPage extends StatelessWidget {
                                 ),
                                 Text(
                                   businessTypes[index]['name_en'],
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16.0.sp,
                                     fontWeight: FontWeight.w500,

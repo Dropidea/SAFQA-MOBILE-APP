@@ -10,62 +10,79 @@ class SignUpController extends GetxController {
   var dataToRegister = {
     "country_id": 3,
     "phone_number_code_id": 7,
-    "phone_number": "01060929656",
+    "phone_number": "",
     "business_type_id": 1,
     "category_id": 2,
     "language_id": 2,
-    "company_name": "cn",
-    "name_en": "cn",
-    "name_ar": "اش",
-    "work_email": "work2a@gmail.com",
-    "bank_account_ame": 1234,
-    "bank_name": "bankname",
-    "account_number": "123",
-    "iban": "123",
-    "email": "email16@gmail.com",
-    "full_name": "fullname",
-    "phone_number_code_manager_id": 4,
-    "phone_number_manager": "01060629466",
+    "company_name": "",
+    "name_en": "",
+    "name_ar": "",
+    "work_email": "",
+    "bank_account_ame": "",
+    "bank_name": "",
+    "account_number": "",
+    "iban": "",
+    "email": "",
+    "full_name": "",
+    "phone_number_code_manager_id": 5,
+    "phone_number_manager": "",
     "nationality_id": 6,
-    "password": "asdasdasd123",
-    "password_confirmation": "asdasdasd123"
+    "password": "",
+    "password_confirmation": ""
   };
   Map<String, dynamic> errors = {};
 
-  List<String> _drops = ['+1', '+2', '+3'];
+  RxString _selectedCategiryDrop = "".obs;
 
-  RxString _selectedDrop = "+1".obs;
+  RxString _selectedNationalityDrop = "".obs;
 
-  RxInt _selectedCategiryDrop = 2.obs;
+  RxString _selectedPhoneNumberManagerCodeDrop = "".obs;
 
-  RxInt _selectedNationalityDrop = 1.obs;
+  RxString _selectedPhoneNumberCodeDrop = "".obs;
 
-  List<String> get drops => _drops;
+  RxString _selectedBankDrop = "".obs;
 
-  String get selectedDrop => _selectedDrop.value;
+  String get selectedCategoryDrop => _selectedCategiryDrop.value;
 
-  int get selectedCategoryDrop => _selectedCategiryDrop.value;
-  int get selectedNationalityDrop => _selectedNationalityDrop.value;
+  String get selectedBankDrop => _selectedBankDrop.value;
 
-  void SelectDrop(String x) {
-    this._selectedDrop.value = x;
-  }
+  String get selectedNationalityDrop => _selectedNationalityDrop.value;
 
-  void SelectCategoryDrop(int x) {
+  String get selectedPhoneNumberManagerCodeDrop =>
+      _selectedPhoneNumberManagerCodeDrop.value;
+
+  String get selectedPhoneNumberCodeDrop => _selectedPhoneNumberCodeDrop.value;
+
+  void selectCategoryDrop(String x) {
     this._selectedCategiryDrop.value = x;
   }
 
-  void SelectNationalityDrop(int x) {
+  void selectBankDrop(String x) {
+    this._selectedBankDrop.value = x;
+  }
+
+  void selectPhoneNumberCodeDrop(String x) {
+    this._selectedPhoneNumberCodeDrop.value = x;
+  }
+
+  void selectPhoneNumberManagerCodeDrop(String x) {
+    this._selectedPhoneNumberManagerCodeDrop.value = x;
+  }
+
+  void selectNationalityDrop(String x) {
     this._selectedNationalityDrop.value = x;
   }
 
   Future<Map<String, dynamic>> register(obj) async {
+    Get.locale!.toString() == "ar_SYR"
+        ? obj['language_id'] = 1
+        : obj['language_id'] = 2;
+
     Map<String, dynamic> res = await AuthService().register(obj);
     Navigator.of(Get.overlayContext!).pop();
 
     errors = res;
-    logWarning(obj);
-    logSuccess(errors);
+    logSuccess(res);
     return res;
   }
 
