@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/services/auth_service.dart';
-import 'package:safqa/services/end_points.dart';
+
+import '../main.dart';
+import '../services/auth_service.dart';
+import '../services/end_points.dart';
 
 class SignUpController extends GetxController {
   var globalData;

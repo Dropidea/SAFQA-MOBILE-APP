@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/pages/home_page.dart';
-import 'package:safqa/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginController extends GetxController {
-  String _token = '';
-  String get token => _token;
+import '../main.dart';
+import '../pages/home/home_page.dart';
+import '../services/auth_service.dart';
 
+class LoginController extends GetxController {
   Future saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
@@ -36,7 +34,6 @@ class LoginController extends GetxController {
     var res = await AuthService().login(email, password);
     Navigator.of(Get.overlayContext!).pop();
     if (res != null) {
-      _token = res;
       logSuccess("token:${res}");
       if (rememberMe) saveToken(res);
       Get.offAll(() => HomePage());

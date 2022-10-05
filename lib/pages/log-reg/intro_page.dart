@@ -3,10 +3,11 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/pages/welcome_page.dart';
-import 'package:safqa/widgets/page_indicator.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../main.dart';
+import '../../widgets/page_indicator.dart';
+import 'welcome_page.dart';
 
 class IntroPage extends StatefulWidget {
   IntroPage({super.key});

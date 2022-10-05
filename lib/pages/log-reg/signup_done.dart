@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/pages/login.dart';
-import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../widgets/zero_app_bar.dart';
+import 'login.dart';
 
 class SignUpDonePage extends StatelessWidget {
   const SignUpDonePage({super.key});

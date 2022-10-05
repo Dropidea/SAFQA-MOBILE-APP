@@ -2,15 +2,16 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/pages/signup_done.dart';
 // import 'package:pinput/pinput.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/my_stepper.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../controllers/signup_controller.dart';
+import '../../main.dart';
+import 'signup_done.dart';
 
 class CompleteSignUpPage extends StatefulWidget {
   CompleteSignUpPage({super.key});

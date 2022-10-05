@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/pages/complete_signup.dart';
-import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../controllers/signup_controller.dart';
+import '../../main.dart';
+import '../../widgets/zero_app_bar.dart';
+import 'complete_signup.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});

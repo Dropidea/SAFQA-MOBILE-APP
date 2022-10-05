@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/services/end_points.dart';
+
+import '../main.dart';
+import 'end_points.dart';
 
 class AuthService {
   final Dio _dio = Dio();

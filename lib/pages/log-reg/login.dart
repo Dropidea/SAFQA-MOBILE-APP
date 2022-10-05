@@ -1,11 +1,12 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/login_controller.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/pages/signup.dart';
-import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../controllers/login_controller.dart';
+import '../../main.dart';
+import '../../widgets/zero_app_bar.dart';
+import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

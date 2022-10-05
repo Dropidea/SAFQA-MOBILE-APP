@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/locals_controller.dart';
-import 'package:safqa/main.dart';
-import 'package:safqa/pages/intro_page.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../controllers/locals_controller.dart';
+import '../../main.dart';
+import 'intro_page.dart';
 
 class SelectLanguagePage extends StatelessWidget {
   const SelectLanguagePage({super.key});

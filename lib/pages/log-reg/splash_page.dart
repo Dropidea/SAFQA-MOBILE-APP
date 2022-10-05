@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/first_time_using_app.dart';
-import 'package:safqa/controllers/login_controller.dart';
-import 'package:safqa/pages/home_page.dart';
-import 'package:safqa/pages/select_language_page.dart';
-import 'package:safqa/pages/welcome_page.dart';
 import 'package:sizer/sizer.dart';
+
+import '../../controllers/first_time_using_app.dart';
+import '../../controllers/login_controller.dart';
+import '../home/home_page.dart';
+import 'select_language_page.dart';
+import 'welcome_page.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -29,6 +30,7 @@ class SplashPage extends StatelessWidget {
           Get.offAll(
             () => HomePage(),
             duration: Duration(milliseconds: 1200),
+            transition: Transition.zoom,
           );
         else {
           Get.offAll(

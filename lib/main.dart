@@ -2,12 +2,13 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/first_time_using_app.dart';
-import 'package:safqa/controllers/locals_controller.dart';
-import 'package:safqa/locals.dart';
-import 'package:safqa/pages/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+
+import 'controllers/first_time_using_app.dart';
+import 'controllers/locals_controller.dart';
+import 'locals.dart';
+import 'pages/log-reg/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
