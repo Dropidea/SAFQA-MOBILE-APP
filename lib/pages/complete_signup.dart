@@ -111,8 +111,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          Container(
+                            margin: const EdgeInsets.only(top: 5),
                             child: Text(
                               "SignUp",
                               style: TextStyle(
@@ -122,9 +122,6 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             ),
                           ),
                         ],
-                      ),
-                      SizedBox(
-                        height: 10.0.sp,
                       ),
                       Expanded(
                         child: Theme(
@@ -505,7 +502,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
 
   List<MyStep> stepList() => [
         MyStep(
-            title: myLabel(0, 'Company information'),
+            label: myLabel(0, 'Company information'),
             content: SizedBox(
               height: 50.0.h,
               child: ListView(
@@ -688,7 +685,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 ? MyStepState.complete
                 : MyStepState.disabled),
         MyStep(
-            title: myLabel(1, 'Bank Account Details'),
+            label: myLabel(1, 'Bank Account Details'),
             content: SizedBox(
               height: 50.0.h,
               child: ListView(
@@ -796,7 +793,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 ? MyStepState.complete
                 : MyStepState.disabled),
         MyStep(
-            title: myLabel(2, 'Company Manager User Login Information'),
+            label: myLabel(2, 'Company Manager User Login Information'),
             content: SizedBox(
               height: 50.0.h,
               child: ListView(
@@ -971,7 +968,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 ? MyStepState.complete
                 : MyStepState.disabled),
         MyStep(
-            title: myLabel(3, 'Send OPT'),
+            label: myLabel(3, 'Send OPT'),
             content: SizedBox(
               height: 50.0.h,
               child: ListView(
@@ -1068,11 +1065,11 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
 
   Widget myLabel(int currenetStep, String text) => currenetStep == _currentStep
       ? SizedBox(
-          width: 190,
-          child: new Text(
+          width: 150,
+          child: Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13.0.sp),
+            style: TextStyle(fontSize: 11.0.sp),
             softWrap: true,
           ),
         )

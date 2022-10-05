@@ -115,18 +115,17 @@ class MyStep {
   ///
   /// The [title], [content], and [state] arguments must not be null.
   const MyStep({
-    required this.title,
+    this.title,
     this.subtitle,
     required this.content,
     this.state = MyStepState.indexed,
     this.isActive = false,
     this.label,
-  })  : assert(title != null),
-        assert(content != null),
+  })  : assert(content != null),
         assert(state != null);
 
   /// The title of the step that typically describes it.
-  final Widget title;
+  final Widget? title;
 
   /// The subtitle of the step that appears below the title and has a smaller
   /// font size. It typically gives more details that complement the title.
@@ -619,7 +618,7 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
           style: _titleStyle(index),
           duration: kThemeAnimationDuration,
           curve: Curves.fastOutSlowIn,
-          child: widget.steps[index].title,
+          child: widget.steps[index].title ?? Container(),
         ),
         if (widget.steps[index].subtitle != null)
           Container(
@@ -764,25 +763,25 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
           child: Row(
             children: <Widget>[
               SizedBox(
-                height: _isLabel() ? 120.0 : 72.0,
+                height: _isLabel() ? 150.0 : 72.0,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     if (widget.steps[i].label != null)
                       const SizedBox(
-                        height: 24.0,
+                        height: 50.0,
                       ),
                     Center(child: _buildIcon(i)),
                     if (widget.steps[i].label != null)
                       SizedBox(
-                        height: 24.0,
+                        height: 50,
                         child: _buildLabelText(i),
                       ),
                   ],
                 ),
               ),
               Container(
-                margin: const EdgeInsetsDirectional.only(start: 12.0),
+                // margin: const EdgeInsetsDirectional.only(start: 12.0),
                 child: _buildHeaderText(i),
               ),
             ],
@@ -791,7 +790,22 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
         if (!_isLast(i))
           Expanded(
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              margin: const EdgeInsets.symmetric(horizontal: 2.0),
+              height: 1.0,
+              color: Colors.grey.shade400,
+            ),
+          ),
+      ],
+    ];
+    final List<Widget> lines = <Widget>[
+      for (int i = 0; i < widget.steps.length; i += 1) ...<Widget>[
+        if (!_isLast(i))
+          Expanded(
+            child: Container(
+              margin: EdgeInsetsDirectional.only(
+                start: _isFirst(i) ? 75 : 0,
+                end: _isLast(i + 1) ? 75 : 0,
+              ),
               height: 1.0,
               color: Colors.grey.shade400,
             ),
@@ -816,8 +830,19 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
           elevation: widget.elevation ?? 2,
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
-              children: children,
+            child: Stack(
+              children: [
+                Container(
+                  height: _isLabel() ? 150.0 : 72.0,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: lines,
+                  ),
+                ),
+                Row(
+                  children: children,
+                ),
+              ],
             ),
           ),
         ),
