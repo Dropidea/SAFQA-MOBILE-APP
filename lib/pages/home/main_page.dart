@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/zoom_drawer_controller.dart';
+import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
 class MainPage extends StatelessWidget {
@@ -10,6 +11,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: ZeroAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

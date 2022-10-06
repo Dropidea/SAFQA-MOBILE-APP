@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/zoom_drawer_controller.dart';
 import 'package:safqa/models/menu_item.dart' as mi;
-import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
 class MenuPage extends StatelessWidget {
@@ -28,26 +27,32 @@ class MenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     MyZoomDrawerController myZoomDrawerController = Get.find();
     return Scaffold(
-      appBar: ZeroAppBar(),
       backgroundColor: Color(0xff285B74),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Spacer(),
-          buildXButton(myZoomDrawerController),
-          Spacer(),
-          ...MyMenuItems.all.map(buildMenuItem).toList(),
-          Spacer(
-            flex: 3,
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildXButton(myZoomDrawerController),
+            Expanded(
+              child: Align(
+                child: ListView(
+                  primary: false,
+                  children: [
+                    ...MyMenuItems.all.map(buildMenuItem).toList(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Container buildXButton(MyZoomDrawerController myZoomDrawerController) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: InkWell(
         customBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
