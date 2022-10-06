@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/zoom_drawer_controller.dart';
-import 'package:safqa/models/menu_item.dart' as mi;
 import 'package:sizer/sizer.dart';
+
+import '../../controllers/zoom_drawer_controller.dart';
+import '../../models/menu_item.dart' as mi;
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});

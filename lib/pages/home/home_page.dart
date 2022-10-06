@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/locals_controller.dart';
-import 'package:safqa/pages/home/main_page.dart';
-import 'package:safqa/pages/home/menu_page.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../controllers/locals_controller.dart';
 import '../../controllers/login_controller.dart';
 import '../../controllers/zoom_drawer_controller.dart';
+import 'main_page.dart';
+import 'menu_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                   menuScreenWidth: 70.0.w,
                   isRtl: snapshot.hasData ? snapshot.data! : false,
                   slideWidth: 70.0.w,
-                  menuScreen: MenuPage(),
+                  menuScreen: const MenuPage(),
                   mainScreen: MainPage(),
                 );
               });
