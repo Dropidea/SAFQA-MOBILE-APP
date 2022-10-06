@@ -803,8 +803,8 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
           Expanded(
             child: Container(
               margin: EdgeInsetsDirectional.only(
-                start: _isFirst(i) ? 75 : 0,
-                end: _isLast(i + 1) ? 75 : 0,
+                start: _isFirst(i) ? 50 : 0,
+                end: _isLast(i + 1) ? 50 : 0,
               ),
               height: 1.0,
               color: Colors.grey.shade400,
@@ -826,24 +826,21 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
 
     return Column(
       children: <Widget>[
-        Material(
-          elevation: widget.elevation ?? 2,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Stack(
-              children: [
-                Container(
-                  height: _isLabel() ? 150.0 : 72.0,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: lines,
-                  ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Stack(
+            children: [
+              SizedBox(
+                height: _isLabel() ? 150.0 : 72.0,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: lines,
                 ),
-                Row(
-                  children: children,
-                ),
-              ],
-            ),
+              ),
+              Row(
+                children: children,
+              ),
+            ],
           ),
         ),
         Expanded(

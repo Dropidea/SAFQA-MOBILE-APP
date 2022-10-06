@@ -73,7 +73,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
               ),
             ),
             width: w,
-            height: h,
+            height: h < 600 ? 650 : h,
             child: Column(
               children: [
                 Row(
@@ -1066,11 +1066,12 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
 
   Widget myLabel(int currenetStep, String text) => currenetStep == _currentStep
       ? SizedBox(
-          width: 150,
+          width: 100,
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11.0.sp),
+            style: TextStyle(
+                fontSize: text.split(" ").length >= 3 ? 10.sp : 12.0.sp),
             softWrap: true,
           ),
         )
