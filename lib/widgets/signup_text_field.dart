@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignUpTextField extends StatelessWidget {
   SignUpTextField({
     super.key,
-    required this.hintText,
+    this.hintText,
     this.prefixIcon,
     this.keyBoardType,
     this.obsecureText = false,
@@ -13,9 +14,10 @@ class SignUpTextField extends StatelessWidget {
     this.onchanged,
     this.initialValue,
     this.controller,
+    this.inputFormatters,
   });
 
-  final String hintText;
+  final String? hintText;
   final Widget? prefixIcon;
   final Widget? prefix;
   final TextInputType? keyBoardType;
@@ -23,6 +25,7 @@ class SignUpTextField extends StatelessWidget {
   final String? initialValue;
   final TextEditingController? controller;
   final Function(String? s)? onchanged;
+  List<TextInputFormatter>? inputFormatters;
   bool obsecureText = false;
   bool readOnly = false;
   @override
@@ -44,6 +47,7 @@ class SignUpTextField extends StatelessWidget {
             prefix: prefix,
           ),
           validator: validator,
+          inputFormatters: inputFormatters,
           obscureText: obsecureText,
           initialValue: initialValue,
           onChanged: onchanged,

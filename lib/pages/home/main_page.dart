@@ -2,6 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/pages/invoices/create_invoice_page.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/charts_controller.dart';
@@ -18,11 +20,18 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   MyZoomDrawerController myZoomDrawerController = Get.find();
+  SignUpController _signUpController = Get.put(SignUpController());
 
   ChartsController _chartsController = Get.put(ChartsController());
   double _x = 0;
   double _y = 0;
   String i = "This Month";
+  @override
+  void initState() {
+    // TODO: implement initState
+    _signUpController.getGlobalData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -414,12 +423,26 @@ class _MainPageState extends State<MainPage> {
           ),
           Positioned(
               bottom: 0,
-              child: Card(
-                elevation: 10,
+              child: GestureDetector(
+                onTap: () => Get.to(
+                  () => CreateInvoicePage(),
+                  transition: Transition.rightToLeft,
+                ),
                 child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 4.0,
+                        spreadRadius: 0.0,
+                        offset:
+                            Offset(2.0, 2.0), // shadow direction: bottom right
+                      )
+                    ],
+                  ),
                   height: 60,
                   width: w,
-                  color: Colors.white,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

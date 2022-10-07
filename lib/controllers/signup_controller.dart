@@ -91,6 +91,7 @@ class SignUpController extends GetxController {
     try {
       var res = await Dio().get(EndPoints.baseURL + EndPoints.globalData);
       globalData = res.data;
+      logInfo(globalData);
       return globalData;
     } on DioError catch (e) {
       logError(e.message);
