@@ -11,10 +11,42 @@ import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/pages/invoices/customer_info_page.dart';
+import 'package:safqa/pages/invoices/invoice_items_page.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import "package:sizer/sizer.dart";
 import 'package:textfield_datepicker/textfield_datepicker.dart';
 import 'package:textfield_datepicker/textfield_timePicker.dart';
+
+Container customDropdown(List<String> items, String? selectedItem, double width,
+    Function onchanged) {
+  return Container(
+    width: width,
+    margin: const EdgeInsets.symmetric(vertical: 5),
+    padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+    decoration: BoxDecoration(
+      color: Colors.grey.shade200,
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+    child: DropdownButtonFormField(
+      decoration: const InputDecoration(border: InputBorder.none),
+      items: items
+          .map(
+            (e) => DropdownMenuItem(
+              value: e,
+              child: Text(
+                e,
+              ),
+            ),
+          )
+          .toList(),
+      value: selectedItem,
+      onChanged: (value) {
+        onchanged(value);
+      },
+    ),
+  );
+}
 
 class CreateInvoicePage extends StatefulWidget {
   CreateInvoicePage({super.key});
@@ -124,19 +156,19 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 customDropdown(
                   addInvoiceController.days,
                   addInvoiceController.selectedDay,
-                  100,
+                  0.25 * w,
                   addInvoiceController.setDay,
                 ),
                 customDropdown(
                   addInvoiceController.monthes,
                   addInvoiceController.selectedMonth,
-                  100,
+                  0.25 * w,
                   addInvoiceController.setMonth,
                 ),
                 customDropdown(
                   addInvoiceController.years,
                   addInvoiceController.selectedYear,
-                  120,
+                  0.35 * w,
                   addInvoiceController.setYear,
                 ),
               ],
@@ -483,13 +515,20 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   blackText("Customer Info", 16),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => CustomerInfoPage(),
+                          transition: Transition.rightToLeft);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
                         color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Icon(
-                      Icons.arrow_forward,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward,
+                      ),
                     ),
                   )
                 ],
@@ -507,13 +546,17 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   blackText("Invoice Items", 16),
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Icon(
-                      Icons.arrow_forward,
+                  GestureDetector(
+                    onTap: () => Get.to(() => InvoiceItemsPage(),
+                        transition: Transition.rightToLeft),
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Icon(
+                        Icons.arrow_forward,
+                      ),
                     ),
                   )
                 ],
@@ -569,36 +612,6 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Container customDropdown(List<String> items, String? selectedItem,
-      double width, Function onchanged) {
-    return Container(
-      width: width,
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: DropdownButtonFormField(
-        decoration: const InputDecoration(border: InputBorder.none),
-        items: items
-            .map(
-              (e) => DropdownMenuItem(
-                value: e,
-                child: Text(
-                  e,
-                ),
-              ),
-            )
-            .toList(),
-        value: selectedItem,
-        onChanged: (value) {
-          onchanged(value);
-        },
       ),
     );
   }

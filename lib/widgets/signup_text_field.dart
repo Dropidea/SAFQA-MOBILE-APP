@@ -39,6 +39,7 @@ class SignUpTextField extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: 15, right: 15, top: 5),
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: keyBoardType,
           decoration: InputDecoration(
             border: InputBorder.none,

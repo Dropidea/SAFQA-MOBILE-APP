@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:safqa/models/invoice_item.dart';
 
 class AddInvoiceController extends GetxController {
   final List<String> days = List<String>.generate(
@@ -66,11 +67,30 @@ class AddInvoiceController extends GetxController {
     _selectedRecurringInterval.value = x;
   }
 
+  List<String> sendByItems = ["SMS", "Email"];
+  String _selectedSendBy = "SMS";
+  String get selectedSendBy => _selectedSendBy;
+
+  void selectSendBy(String x) {
+    _selectedSendBy = x;
+  }
+
   List<String> invoicesLang = ["English", "Arabic "];
   Object invoicesLangValue = 0;
   void setInvoiceLang(Object val) {
     // logSuccess(val);
     invoicesLangValue = val;
+    update();
+  }
+
+  List<InvoiceItem> invoiceItems = [];
+  void addInvoiceItem(InvoiceItem item) {
+    invoiceItems.add(item);
+    update();
+  }
+
+  void deleteInvoiceItem(int ind) {
+    invoiceItems.removeAt(ind);
     update();
   }
 }
