@@ -10,7 +10,7 @@ import 'complete_signup.dart';
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
   PageController _pageController = PageController();
-  SignUpController _signUpController = Get.find();
+  SignUpController _signUpController = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
