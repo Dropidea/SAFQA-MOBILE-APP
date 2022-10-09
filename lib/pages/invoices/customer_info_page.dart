@@ -80,7 +80,34 @@ class CustomerInfoPage extends StatelessWidget {
             SizedBox(height: 50),
             Center(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.defaultDialog(
+                    title: "",
+                    content: Column(
+                      children: [
+                        Image(
+                          image: AssetImage("assets/images/tick.png"),
+                          height: 100,
+                        ),
+                        SizedBox(height: 10),
+                        blackText("Saved successfully", 16),
+                        SizedBox(height: 10),
+                        InkWell(
+                          onTap: () => Get.back(),
+                          child: Container(
+                            width: w / 2,
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              color: Color(0xff2D5571),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(child: whiteText("Next", 17)),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -122,6 +149,14 @@ Text blackText(String text, double size) {
     text,
     style: TextStyle(
         color: Colors.black, fontWeight: FontWeight.w500, fontSize: size.sp),
+  );
+}
+
+Text whiteText(String text, double size) {
+  return Text(
+    text,
+    style: TextStyle(
+        color: Colors.white, fontWeight: FontWeight.w500, fontSize: size.sp),
   );
 }
 

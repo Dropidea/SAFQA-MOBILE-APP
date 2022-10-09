@@ -157,26 +157,26 @@ class InvoiceItemsPage extends StatelessWidget {
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      greyText("Product Name", 13),
-                                      SizedBox(height: 10),
-                                      blackText(item.productName, 13)
+                                      greyText("Product Name", 11),
+                                      const SizedBox(height: 10),
+                                      blackText(item.productName, 11)
                                     ],
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      greyText("Unit Price", 13),
+                                      greyText("Unit Price", 11),
                                       SizedBox(height: 10),
-                                      blackText("\$${item.unitPrice}", 13)
+                                      blackText("\$${item.unitPrice}", 11)
                                     ],
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      greyText("Quantity", 13),
+                                      greyText("Quantity", 11),
                                       SizedBox(height: 10),
                                       blackText(
-                                          item.quantity.round().toString(), 13)
+                                          item.quantity.round().toString(), 11)
                                     ],
                                   ),
                                   Column(
