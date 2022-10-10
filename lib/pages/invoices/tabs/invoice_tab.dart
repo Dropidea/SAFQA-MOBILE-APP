@@ -10,9 +10,9 @@ import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/pages/invoices/create_invoice_page.dart';
 import 'package:safqa/pages/invoices/customer_info_page.dart';
 import 'package:safqa/pages/invoices/invoice_items_page.dart';
+import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textfield_datepicker/textfield_datepicker.dart';
@@ -45,27 +45,27 @@ class _InvoiceTabState extends State<InvoiceTab> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            customDropdown(
-              addInvoiceController.days,
-              addInvoiceController.selectedDay,
-              0.25 * w,
-              addInvoiceController.setDay,
+            CustomDropdown(
+              items: addInvoiceController.days,
+              selectedItem: addInvoiceController.selectedDay,
+              width: 0.25 * w,
+              onchanged: addInvoiceController.setDay,
             ),
-            customDropdown(
-              addInvoiceController.monthes,
-              addInvoiceController.selectedMonth,
-              0.25 * w,
-              addInvoiceController.setMonth,
+            CustomDropdown(
+              items: addInvoiceController.monthes,
+              selectedItem: addInvoiceController.selectedMonth,
+              width: 0.25 * w,
+              onchanged: addInvoiceController.setMonth,
             ),
-            customDropdown(
-              addInvoiceController.years,
-              addInvoiceController.selectedYear,
-              0.35 * w,
-              addInvoiceController.setYear,
+            CustomDropdown(
+              items: addInvoiceController.years,
+              selectedItem: addInvoiceController.selectedYear,
+              width: 0.35 * w,
+              onchanged: addInvoiceController.setYear,
             ),
           ],
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         blackText("Currency", 16),
         Obx(
           () {
@@ -82,21 +82,21 @@ class _InvoiceTabState extends State<InvoiceTab> {
                 .toList();
             addInvoiceController.selectCurrencyDrop(countriesCurrencies[0]);
 
-            return customDropdown(
-                countriesCurrencies,
-                addInvoiceController.selectedCurrencyDrop,
-                w,
-                addInvoiceController.selectCurrencyDrop);
+            return CustomDropdown(
+                items: countriesCurrencies,
+                selectedItem: addInvoiceController.selectedCurrencyDrop,
+                width: w,
+                onchanged: addInvoiceController.selectCurrencyDrop);
           },
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         blackText("Discount Available", 16),
-        customDropdown(
-            addInvoiceController.discountDrops,
-            addInvoiceController.selectedDiscountDrop,
-            w,
-            addInvoiceController.selectDiscountDrop),
-        const SizedBox(height: 30),
+        CustomDropdown(
+            items: addInvoiceController.discountDrops,
+            selectedItem: addInvoiceController.selectedDiscountDrop,
+            width: w,
+            onchanged: addInvoiceController.selectDiscountDrop),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -165,7 +165,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             ),
           ],
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Row(
           children: [
             blackText("Remind after", 16),
@@ -197,13 +197,13 @@ class _InvoiceTabState extends State<InvoiceTab> {
             style: TextStyle(color: Color(0xff2F6782), fontSize: 11.0.sp),
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         blackText("Recurring Interval", 16),
-        customDropdown(
-            addInvoiceController.recurringInterval,
-            addInvoiceController.selectedRecurringInterval,
-            w,
-            addInvoiceController.selectRecurringInterval),
+        CustomDropdown(
+            items: addInvoiceController.recurringInterval,
+            selectedItem: addInvoiceController.selectedRecurringInterval,
+            width: w,
+            onchanged: addInvoiceController.selectRecurringInterval),
         SizedBox(
           width: w,
           child: Text(
@@ -212,7 +212,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             style: TextStyle(color: Color(0xff2F6782), fontSize: 11.0.sp),
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         blackText("Language of the invoice", 16),
         const SizedBox(height: 10),
         Row(
@@ -260,7 +260,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             ),
           ],
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Row(
           children: [
             blackText("Attach File", 16),
@@ -322,7 +322,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             ),
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Row(
           children: [
             blackText("Comments File", 16),
@@ -343,7 +343,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             decoration: const InputDecoration(border: InputBorder.none),
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         blackText("Terms & Conditions", 16),
         const SizedBox(height: 10),
         Row(
@@ -391,7 +391,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             ),
           ],
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Container(
           width: w,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -450,7 +450,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             ],
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -475,7 +475,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             ],
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(

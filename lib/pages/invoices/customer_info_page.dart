@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
-import 'package:safqa/pages/invoices/create_invoice_page.dart';
+import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
@@ -42,11 +42,11 @@ class CustomerInfoPage extends StatelessWidget {
             SignUpTextField(),
             const SizedBox(height: 20),
             blackText("Send invoice By", 16),
-            customDropdown(
-              addInvoiceController.sendByItems,
-              addInvoiceController.selectedSendBy,
-              2,
-              addInvoiceController.selectSendBy,
+            CustomDropdown(
+              items: addInvoiceController.sendByItems,
+              selectedItem: addInvoiceController.selectedSendBy,
+              width: 2,
+              onchanged: addInvoiceController.selectSendBy,
             ),
             const SizedBox(height: 20),
             blackText("Customer phonne number", 16),

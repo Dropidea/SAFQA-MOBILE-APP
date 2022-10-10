@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../controllers/charts_controller.dart';
 import '../../controllers/zoom_drawer_controller.dart';
-import '../../widgets/my_dropdown.dart';
+import '../../widgets/month_year_dropdown.dart';
 import '../../widgets/zero_app_bar.dart';
 
 class MainPage extends StatefulWidget {
@@ -91,7 +91,7 @@ class _MainPageState extends State<MainPage> {
                       const SizedBox(height: 10),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
                             width: 0.40 * w,
@@ -129,26 +129,36 @@ class _MainPageState extends State<MainPage> {
                           ),
                           Container(
                             width: 0.40 * w,
-                            height: 0.12 * h,
+                            height: 0.2 * h,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(
                                       "assets/images/welcome_background.png"),
                                   fit: BoxFit.cover),
                               color: Color(0xff2F6782),
-                              borderRadius: BorderRadius.vertical(
-                                bottom: Radius.circular(15),
-                              ),
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Center(
-                              child: Text(
-                                "Number Of Transactions",
-                                softWrap: true,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color(0xffCBCBCB),
-                                    fontSize: 14.0.sp),
-                              ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  "33",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20.0.sp,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  "Number Of Transactions",
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xffCBCBCB),
+                                      fontSize: 14.0.sp),
+                                ),
+                              ],
                             ),
                           )
                         ],

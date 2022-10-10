@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/components/radio/gf_radio.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
@@ -9,16 +10,17 @@ import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
-class QuickInvoiceTab extends StatefulWidget {
-  const QuickInvoiceTab({super.key});
+class PaymentLinkTab extends StatefulWidget {
+  const PaymentLinkTab({super.key});
 
   @override
-  State<QuickInvoiceTab> createState() => _QuickInvoiceTabState();
+  State<PaymentLinkTab> createState() => _PaymentLinkTabState();
 }
 
-class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
+class _PaymentLinkTabState extends State<PaymentLinkTab> {
   int invoicesLangValue = 0;
   int termsAndConditions = 0;
+  int paymentActive = 0;
   String filePath = "";
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,67 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           ],
         ),
         const SizedBox(height: 20),
+        blackText("Payment Url Title", 16),
+        SignUpTextField(),
+        const SizedBox(height: 20),
+        blackText("Is the payment link active?", 16),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GFRadio(
+                    activeBorderColor: Colors.transparent,
+                    inactiveBorderColor: Colors.transparent,
+                    radioColor: Color(0xff66B4D2),
+                    inactiveIcon: Icon(
+                      Icons.circle,
+                      color: Colors.grey.shade200,
+                    ),
+                    size: GFSize.MEDIUM,
+                    value: 0,
+                    groupValue: paymentActive,
+                    onChanged: (value) => setState(() {
+                          paymentActive = value;
+                        })),
+                greyText("Yes", 16),
+              ],
+            ),
+            SizedBox(width: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GFRadio(
+                    activeBorderColor: Colors.transparent,
+                    radioColor: Color(0xff66B4D2),
+                    inactiveIcon: Icon(
+                      Icons.circle,
+                      color: Colors.grey.shade200,
+                    ),
+                    size: GFSize.MEDIUM,
+                    inactiveBorderColor: Colors.transparent,
+                    value: 1,
+                    groupValue: paymentActive,
+                    onChanged: (value) => setState(() {
+                          paymentActive = value;
+                        })),
+                greyText("No", 16),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        blackText("Fixed Price", 16),
+        CustomDropdown(
+          width: w,
+          items: ["yes", "No"],
+          onchanged: (String v) {
+            //TODO:fixed Price Function
+          },
+          hint: "Fixed Price",
+        ),
+        const SizedBox(height: 20),
         blackText("Currency", 16),
         Obx(
           () {
@@ -74,23 +137,36 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
             addInvoiceController.selectCurrencyDrop(countriesCurrencies[0]);
 
             return CustomDropdown(
-                items: countriesCurrencies,
-                selectedItem: addInvoiceController.selectedCurrencyDrop,
-                width: w,
-                onchanged: addInvoiceController.selectCurrencyDrop);
+              items: countriesCurrencies,
+              selectedItem: addInvoiceController.selectedCurrencyDrop,
+              width: w,
+              onchanged: addInvoiceController.selectCurrencyDrop,
+            );
           },
         ),
         const SizedBox(height: 20),
-        blackText("Invoice value", 16),
-        SignUpTextField(
-          hintText: "0 LE",
-          keyBoardType: TextInputType.number,
-        ),
+        blackText("Payment Value", 16),
+        SignUpTextField(),
         const SizedBox(height: 20),
-        blackText("Invoice Local Currency Value", 16),
-        SignUpTextField(
-          hintText: "0 AED",
-          keyBoardType: TextInputType.number,
+        Row(
+          children: [
+            blackText("Comments", 16),
+            SizedBox(width: 10),
+            greyText("(optional)", 13)
+          ],
+        ),
+        Container(
+          width: w,
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: TextField(
+            maxLines: 3,
+            decoration: const InputDecoration(border: InputBorder.none),
+          ),
         ),
         const SizedBox(height: 20),
         blackText("Language of the invoice", 16),
@@ -141,35 +217,52 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           ],
         ),
         const SizedBox(height: 20),
-        Container(
-          width: w,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade100, width: 2),
-              borderRadius: BorderRadius.circular(15)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              blackText("Customer Info", 16),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => CustomerInfoPage(),
-                      transition: Transition.rightToLeft);
-                },
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Icon(
-                    Icons.arrow_forward,
-                  ),
-                ),
-              )
-            ],
-          ),
+        blackText("Terms & Conditions", 16),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GFRadio(
+                    activeBorderColor: Colors.transparent,
+                    inactiveBorderColor: Colors.transparent,
+                    radioColor: Color(0xff66B4D2),
+                    inactiveIcon: Icon(
+                      Icons.circle,
+                      color: Colors.grey.shade200,
+                    ),
+                    size: GFSize.MEDIUM,
+                    value: 0,
+                    groupValue: termsAndConditions,
+                    onChanged: (value) => setState(() {
+                          termsAndConditions = value;
+                        })),
+                greyText("Disable", 16),
+              ],
+            ),
+            SizedBox(width: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GFRadio(
+                    activeBorderColor: Colors.transparent,
+                    radioColor: Color(0xff66B4D2),
+                    inactiveIcon: Icon(
+                      Icons.circle,
+                      color: Colors.grey.shade200,
+                    ),
+                    size: GFSize.MEDIUM,
+                    inactiveBorderColor: Colors.transparent,
+                    value: 1,
+                    groupValue: termsAndConditions,
+                    onChanged: (value) => setState(() {
+                          termsAndConditions = value;
+                        })),
+                greyText("Enable", 16),
+              ],
+            ),
+          ],
         ),
         const SizedBox(height: 20),
         Padding(
@@ -177,7 +270,7 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              blackText("Create The Invoice", 16),
+              blackText("Create The Link", 16),
               SizedBox(width: 10),
               Container(
                 decoration: BoxDecoration(

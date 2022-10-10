@@ -5,38 +5,14 @@ import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/invoices/tabs/invoice_tab.dart';
+import 'package:safqa/pages/invoices/tabs/payment_link_tab.dart';
 import 'package:safqa/pages/invoices/tabs/quick_invoice_tab.dart';
 import "package:sizer/sizer.dart";
 
-Container customDropdown(List<String> items, String? selectedItem, double width,
-    Function onchanged) {
-  return Container(
-    width: width,
-    margin: const EdgeInsets.symmetric(vertical: 5),
-    padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
-    decoration: BoxDecoration(
-      color: Colors.grey.shade200,
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-    child: DropdownButtonFormField(
-      decoration: const InputDecoration(border: InputBorder.none),
-      items: items
-          .map(
-            (e) => DropdownMenuItem(
-              value: e,
-              child: Text(
-                e,
-              ),
-            ),
-          )
-          .toList(),
-      value: selectedItem,
-      onChanged: (value) {
-        onchanged(value);
-      },
-    ),
-  );
-}
+// Container customDropdown(List<String> items, String? selectedItem, double width,
+//     Function onchanged) {
+//   return ;
+// }
 
 class CreateInvoicePage extends StatefulWidget {
   CreateInvoicePage({super.key});
@@ -83,6 +59,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
         ),
         centerTitle: true,
         bottom: TabBar(
+          isScrollable: true,
           controller: _tabController,
           indicator: const BoxDecoration(
             borderRadius: BorderRadius.all(
@@ -97,7 +74,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
               ],
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          // padding: const EdgeInsets.symmetric(horizontal: 10),
           tabs: [
             Tab(
               child: Text(
@@ -108,7 +85,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
                     color: _tabController.index == 0
                         ? Colors.white
                         : const Color(0xff8B8B8B),
-                    fontSize: 11.0.sp),
+                    fontSize: 13.0.sp),
               ),
             ),
             Tab(
@@ -120,7 +97,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
                     color: _tabController.index == 1
                         ? Colors.white
                         : const Color(0xff8B8B8B),
-                    fontSize: 11.0.sp),
+                    fontSize: 13.0.sp),
               ),
             ),
             Tab(
@@ -132,7 +109,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
                     color: _tabController.index == 2
                         ? Colors.white
                         : const Color(0xff8B8B8B),
-                    fontSize: 11.0.sp),
+                    fontSize: 13.sp),
               ),
             ),
           ],
@@ -175,7 +152,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
               children: [
                 InvoiceTab(),
                 QuickInvoiceTab(),
-                Container(),
+                PaymentLinkTab(),
               ],
             ))
           ],
