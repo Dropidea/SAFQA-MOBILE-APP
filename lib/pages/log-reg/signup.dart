@@ -69,7 +69,8 @@ class SignUpPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
                             child: Text(
                               "SignUp",
                               style: TextStyle(

@@ -103,6 +103,8 @@ flutter:
     - assets/images/t.png
     - assets/images/inv_item.png
     - assets/images/tick.png
+    - assets/images/double_forward_icon.png
+    - assets/images/btn_wallpaper.png
 
 
 

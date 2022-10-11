@@ -83,12 +83,14 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
         const SizedBox(height: 20),
         blackText("Invoice value", 16),
         SignUpTextField(
+          padding: EdgeInsets.all(0),
           hintText: "0 LE",
           keyBoardType: TextInputType.number,
         ),
         const SizedBox(height: 20),
         blackText("Invoice Local Currency Value", 16),
         SignUpTextField(
+          padding: EdgeInsets.all(0),
           hintText: "0 AED",
           keyBoardType: TextInputType.number,
         ),
@@ -108,7 +110,7 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     value: 0,
                     groupValue: invoicesLangValue,
                     onChanged: (value) => setState(() {
@@ -128,7 +130,7 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
                     value: 1,
                     groupValue: invoicesLangValue,

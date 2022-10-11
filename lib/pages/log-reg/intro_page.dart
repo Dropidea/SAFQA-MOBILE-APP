@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/pages/log-reg/welcome_page.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../main.dart';
 import '../../widgets/page_indicator.dart';
-import 'welcome_page.dart';
 
 class IntroPage extends StatefulWidget {
   IntroPage({super.key});
@@ -17,15 +16,16 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPageState extends State<IntroPage> {
-  final _pageController = PageController();
+  final _pageController = PageController(initialPage: 0, keepPage: false);
   bool flag = false;
-
-  final _currentPageNotifier = ValueNotifier<int>(0);
+  int i = 0;
 
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+    LocalsController localsController = Get.find();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -34,7 +34,7 @@ class _IntroPageState extends State<IntroPage> {
       ),
       body: Stack(
         children: [
-          _currentPageNotifier.value == 1
+          i == 1
               ? Positioned(
                   top: 0,
                   left: 0,
@@ -42,15 +42,17 @@ class _IntroPageState extends State<IntroPage> {
                     image: AssetImage("assets/images/circle1.png"),
                   ),
                 )
-              : _currentPageNotifier.value == 4
+              : i == 4
                   ? Positioned(
                       right: 0,
                       top: 0,
-                      child:
-                          Image(image: AssetImage("assets/images/circle2.png")))
+                      child: Image(
+                        image: AssetImage("assets/images/circle2.png"),
+                      ),
+                    )
                   : Container(),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(20),
             width: w,
             height: h,
             child: Column(
@@ -67,7 +69,7 @@ class _IntroPageState extends State<IntroPage> {
                             child: InkWell(
                               onTap: () {
                                 this._pageController.jumpToPage(4);
-                                _currentPageNotifier.value = 4;
+                                i = 4;
                                 flag = true;
                                 setState(() {});
                               },
@@ -85,11 +87,15 @@ class _IntroPageState extends State<IntroPage> {
                       ),
                 Container(
                   width: w,
+                  margin: EdgeInsets.only(top: 30),
                   height: 1.7 * h / 3,
                   child: PageView(
                     controller: _pageController,
                     physics: NeverScrollableScrollPhysics(),
-                    onPageChanged: (value) {},
+                    onPageChanged: (value) {
+                      i = value;
+                      setState(() {});
+                    },
                     children: [
                       buildIntroPage(w, h, "assets/images/intro1.png",
                           "Generate", "Invoices & Payment Links"),
@@ -106,71 +112,99 @@ class _IntroPageState extends State<IntroPage> {
                 ),
                 // _buildCircleIndicator2(),
                 PageIndicator(
-                  currentValue: _currentPageNotifier.value,
+                  currentValue: i,
                 ),
-                flag
-                    ? GestureDetector(
-                        onTap: () {
-                          Get.to(() => const WelcomePage());
-                        },
-                        child: Container(
-                          width: 0.7 * w,
-                          height: 45.0.sp,
-                          margin: EdgeInsets.symmetric(vertical: 0.08 * h),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  Color(0xff183441),
-                                  Color(0xff2F6782),
-                                ]),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'start'.tr,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0.sp,
-                              ),
-                            ),
+                Visibility(
+                  visible: i == 4,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => const WelcomePage());
+                    },
+                    child: Container(
+                      width: 0.7 * w,
+                      height: 45.0.sp,
+                      margin: EdgeInsets.symmetric(vertical: 0.08 * h),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color(0xff183441),
+                              Color(0xff2F6782),
+                            ]),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'start'.tr,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0.sp,
                           ),
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: i != 4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 50.0.sp,
+                        height: 50.0.sp,
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 0.08 * h),
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                              colors: [
+                                Color(0xff2F6782),
+                                Color(0xff163646),
+                              ]),
+                          shape: BoxShape.circle,
+                        ),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(30.0),
+                          onTap: () {
+                            i++;
+                            _pageController.jumpToPage(i);
+                            if (i == 4) {
+                              flag = true;
+                              setState(() {});
+                            }
+                          },
+                          child: FutureBuilder(
+                              future: localsController.getLocale(),
+                              builder: (context, snp) {
+                                if (snp.connectionState ==
+                                    ConnectionState.done) {
+                                  return Transform.scale(
+                                    scaleX: snp.data! ? -1 : 1,
+                                    child: Container(
+                                      width: 15.0.sp,
+                                      height: 15.0.sp,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                            "assets/images/double_forward_icon.png",
+                                          ),
+                                          scale: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else
+                                  return Container();
+                              }),
+                        ),
                       )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 50.0.sp,
-                            height: 50.0.sp,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 0.08 * h),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xff2F6782),
-                            ),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(30.0),
-                              onTap: () {
-                                _currentPageNotifier.value += 1;
-                                if (_currentPageNotifier.value == 4)
-                                  flag = true;
-                                setState(() {});
-                                logSuccess(
-                                    _currentPageNotifier.value.toString());
-                                _pageController
-                                    .jumpToPage(_currentPageNotifier.value);
-                              },
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        ],
-                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -207,7 +241,7 @@ class _IntroPageState extends State<IntroPage> {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+          margin: EdgeInsets.only(top: 10, left: 10, right: 10),
           child: Text(
             text2,
             textAlign: TextAlign.center,
@@ -222,14 +256,14 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 
-  _buildCircleIndicator2() {
-    return CirclePageIndicator(
-      size: 15.0,
-      selectedSize: 18.0,
-      dotColor: Color(0xff5D5E60),
-      selectedDotColor: Color(0xff2F6782),
-      itemCount: 5,
-      currentPageNotifier: _currentPageNotifier,
-    );
-  }
+  // _buildCircleIndicator2() {
+  //   return CirclePageIndicator(
+  //     size: 15.0,
+  //     selectedSize: 18.0,
+  //     dotColor: Color(0xffE2EBF5),
+  //     selectedDotColor: Color(0xff2F6782),
+  //     itemCount: 5,
+  //     currentPageNotifier: i,
+  //   );
+  // }
 }

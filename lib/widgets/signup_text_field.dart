@@ -15,6 +15,7 @@ class SignUpTextField extends StatelessWidget {
     this.initialValue,
     this.controller,
     this.inputFormatters,
+    this.padding = const EdgeInsets.only(left: 15, right: 15, top: 5),
   });
 
   final String? hintText;
@@ -28,21 +29,22 @@ class SignUpTextField extends StatelessWidget {
   List<TextInputFormatter>? inputFormatters;
   bool obsecureText = false;
   bool readOnly = false;
+  EdgeInsetsGeometry? padding = EdgeInsets.only(left: 15, right: 15, top: 5);
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: new BorderRadius.circular(10.0),
-      ),
       child: Padding(
-        padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+        padding: padding!,
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: keyBoardType,
           decoration: InputDecoration(
-            border: InputBorder.none,
+            fillColor: Colors.grey.shade200,
+            filled: true,
+            border: OutlineInputBorder(
+                borderRadius: new BorderRadius.circular(10.0),
+                borderSide: BorderSide.none),
             hintText: hintText,
             prefixIcon: prefixIcon,
             prefix: prefix,

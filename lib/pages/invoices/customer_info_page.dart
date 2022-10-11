@@ -39,7 +39,9 @@ class CustomerInfoPage extends StatelessWidget {
             Divider(thickness: 1.5),
             const SizedBox(height: 20),
             blackText("Customer Name", 16),
-            SignUpTextField(),
+            SignUpTextField(
+              padding: EdgeInsets.all(0),
+            ),
             const SizedBox(height: 20),
             blackText("Send invoice By", 16),
             CustomDropdown(
@@ -49,26 +51,22 @@ class CustomerInfoPage extends StatelessWidget {
               onchanged: addInvoiceController.selectSendBy,
             ),
             const SizedBox(height: 20),
-            blackText("Customer phonne number", 16),
-            Container(
-              width: w,
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(10.0),
+            blackText("Customer phone number", 16),
+            IntlPhoneField(
+              flagsButtonPadding: EdgeInsets.symmetric(horizontal: 20),
+              dropdownIconPosition: IconPosition.trailing,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                fillColor: Colors.grey.shade200,
+                filled: true,
+                border: OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none),
               ),
-              child: IntlPhoneField(
-                dropdownIconPosition: IconPosition.trailing,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                ),
-                initialCountryCode: 'IN',
-                onChanged: (phone) {},
-              ),
+              initialCountryCode: 'IN',
+              onChanged: (phone) {},
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             Row(
               children: [
                 blackText("Customer Reference", 16),
@@ -76,7 +74,9 @@ class CustomerInfoPage extends StatelessWidget {
                 greyText("(optional)", 13)
               ],
             ),
-            SignUpTextField(),
+            SignUpTextField(
+              padding: EdgeInsets.all(0),
+            ),
             SizedBox(height: 50),
             Center(
               child: GestureDetector(
@@ -111,7 +111,11 @@ class CustomerInfoPage extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Color(0xff326C88),
+                    color: Color(0xff2F6782),
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/btn_wallpaper.png"),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   width: 0.7 * w,
                   padding: EdgeInsets.all(15),

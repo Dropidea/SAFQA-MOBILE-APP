@@ -9,7 +9,6 @@ import 'package:sizer/sizer.dart';
 import '../../controllers/charts_controller.dart';
 import '../../controllers/zoom_drawer_controller.dart';
 import '../../widgets/month_year_dropdown.dart';
-import '../../widgets/zero_app_bar.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({super.key});
@@ -39,21 +38,21 @@ class _MainPageState extends State<MainPage> {
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Color(0xffF9F9F9),
-      appBar: ZeroAppBar(),
       body: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 40),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: topSection(),
                 ),
                 Expanded(
                     child: Align(
                   child: ListView(
                     primary: false,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
                       const SizedBox(height: 10),
                       Row(
@@ -163,7 +162,7 @@ class _MainPageState extends State<MainPage> {
                           )
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 30),
                       RichText(
                         text: TextSpan(
                           style: TextStyle(
@@ -212,7 +211,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: 0.6 * h,
+                        height: 0.4 * h,
                         width: w,
                         child: Align(
                           child: ListView(
@@ -220,7 +219,7 @@ class _MainPageState extends State<MainPage> {
                             scrollDirection: Axis.horizontal,
                             children: [
                               SizedBox(
-                                height: 0.5 * h,
+                                height: 0.45 * h,
                                 width: w + 200,
                                 child: BarChart(
                                   BarChartData(
@@ -260,6 +259,7 @@ class _MainPageState extends State<MainPage> {
                                           enabled: true,
                                           touchTooltipData: BarTouchTooltipData(
                                             tooltipBgColor: Colors.transparent,
+                                            tooltipMargin: 0,
                                             getTooltipItem: (group, groupIndex,
                                                     rod, rodIndex) =>
                                                 BarTooltipItem(
@@ -323,7 +323,7 @@ class _MainPageState extends State<MainPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 30),
                       RichText(
                         text: TextSpan(
                           style: TextStyle(
@@ -372,10 +372,10 @@ class _MainPageState extends State<MainPage> {
                                   "50 K", "Total Balance", Color(0xff2F6782)),
                               SizedBox(height: 10),
                               buildLegend2("25 K", "Awaiting Balance",
-                                  Color(0xff2F6782)),
+                                  Color(0xffE4E4E4)),
                               SizedBox(height: 10),
                               buildLegend2("25 K", "Awaiting to Transfer",
-                                  Color(0xff2F6782)),
+                                  Color(0xff00A7B3)),
                             ],
                           ),
                           Stack(
@@ -490,6 +490,16 @@ class _MainPageState extends State<MainPage> {
           width: 15,
           height: 16,
           decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.4),
+                blurRadius: 5,
+                offset: Offset(0, 3),
+              ),
+            ],
             color: c,
             borderRadius: BorderRadius.circular(3),
           ),
@@ -551,58 +561,56 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget topSection() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: 10,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              InkWell(
-                onTap: myZoomDrawerController.zoomDrawerController.toggle,
-                child: const Image(
-                  image: AssetImage('assets/images/menu.png'),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            InkWell(
+              onTap: myZoomDrawerController.zoomDrawerController.toggle,
+              child: const Image(
+                image: AssetImage('assets/images/menu.png'),
+              ),
+            ),
+            const SizedBox(width: 20),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Dashboard",
+                  style:
+                      TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0.sp),
                 ),
-              ),
-              const SizedBox(width: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Dashboard",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 16.0.sp),
+                const SizedBox(height: 10),
+                Text(
+                  "lafi s h m almutairi",
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    color: Color(0xff858585),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "lafi s h m almutairi",
-                    style: TextStyle(
-                      fontSize: 13.0.sp,
-                      color: Color(0xff858585),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Icon(
-                Icons.notifications_rounded,
-                size: 30.0.sp,
-                color: Color(0xffD1D1D1),
-              ),
-              const SizedBox(width: 10),
-              Image(
-                image: AssetImage("assets/images/t.png"),
-              ),
-            ],
-          ),
-        ],
-      ),
+                ),
+              ],
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Icon(
+              Icons.notifications_rounded,
+              size: 30.0.sp,
+              color: Color(0xffD1D1D1),
+            ),
+            const SizedBox(width: 10),
+            Image(
+              image: AssetImage("assets/images/t.png"),
+              width: 30.0.sp,
+              height: 30.0.sp,
+              fit: BoxFit.cover,
+            ),
+          ],
+        ),
+      ],
     );
   }
 

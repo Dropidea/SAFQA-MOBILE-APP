@@ -108,7 +108,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                   width: 0.5 * w,
                   height: 50,
                   margin: const EdgeInsets.symmetric(vertical: 5),
-                  padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(10.0),
@@ -143,7 +143,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                   width: 0.3 * w,
                   height: 50,
                   margin: const EdgeInsets.symmetric(vertical: 5),
-                  padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(10.0),
@@ -178,6 +178,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             SizedBox(
               width: 0.5 * w,
               child: SignUpTextField(
+                padding: EdgeInsets.all(0),
                 keyBoardType: TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),
@@ -228,7 +229,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     value: 0,
                     groupValue: invoicesLangValue,
                     onChanged: (value) => setState(() {
@@ -248,7 +249,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
                     value: 1,
                     groupValue: invoicesLangValue,
@@ -359,7 +360,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     value: 0,
                     groupValue: termsAndConditions,
                     onChanged: (value) => setState(() {
@@ -379,7 +380,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
                     value: 1,
                     groupValue: termsAndConditions,

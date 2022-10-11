@@ -42,6 +42,7 @@ class SelectLanguagePage extends StatelessWidget {
             Container(
               width: w,
               height: h,
+              padding: EdgeInsets.only(top: 0.05 * h),
               child: Column(
                 children: [
                   Container(

@@ -54,7 +54,8 @@ class MyApp extends StatelessWidget {
         translations: LocaleString(),
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.indigo,
+          // primarySwatch: Colors.,
+          // colorScheme: Colors.red,
           primaryColor: Color(0xff2F6782),
           canvasColor: Colors.white,
           fontFamily: "Tajawal",

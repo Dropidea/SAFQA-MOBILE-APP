@@ -60,7 +60,9 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
         ),
         const SizedBox(height: 20),
         blackText("Payment Url Title", 16),
-        SignUpTextField(),
+        SignUpTextField(
+          padding: EdgeInsets.all(0),
+        ),
         const SizedBox(height: 20),
         blackText("Is the payment link active?", 16),
         const SizedBox(height: 10),
@@ -77,7 +79,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     value: 0,
                     groupValue: paymentActive,
                     onChanged: (value) => setState(() {
@@ -97,7 +99,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
                     value: 1,
                     groupValue: paymentActive,
@@ -146,7 +148,9 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
         ),
         const SizedBox(height: 20),
         blackText("Payment Value", 16),
-        SignUpTextField(),
+        SignUpTextField(
+          padding: EdgeInsets.all(0),
+        ),
         const SizedBox(height: 20),
         Row(
           children: [
@@ -184,7 +188,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     value: 0,
                     groupValue: invoicesLangValue,
                     onChanged: (value) => setState(() {
@@ -204,7 +208,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
                     value: 1,
                     groupValue: invoicesLangValue,
@@ -232,7 +236,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     value: 0,
                     groupValue: termsAndConditions,
                     onChanged: (value) => setState(() {
@@ -252,7 +256,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
                       Icons.circle,
                       color: Colors.grey.shade200,
                     ),
-                    size: GFSize.MEDIUM,
+                    size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
                     value: 1,
                     groupValue: termsAndConditions,

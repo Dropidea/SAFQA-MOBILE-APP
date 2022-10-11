@@ -99,7 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
                             child: Text(
                               "login".tr,
                               style: TextStyle(
@@ -222,6 +223,11 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 40.0.sp,
                                 decoration: BoxDecoration(
                                   color: Color(0xff2F6782),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/btn_wallpaper.png"),
+                                    fit: BoxFit.cover,
+                                  ),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: InkWell(
@@ -251,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               SizedBox(
-                                height: 5.0.sp,
+                                height: 10.0.sp,
                               ),
                               Text(
                                 "or_using_fast_login_by_fingerprint".tr,
@@ -259,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Color(0xff2F6782),
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w500,
-                                    decorationThickness: 15,
+                                    decorationThickness: 5,
                                     fontSize: 12.0.sp),
                               ),
                               SizedBox(
@@ -267,8 +273,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               Align(
                                 child: Container(
-                                  width: 80.0.sp,
-                                  height: 80.0.sp,
+                                  width: 60.0.sp,
+                                  height: 60.0.sp,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage(
@@ -280,7 +286,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               SizedBox(
-                                height: 10.0.sp,
+                                height: 15.0.sp,
                               ),
                               Text(
                                 "dont_have_an_account".tr,

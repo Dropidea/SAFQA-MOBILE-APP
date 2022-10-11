@@ -23,6 +23,8 @@ class CompleteSignUpPage extends StatefulWidget {
 class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   SignUpController _signUpController = Get.find();
   PageController _pageController = PageController();
+  TextEditingController pw = TextEditingController();
+  TextEditingController cpw = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   bool _agreeFlag = false;
@@ -109,25 +111,26 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(top: 5),
-                            child: Text(
-                              "SignUp",
-                              style: TextStyle(
-                                  color: Color(0xff2F6782),
-                                  fontSize: 20.0.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Container(
+                      //       margin: const EdgeInsets.only(top: 20),
+                      //       child: Text(
+                      //         "SignUp",
+                      //         style: TextStyle(
+                      //             color: Color(0xff2F6782),
+                      //             fontSize: 20.0.sp,
+                      //             fontWeight: FontWeight.bold),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Expanded(
                         child: Theme(
                             data: Theme.of(context),
                             child: Form(
+                              autovalidateMode: AutovalidateMode.always,
                               key: formKey,
                               child: MyStepper(
                                 type: MyStepperType.horizontal,
@@ -311,6 +314,11 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                                 height: 40.0.sp,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xff2F6782),
+                                                  image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/btn_wallpaper.png"),
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                   borderRadius:
                                                       BorderRadius.circular(15),
                                                 ),
@@ -513,6 +521,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     hintText: "Legal Company Name",
                     onchanged: (s) {
                       _signUpController.dataToRegister['company_name'] = s!;
+                      _signUpController.errors = {};
                     },
                     validator: (s) {
                       if (_signUpController.errors == null)
@@ -529,6 +538,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     hintText: "Company Brand Name (EN)",
                     onchanged: (s) {
                       _signUpController.dataToRegister['name_en'] = s!;
+                      _signUpController.errors = {};
                     },
                     validator: (s) {
                       if (_signUpController.errors == null)
@@ -545,6 +555,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     hintText: "Company Brand Name (AR)",
                     onchanged: (s) {
                       _signUpController.dataToRegister['name_ar'] = s!;
+                      _signUpController.errors = {};
                     },
                     validator: (s) {
                       if (_signUpController.errors == null)
@@ -557,125 +568,129 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         return null;
                     },
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: new BorderRadius.circular(10.0),
-                    ),
-                    child: Obx(() {
-                      List countries = _signUpController.globalData['country'];
-                      List<String> ids = countries
-                          .map<String>(
-                            (e) => e['id'].toString(),
-                          )
-                          .toList();
-                      List<String> countriesCodes = countries
-                          .map<String>(
-                            (e) => e['code'].toString(),
-                          )
-                          .toList();
-                      _signUpController
-                          .selectPhoneNumberCodeDrop(countriesCodes[4]);
-                      return SignUpTextField(
-                        keyBoardType: TextInputType.number,
-                        prefixIcon: SizedBox(
-                          width: 60,
-                          child: DropdownButtonFormField<String>(
-                            isExpanded: true,
-                            items: countriesCodes
-                                .map((e) => DropdownMenuItem<String>(
-                                      child: Text(e),
-                                      value: e,
-                                    ))
-                                .toList(),
-                            value:
-                                _signUpController.selectedPhoneNumberCodeDrop,
-                            onChanged: (value) {
-                              _signUpController
-                                  .selectPhoneNumberCodeDrop(value!);
-                              logError(_signUpController
-                                  .selectedPhoneNumberCodeDrop);
-                              _signUpController
-                                      .dataToRegister['phone_number_code_id'] =
-                                  ids[countriesCodes.indexOf(_signUpController
-                                      .selectedPhoneNumberCodeDrop)];
-                            },
-                          ),
+                  Obx(() {
+                    List countries = _signUpController.globalData['country'];
+                    List<String> ids = countries
+                        .map<String>(
+                          (e) => e['id'].toString(),
+                        )
+                        .toList();
+                    List<String> countriesCodes = countries
+                        .map<String>(
+                          (e) => e['code'].toString(),
+                        )
+                        .toList();
+                    _signUpController
+                        .selectPhoneNumberCodeDrop(countriesCodes[4]);
+                    return SignUpTextField(
+                      keyBoardType: TextInputType.number,
+                      prefixIcon: SizedBox(
+                        width: 60,
+                        child: DropdownButtonFormField<String>(
+                          decoration:
+                              const InputDecoration(border: InputBorder.none),
+                          isExpanded: true,
+                          items: countriesCodes
+                              .map((e) => DropdownMenuItem<String>(
+                                    child: Center(child: Text(e)),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          value: _signUpController.selectedPhoneNumberCodeDrop,
+                          onChanged: (value) {
+                            _signUpController.selectPhoneNumberCodeDrop(value!);
+                            logError(
+                                _signUpController.selectedPhoneNumberCodeDrop);
+                            _signUpController
+                                    .dataToRegister['phone_number_code_id'] =
+                                ids[countriesCodes.indexOf(_signUpController
+                                    .selectedPhoneNumberCodeDrop)];
+                            _signUpController.errors = {};
+                          },
                         ),
-                        hintText: 'Company Phone Number',
-                        validator: (s) {
-                          if (_signUpController.errors == null)
-                            return null;
-                          else if (_signUpController.errors
-                              .containsKey('phone_number')) {
-                            return _signUpController.errors['phone_number'][0]
-                                .toString();
-                          } else
-                            return null;
-                        },
-                        onchanged: (s) {
-                          _signUpController.dataToRegister['phone_number'] = s!;
-                        },
-                      );
-                    }),
-                  ),
+                      ),
+                      hintText: 'Company Phone Number',
+                      validator: (s) {
+                        if (_signUpController.errors == null)
+                          return null;
+                        else if (_signUpController.errors
+                            .containsKey('phone_number')) {
+                          return _signUpController.errors['phone_number'][0]
+                              .toString();
+                        } else
+                          return null;
+                      },
+                      onchanged: (s) {
+                        _signUpController.dataToRegister['phone_number'] = s!;
+                        _signUpController.errors = {};
+                      },
+                    );
+                  }),
                   SignUpTextField(
                     hintText: "Company Email",
                     keyBoardType: TextInputType.emailAddress,
                     onchanged: (s) {
                       _signUpController.dataToRegister['work_email'] = s!;
+                      _signUpController.errors = {};
                     },
                     validator: (s) {
-                      if (_signUpController.errors == null)
+                      if (s!.isEmpty) {
                         return null;
-                      else if (_signUpController.errors
+                      } else if (!EmailValidator.validate(s)) {
+                        return "please enter a valid email!";
+                      } else if (_signUpController.errors
                           .containsKey('work_email')) {
                         return _signUpController.errors['work_email'][0]
                             .toString();
-                      } else
+                      } else {
                         return null;
+                      }
                     },
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: new BorderRadius.circular(10.0),
-                    ),
-                    child: Obx(
-                      () {
-                        List categories =
-                            _signUpController.globalData['category'];
-                        List<String> ids = categories
-                            .map<String>((e) => e['id'].toString())
-                            .toList();
-                        List<String> categoryNames = categories
-                            .map<String>((e) => e['name'].toString())
-                            .toList();
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      child: Obx(
+                        () {
+                          List categories =
+                              _signUpController.globalData['category'];
+                          List<String> ids = categories
+                              .map<String>((e) => e['id'].toString())
+                              .toList();
+                          List<String> categoryNames = categories
+                              .map<String>((e) => e['name'].toString())
+                              .toList();
 
-                        return DropdownButtonFormField<String>(
-                          decoration: InputDecoration(border: InputBorder.none),
-                          items: categoryNames
-                              .map((e) => DropdownMenuItem<String>(
-                                    child: Text(e),
-                                    value: e,
-                                  ))
-                              .toList(),
-                          value: _signUpController.selectedCategoryDrop == ""
-                              ? null
-                              : _signUpController.selectedCategoryDrop,
-                          hint: Text("Categories"),
-                          onChanged: (value) {
-                            _signUpController.selectCategoryDrop(value!);
+                          return DropdownButtonFormField<String>(
+                            decoration: InputDecoration(
+                              fillColor: Colors.grey.shade200,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(10.0),
+                                  borderSide: BorderSide.none),
+                            ),
+                            items: categoryNames
+                                .map((e) => DropdownMenuItem<String>(
+                                      child: Text(e),
+                                      value: e,
+                                    ))
+                                .toList(),
+                            value: _signUpController.selectedCategoryDrop == ""
+                                ? null
+                                : _signUpController.selectedCategoryDrop,
+                            hint: Text("Categories"),
+                            onChanged: (value) {
+                              _signUpController.errors = {};
 
-                            _signUpController.dataToRegister['category_id'] =
-                                ids[categoryNames.indexOf(value)];
-                          },
-                        );
-                      },
+                              _signUpController.selectCategoryDrop(value!);
+
+                              _signUpController.dataToRegister['category_id'] =
+                                  ids[categoryNames.indexOf(value)];
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -694,8 +709,10 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 children: [
                   SignUpTextField(
                     hintText: "Bank Account Name",
-                    onchanged: (s) => _signUpController
-                        .dataToRegister['bank_account_ame'] = s!,
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['bank_account_ame'] = s!;
+                      _signUpController.errors = {};
+                    },
                     validator: (s) {
                       if (_signUpController.errors == null)
                         return null;
@@ -709,58 +726,66 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: new BorderRadius.circular(10.0),
-                    ),
-                    child: Obx(() {
-                      List banks = _signUpController.globalData['banks'];
-                      List<String> ids = banks
-                          .map<String>(
-                            (e) => e['id'].toString(),
-                          )
-                          .toList();
-                      List<String> banksNames = banks
-                          .map<String>(
-                            (e) => e['name'].toString(),
-                          )
-                          .toList();
-                      return DropdownButtonFormField<String>(
-                        decoration: InputDecoration(border: InputBorder.none),
-                        items: banksNames
-                            .map((e) => DropdownMenuItem<String>(
-                                  child: Text(e),
-                                  value: e,
-                                ))
-                            .toList(),
-                        value: _signUpController.selectedBankDrop == ""
-                            ? null
-                            : _signUpController.selectedBankDrop,
-                        hint: Text("Banks"),
-                        onChanged: (value) {
-                          _signUpController.selectBankDrop(value!);
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      child: Obx(() {
+                        List banks = _signUpController.globalData['banks'];
+                        List<String> ids = banks
+                            .map<String>(
+                              (e) => e['id'].toString(),
+                            )
+                            .toList();
+                        List<String> banksNames = banks
+                            .map<String>(
+                              (e) => e['name'].toString(),
+                            )
+                            .toList();
+                        return DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            fillColor: Colors.grey.shade200,
+                            filled: true,
+                            border: OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none),
+                          ),
+                          items: banksNames
+                              .map((e) => DropdownMenuItem<String>(
+                                    child: Text(e),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          value: _signUpController.selectedBankDrop == ""
+                              ? null
+                              : _signUpController.selectedBankDrop,
+                          hint: Text("Banks"),
+                          onChanged: (value) {
+                            _signUpController.selectBankDrop(value!);
+                            _signUpController.errors = {};
 
-                          _signUpController.dataToRegister['bank_name'] = value;
-                        },
-                        validator: (s) {
-                          if (_signUpController.errors == null)
-                            return null;
-                          else if (_signUpController.errors
-                              .containsKey('bank_name')) {
-                            return _signUpController.errors['bank_name'][0]
-                                .toString();
-                          } else
-                            return null;
-                        },
-                      );
-                    }),
+                            _signUpController.dataToRegister['bank_name'] =
+                                value;
+                          },
+                          validator: (s) {
+                            if (_signUpController.errors == null)
+                              return null;
+                            else if (_signUpController.errors
+                                .containsKey('bank_name')) {
+                              return _signUpController.errors['bank_name'][0]
+                                  .toString();
+                            } else
+                              return null;
+                          },
+                        );
+                      }),
+                    ),
                   ),
                   SignUpTextField(
                     hintText: "Account Number",
                     keyBoardType: TextInputType.number,
-                    onchanged: (s) =>
-                        _signUpController.dataToRegister['account_number'] = s!,
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['account_number'] = s!;
+                      _signUpController.errors = {};
+                    },
                     validator: (s) {
                       if (_signUpController.errors == null)
                         return null;
@@ -775,8 +800,10 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                   SignUpTextField(
                     hintText: "IBAN",
                     keyBoardType: TextInputType.number,
-                    onchanged: (s) =>
-                        _signUpController.dataToRegister['iban'] = s!,
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['iban'] = s!;
+                      _signUpController.errors = {};
+                    },
                     validator: (s) {
                       if (_signUpController.errors == null)
                         return null;
@@ -802,8 +829,10 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 children: [
                   SignUpTextField(
                     hintText: "Manager Full Name",
-                    onchanged: (s) =>
-                        _signUpController.dataToRegister['full_name'] = s!,
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['full_name'] = s!;
+                      _signUpController.errors = {};
+                    },
                     validator: (s) {
                       if (_signUpController.errors == null)
                         return null;
@@ -818,27 +847,130 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                   SignUpTextField(
                     hintText: "Email",
                     keyBoardType: TextInputType.emailAddress,
-                    onchanged: (s) =>
-                        _signUpController.dataToRegister['email'] = s!,
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['email'] = s!;
+                      _signUpController.errors = {};
+                    },
                     validator: (s) {
-                      if (!EmailValidator.validate(s!))
+                      if (s!.isEmpty) {
+                        return null;
+                      }
+                      if (!EmailValidator.validate(s)) {
                         return "please_enter_a_valid_email".tr;
-                      else if (_signUpController.errors == null)
-                        return null;
-                      else if (_signUpController.errors.containsKey('email')) {
+                      } else if (_signUpController.errors
+                          .containsKey('email')) {
                         return _signUpController.errors['email'][0].toString();
-                      } else
+                      } else {
                         return null;
+                      }
                     },
                   ),
+                  Obx(() {
+                    List countries = _signUpController.globalData['country'];
+                    List<String> ids = countries
+                        .map<String>(
+                          (e) => e['id'].toString(),
+                        )
+                        .toList();
+                    List<String> countriesCodes = countries
+                        .map<String>(
+                          (e) => e['code'].toString(),
+                        )
+                        .toList();
+                    _signUpController
+                        .selectPhoneNumberManagerCodeDrop(countriesCodes[4]);
+                    return SignUpTextField(
+                      keyBoardType: TextInputType.number,
+                      prefixIcon: SizedBox(
+                        width: 60,
+                        child: DropdownButtonFormField<String>(
+                          decoration:
+                              const InputDecoration(border: InputBorder.none),
+                          isExpanded: true,
+                          items: countriesCodes
+                              .map((e) => DropdownMenuItem<String>(
+                                    child: Center(child: Text(e)),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          value: _signUpController
+                              .selectedPhoneNumberManagerCodeDrop,
+                          onChanged: (value) {
+                            _signUpController
+                                .selectPhoneNumberManagerCodeDrop(value!);
+                            logError(_signUpController
+                                .selectedPhoneNumberManagerCodeDrop);
+                            _signUpController.dataToRegister[
+                                    'phone_number_code_manager_id'] =
+                                ids[countriesCodes.indexOf(_signUpController
+                                    .selectedPhoneNumberManagerCodeDrop)];
+                            _signUpController.errors = {};
+                          },
+                        ),
+                      ),
+                      onchanged: (s) {
+                        _signUpController
+                            .dataToRegister['phone_number_manager'] = s!;
+                        _signUpController.errors = {};
+                      },
+                      validator: (s) {
+                        if (_signUpController.errors == null) return null;
+                        return _signUpController.errors
+                                .containsKey("phone_number_manager")
+                            ? _signUpController.errors['phone_number_manager']
+                                    [0]
+                                .toString()
+                            : null;
+                      },
+                      hintText: 'Manager Mobile Number',
+                    );
+                  }),
+                  SignUpTextField(
+                    hintText: "Password",
+                    obsecureText: true,
+                    controller: pw,
+                    onchanged: (s) {
+                      _signUpController.dataToRegister['password'] = s!;
+                      _signUpController.errors = {};
+                    },
+                    validator: (s) {
+                      if (s!.isEmpty) {
+                        return null;
+                      } else if (s.length < 6) {
+                        return "password should at least be 6 length";
+                      } else {
+                        return _signUpController.errors.containsKey("password")
+                            ? _signUpController.errors['password'][0]
+                            : null;
+                      }
+                    },
+                  ),
+                  SignUpTextField(
+                      hintText: "Confirm Password",
+                      controller: cpw,
+                      obsecureText: true,
+                      validator: (s) {
+                        if (s!.isEmpty) {
+                          return null;
+                        } else if (cpw.text != pw.text) {
+                          return "passwords doesn't match";
+                        } else {
+                          return _signUpController.errors
+                                  .containsKey("password_confirmation")
+                              ? _signUpController
+                                  .errors['password_confirmation'][0]
+                              : null;
+                        }
+                      },
+                      onchanged: (s) {
+                        _signUpController
+                            .dataToRegister['password_confirmation'] = s!;
+                        _signUpController.errors = {};
+                      }),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: new BorderRadius.circular(10.0),
-                    ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
                       child: Obx(() {
                         List countries =
                             _signUpController.globalData['country'];
@@ -847,119 +979,39 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                               (e) => e['id'].toString(),
                             )
                             .toList();
-                        List<String> countriesCodes = countries
+                        List<String> countriesNames = countries
                             .map<String>(
-                              (e) => e['code'].toString(),
+                              (e) => e['name_en'].toString(),
                             )
                             .toList();
-                        _signUpController.selectPhoneNumberManagerCodeDrop(
-                            countriesCodes[4]);
-                        return SignUpTextField(
-                          keyBoardType: TextInputType.number,
-                          prefixIcon: SizedBox(
-                            width: 60,
-                            child: DropdownButtonFormField<String>(
-                              isExpanded: true,
-                              items: countriesCodes
-                                  .map((e) => DropdownMenuItem<String>(
-                                        child: Text(e),
-                                        value: e,
-                                      ))
-                                  .toList(),
-                              value: _signUpController
-                                  .selectedPhoneNumberManagerCodeDrop,
-                              onChanged: (value) {
-                                _signUpController
-                                    .selectPhoneNumberManagerCodeDrop(value!);
-                                logError(_signUpController
-                                    .selectedPhoneNumberManagerCodeDrop);
-                                _signUpController.dataToRegister[
-                                        'phone_number_code_manager_id'] =
-                                    ids[countriesCodes.indexOf(_signUpController
-                                        .selectedPhoneNumberManagerCodeDrop)];
-                              },
-                            ),
+                        return DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            fillColor: Colors.grey.shade200,
+                            filled: true,
+                            border: OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none),
                           ),
-                          onchanged: (s) {
-                            _signUpController
-                                .dataToRegister['phone_number_manager'] = s!;
+                          items: countriesNames
+                              .map((e) => DropdownMenuItem<String>(
+                                    child: Text(e),
+                                    value: e,
+                                  ))
+                              .toList(),
+                          value: _signUpController.selectedNationalityDrop == ""
+                              ? null
+                              : _signUpController.selectedNationalityDrop,
+                          hint: Text("Nationality"),
+                          onChanged: (value) {
+                            _signUpController.selectNationalityDrop(value!);
+                            _signUpController.errors = {};
+
+                            _signUpController.dataToRegister['nationality_id'] =
+                                ids[countriesNames.indexOf(value)];
                           },
-                          validator: (s) {
-                            if (_signUpController.errors == null) return null;
-                            return _signUpController.errors
-                                    .containsKey("phone_number_manager")
-                                ? _signUpController
-                                    .errors['phone_number_manager'][0]
-                                    .toString()
-                                : null;
-                          },
-                          hintText: 'Manager Mobile Number',
                         );
                       }),
                     ),
-                  ),
-                  SignUpTextField(
-                    hintText: "Password",
-                    obsecureText: true,
-                    onchanged: (s) =>
-                        _signUpController.dataToRegister['password'] = s!,
-                    validator: (s) {
-                      return _signUpController.errors.containsKey("password")
-                          ? _signUpController.errors['password'][0]
-                          : null;
-                    },
-                  ),
-                  SignUpTextField(
-                    hintText: "Confirm Password",
-                    obsecureText: true,
-                    validator: (s) {
-                      return _signUpController.errors
-                              .containsKey("password_confirmation")
-                          ? _signUpController.errors['password_confirmation'][0]
-                          : null;
-                    },
-                    onchanged: (s) => _signUpController
-                        .dataToRegister['password_confirmation'] = s!,
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: new BorderRadius.circular(10.0),
-                    ),
-                    child: Obx(() {
-                      List countries = _signUpController.globalData['country'];
-                      List<String> ids = countries
-                          .map<String>(
-                            (e) => e['id'].toString(),
-                          )
-                          .toList();
-                      List<String> countriesNames = countries
-                          .map<String>(
-                            (e) => e['name_en'].toString(),
-                          )
-                          .toList();
-                      return DropdownButtonFormField<String>(
-                        decoration: InputDecoration(border: InputBorder.none),
-                        items: countriesNames
-                            .map((e) => DropdownMenuItem<String>(
-                                  child: Text(e),
-                                  value: e,
-                                ))
-                            .toList(),
-                        value: _signUpController.selectedNationalityDrop == ""
-                            ? null
-                            : _signUpController.selectedNationalityDrop,
-                        hint: Text("Nationality"),
-                        onChanged: (value) {
-                          _signUpController.selectNationalityDrop(value!);
-
-                          _signUpController.dataToRegister['nationality_id'] =
-                              ids[countriesNames.indexOf(value)];
-                        },
-                      );
-                    }),
                   ),
                 ],
               ),
@@ -976,7 +1028,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 primary: false,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 15.0.sp),
+                    margin: EdgeInsets.only(
+                        top: 10, bottom: 15.0.sp, left: 15, right: 15),
                     child: Text(
                       "We've almost done!",
                       style: TextStyle(
@@ -987,7 +1040,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     hintText: "00201084433369",
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 10),
+                    margin: const EdgeInsets.only(top: 10, left: 15, right: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

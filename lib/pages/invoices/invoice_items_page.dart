@@ -50,6 +50,7 @@ class InvoiceItemsPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 blackText("Productn name", 16),
                 SignUpTextField(
+                  padding: EdgeInsets.all(0),
                   controller: t1,
                   validator: (s) {
                     if (s!.isEmpty || s == "") {
@@ -61,6 +62,7 @@ class InvoiceItemsPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 blackText("Unit Price", 16),
                 SignUpTextField(
+                  padding: EdgeInsets.all(0),
                   hintText: "0 AED",
                   controller: t2,
                   keyBoardType: TextInputType.number,
@@ -110,7 +112,11 @@ class InvoiceItemsPage extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Color(0xff326C88),
+                        color: Color(0xff2F6782),
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/btn_wallpaper.png"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       width: 0.7 * w,
                       padding: EdgeInsets.all(15),
@@ -142,7 +148,6 @@ class InvoiceItemsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                           image: DecorationImage(
                               image: AssetImage("assets/images/inv_item.png"),
-                              opacity: 0.5,
                               fit: BoxFit.fill),
                         ),
                         child: Column(

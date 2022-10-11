@@ -379,7 +379,7 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
         return Icon(
           Icons.circle,
           color: isDarkActive ? _kCircleActiveDark : _kCircleActiveLight,
-          size: 12.0,
+          size: _isCurrent(index) ? 15.0 : 12,
         );
       case MyStepState.error:
         return const Text('!', style: _kStepStyle);
@@ -387,19 +387,21 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
   }
 
   Color _circleColor(int index) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ThemeData themeData = Theme.of(context);
     return widget.steps[index].isActive
-        ? colorScheme.primary
+        ? themeData.primaryColor
         : Colors.grey.shade400;
   }
 
   Widget _buildCircle(int index, bool oldState) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
-      width: widget.steps[index].state == MyStepState.complete
-          ? _kStepSize
-          : _kStepSize - 4,
-      height: _kStepSize,
+      width: _isCurrent(index)
+          ? _kStepSize + 6
+          : widget.steps[index].state == MyStepState.complete
+              ? _kStepSize
+              : _kStepSize - 4,
+      height: _isCurrent(index) ? _kStepSize + 6 : _kStepSize,
       child: AnimatedContainer(
         curve: Curves.fastOutSlowIn,
         duration: kThemeAnimationDuration,
@@ -846,7 +848,7 @@ class _MyStepperState extends State<MyStepper> with TickerProviderStateMixin {
         Expanded(
           child: ListView(
             physics: widget.physics,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            // padding: const EdgeInsets.symmetric(horizontal: 20),
             children: <Widget>[
               AnimatedSize(
                 curve: Curves.fastOutSlowIn,
