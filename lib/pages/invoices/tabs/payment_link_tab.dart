@@ -116,7 +116,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
         CustomDropdown(
           width: w,
           items: ["yes", "No"],
-          onchanged: (String v) {
+          onchanged: (String? v) {
             //TODO:fixed Price Function
           },
           hint: "Fixed Price",

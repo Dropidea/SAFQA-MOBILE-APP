@@ -29,7 +29,9 @@ class LoginController extends GetxController {
       SizedBox(
           height: 25,
           width: 25,
-          child: Center(child: CircularProgressIndicator())),
+          child: Center(
+            child: CircularProgressIndicator(),
+          )),
     );
     var res = await AuthService().login(email, password);
     Navigator.of(Get.overlayContext!).pop();

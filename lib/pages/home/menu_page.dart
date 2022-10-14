@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/zoom_drawer_controller.dart';
@@ -22,7 +23,11 @@ class MenuPage extends StatelessWidget {
           color: item.title == "Log out" ? Color(0xffE47E7B) : Colors.white,
         ),
         minLeadingWidth: 20,
-        onTap: () {},
+        onTap: () async {
+          if (item.title == "Log out") {
+            await AuthService().logout();
+          }
+        },
       );
   @override
   Widget build(BuildContext context) {

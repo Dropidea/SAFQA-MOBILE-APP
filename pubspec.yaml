@@ -51,6 +51,7 @@ dependencies:
   intl: ^0.17.0
   dotted_border: ^2.0.0+2
   file_picker: ^2.1.7
+  badges: ^2.0.3
   # pinput: ^2.2.12
 
 dev_dependencies:
@@ -105,6 +106,10 @@ flutter:
     - assets/images/tick.png
     - assets/images/double_forward_icon.png
     - assets/images/btn_wallpaper.png
+    - assets/images/notification.png
+    - assets/images/chart.png
+    - assets/images/stamp.png
+    - assets/images/create_invoice.png
 
 
 

@@ -11,7 +11,7 @@ import 'package:sizer/sizer.dart';
 
 class InvoiceItemsPage extends StatelessWidget {
   InvoiceItemsPage({super.key});
-  double quantity = 0;
+  int quantity = 0;
   TextEditingController t1 = TextEditingController();
   TextEditingController t2 = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -88,7 +88,7 @@ class InvoiceItemsPage extends StatelessWidget {
                       child: NumericStepButton(
                         minValue: 0,
                         onChanged: (value) {
-                          quantity = value;
+                          quantity = value.round();
                           logWarning(quantity);
                         },
                       ),
@@ -101,12 +101,14 @@ class InvoiceItemsPage extends StatelessWidget {
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         InvoiceItem item = InvoiceItem(
-                          t1.text,
-                          t2.text,
-                          quantity,
+                          productName: t1.text,
+                          unitPrice: t2.text,
+                          quantity: quantity,
                         );
                         addInvoiceController.addInvoiceItem(item);
-                        logError(addInvoiceController.invoiceItems.length);
+                        addInvoiceController.addInvoiceItemAsArrays(item);
+                        logSuccess(
+                            addInvoiceController.dataToCreateInvoice.toJson());
                       }
                     },
                     child: Container(
@@ -164,7 +166,7 @@ class InvoiceItemsPage extends StatelessWidget {
                                     children: [
                                       greyText("Product Name", 11),
                                       const SizedBox(height: 10),
-                                      blackText(item.productName, 11)
+                                      blackText(item.productName!, 11)
                                     ],
                                   ),
                                   Column(
@@ -181,7 +183,7 @@ class InvoiceItemsPage extends StatelessWidget {
                                       greyText("Quantity", 11),
                                       SizedBox(height: 10),
                                       blackText(
-                                          item.quantity.round().toString(), 11)
+                                          item.quantity!.round().toString(), 11)
                                     ],
                                   ),
                                   Column(
@@ -260,7 +262,7 @@ class InvoiceItemsPage extends StatelessWidget {
 
   Widget buildMenuItem(InvoiceItem item) => ListTile(
         title: Text(
-          item.productName,
+          item.productName!,
           style: TextStyle(
             color: Color(0xffE47E7B),
             fontSize: 15.0.sp,

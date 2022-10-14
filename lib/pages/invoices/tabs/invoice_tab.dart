@@ -9,6 +9,7 @@ import 'package:getwidget/components/radio/gf_radio.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/invoices/customer_info_page.dart';
 import 'package:safqa/pages/invoices/invoice_items_page.dart';
@@ -29,16 +30,26 @@ class _InvoiceTabState extends State<InvoiceTab> {
   int invoicesLangValue = 0;
   int termsAndConditions = 0;
   String filePath = "";
+  bool recurringIntervalFlag = false;
+  bool discountAvailableFlag = false;
+  bool discountTypeFlag = true;
+  bool termsConditionsFlag = false;
+  TextEditingController expiryDateController =
+      TextEditingController(text: 'yyyy-MM-dd');
+  TextEditingController startDateController =
+      TextEditingController(text: 'dd/MM/yyyy');
+  TextEditingController endDateController =
+      TextEditingController(text: 'dd/MM/yyyy');
+  TextEditingController expiryTimeController =
+      TextEditingController(text: '00:00');
+  AddInvoiceController addInvoiceController = Get.find();
+  SignUpController _signUpController = Get.find();
+  LoginController _loginController = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
-    AddInvoiceController addInvoiceController = Get.find();
-    SignUpController _signUpController = Get.find();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    TextEditingController textEditingController1 =
-        TextEditingController(text: 'dd/MM/yyyy');
-    TextEditingController textEditingController2 =
-        TextEditingController(text: '00:00');
+
     return ListView(
       children: [
         blackText("Invoice Date", 16),
@@ -83,20 +94,101 @@ class _InvoiceTabState extends State<InvoiceTab> {
             addInvoiceController.selectCurrencyDrop(countriesCurrencies[0]);
 
             return CustomDropdown(
-                items: countriesCurrencies,
-                selectedItem: addInvoiceController.selectedCurrencyDrop,
-                width: w,
-                onchanged: addInvoiceController.selectCurrencyDrop);
+              items: countriesCurrencies,
+              selectedItem: addInvoiceController.selectedCurrencyDrop,
+              width: w,
+              onchanged: (s) {
+                addInvoiceController.selectCurrencyDrop(s);
+                addInvoiceController.dataToCreateInvoice.currencyId =
+                    ids[countriesCurrencies.indexOf(s!)];
+              },
+            );
           },
         ),
         const SizedBox(height: 20),
         blackText("Discount Available", 16),
-        CustomDropdown(
-            items: addInvoiceController.discountDrops,
-            selectedItem: addInvoiceController.selectedDiscountDrop,
-            width: w,
-            onchanged: addInvoiceController.selectDiscountDrop),
+        Container(
+          width: w,
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: DropdownButtonFormField(
+            decoration: const InputDecoration(border: InputBorder.none),
+            items: addInvoiceController.discountDrops
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                    ),
+                  ),
+                )
+                .toList(),
+            value: addInvoiceController.selectedDiscountDrop,
+            onChanged: (value) {
+              addInvoiceController.selectDiscountDrop(value!);
+              if (value == "No") {
+                discountAvailableFlag = false;
+              } else {
+                discountAvailableFlag = true;
+              }
+              setState(() {});
+            },
+          ),
+        ),
         const SizedBox(height: 20),
+        discountAvailableFlag ? blackText("Discount Type", 16) : Container(),
+        discountAvailableFlag
+            ? Container(
+                width: w,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: DropdownButtonFormField(
+                  decoration: const InputDecoration(border: InputBorder.none),
+                  items: addInvoiceController.discountTypesDrops
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  value: addInvoiceController.selectedDiscountTypesDrop,
+                  onChanged: (value) {
+                    addInvoiceController.selectDiscountTypesDrop(value!);
+                    if (value == "Fixed") {
+                      discountTypeFlag = true;
+                    } else {
+                      discountTypeFlag = false;
+                    }
+                    addInvoiceController.dataToCreateInvoice.discountType =
+                        value;
+                    setState(() {});
+                  },
+                ),
+              )
+            : Container(),
+        discountAvailableFlag ? const SizedBox(height: 20) : Container(),
+        discountAvailableFlag ? blackText("Discount Value", 16) : Container(),
+        discountAvailableFlag
+            ? SignUpTextField(
+                padding: EdgeInsets.all(0),
+                hintText: discountTypeFlag ? "0 AED" : "0 %",
+                onchanged: (s) {
+                  addInvoiceController.dataToCreateInvoice.discountValue = s;
+                },
+              )
+            : Container(),
+        discountAvailableFlag ? const SizedBox(height: 20) : Container(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -117,12 +209,11 @@ class _InvoiceTabState extends State<InvoiceTab> {
                     child: TextfieldDatePicker(
                       decoration:
                           const InputDecoration(border: InputBorder.none),
-                      textfieldDatePickerController: textEditingController1,
+                      textfieldDatePickerController: expiryDateController,
                       materialDatePickerFirstDate: DateTime(2000),
                       materialDatePickerLastDate: DateTime(2050),
-                      materialDatePickerInitialDate:
-                          DateTime(DateTime.now().year),
-                      preferredDateFormat: DateFormat('dd/MM/yyyy'),
+                      materialDatePickerInitialDate: DateTime.now(),
+                      preferredDateFormat: DateFormat('y-M-d'),
                       cupertinoDatePickerMaximumDate: DateTime(2050),
                       cupertinoDatePickerMinimumDate: DateTime(2000),
                       cupertinoDatePickerBackgroundColor:
@@ -157,7 +248,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                           Theme.of(context).primaryColor,
                       materialInitialTime: TimeOfDay.now(),
                       textfieldDateAndTimePickerController:
-                          textEditingController2,
+                          expiryTimeController,
                     ),
                   ),
                 )
@@ -184,6 +275,9 @@ class _InvoiceTabState extends State<InvoiceTab> {
                   FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),
                 ],
                 hintText: "0",
+                onchanged: (s) {
+                  addInvoiceController.dataToCreateInvoice.remindAfter = s;
+                },
               ),
             ),
             SizedBox(width: 10),
@@ -200,11 +294,41 @@ class _InvoiceTabState extends State<InvoiceTab> {
         ),
         const SizedBox(height: 20),
         blackText("Recurring Interval", 16),
-        CustomDropdown(
-            items: addInvoiceController.recurringInterval,
-            selectedItem: addInvoiceController.selectedRecurringInterval,
-            width: w,
-            onchanged: addInvoiceController.selectRecurringInterval),
+        Container(
+          width: w,
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: DropdownButtonFormField(
+            decoration: const InputDecoration(border: InputBorder.none),
+            items: addInvoiceController.recurringInterval
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                    ),
+                  ),
+                )
+                .toList(),
+            value: addInvoiceController.selectedRecurringInterval,
+            onChanged: (value) {
+              addInvoiceController.selectRecurringInterval(value!);
+              if (value != "No Recurring") {
+                setState(() {
+                  recurringIntervalFlag = true;
+                });
+              } else {
+                setState(() {
+                  recurringIntervalFlag = false;
+                });
+              }
+            },
+          ),
+        ),
         SizedBox(
           width: w,
           child: Text(
@@ -213,6 +337,82 @@ class _InvoiceTabState extends State<InvoiceTab> {
             style: TextStyle(color: Color(0xff2F6782), fontSize: 11.0.sp),
           ),
         ),
+        const SizedBox(height: 20),
+        recurringIntervalFlag
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      blackText("Start Date", 15),
+                      Container(
+                        width: 0.4 * w,
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Center(
+                          child: TextfieldDatePicker(
+                            decoration:
+                                const InputDecoration(border: InputBorder.none),
+                            textfieldDatePickerController: startDateController,
+                            materialDatePickerFirstDate: DateTime(2000),
+                            materialDatePickerLastDate: DateTime(2050),
+                            materialDatePickerInitialDate: DateTime.now(),
+                            preferredDateFormat: DateFormat('y-M-d'),
+                            cupertinoDatePickerMaximumDate: DateTime(2050),
+                            cupertinoDatePickerMinimumDate: DateTime(2000),
+                            cupertinoDatePickerBackgroundColor:
+                                Theme.of(context).primaryColor,
+                            cupertinoDatePickerMaximumYear: 2050,
+                            cupertinoDateInitialDateTime:
+                                DateTime(DateTime.now().year),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      blackText("End Date", 15),
+                      Container(
+                        width: 0.4 * w,
+                        height: 50,
+                        margin: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Center(
+                          child: TextfieldDatePicker(
+                            decoration:
+                                const InputDecoration(border: InputBorder.none),
+                            textfieldDatePickerController: endDateController,
+                            materialDatePickerFirstDate: DateTime(2000),
+                            materialDatePickerLastDate: DateTime(2050),
+                            materialDatePickerInitialDate: DateTime.now(),
+                            preferredDateFormat: DateFormat('y-M-d'),
+                            cupertinoDatePickerMaximumDate: DateTime(2050),
+                            cupertinoDatePickerMinimumDate: DateTime(2000),
+                            cupertinoDatePickerBackgroundColor:
+                                Theme.of(context).primaryColor,
+                            cupertinoDatePickerMaximumYear: 2050,
+                            cupertinoDateInitialDateTime:
+                                DateTime(DateTime.now().year),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
+            : Container(),
         const SizedBox(height: 20),
         blackText("Language of the invoice", 16),
         const SizedBox(height: 10),
@@ -232,9 +432,14 @@ class _InvoiceTabState extends State<InvoiceTab> {
                     size: GFSize.SMALL,
                     value: 0,
                     groupValue: invoicesLangValue,
-                    onChanged: (value) => setState(() {
+                    onChanged: (value) {
+                      setState(
+                        () {
                           invoicesLangValue = value;
-                        })),
+                        },
+                      );
+                      addInvoiceController.dataToCreateInvoice.languageId = 1;
+                    }),
                 greyText("English", 16),
               ],
             ),
@@ -253,9 +458,14 @@ class _InvoiceTabState extends State<InvoiceTab> {
                     inactiveBorderColor: Colors.transparent,
                     value: 1,
                     groupValue: invoicesLangValue,
-                    onChanged: (value) => setState(() {
+                    onChanged: (value) {
+                      setState(
+                        () {
                           invoicesLangValue = value;
-                        })),
+                        },
+                      );
+                      addInvoiceController.dataToCreateInvoice.languageId = 2;
+                    }),
                 greyText("Arabic", 16),
               ],
             ),
@@ -275,6 +485,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             if (result != null) {
               File file = File(result.files.single.path);
               filePath = result.files.single.path.split("/").last;
+              // addInvoiceController.dataToCreateInvoice.attachFile = file;
               setState(() {});
             } else {
               // User canceled the picker
@@ -326,7 +537,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
         const SizedBox(height: 20),
         Row(
           children: [
-            blackText("Comments File", 16),
+            blackText("Comments", 16),
             SizedBox(width: 10),
             greyText("(optional)", 13)
           ],
@@ -340,6 +551,9 @@ class _InvoiceTabState extends State<InvoiceTab> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
+            onChanged: (value) {
+              addInvoiceController.dataToCreateInvoice.comments = value;
+            },
             maxLines: 3,
             decoration: const InputDecoration(border: InputBorder.none),
           ),
@@ -365,6 +579,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                     groupValue: termsAndConditions,
                     onChanged: (value) => setState(() {
                           termsAndConditions = value;
+                          termsConditionsFlag = false;
                         })),
                 greyText("Disable", 16),
               ],
@@ -386,12 +601,33 @@ class _InvoiceTabState extends State<InvoiceTab> {
                     groupValue: termsAndConditions,
                     onChanged: (value) => setState(() {
                           termsAndConditions = value;
+                          termsConditionsFlag = true;
                         })),
                 greyText("Enable", 16),
               ],
             ),
           ],
         ),
+        termsConditionsFlag
+            ? Container(
+                width: w,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: TextField(
+                  maxLines: 3,
+                  decoration: const InputDecoration(border: InputBorder.none),
+                  onChanged: (value) {
+                    addInvoiceController
+                        .dataToCreateInvoice.termsAndConditions = value;
+                  },
+                ),
+              )
+            : Container(),
+        termsConditionsFlag ? const SizedBox(height: 20) : Container(),
         const SizedBox(height: 20),
         Container(
           width: w,
@@ -484,16 +720,37 @@ class _InvoiceTabState extends State<InvoiceTab> {
             children: [
               blackText("Create The Invoice", 16),
               SizedBox(width: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
+              InkWell(
+                customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
-                padding: EdgeInsets.all(20),
-                child: Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                  size: 22.0.sp,
+                onTap: () async {
+                  String expiryDate = expiryDateController.text +
+                      " " +
+                      expiryTimeController.text.split(" ")[0];
+
+                  addInvoiceController.dataToCreateInvoice.expiryDate =
+                      expiryDate;
+                  addInvoiceController.dataToCreateInvoice.recurringStartDate =
+                      startDateController.text;
+                  addInvoiceController.dataToCreateInvoice.recurringEndDate =
+                      endDateController.text;
+                  addInvoiceController.dataToCreateInvoice.token =
+                      await _loginController.loadToken();
+
+                  await addInvoiceController.createInvoice();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding: EdgeInsets.all(20),
+                  child: Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 22.0.sp,
+                  ),
                 ),
               )
             ],

@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomerInfoPage extends StatelessWidget {
-  const CustomerInfoPage({super.key});
+  CustomerInfoPage({super.key});
+  TextEditingController customerNameControler = TextEditingController();
+  TextEditingController customerPhoneNumberControler = TextEditingController();
+  TextEditingController customerRefrenceControler = TextEditingController();
+  String customerMobileCode = "+20";
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +46,7 @@ class CustomerInfoPage extends StatelessWidget {
             blackText("Customer Name", 16),
             SignUpTextField(
               padding: EdgeInsets.all(0),
+              controller: customerNameControler,
             ),
             const SizedBox(height: 20),
             blackText("Send invoice By", 16),
@@ -48,7 +54,11 @@ class CustomerInfoPage extends StatelessWidget {
               items: addInvoiceController.sendByItems,
               selectedItem: addInvoiceController.selectedSendBy,
               width: 2,
-              onchanged: addInvoiceController.selectSendBy,
+              onchanged: (s) {
+                addInvoiceController.selectSendBy(s);
+                addInvoiceController.dataToCreateInvoice.customerSendBy =
+                    (addInvoiceController.sendByItems.indexOf(s!) + 1);
+              },
             ),
             const SizedBox(height: 20),
             blackText("Customer phone number", 16),
@@ -64,7 +74,12 @@ class CustomerInfoPage extends StatelessWidget {
                     borderSide: BorderSide.none),
               ),
               initialCountryCode: 'IN',
-              onChanged: (phone) {},
+              onChanged: (phone) {
+                logSuccess(customerPhoneNumberControler.text);
+              },
+              onCountryChanged: (value) =>
+                  customerMobileCode = "+${value.dialCode}",
+              controller: customerPhoneNumberControler,
             ),
             const SizedBox(height: 10),
             Row(
@@ -76,11 +91,21 @@ class CustomerInfoPage extends StatelessWidget {
             ),
             SignUpTextField(
               padding: EdgeInsets.all(0),
+              controller: customerRefrenceControler,
             ),
             SizedBox(height: 50),
             Center(
               child: GestureDetector(
                 onTap: () {
+                  addInvoiceController.saveCustomerInfo(
+                      customerNameControler.text,
+                      addInvoiceController.sendByItems
+                              .indexOf(addInvoiceController.selectedSendBy) +
+                          1,
+                      customerPhoneNumberControler.text,
+                      customerMobileCode,
+                      customerRefrenceControler.text);
+
                   Get.defaultDialog(
                     title: "",
                     content: Column(
@@ -151,6 +176,7 @@ Text blueText(String text, double size) {
 Text blackText(String text, double size) {
   return Text(
     text,
+    softWrap: true,
     style: TextStyle(
         color: Colors.black, fontWeight: FontWeight.w500, fontSize: size.sp),
   );
@@ -167,6 +193,7 @@ Text whiteText(String text, double size) {
 Text greyText(String text, double size) {
   return Text(
     text,
+    softWrap: true,
     style: TextStyle(
         color: const Color(0xff8B8B8B),
         fontWeight: FontWeight.w500,

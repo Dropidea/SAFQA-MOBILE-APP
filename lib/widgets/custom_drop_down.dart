@@ -15,7 +15,8 @@ class CustomDropdown extends StatelessWidget {
   final List<String> items;
   final String? selectedItem;
   final String? hint;
-  final Function onchanged;
+  final Function(String? s)? onchanged;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,9 +41,7 @@ class CustomDropdown extends StatelessWidget {
             .toList(),
         value: selectedItem,
         hint: greyText(hint ?? "", 15),
-        onChanged: (value) {
-          onchanged(value);
-        },
+        onChanged: onchanged,
       ),
     );
   }

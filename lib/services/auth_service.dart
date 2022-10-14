@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/pages/log-reg/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 import 'end_points.dart';
@@ -56,5 +58,35 @@ class AuthService {
       // ));
       // return e.response!.data;
     }
+  }
+
+  Future logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    Get.dialog(AlertDialog(
+      title: Text(
+        "Log out",
+        style: TextStyle(
+            color: Colors.red.shade700,
+            fontWeight: FontWeight.w500,
+            fontSize: 22),
+      ),
+      content: Text("Are You Sure Want To Proceed ?"),
+      actions: <Widget>[
+        TextButton(
+          child: Text("YES"),
+          onPressed: () {
+            Get.offAll(() => const LoginPage());
+            Get.back();
+          },
+        ),
+        TextButton(
+          child: Text("NO"),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ],
+    ));
   }
 }

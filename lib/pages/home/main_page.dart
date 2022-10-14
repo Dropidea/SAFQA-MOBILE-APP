@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/pages/home/notification_page.dart';
 import 'package:safqa/pages/invoices/create_invoice_page.dart';
 import 'package:sizer/sizer.dart';
 
@@ -596,10 +597,33 @@ class _MainPageState extends State<MainPage> {
         ),
         Row(
           children: [
-            Icon(
-              Icons.notifications_rounded,
-              size: 30.0.sp,
-              color: Color(0xffD1D1D1),
+            GestureDetector(
+              onTap: () => Get.to(
+                () => NotificationPage(),
+                transition: Transition.downToUp,
+              ),
+              child: Stack(
+                children: [
+                  Image(
+                    image: AssetImage("assets/images/notification.png"),
+                    width: 25.0.sp,
+                    height: 25.0.sp,
+                  ),
+                  Visibility(
+                    visible: true,
+                    //TODO:notifications
+                    child: Positioned(
+                      top: 0.0.sp,
+                      right: 5.0.sp,
+                      child: new Icon(
+                        Icons.brightness_1,
+                        size: 12.0,
+                        color: Color(0xffDE6464),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(width: 10),
             Image(
