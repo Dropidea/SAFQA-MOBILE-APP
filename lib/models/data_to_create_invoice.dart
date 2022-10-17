@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class DataToCreateInvoice {
   String? token;
   String? customerName;
@@ -15,7 +17,7 @@ class DataToCreateInvoice {
   String? termsAndConditions;
   String? recurringEndDate;
   int? languageId = 1;
-  // File? attachFile;
+  File? attachFile;
 
   List<String> productName = [];
   List<int> productQuantity = [];
@@ -35,7 +37,7 @@ class DataToCreateInvoice {
     this.recurringEndDate,
     this.recurringStartDate,
     this.languageId,
-    // this.attachFile,
+    this.attachFile,
     this.comments,
     this.termsAndConditions,
   });
@@ -63,7 +65,7 @@ class DataToCreateInvoice {
     data["recurring_end_date"] = recurringEndDate;
     data["recurring_start_date"] = recurringStartDate;
     data["language_id"] = languageId;
-    // data["attach_file"] = attachFile;
+    data["attach_file"] = attachFile;
     data["comment"] = comments;
     data["terms_and_conditions"] = termsAndConditions;
 

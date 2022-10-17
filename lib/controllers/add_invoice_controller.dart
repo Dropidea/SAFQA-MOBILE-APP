@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as d;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/data_to_create_invoice.dart';
@@ -9,12 +11,85 @@ class AddInvoiceController extends GetxController {
   DataToCreateInvoice dataToCreateInvoice = DataToCreateInvoice();
 
   Future createInvoice() async {
+    // logWarning(dataToCreateInvoice.toJson());
+    Dio dio = Dio();
+    dio.options.headers['content-Type'] = 'multipart/form-data';
+    dio.options.headers["authorization"] =
+        "Bearer ${dataToCreateInvoice.token}";
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    final body = d.FormData.fromMap({
+      "token": dataToCreateInvoice.token,
+      "customer_name": dataToCreateInvoice.customerName,
+      "send_invoice_option_id": dataToCreateInvoice.customerSendBy,
+      "customer_mobile": dataToCreateInvoice.customerMobileNumbr,
+      "customer_mobile_code": dataToCreateInvoice.customerMobileNumbrCode,
+      "customer_reference": dataToCreateInvoice.customerRefrence,
+      "product_name[]": dataToCreateInvoice.productName,
+      "product_quantity[]": dataToCreateInvoice.productQuantity,
+      "product_price[]": dataToCreateInvoice.productPrice,
+      "currency_id": dataToCreateInvoice.currencyId,
+      "discount_type": dataToCreateInvoice.discountType,
+      "discount_value": dataToCreateInvoice.discountValue,
+      "expiry_date": dataToCreateInvoice.expiryDate,
+      "remind_after": dataToCreateInvoice.remindAfter,
+      "recurring_end_date": dataToCreateInvoice.recurringEndDate,
+      "recurring_start_date": dataToCreateInvoice.recurringStartDate,
+      "language_id": dataToCreateInvoice.languageId,
+      "comment": dataToCreateInvoice.comments,
+      "terms_and_conditions": dataToCreateInvoice.termsAndConditions,
+      // "is_open_invoice": "fixed",
+      // "recurring_interval_id": 1,
+      "attach_file": dataToCreateInvoice.attachFile == null
+          ? ""
+          : {
+              await d.MultipartFile.fromFile(
+                dataToCreateInvoice.attachFile!.path,
+                filename: dataToCreateInvoice.attachFile!.path.split(" ").last,
+              )
+            }
+    });
     try {
-      var res = await Dio().post(EndPoints.baseURL + EndPoints.createInvoice,
-          data: dataToCreateInvoice);
+      var res = await dio.post(EndPoints.baseURL + EndPoints.createInvoice,
+          data: body);
+      Get.back();
       logSuccess(res);
     } on DioError catch (e) {
+      Get.back();
       logError(e.response!.data);
+      Map<String, dynamic> m = e.response!.data;
+      String errors = "";
+      int c = 0;
+      for (var i in m.values) {
+        for (var j = 0; j < i.length; j++) {
+          if (j == i.length - 1) {
+            errors = errors + i[j];
+          } else {
+            errors = "${errors + i[j]}\n";
+          }
+        }
+
+        c++;
+        if (c != m.values.length) {
+          errors += "\n";
+        }
+      }
+
+      Get.showSnackbar(
+        GetSnackBar(
+          duration: Duration(milliseconds: 2000),
+          backgroundColor: Colors.red,
+          // message: errors,
+          messageText: Text(
+            errors,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+            ),
+          ),
+        ),
+      );
     }
   }
 

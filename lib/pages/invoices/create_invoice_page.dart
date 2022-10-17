@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/invoices/tabs/invoice_tab.dart';
@@ -140,7 +141,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
                   children: [
                     blackText("Invoice Date", 14),
                     const SizedBox(height: 5),
-                    greyText("04 Oct 2022", 12),
+                    greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
                   ],
                 )
               ],

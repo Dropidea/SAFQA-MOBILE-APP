@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/invoices/customer_info_page.dart';
 import 'package:safqa/pages/invoices/invoice_items_page.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
@@ -29,7 +30,7 @@ class InvoiceTab extends StatefulWidget {
 class _InvoiceTabState extends State<InvoiceTab> {
   int invoicesLangValue = 0;
   int termsAndConditions = 0;
-  String filePath = "";
+  String fileName = "";
   bool recurringIntervalFlag = false;
   bool discountAvailableFlag = false;
   bool discountTypeFlag = true;
@@ -52,31 +53,31 @@ class _InvoiceTabState extends State<InvoiceTab> {
 
     return ListView(
       children: [
-        blackText("Invoice Date", 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomDropdown(
-              items: addInvoiceController.days,
-              selectedItem: addInvoiceController.selectedDay,
-              width: 0.25 * w,
-              onchanged: addInvoiceController.setDay,
-            ),
-            CustomDropdown(
-              items: addInvoiceController.monthes,
-              selectedItem: addInvoiceController.selectedMonth,
-              width: 0.25 * w,
-              onchanged: addInvoiceController.setMonth,
-            ),
-            CustomDropdown(
-              items: addInvoiceController.years,
-              selectedItem: addInvoiceController.selectedYear,
-              width: 0.35 * w,
-              onchanged: addInvoiceController.setYear,
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
+        //    blackText("Invoice Date", 16),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     CustomDropdown(
+        //       items: addInvoiceController.days,
+        //       selectedItem: addInvoiceController.selectedDay,
+        //       width: 0.25 * w,
+        //       onchanged: addInvoiceController.setDay,
+        //     ),
+        //     CustomDropdown(
+        //       items: addInvoiceController.monthes,
+        //       selectedItem: addInvoiceController.selectedMonth,
+        //       width: 0.25 * w,
+        //       onchanged: addInvoiceController.setMonth,
+        //     ),
+        //     CustomDropdown(
+        //       items: addInvoiceController.years,
+        //       selectedItem: addInvoiceController.selectedYear,
+        //       width: 0.35 * w,
+        //       onchanged: addInvoiceController.setYear,
+        //     ),
+        //   ],
+        // ),
+        // const SizedBox(height: 20),
         blackText("Currency", 16),
         Obx(
           () {
@@ -325,6 +326,8 @@ class _InvoiceTabState extends State<InvoiceTab> {
                 setState(() {
                   recurringIntervalFlag = false;
                 });
+                //TODO:recurring interval id
+
               }
             },
           ),
@@ -484,8 +487,10 @@ class _InvoiceTabState extends State<InvoiceTab> {
             FilePickerResult? result = await FilePicker.platform.pickFiles();
             if (result != null) {
               File file = File(result.files.single.path);
-              filePath = result.files.single.path.split("/").last;
-              // addInvoiceController.dataToCreateInvoice.attachFile = file;
+              fileName = result.files.single.path.split("/").last;
+
+              addInvoiceController.dataToCreateInvoice.attachFile = file;
+
               setState(() {});
             } else {
               // User canceled the picker
@@ -518,14 +523,14 @@ class _InvoiceTabState extends State<InvoiceTab> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
-                  child: filePath == ""
+                  child: fileName == ""
                       ? Icon(
                           Icons.add_rounded,
                           color: Color(0xff00A7B3),
                           size: 22.0.sp,
                         )
                       : Text(
-                          filePath,
+                          fileName,
                           style: TextStyle(
                             color: Color(0xff00A7B3),
                             fontSize: 15.0.sp,
@@ -725,9 +730,13 @@ class _InvoiceTabState extends State<InvoiceTab> {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 onTap: () async {
-                  String expiryDate = expiryDateController.text +
-                      " " +
-                      expiryTimeController.text.split(" ")[0];
+                  var expiryTime = expiryTimeController.text.split(" ")[0];
+                  if (expiryTime.length == 4) {
+                    expiryTime = "0" + expiryTimeController.text.split(" ")[0];
+                  }
+                  String expiryDate =
+                      expiryDateController.text + " " + expiryTime;
+                  logSuccess(expiryDate);
 
                   addInvoiceController.dataToCreateInvoice.expiryDate =
                       expiryDate;
