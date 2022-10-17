@@ -81,7 +81,7 @@ class SignUpPage extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: 20.0.sp,
+                        height: 5.0.sp,
                       ),
                       Expanded(
                         child: PageView(

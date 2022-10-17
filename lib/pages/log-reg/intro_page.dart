@@ -87,8 +87,8 @@ class _IntroPageState extends State<IntroPage> {
                       ),
                 Container(
                   width: w,
-                  margin: EdgeInsets.only(top: 30),
-                  height: 1.7 * h / 3,
+                  margin: EdgeInsets.only(top: 20),
+                  height: 1.55 * h / 3,
                   child: PageView(
                     controller: _pageController,
                     physics: NeverScrollableScrollPhysics(),
@@ -155,8 +155,8 @@ class _IntroPageState extends State<IntroPage> {
                       Container(
                         width: 50.0.sp,
                         height: 50.0.sp,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 0.08 * h),
+                        margin:
+                            EdgeInsets.only(left: 20, right: 20, top: 0.1 * h),
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
                               begin: Alignment.bottomLeft,
@@ -231,22 +231,22 @@ class _IntroPageState extends State<IntroPage> {
         ),
         Container(
           margin:
-              EdgeInsets.only(top: 30.0.sp, bottom: 10, left: 20, right: 20),
+              EdgeInsets.only(top: 20.0.sp, bottom: 10, left: 20, right: 20),
           child: Text(
             text1,
             style: TextStyle(
-              fontSize: 20.0.sp,
+              fontSize: 18.0.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+          margin: EdgeInsets.only(left: 10, right: 10),
           child: Text(
             text2,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 20.0.sp,
+              fontSize: 18.0.sp,
               fontWeight: FontWeight.w600,
               color: Color(0xff2F6782),
             ),

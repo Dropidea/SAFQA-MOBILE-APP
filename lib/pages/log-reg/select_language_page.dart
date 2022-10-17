@@ -28,7 +28,7 @@ class SelectLanguagePage extends StatelessWidget {
               children: [
                 Container(
                   width: w,
-                  height: h / 3,
+                  height: h / 2.5,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
@@ -42,11 +42,11 @@ class SelectLanguagePage extends StatelessWidget {
             Container(
               width: w,
               height: h,
-              padding: EdgeInsets.only(top: 0.05 * h),
+              padding: EdgeInsets.only(top: 0.04 * h),
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 0.07 * h, bottom: 0.07 * h),
+                    margin: EdgeInsets.only(top: 0.05 * h, bottom: 0.05 * h),
                     child: Hero(
                       tag: "logo",
                       child: Image(
@@ -60,7 +60,7 @@ class SelectLanguagePage extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: 0.07 * h),
+                    margin: EdgeInsets.only(bottom: 0.05 * h),
                     child: Text(
                       "Please choose the language",
                       textAlign: TextAlign.center,

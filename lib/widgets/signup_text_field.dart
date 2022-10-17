@@ -33,7 +33,7 @@ class SignUpTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.symmetric(vertical: 2),
       child: Padding(
         padding: padding!,
         child: TextFormField(
