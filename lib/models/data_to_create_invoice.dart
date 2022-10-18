@@ -13,6 +13,8 @@ class DataToCreateInvoice {
   String? expiryDate;
   String? remindAfter;
   String? recurringStartDate;
+  String? recurringIntervalId;
+  String? isOpenInvoice;
   String? comments;
   String? termsAndConditions;
   String? recurringEndDate;
@@ -40,6 +42,8 @@ class DataToCreateInvoice {
     this.attachFile,
     this.comments,
     this.termsAndConditions,
+    this.recurringIntervalId,
+    this.isOpenInvoice,
   });
 
   // DataToCreateInvoice.fromJson(
@@ -65,9 +69,11 @@ class DataToCreateInvoice {
     data["recurring_end_date"] = recurringEndDate;
     data["recurring_start_date"] = recurringStartDate;
     data["language_id"] = languageId;
-    data["attach_file"] = attachFile;
+    // data["attach_file"] = attachFile;
     data["comment"] = comments;
     data["terms_and_conditions"] = termsAndConditions;
+    data["recurring_interval_id"] = recurringIntervalId;
+    data["is_open_invoice"] = isOpenInvoice;
 
     return data;
   }

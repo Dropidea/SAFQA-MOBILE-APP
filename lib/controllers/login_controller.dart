@@ -36,7 +36,7 @@ class LoginController extends GetxController {
     var res = await AuthService().login(email, password);
     Navigator.of(Get.overlayContext!).pop();
     if (res != null) {
-      logSuccess("token:${res}");
+      logWarning("token:${res}");
       if (rememberMe) saveToken(res);
       Get.offAll(() => HomePage());
     }

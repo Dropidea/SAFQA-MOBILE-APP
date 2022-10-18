@@ -37,6 +37,10 @@ class _InvoiceTabState extends State<InvoiceTab> {
   bool termsConditionsFlag = false;
   TextEditingController expiryDateController =
       TextEditingController(text: 'yyyy-MM-dd');
+  TextEditingController remindAfterController = TextEditingController();
+  TextEditingController discountValueController = TextEditingController();
+  TextEditingController commentsController = TextEditingController();
+  TextEditingController termsController = TextEditingController();
   TextEditingController startDateController =
       TextEditingController(text: 'dd/MM/yyyy');
   TextEditingController endDateController =
@@ -105,6 +109,37 @@ class _InvoiceTabState extends State<InvoiceTab> {
               },
             );
           },
+        ),
+        const SizedBox(height: 20),
+        blackText("Is Open Invoice", 16),
+        Container(
+          width: w,
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: DropdownButtonFormField(
+            decoration: const InputDecoration(border: InputBorder.none),
+            items: addInvoiceController.isOpenInvoiceDrops
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                    ),
+                  ),
+                )
+                .toList(),
+            value: addInvoiceController.selectedIsOpenInvoiceDrop,
+            onChanged: (value) {
+              addInvoiceController.selectIsOpenInvoiceDrop(value!);
+              addInvoiceController.dataToCreateInvoice.isOpenInvoice = value;
+              logSuccess(
+                  addInvoiceController.dataToCreateInvoice.isOpenInvoice!);
+            },
+          ),
         ),
         const SizedBox(height: 20),
         blackText("Discount Available", 16),
@@ -182,6 +217,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
         discountAvailableFlag ? blackText("Discount Value", 16) : Container(),
         discountAvailableFlag
             ? SignUpTextField(
+                controller: discountValueController,
                 padding: EdgeInsets.all(0),
                 hintText: discountTypeFlag ? "0 AED" : "0 %",
                 onchanged: (s) {
@@ -272,6 +308,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
               child: SignUpTextField(
                 padding: EdgeInsets.all(0),
                 keyBoardType: TextInputType.numberWithOptions(decimal: true),
+                controller: remindAfterController,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),
                 ],
@@ -326,9 +363,12 @@ class _InvoiceTabState extends State<InvoiceTab> {
                 setState(() {
                   recurringIntervalFlag = false;
                 });
-                //TODO:recurring interval id
-
               }
+              addInvoiceController.dataToCreateInvoice.recurringIntervalId =
+                  (addInvoiceController.recurringInterval.indexOf(value) + 1)
+                      .toString();
+              logSuccess(addInvoiceController
+                  .dataToCreateInvoice.recurringIntervalId!);
             },
           ),
         ),
@@ -556,6 +596,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
+            controller: commentsController,
             onChanged: (value) {
               addInvoiceController.dataToCreateInvoice.comments = value;
             },
@@ -625,6 +666,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                 child: TextField(
                   maxLines: 3,
                   decoration: const InputDecoration(border: InputBorder.none),
+                  controller: termsController,
                   onChanged: (value) {
                     addInvoiceController
                         .dataToCreateInvoice.termsAndConditions = value;
@@ -647,6 +689,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
               blackText("Customer Info", 16),
               GestureDetector(
                 onTap: () {
+                  FocusScope.of(context).unfocus();
                   Get.to(() => CustomerInfoPage(),
                       transition: Transition.rightToLeft);
                 },

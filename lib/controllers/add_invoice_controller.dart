@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/data_to_create_invoice.dart';
 import 'package:safqa/models/invoice_item.dart';
+import 'package:safqa/pages/home/home_page.dart';
+import 'package:safqa/pages/invoices/customer_info_page.dart';
 import 'package:safqa/services/end_points.dart';
 
 class AddInvoiceController extends GetxController {
@@ -14,8 +16,8 @@ class AddInvoiceController extends GetxController {
     // logWarning(dataToCreateInvoice.toJson());
     Dio dio = Dio();
     dio.options.headers['content-Type'] = 'multipart/form-data';
-    dio.options.headers["authorization"] =
-        "Bearer ${dataToCreateInvoice.token}";
+    // dio.options.headers["authorization"] =
+    //     "Bearer ${dataToCreateInvoice.token}";
     Get.dialog(Center(
       child: CircularProgressIndicator(),
     ));
@@ -38,23 +40,52 @@ class AddInvoiceController extends GetxController {
       "recurring_start_date": dataToCreateInvoice.recurringStartDate,
       "language_id": dataToCreateInvoice.languageId,
       "comment": dataToCreateInvoice.comments,
+      "is_open_invoice": dataToCreateInvoice.isOpenInvoice,
+      "recurring_interval_id": dataToCreateInvoice.recurringIntervalId,
       "terms_and_conditions": dataToCreateInvoice.termsAndConditions,
-      // "is_open_invoice": "fixed",
-      // "recurring_interval_id": 1,
-      "attach_file": dataToCreateInvoice.attachFile == null
-          ? ""
-          : {
-              await d.MultipartFile.fromFile(
-                dataToCreateInvoice.attachFile!.path,
-                filename: dataToCreateInvoice.attachFile!.path.split(" ").last,
-              )
-            }
     });
+    if (dataToCreateInvoice.attachFile != null)
+      body.files.add(MapEntry(
+          "attach_file",
+          await d.MultipartFile.fromFile(
+            dataToCreateInvoice.attachFile!.path,
+            filename: dataToCreateInvoice.attachFile!.path.split(" ").last,
+          )));
     try {
       var res = await dio.post(EndPoints.baseURL + EndPoints.createInvoice,
           data: body);
       Get.back();
-      logSuccess(res);
+      Get.defaultDialog(
+        title: "",
+        content: Container(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            children: [
+              Image(
+                image: AssetImage("assets/images/tick.png"),
+                height: 100,
+              ),
+              SizedBox(height: 10),
+              blackText("Created successfully", 16),
+              SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                  Get.back();
+                  Get.off(() => HomePage());
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Color(0xff2D5571),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(child: whiteText("close", 17)),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
     } on DioError catch (e) {
       Get.back();
       logError(e.response!.data);
@@ -140,6 +171,13 @@ class AddInvoiceController extends GetxController {
 
   void selectCurrencyDrop(String? x) {
     _selectedCurrencyDrop.value = x!;
+  }
+
+  List<String> isOpenInvoiceDrops = ["Changeable", "Fixed"];
+  RxString _selectedIsOpenInvoiceDrop = "Changeable".obs;
+  String get selectedIsOpenInvoiceDrop => _selectedIsOpenInvoiceDrop.value;
+  void selectIsOpenInvoiceDrop(String x) {
+    _selectedIsOpenInvoiceDrop.value = x;
   }
 
   List<String> discountDrops = ["yes", "No"];

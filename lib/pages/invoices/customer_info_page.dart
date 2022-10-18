@@ -118,7 +118,10 @@ class CustomerInfoPage extends StatelessWidget {
                         blackText("Saved successfully", 16),
                         SizedBox(height: 10),
                         InkWell(
-                          onTap: () => Get.back(),
+                          onTap: () {
+                            Get.back();
+                            Get.back();
+                          },
                           child: Container(
                             width: w / 2,
                             padding: EdgeInsets.symmetric(vertical: 10),
