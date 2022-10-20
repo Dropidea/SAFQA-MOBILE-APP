@@ -4,7 +4,7 @@ import 'package:getwidget/colors/gf_color.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/invoice_item.dart';
-import 'package:safqa/pages/invoices/customer_info_page.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/number_increase_decrese.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:safqa/pages/invoices/customer_info_page.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 
 class CustomDropdown extends StatelessWidget {
   CustomDropdown(

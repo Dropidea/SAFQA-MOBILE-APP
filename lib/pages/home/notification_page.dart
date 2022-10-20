@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safqa/pages/invoices/customer_info_page.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:sizer/sizer.dart';
 
 class NotificationPage extends StatelessWidget {

@@ -3,21 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/radio/gf_radio.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/pages/invoices/customer_info_page.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
-class PaymentLinkTab extends StatefulWidget {
-  const PaymentLinkTab({super.key});
+class CreatePaymentLinkTab extends StatefulWidget {
+  const CreatePaymentLinkTab({super.key});
 
   @override
-  State<PaymentLinkTab> createState() => _PaymentLinkTabState();
+  State<CreatePaymentLinkTab> createState() => _CreatePaymentLinkTabState();
 }
 
-class _PaymentLinkTabState extends State<PaymentLinkTab> {
+class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
   int invoicesLangValue = 0;
   int termsAndConditions = 0;
   int paymentActive = 0;
@@ -34,6 +35,28 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
         TextEditingController(text: '00:00');
     return ListView(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                blackText("Payment Link ID", 14),
+                const SizedBox(height: 5),
+                greyText("2659986 / 2022000048", 12),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                blackText("Payment Link Date", 14),
+                const SizedBox(height: 5),
+                greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 30),
         blackText("Invoice Date", 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -274,7 +297,7 @@ class _PaymentLinkTabState extends State<PaymentLinkTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              blackText("Create The Link", 16),
+              blackText("Create Link", 16),
               SizedBox(width: 10),
               Container(
                 decoration: BoxDecoration(

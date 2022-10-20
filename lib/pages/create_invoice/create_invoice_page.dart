@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/pages/invoices/tabs/invoice_tab.dart';
-import 'package:safqa/pages/invoices/tabs/payment_link_tab.dart';
-import 'package:safqa/pages/invoices/tabs/quick_invoice_tab.dart';
+import 'package:safqa/pages/create_invoice/tabs/invoice_tab.dart';
+import 'package:safqa/pages/create_invoice/tabs/payment_link_tab.dart';
+import 'package:safqa/pages/create_invoice/tabs/quick_invoice_tab.dart';
 import "package:sizer/sizer.dart";
 
 // Container customDropdown(List<String> items, String? selectedItem, double width,
@@ -37,12 +36,12 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
     setState(() {});
   }
 
+  AddInvoiceController addInvoiceController = Get.find();
+  SignUpController _signUpController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    AddInvoiceController addInvoiceController = Get.put(AddInvoiceController());
-    SignUpController _signUpController = Get.find();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -125,35 +124,13 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    blackText("Invoice ID", 14),
-                    const SizedBox(height: 5),
-                    greyText("2659986 / 2022000048", 12),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    blackText("Invoice Date", 14),
-                    const SizedBox(height: 5),
-                    greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 30),
             Expanded(
                 child: TabBarView(
               controller: _tabController,
               children: [
-                InvoiceTab(),
-                QuickInvoiceTab(),
-                PaymentLinkTab(),
+                CreateInvoiceTab(),
+                CreateQuickInvoiceTab(),
+                CreatePaymentLinkTab(),
               ],
             ))
           ],

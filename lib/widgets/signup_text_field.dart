@@ -16,11 +16,15 @@ class SignUpTextField extends StatelessWidget {
     this.controller,
     this.inputFormatters,
     this.padding = const EdgeInsets.only(left: 15, right: 15, top: 5),
+    this.suffixIcon,
+    this.suffix,
   });
 
   final String? hintText;
   final Widget? prefixIcon;
   final Widget? prefix;
+  final Widget? suffixIcon;
+  final Widget? suffix;
   final TextInputType? keyBoardType;
   final String? Function(String? s)? validator;
   final String? initialValue;
@@ -40,15 +44,16 @@ class SignUpTextField extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: keyBoardType,
           decoration: InputDecoration(
-            fillColor: Colors.grey.shade200,
-            filled: true,
-            border: OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(10.0),
-                borderSide: BorderSide.none),
-            hintText: hintText,
-            prefixIcon: prefixIcon,
-            prefix: prefix,
-          ),
+              fillColor: Colors.grey.shade200,
+              filled: true,
+              border: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none),
+              hintText: hintText,
+              prefixIcon: prefixIcon,
+              prefix: prefix,
+              suffix: suffix,
+              suffixIcon: suffixIcon),
           validator: validator,
           inputFormatters: inputFormatters,
           obscureText: obsecureText,

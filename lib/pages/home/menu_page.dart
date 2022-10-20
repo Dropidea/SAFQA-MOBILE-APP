@@ -7,8 +7,11 @@ import '../../controllers/zoom_drawer_controller.dart';
 import '../../models/menu_item.dart' as mi;
 
 class MenuPage extends StatelessWidget {
-  const MenuPage({super.key});
+  MenuPage(
+      {super.key, required this.onSelectedItem, required this.currentItem});
 
+  final ValueChanged<mi.MenuItem> onSelectedItem;
+  final mi.MenuItem currentItem;
   Widget buildMenuItem(mi.MenuItem item) => ListTile(
         title: Text(
           item.title,
@@ -20,18 +23,22 @@ class MenuPage extends StatelessWidget {
         ),
         leading: Icon(
           item.icon,
-          color: item.title == "Log out" ? Color(0xffE47E7B) : Colors.white,
+          color:
+              item.title == "Log out" ? Color(0xffE47E7B) : Color(0xffffffff),
         ),
         minLeadingWidth: 20,
+        // selected: currentItem == item,
         onTap: () async {
           if (item.title == "Log out") {
             await AuthService().logout();
+          } else {
+            onSelectedItem(item);
           }
         },
       );
+  MyZoomDrawerController myZoomDrawerController = Get.find();
   @override
   Widget build(BuildContext context) {
-    MyZoomDrawerController myZoomDrawerController = Get.find();
     return Scaffold(
       backgroundColor: Color(0xff285B74),
       body: SafeArea(
@@ -81,19 +88,21 @@ class MenuPage extends StatelessWidget {
 }
 
 class MyMenuItems {
-  static final invoices = mi.MenuItem("Invoices", Icons.abc);
-  static final products = mi.MenuItem("Products", Icons.abc);
-  static final customers = mi.MenuItem("Customers", Icons.abc);
-  static final payments = mi.MenuItem("Payments", Icons.abc);
-  static final accountStatement = mi.MenuItem("Account statement", Icons.abc);
-  static final deposits = mi.MenuItem("Deposits", Icons.abc);
-  static final refunds = mi.MenuItem("Refunds", Icons.abc);
-  static final multiFactorAuthentication =
+  // static const dashboard = mi.MenuItem("Dashboard", Icons.abc);
+  static const invoices = mi.MenuItem("Invoices", Icons.abc);
+  static const products = mi.MenuItem("Products", Icons.abc);
+  static const customers = mi.MenuItem("Customers", Icons.abc);
+  static const payments = mi.MenuItem("Payments", Icons.abc);
+  static const accountStatement = mi.MenuItem("Account statement", Icons.abc);
+  static const deposits = mi.MenuItem("Deposits", Icons.abc);
+  static const refunds = mi.MenuItem("Refunds", Icons.abc);
+  static const multiFactorAuthentication =
       mi.MenuItem("multi-factor authentication", Icons.abc);
-  static final help = mi.MenuItem("Help", Icons.abc);
-  static final settings = mi.MenuItem("Settings", Icons.abc);
-  static final logOut = mi.MenuItem("Log out", Icons.abc);
-  static final all = <mi.MenuItem>[
+  static const help = mi.MenuItem("Help", Icons.abc);
+  static const settings = mi.MenuItem("Settings", Icons.abc);
+  static const logOut = mi.MenuItem("Log out", Icons.abc);
+  static const all = <mi.MenuItem>[
+    // dashboard,
     invoices,
     products,
     customers,

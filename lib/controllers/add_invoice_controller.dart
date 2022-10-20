@@ -2,15 +2,21 @@ import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:safqa/main.dart';
+import 'package:safqa/models/customer_info.dart';
 import 'package:safqa/models/data_to_create_invoice.dart';
+import 'package:safqa/models/data_to_create_quick_invoice.dart';
 import 'package:safqa/models/invoice_item.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/home_page.dart';
-import 'package:safqa/pages/invoices/customer_info_page.dart';
 import 'package:safqa/services/end_points.dart';
 
 class AddInvoiceController extends GetxController {
   DataToCreateInvoice dataToCreateInvoice = DataToCreateInvoice();
+  DataToCreateQuickInvoice dataToCreateQuickInvoice =
+      DataToCreateQuickInvoice();
+  CustomerInfo customerInfo = CustomerInfo();
 
   Future createInvoice() async {
     // logWarning(dataToCreateInvoice.toJson());
@@ -44,16 +50,19 @@ class AddInvoiceController extends GetxController {
       "recurring_interval_id": dataToCreateInvoice.recurringIntervalId,
       "terms_and_conditions": dataToCreateInvoice.termsAndConditions,
     });
-    if (dataToCreateInvoice.attachFile != null)
+    if (dataToCreateInvoice.attachFile != null) {
       body.files.add(MapEntry(
-          "attach_file",
-          await d.MultipartFile.fromFile(
-            dataToCreateInvoice.attachFile!.path,
+        "attach_file",
+        await d.MultipartFile.fromFile(dataToCreateInvoice.attachFile!.path,
             filename: dataToCreateInvoice.attachFile!.path.split(" ").last,
-          )));
+            contentType: MediaType('document', 'pdf')),
+      ));
+    }
+    logSuccess(body.files.first.value.contentType!);
     try {
       var res = await dio.post(EndPoints.baseURL + EndPoints.createInvoice,
           data: body);
+      customerInfo = CustomerInfo();
       Get.back();
       Get.defaultDialog(
         title: "",
@@ -72,6 +81,91 @@ class AddInvoiceController extends GetxController {
                 onTap: () {
                   Get.back();
                   Get.off(() => HomePage());
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Color(0xff2D5571),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Center(child: whiteText("close", 17)),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    } on DioError catch (e) {
+      Get.back();
+      logError(e.response!.data);
+      Map<String, dynamic> m = e.response!.data;
+      String errors = "";
+      int c = 0;
+      for (var i in m.values) {
+        for (var j = 0; j < i.length; j++) {
+          if (j == i.length - 1) {
+            errors = errors + i[j];
+          } else {
+            errors = "${errors + i[j]}\n";
+          }
+        }
+
+        c++;
+        if (c != m.values.length) {
+          errors += "\n";
+        }
+      }
+
+      Get.showSnackbar(
+        GetSnackBar(
+          duration: Duration(milliseconds: 2000),
+          backgroundColor: Colors.red,
+          // message: errors,
+          messageText: Text(
+            errors,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future createQuickInvoice() async {
+    // logWarning(dataToCreateInvoice.toJson());
+    Dio dio = Dio();
+    dio.options.headers['content-Type'] = 'multipart/form-data';
+    // dio.options.headers["authorization"] =
+    //     "Bearer ${dataToCreateInvoice.token}";
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    logSuccess(dataToCreateQuickInvoice.token!);
+    final body = d.FormData.fromMap(dataToCreateQuickInvoice.toJson());
+    logSuccess(dataToCreateQuickInvoice.token!);
+    try {
+      var res = await dio.post(EndPoints.baseURL + EndPoints.createQuickInvoice,
+          data: body);
+      customerInfo = CustomerInfo();
+      Get.back();
+      Get.defaultDialog(
+        title: "",
+        content: Container(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            children: [
+              Image(
+                image: AssetImage("assets/images/tick.png"),
+                height: 100,
+              ),
+              SizedBox(height: 10),
+              blackText("Created successfully", 16),
+              SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                  Get.back();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
@@ -260,12 +354,12 @@ class AddInvoiceController extends GetxController {
 
   void saveCustomerInfo(String name, int sendBy, String phoneNum,
       String phoneNumCode, String? customerRef) {
-    dataToCreateInvoice.customerName = name;
-    dataToCreateInvoice.customerMobileNumbr = phoneNum;
-    dataToCreateInvoice.customerMobileNumbrCode = phoneNumCode;
-    dataToCreateInvoice.customerSendBy = sendBy;
-    dataToCreateInvoice.customerRefrence = customerRef;
+    customerInfo.customerName = name;
+    customerInfo.customerMobileNumbr = phoneNum;
+    customerInfo.customerMobileNumbrCode = phoneNumCode;
+    customerInfo.customerSendBy = sendBy;
+    customerInfo.customerRefrence = customerRef;
 
-    logError(dataToCreateInvoice.toJson());
+    logError(customerInfo.toJson());
   }
 }

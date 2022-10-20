@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:safqa/pages/log-reg/login.dart';
+import 'package:safqa/services/end_points.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/first_time_using_app.dart';
@@ -17,7 +20,7 @@ class SplashPage extends StatelessWidget {
     LoginController loginController = Get.put(LoginController());
     FirstTimeUsingAppController _firstTimeController = Get.find();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       await _firstTimeController.setFirstTimeUsing();
       if (await _firstTimeController.checkIfFirstTimeUsingApp()) {
         Get.offAll(
@@ -26,13 +29,22 @@ class SplashPage extends StatelessWidget {
         );
       } else {
         var token = await loginController.loadToken();
-        if (token != "")
-          Get.offAll(
-            () => HomePage(),
-            duration: Duration(milliseconds: 1200),
-            transition: Transition.zoom,
-          );
-        else {
+        if (token != "") {
+          try {
+            await Dio().post(EndPoints.baseURL + EndPoints.meEndPoint,
+                data: {'token': token});
+            Get.offAll(
+              () => HomePage(),
+              duration: Duration(milliseconds: 1200),
+              transition: Transition.zoom,
+            );
+          } catch (e) {
+            Get.offAll(
+              () => LoginPage(),
+              duration: Duration(milliseconds: 1200),
+            );
+          }
+        } else {
           Get.offAll(
             () => WelcomePage(),
             duration: Duration(milliseconds: 1200),

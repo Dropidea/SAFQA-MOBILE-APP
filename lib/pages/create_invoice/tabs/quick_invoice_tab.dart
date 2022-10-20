@@ -2,61 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/pages/invoices/customer_info_page.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
-class QuickInvoiceTab extends StatefulWidget {
-  const QuickInvoiceTab({super.key});
+class CreateQuickInvoiceTab extends StatefulWidget {
+  const CreateQuickInvoiceTab({super.key});
 
   @override
-  State<QuickInvoiceTab> createState() => _QuickInvoiceTabState();
+  State<CreateQuickInvoiceTab> createState() => _CreateQuickInvoiceTabState();
 }
 
-class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
+class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
   int invoicesLangValue = 0;
   int termsAndConditions = 0;
   String filePath = "";
+  AddInvoiceController addInvoiceController = Get.find();
+  SignUpController _signUpController = Get.find();
+  TextEditingController textEditingController1 =
+      TextEditingController(text: 'dd/MM/yyyy');
+  TextEditingController textEditingController2 =
+      TextEditingController(text: '00:00');
+  LoginController _loginController = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
-    AddInvoiceController addInvoiceController = Get.find();
-    SignUpController _signUpController = Get.find();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    TextEditingController textEditingController1 =
-        TextEditingController(text: 'dd/MM/yyyy');
-    TextEditingController textEditingController2 =
-        TextEditingController(text: '00:00');
+
     return ListView(
       children: [
-        blackText("Invoice Date", 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomDropdown(
-              items: addInvoiceController.days,
-              selectedItem: addInvoiceController.selectedDay,
-              width: 0.25 * w,
-              onchanged: addInvoiceController.setDay,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                blackText("Invoice ID", 14),
+                const SizedBox(height: 5),
+                greyText("2659986 / 2022000048", 12),
+              ],
             ),
-            CustomDropdown(
-              items: addInvoiceController.monthes,
-              selectedItem: addInvoiceController.selectedMonth,
-              width: 0.25 * w,
-              onchanged: addInvoiceController.setMonth,
-            ),
-            CustomDropdown(
-              items: addInvoiceController.years,
-              selectedItem: addInvoiceController.selectedYear,
-              width: 0.35 * w,
-              onchanged: addInvoiceController.setYear,
-            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                blackText("Invoice Date", 14),
+                const SizedBox(height: 5),
+                greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
+              ],
+            )
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 30),
         blackText("Currency", 16),
         Obx(
           () {
@@ -77,7 +78,11 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
                 items: countriesCurrencies,
                 selectedItem: addInvoiceController.selectedCurrencyDrop,
                 width: w,
-                onchanged: addInvoiceController.selectCurrencyDrop);
+                onchanged: (s) {
+                  addInvoiceController.selectCurrencyDrop(s);
+                  addInvoiceController.dataToCreateQuickInvoice.currencyId =
+                      ids[countriesCurrencies.indexOf(s!)];
+                });
           },
         ),
         const SizedBox(height: 20),
@@ -86,6 +91,9 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           padding: EdgeInsets.all(0),
           hintText: "0 LE",
           keyBoardType: TextInputType.number,
+          onchanged: (s) {
+            addInvoiceController.dataToCreateQuickInvoice.invoiceValue = s;
+          },
         ),
         const SizedBox(height: 20),
         blackText("Invoice Local Currency Value", 16),
@@ -93,6 +101,9 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           padding: EdgeInsets.all(0),
           hintText: "0 AED",
           keyBoardType: TextInputType.number,
+          onchanged: (s) {
+            addInvoiceController.dataToCreateQuickInvoice.loacalCurrency = s!;
+          },
         ),
         const SizedBox(height: 20),
         blackText("Language of the invoice", 16),
@@ -115,6 +126,8 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
                     groupValue: invoicesLangValue,
                     onChanged: (value) => setState(() {
                           invoicesLangValue = value;
+                          addInvoiceController
+                              .dataToCreateQuickInvoice.languageId = 1;
                         })),
                 greyText("English", 16),
               ],
@@ -136,6 +149,8 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
                     groupValue: invoicesLangValue,
                     onChanged: (value) => setState(() {
                           invoicesLangValue = value;
+                          addInvoiceController
+                              .dataToCreateQuickInvoice.languageId = 2;
                         })),
                 greyText("Arabic", 16),
               ],
@@ -179,18 +194,30 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              blackText("Create The Invoice", 16),
+              blackText("Create Invoice", 16),
               SizedBox(width: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                padding: EdgeInsets.all(20),
-                child: Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                  size: 22.0.sp,
+              GestureDetector(
+                onTap: () async {
+                  addInvoiceController.dataToCreateQuickInvoice.token =
+                      await _loginController.loadToken();
+                  addInvoiceController.dataToCreateQuickInvoice.customerName =
+                      addInvoiceController.customerInfo.customerName;
+                  addInvoiceController.dataToCreateQuickInvoice.customerSendBy =
+                      addInvoiceController.customerInfo.customerSendBy;
+
+                  await addInvoiceController.createQuickInvoice();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding: EdgeInsets.all(20),
+                  child: Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 22.0.sp,
+                  ),
                 ),
               )
             ],

@@ -56,8 +56,6 @@ class CustomerInfoPage extends StatelessWidget {
               width: 2,
               onchanged: (s) {
                 addInvoiceController.selectSendBy(s);
-                addInvoiceController.dataToCreateInvoice.customerSendBy =
-                    (addInvoiceController.sendByItems.indexOf(s!) + 1);
               },
             ),
             const SizedBox(height: 20),

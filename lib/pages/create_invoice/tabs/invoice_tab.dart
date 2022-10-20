@@ -12,22 +12,22 @@ import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
-import 'package:safqa/pages/invoices/customer_info_page.dart';
-import 'package:safqa/pages/invoices/invoice_items_page.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/create_invoice/invoice_items_page.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textfield_datepicker/textfield_datepicker.dart';
 import 'package:textfield_datepicker/textfield_timePicker.dart';
 
-class InvoiceTab extends StatefulWidget {
-  const InvoiceTab({super.key});
+class CreateInvoiceTab extends StatefulWidget {
+  const CreateInvoiceTab({super.key});
 
   @override
-  State<InvoiceTab> createState() => _InvoiceTabState();
+  State<CreateInvoiceTab> createState() => _CreateInvoiceTabState();
 }
 
-class _InvoiceTabState extends State<InvoiceTab> {
+class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   int invoicesLangValue = 0;
   int termsAndConditions = 0;
   String fileName = "";
@@ -82,6 +82,28 @@ class _InvoiceTabState extends State<InvoiceTab> {
         //   ],
         // ),
         // const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                blackText("Invoice ID", 14),
+                const SizedBox(height: 5),
+                greyText("2659986 / 2022000048", 12),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                blackText("Invoice Date", 14),
+                const SizedBox(height: 5),
+                greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 30),
         blackText("Currency", 16),
         Obx(
           () {
@@ -220,6 +242,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
                 controller: discountValueController,
                 padding: EdgeInsets.all(0),
                 hintText: discountTypeFlag ? "0 AED" : "0 %",
+                keyBoardType: TextInputType.number,
                 onchanged: (s) {
                   addInvoiceController.dataToCreateInvoice.discountValue = s;
                 },
@@ -524,7 +547,10 @@ class _InvoiceTabState extends State<InvoiceTab> {
         ),
         GestureDetector(
           onTap: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles();
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+              type: FileType.custom,
+              allowedExtensions: ['pdf', 'xlsx'],
+            );
             if (result != null) {
               File file = File(result.files.single.path);
               fileName = result.files.single.path.split("/").last;
@@ -766,7 +792,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              blackText("Create The Invoice", 16),
+              blackText("Create Invoice", 16),
               SizedBox(width: 10),
               InkWell(
                 customBorder: RoundedRectangleBorder(
@@ -780,7 +806,17 @@ class _InvoiceTabState extends State<InvoiceTab> {
                   String expiryDate =
                       expiryDateController.text + " " + expiryTime;
                   logSuccess(expiryDate);
-
+                  addInvoiceController.dataToCreateInvoice.customerName =
+                      addInvoiceController.customerInfo.customerName;
+                  addInvoiceController.dataToCreateInvoice.customerMobileNumbr =
+                      addInvoiceController.customerInfo.customerMobileNumbr;
+                  addInvoiceController
+                          .dataToCreateInvoice.customerMobileNumbrCode =
+                      addInvoiceController.customerInfo.customerMobileNumbrCode;
+                  addInvoiceController.dataToCreateInvoice.customerRefrence =
+                      addInvoiceController.customerInfo.customerRefrence;
+                  addInvoiceController.dataToCreateInvoice.customerSendBy =
+                      addInvoiceController.customerInfo.customerSendBy;
                   addInvoiceController.dataToCreateInvoice.expiryDate =
                       expiryDate;
                   addInvoiceController.dataToCreateInvoice.recurringStartDate =
@@ -789,7 +825,6 @@ class _InvoiceTabState extends State<InvoiceTab> {
                       endDateController.text;
                   addInvoiceController.dataToCreateInvoice.token =
                       await _loginController.loadToken();
-
                   await addInvoiceController.createInvoice();
                 },
                 child: Container(

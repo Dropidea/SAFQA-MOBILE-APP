@@ -2,9 +2,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/pages/create_invoice/create_invoice_page.dart';
 import 'package:safqa/pages/home/notification_page.dart';
-import 'package:safqa/pages/invoices/create_invoice_page.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/charts_controller.dart';
@@ -20,6 +21,8 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   MyZoomDrawerController myZoomDrawerController = Get.find();
+  AddInvoiceController addInvoiceController = Get.put(AddInvoiceController());
+
   SignUpController _signUpController = Get.put(SignUpController());
 
   ChartsController _chartsController = Get.put(ChartsController());

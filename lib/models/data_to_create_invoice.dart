@@ -6,7 +6,7 @@ class DataToCreateInvoice {
   String? customerMobileNumbr;
   String? customerMobileNumbrCode;
   String? customerRefrence;
-  int? customerSendBy;
+  int? customerSendBy = 1;
   String? currencyId = "1";
   String? discountType;
   String? discountValue;

@@ -4,5 +4,5 @@ class MenuItem {
   final String title;
   final IconData icon;
 
-  MenuItem(this.title, this.icon);
+  const MenuItem(this.title, this.icon);
 }
