@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -127,9 +128,15 @@ class _InvoicesPageState extends State<InvoicesPage>
                   Get.to(() => SearchFilterPage(),
                       transition: Transition.downToUp);
                 },
-                child: Icon(
-                  Icons.filter_alt,
-                  color: Colors.grey,
+                child: Badge(
+                  badgeColor: Color(0xff1BAFB2),
+                  showBadge: true,
+                  position: BadgePosition.topEnd(top: 5, end: 5),
+                  child: Image(
+                    image: AssetImage("assets/images/filter.png"),
+                    width: 25,
+                    height: 25,
+                  ),
                 ),
               ),
             ),

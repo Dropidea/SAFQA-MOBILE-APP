@@ -14,7 +14,7 @@ class InvoiceSubCreatePaymentLink extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: blackText("Create Invoice", 16),
+        title: blackText("Create Payment Link", 16),
 
         centerTitle: true,
       ),
