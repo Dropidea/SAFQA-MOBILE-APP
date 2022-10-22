@@ -177,13 +177,15 @@ class _SearchFilterPageState extends State<SearchFilterPage> {
                                     keyboardType: TextInputType.number,
                                     controller: minController,
                                     onChanged: (value) {
-                                      setState(() {
-                                        if (double.parse(value) > 0 &&
-                                            double.parse(value) < sMax) {
-                                          sMin = double.parse(value);
-                                          _values = SfRangeValues(sMin, sMax);
-                                        }
-                                      });
+                                      if (value != "") {
+                                        setState(() {
+                                          if (double.parse(value) > 0 &&
+                                              double.parse(value) < sMax) {
+                                            sMin = double.parse(value);
+                                            _values = SfRangeValues(sMin, sMax);
+                                          }
+                                        });
+                                      }
                                     },
                                     decoration: InputDecoration(
                                       hintText: "Min",
@@ -208,14 +210,16 @@ class _SearchFilterPageState extends State<SearchFilterPage> {
                                   height: 50,
                                   child: TextFormField(
                                     onChanged: (value) {
-                                      setState(() {
-                                        if (double.parse(value) > 100 &&
-                                            double.parse(value) > sMin) {
-                                          sMax = double.parse(value);
-                                          sInterval = sMax / 5;
-                                          _values = SfRangeValues(sMin, sMax);
-                                        }
-                                      });
+                                      if (value != "") {
+                                        setState(() {
+                                          if (double.parse(value) > 100 &&
+                                              double.parse(value) > sMin) {
+                                            sMax = double.parse(value);
+                                            sInterval = sMax / 5;
+                                            _values = SfRangeValues(sMin, sMax);
+                                          }
+                                        });
+                                      }
                                     },
                                     keyboardType: TextInputType.number,
                                     controller: maxController,

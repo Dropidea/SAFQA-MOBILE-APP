@@ -4,6 +4,7 @@ import 'package:safqa/models/invoice.dart';
 import 'package:safqa/models/invoice_types.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/invoices_controller.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoice_details.dart';
 import 'package:sizer/sizer.dart';
 
 class InvoiceTab extends StatefulWidget {
@@ -29,8 +30,15 @@ class _InvoiceTabState extends State<InvoiceTab> {
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) =>
-              InvoiceWidget(inv: invoiceController.invoices[index]),
+          itemBuilder: (context, index) => InvoiceWidget(
+            inv: invoiceController.invoices[index],
+            onTap: () {
+              Get.to(
+                () => InvoiceDetailsPage(),
+                transition: Transition.downToUp,
+              );
+            },
+          ),
           itemCount: invoiceController.invoices.length,
           separatorBuilder: (BuildContext context, int index) =>
               SizedBox(height: 20),
