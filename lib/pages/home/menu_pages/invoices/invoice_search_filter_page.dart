@@ -8,14 +8,15 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:textfield_datepicker/textfield_datepicker.dart';
 
-class SearchFilterPage extends StatefulWidget {
-  const SearchFilterPage({super.key});
+class InvoiceSearchFilterPage extends StatefulWidget {
+  const InvoiceSearchFilterPage({super.key});
 
   @override
-  State<SearchFilterPage> createState() => _SearchFilterPageState();
+  State<InvoiceSearchFilterPage> createState() =>
+      _InvoiceSearchFilterPageState();
 }
 
-class _SearchFilterPageState extends State<SearchFilterPage> {
+class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
   int invoiceStatus = 0;
   int invoiceValue = 0;
   int dateCreated = 0;
@@ -521,9 +522,9 @@ class _SearchFilterPageState extends State<SearchFilterPage> {
             onChanged: onChanged,
           ),
           SizedBox(
-            width: 10,
+            width: 15,
           ),
-          groupValue == value ? blackText(text, 16) : greyText(text, 16),
+          groupValue == value ? blackText(text, 15) : greyText(text, 15),
         ],
       ),
     );

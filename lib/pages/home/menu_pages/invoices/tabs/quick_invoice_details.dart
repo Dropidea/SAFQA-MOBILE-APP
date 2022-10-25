@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:sizer/sizer.dart';
 
-class InvoiceDetailsPage extends StatelessWidget {
-  const InvoiceDetailsPage({super.key});
+class QuickInvoiceDetailsPage extends StatelessWidget {
+  const QuickInvoiceDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class InvoiceDetailsPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Invoice Details", 17),
+        title: blackText("Quick Invoice Details", 17),
       ),
       body: Column(
         children: [
@@ -260,71 +260,6 @@ class InvoiceDetailsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  ExpandablePanel(
-                      header: Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.grey, width: 0.5),
-                          ),
-                        ),
-                        child: blackText("Invoice Items", 15),
-                      ),
-                      controller: ExpandableController(initialExpanded: true),
-                      collapsed: Container(),
-                      expanded: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.only(end: 20, top: 10),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    blackText("Product Name", 13),
-                                    SizedBox(height: 10),
-                                    greyText("T-shirt", 13),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    blackText("Quantity", 13),
-                                    SizedBox(height: 10),
-                                    greyText("10", 13),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    blackText("Unit Price", 13),
-                                    SizedBox(height: 10),
-                                    greyText("40 AED", 13),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 20),
-                                  child: Center(
-                                    child: whiteText("Total: 40", 14),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
                   SizedBox(height: 20),
                   ExpandablePanel(
                       header: Container(

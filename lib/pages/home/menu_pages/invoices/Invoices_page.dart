@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/zoom_drawer_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/invoices/search_filter_page.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/invoice_search_filter_page.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/payment_link_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoice_tab.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_invoice.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_payment_link.dart';
@@ -124,18 +125,22 @@ class _InvoicesPageState extends State<InvoicesPage>
               suffixIcon: GestureDetector(
                 onTap: () {
                   FocusScope.of(context).unfocus();
-
-                  Get.to(() => SearchFilterPage(),
-                      transition: Transition.downToUp);
+                  if (_tabController.index == 2) {
+                    Get.to(() => PaymentLinkSearchFilterPage(),
+                        transition: Transition.downToUp);
+                  } else {
+                    Get.to(() => InvoiceSearchFilterPage(),
+                        transition: Transition.downToUp);
+                  }
                 },
                 child: Badge(
                   badgeColor: Color(0xff1BAFB2),
                   showBadge: true,
-                  position: BadgePosition.topEnd(top: 5, end: 5),
+                  position: BadgePosition.topEnd(top: 8, end: 8),
                   child: Image(
                     image: AssetImage("assets/images/filter.png"),
-                    width: 25,
-                    height: 25,
+                    width: 18,
+                    height: 18,
                   ),
                 ),
               ),
