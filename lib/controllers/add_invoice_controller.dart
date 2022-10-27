@@ -134,7 +134,7 @@ class AddInvoiceController extends GetxController {
   }
 
   Future createQuickInvoice() async {
-    // logWarning(dataToCreateInvoice.toJson());
+    logWarning(dataToCreateQuickInvoice.toJson());
     Dio dio = Dio();
     dio.options.headers['content-Type'] = 'multipart/form-data';
     // dio.options.headers["authorization"] =

@@ -20,6 +20,7 @@ class AuthService {
           data: data);
       var jsonRes = res.data;
       logSuccess("login success");
+      logSuccess(jsonRes['access_token'].toString());
       return jsonRes['access_token'];
     } on DioError catch (e) {
       logError(e.response!.data['error']);

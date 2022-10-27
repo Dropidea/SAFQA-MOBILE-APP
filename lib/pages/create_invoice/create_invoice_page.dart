@@ -51,7 +51,11 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          "Create a New Invoice",
+          _tabController.index == 0
+              ? "Create a New Invoice"
+              : _tabController.index == 1
+                  ? "Create a Quick Invoice"
+                  : "Create a Payment Link",
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
