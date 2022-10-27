@@ -11,10 +11,12 @@ class MyButton extends StatelessWidget {
     required this.text,
     this.func,
     required this.textSize,
+    this.textColor,
   });
   final double width;
   final double heigt;
   final Color color;
+  final Color? textColor;
   final double borderRadius;
   final String text;
   final Callback? func;
@@ -36,7 +38,7 @@ class MyButton extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              color: func == null ? Color(0xffBBBBBB) : Colors.white,
+              color: func == null ? Color(0xffBBBBBB) : textColor,
               fontSize: textSize,
               fontWeight: FontWeight.w500,
             ),

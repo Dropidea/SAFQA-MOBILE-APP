@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/Invoices_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/products_main_page.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/locals_controller.dart';
@@ -62,6 +63,8 @@ class _HomePageState extends State<HomePage> {
     switch (_currnetMenuItem) {
       case MyMenuItems.invoices:
         return InvoicesPage();
+      case MyMenuItems.products:
+        return ProductsMainPage();
       default:
         return MainPage();
     }

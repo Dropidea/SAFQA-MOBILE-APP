@@ -201,3 +201,25 @@ Text greyText(String text, double size) {
         fontSize: size.sp),
   );
 }
+
+Text greenText(String text, double size) {
+  return Text(
+    text,
+    softWrap: true,
+    style: TextStyle(
+        color: const Color(0xff58D241),
+        fontWeight: FontWeight.w500,
+        fontSize: size.sp),
+  );
+}
+
+Text redText(String text, double size) {
+  return Text(
+    text,
+    softWrap: true,
+    style: TextStyle(
+        color: const Color(0xffE47E7B),
+        fontWeight: FontWeight.w500,
+        fontSize: size.sp),
+  );
+}
