@@ -102,7 +102,9 @@ class QuickInvoiceDetailsPage extends StatelessWidget {
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),
-                    expanded: Padding(
+                    theme: ExpandableThemeData(hasIcon: false),
+                    expanded: Container(
+                      margin: EdgeInsets.only(top: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +181,9 @@ class QuickInvoiceDetailsPage extends StatelessWidget {
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),
-                    expanded: Padding(
+                    theme: ExpandableThemeData(hasIcon: false),
+                    expanded: Container(
+                      margin: EdgeInsets.only(top: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,7 +276,9 @@ class QuickInvoiceDetailsPage extends StatelessWidget {
                       ),
                       controller: ExpandableController(initialExpanded: true),
                       collapsed: Container(),
-                      expanded: Padding(
+                      theme: ExpandableThemeData(hasIcon: false),
+                      expanded: Container(
+                        margin: EdgeInsets.only(top: 10),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
                         child: Row(
@@ -311,7 +317,9 @@ class QuickInvoiceDetailsPage extends StatelessWidget {
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),
-                    expanded: Padding(
+                    theme: ExpandableThemeData(hasIcon: false),
+                    expanded: Container(
+                      margin: EdgeInsets.only(top: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -69,134 +69,141 @@ class _PaymentLinkSearchFilterPageState
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             ExpandablePanel(
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
-              expanded: Column(
-                children: [
-                  buildRadioButton(
-                      0,
-                      "Fixed Value",
-                      paymentAmount,
-                      (p0) => setState(
-                            () {
-                              paymentAmount = p0;
-                            },
-                          )),
-                  buildRadioButton(
-                      1,
-                      "Min/Max",
-                      paymentAmount,
-                      (p0) => setState(
-                            () {
-                              paymentAmount = p0;
-                            },
-                          )),
-                  SizedBox(height: 10),
-                  paymentAmount == 0
-                      ? buildInvoiceValueFixedTextfield()
-                      : Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  ),
-                                  width: 0.4 * w,
-                                  height: 50,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: minController,
-                                    onChanged: (value) {
-                                      if (value != "") {
-                                        setState(() {
-                                          if (double.parse(value) > 0 &&
-                                              double.parse(value) < sMax) {
-                                            sMin = double.parse(value);
-                                            _values = SfRangeValues(sMin, sMax);
-                                          }
-                                        });
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: "Min",
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  ),
-                                  width: 0.4 * w,
-                                  height: 50,
-                                  child: TextFormField(
-                                    onChanged: (value) {
-                                      if (value != "") {
-                                        setState(() {
-                                          if (double.parse(value) > 100 &&
-                                              double.parse(value) > sMin) {
-                                            sMax = double.parse(value);
-                                            sInterval = sMax / 5;
-                                            _values = SfRangeValues(sMin, sMax);
-                                          }
-                                        });
-                                      }
-                                    },
-                                    keyboardType: TextInputType.number,
-                                    controller: maxController,
-                                    decoration: InputDecoration(
-                                      hintText: "Max",
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SfRangeSlider(
-                              // shouldAlwaysShowTooltip: true,
-
-                              min: sMin,
-                              max: sMax,
-                              values: _values,
-                              interval: sInterval,
-                              activeColor: Color(0xff1BAFB2),
-                              showTicks: true,
-                              showLabels: true,
-                              enableTooltip: true,
-                              minorTicksPerInterval: 1,
-                              stepSize: 1,
-                              onChanged: (value) {
-                                setState(() {
-                                  _values = value;
-                                });
+              theme: ExpandableThemeData(hasIcon: false),
+              expanded: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Column(
+                  children: [
+                    buildRadioButton(
+                        0,
+                        "Fixed Value",
+                        paymentAmount,
+                        (p0) => setState(
+                              () {
+                                paymentAmount = p0;
                               },
-                            )
-                          ],
-                        )
-                ],
+                            )),
+                    buildRadioButton(
+                        1,
+                        "Min/Max",
+                        paymentAmount,
+                        (p0) => setState(
+                              () {
+                                paymentAmount = p0;
+                              },
+                            )),
+                    SizedBox(height: 10),
+                    paymentAmount == 0
+                        ? buildInvoiceValueFixedTextfield()
+                        : Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                    ),
+                                    width: 0.4 * w,
+                                    height: 50,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: minController,
+                                      onChanged: (value) {
+                                        if (value != "") {
+                                          setState(() {
+                                            if (double.parse(value) > 0 &&
+                                                double.parse(value) < sMax) {
+                                              sMin = double.parse(value);
+                                              _values =
+                                                  SfRangeValues(sMin, sMax);
+                                            }
+                                          });
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: "Min",
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                    ),
+                                    width: 0.4 * w,
+                                    height: 50,
+                                    child: TextFormField(
+                                      onChanged: (value) {
+                                        if (value != "") {
+                                          setState(() {
+                                            if (double.parse(value) > 100 &&
+                                                double.parse(value) > sMin) {
+                                              sMax = double.parse(value);
+                                              sInterval = sMax / 5;
+                                              _values =
+                                                  SfRangeValues(sMin, sMax);
+                                            }
+                                          });
+                                        }
+                                      },
+                                      keyboardType: TextInputType.number,
+                                      controller: maxController,
+                                      decoration: InputDecoration(
+                                        hintText: "Max",
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SfRangeSlider(
+                                // shouldAlwaysShowTooltip: true,
+
+                                min: sMin,
+                                max: sMax,
+                                values: _values,
+                                interval: sInterval,
+                                activeColor: Color(0xff1BAFB2),
+                                showTicks: true,
+                                showLabels: true,
+                                enableTooltip: true,
+                                minorTicksPerInterval: 1,
+                                stepSize: 1,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _values = value;
+                                  });
+                                },
+                              )
+                            ],
+                          )
+                  ],
+                ),
               ),
               header: Container(
                 decoration: BoxDecoration(
@@ -208,143 +215,152 @@ class _PaymentLinkSearchFilterPageState
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             ExpandablePanel(
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
-              expanded: Column(
-                children: [
-                  buildRadioButton(
-                      0,
-                      "Fixed Date",
-                      dateCreated,
-                      (p0) => setState(
-                            () {
-                              dateCreated = p0;
-                            },
-                          )),
-                  buildRadioButton(
-                      1,
-                      "From/To",
-                      dateCreated,
-                      (p0) => setState(
-                            () {
-                              dateCreated = p0;
-                            },
-                          )),
-                  SizedBox(height: 10),
-                  dateCreated == 0
-                      ? SizedBox(
-                          width: w,
-                          child: TextfieldDatePicker(
-                            decoration: InputDecoration(
-                              hintText: 'dd/MM/yyyy',
-                              fillColor: Colors.white,
-                              filled: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade300,
+              theme: ExpandableThemeData(hasIcon: false),
+              expanded: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Column(
+                  children: [
+                    buildRadioButton(
+                        0,
+                        "Fixed Date",
+                        dateCreated,
+                        (p0) => setState(
+                              () {
+                                dateCreated = p0;
+                              },
+                            )),
+                    buildRadioButton(
+                        1,
+                        "From/To",
+                        dateCreated,
+                        (p0) => setState(
+                              () {
+                                dateCreated = p0;
+                              },
+                            )),
+                    SizedBox(height: 10),
+                    dateCreated == 0
+                        ? SizedBox(
+                            width: w,
+                            child: TextfieldDatePicker(
+                              decoration: InputDecoration(
+                                hintText: 'dd/MM/yyyy',
+                                fillColor: Colors.white,
+                                filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  ),
                                 ),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade300,
-                                ),
-                              ),
+                              textfieldDatePickerController:
+                                  fixedDateController,
+                              materialDatePickerFirstDate: DateTime(2000),
+                              materialDatePickerLastDate: DateTime(2050),
+                              materialDatePickerInitialDate: DateTime.now(),
+                              preferredDateFormat: DateFormat('dd/MM/yyyy'),
+                              cupertinoDatePickerMaximumDate: DateTime(2050),
+                              cupertinoDatePickerMinimumDate: DateTime(2000),
+                              cupertinoDatePickerBackgroundColor:
+                                  Theme.of(context).primaryColor,
+                              cupertinoDatePickerMaximumYear: 2050,
+                              cupertinoDateInitialDateTime:
+                                  DateTime(DateTime.now().year),
                             ),
-                            textfieldDatePickerController: fixedDateController,
-                            materialDatePickerFirstDate: DateTime(2000),
-                            materialDatePickerLastDate: DateTime(2050),
-                            materialDatePickerInitialDate: DateTime.now(),
-                            preferredDateFormat: DateFormat('dd/MM/yyyy'),
-                            cupertinoDatePickerMaximumDate: DateTime(2050),
-                            cupertinoDatePickerMinimumDate: DateTime(2000),
-                            cupertinoDatePickerBackgroundColor:
-                                Theme.of(context).primaryColor,
-                            cupertinoDatePickerMaximumYear: 2050,
-                            cupertinoDateInitialDateTime:
-                                DateTime(DateTime.now().year),
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(
-                              width: 0.4 * w,
-                              child: TextfieldDatePicker(
-                                decoration: InputDecoration(
-                                  hintText: 'dd/MM/yyyy',
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.grey.shade300,
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                width: 0.4 * w,
+                                child: TextfieldDatePicker(
+                                  decoration: InputDecoration(
+                                    hintText: 'dd/MM/yyyy',
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey.shade300,
+                                      ),
                                     ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  ),
+                                  textfieldDatePickerController:
+                                      startDateController,
+                                  materialDatePickerFirstDate: DateTime(2000),
+                                  materialDatePickerLastDate: DateTime(2050),
+                                  materialDatePickerInitialDate: DateTime.now(),
+                                  preferredDateFormat: DateFormat('dd/MM/yyyy'),
+                                  cupertinoDatePickerMaximumDate:
+                                      DateTime(2050),
+                                  cupertinoDatePickerMinimumDate:
+                                      DateTime(2000),
+                                  cupertinoDatePickerBackgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  cupertinoDatePickerMaximumYear: 2050,
+                                  cupertinoDateInitialDateTime:
+                                      DateTime(DateTime.now().year),
                                 ),
-                                textfieldDatePickerController:
-                                    startDateController,
-                                materialDatePickerFirstDate: DateTime(2000),
-                                materialDatePickerLastDate: DateTime(2050),
-                                materialDatePickerInitialDate: DateTime.now(),
-                                preferredDateFormat: DateFormat('dd/MM/yyyy'),
-                                cupertinoDatePickerMaximumDate: DateTime(2050),
-                                cupertinoDatePickerMinimumDate: DateTime(2000),
-                                cupertinoDatePickerBackgroundColor:
-                                    Theme.of(context).primaryColor,
-                                cupertinoDatePickerMaximumYear: 2050,
-                                cupertinoDateInitialDateTime:
-                                    DateTime(DateTime.now().year),
                               ),
-                            ),
-                            SizedBox(
-                              width: 0.4 * w,
-                              child: TextfieldDatePicker(
-                                decoration: InputDecoration(
-                                  hintText: 'dd/MM/yyyy',
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.grey.shade300,
+                              SizedBox(
+                                width: 0.4 * w,
+                                child: TextfieldDatePicker(
+                                  decoration: InputDecoration(
+                                    hintText: 'dd/MM/yyyy',
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                        color: Colors.grey.shade300,
+                                      ),
                                     ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                      color: Colors.grey.shade300,
-                                    ),
-                                  ),
+                                  textfieldDatePickerController:
+                                      endDateController,
+                                  materialDatePickerFirstDate: DateTime(2000),
+                                  materialDatePickerLastDate: DateTime(2050),
+                                  materialDatePickerInitialDate: DateTime.now(),
+                                  preferredDateFormat: DateFormat('dd/MM/yyyy'),
+                                  cupertinoDatePickerMaximumDate:
+                                      DateTime(2050),
+                                  cupertinoDatePickerMinimumDate:
+                                      DateTime(2000),
+                                  cupertinoDatePickerBackgroundColor:
+                                      Theme.of(context).primaryColor,
+                                  cupertinoDatePickerMaximumYear: 2050,
+                                  cupertinoDateInitialDateTime:
+                                      DateTime(DateTime.now().year),
                                 ),
-                                textfieldDatePickerController:
-                                    endDateController,
-                                materialDatePickerFirstDate: DateTime(2000),
-                                materialDatePickerLastDate: DateTime(2050),
-                                materialDatePickerInitialDate: DateTime.now(),
-                                preferredDateFormat: DateFormat('dd/MM/yyyy'),
-                                cupertinoDatePickerMaximumDate: DateTime(2050),
-                                cupertinoDatePickerMinimumDate: DateTime(2000),
-                                cupertinoDatePickerBackgroundColor:
-                                    Theme.of(context).primaryColor,
-                                cupertinoDatePickerMaximumYear: 2050,
-                                cupertinoDateInitialDateTime:
-                                    DateTime(DateTime.now().year),
-                              ),
-                            )
-                          ],
-                        )
-                ],
+                              )
+                            ],
+                          )
+                  ],
+                ),
               ),
               header: Container(
                 decoration: const BoxDecoration(
@@ -356,11 +372,12 @@ class _PaymentLinkSearchFilterPageState
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             ExpandablePanel(
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
+              theme: ExpandableThemeData(hasIcon: false),
               expanded: buildCustomerNameTextfield(),
               header: Container(
                 decoration: BoxDecoration(
@@ -414,6 +431,7 @@ class _PaymentLinkSearchFilterPageState
 
   Container buildCustomerNameTextfield() {
     return Container(
+      margin: EdgeInsets.only(top: 10),
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),

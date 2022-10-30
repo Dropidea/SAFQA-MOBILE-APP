@@ -1,9 +1,10 @@
 import 'package:badges/badges.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/product_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/products_create_page.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/product.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -51,30 +52,15 @@ class ProductsTab extends StatelessWidget {
               onTap: () {
                 //TODO:
               },
-              child: DottedBorder(
-                customPath: (size) {
-                  return Path()
-                    ..moveTo(10, 0)
-                    ..lineTo(size.width - 10, 0)
-                    ..arcToPoint(Offset(size.width, 10),
-                        radius: Radius.circular(10))
-                    ..lineTo(size.width, size.height - 10)
-                    ..arcToPoint(Offset(size.width - 10, size.height),
-                        radius: Radius.circular(10))
-                    ..lineTo(10, size.height)
-                    ..arcToPoint(Offset(0, size.height - 10),
-                        radius: Radius.circular(10))
-                    ..lineTo(0, 10)
-                    ..arcToPoint(Offset(10, 0), radius: Radius.circular(10));
+              child: GestureDetector(
+                onTap: () {
+                  Get.to(() => ProductCreatePage());
                 },
-                color: Color(0xff00A7B3),
-                strokeWidth: 1,
-                dashPattern: [10, 5],
                 child: Container(
                   width: 0.45 * w,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: Color(0xff00A7B3).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
@@ -101,49 +87,29 @@ class ProductsTab extends StatelessWidget {
               onTap: () {
                 //TODO:
               },
-              child: DottedBorder(
-                customPath: (size) {
-                  return Path()
-                    ..moveTo(10, 0)
-                    ..lineTo(size.width - 10, 0)
-                    ..arcToPoint(Offset(size.width, 10),
-                        radius: Radius.circular(10))
-                    ..lineTo(size.width, size.height - 10)
-                    ..arcToPoint(Offset(size.width - 10, size.height),
-                        radius: Radius.circular(10))
-                    ..lineTo(10, size.height)
-                    ..arcToPoint(Offset(0, size.height - 10),
-                        radius: Radius.circular(10))
-                    ..lineTo(0, 10)
-                    ..arcToPoint(Offset(10, 0), radius: Radius.circular(10));
-                },
-                color: Color(0xff8B8B8B),
-                strokeWidth: 1,
-                dashPattern: [10, 5],
-                child: Container(
-                  width: 0.45 * w,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.file_download_outlined,
+              child: Container(
+                width: 0.45 * w,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Color(0xff8B8B8B).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.file_download_outlined,
+                      color: Color(0xff8B8B8B),
+                    ),
+                    Text(
+                      "Import Product",
+                      style: TextStyle(
                         color: Color(0xff8B8B8B),
+                        fontSize: 13.0.sp,
                       ),
-                      Text(
-                        "Import Product",
-                        style: TextStyle(
-                          color: Color(0xff8B8B8B),
-                          fontSize: 13.0.sp,
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -160,6 +126,7 @@ class ProductsTab extends StatelessWidget {
                   onTap: () {
                     Get.dialog(
                       AlertDialog(
+                        actionsPadding: EdgeInsets.only(bottom: 30),
                         titlePadding: EdgeInsets.all(0),
                         actionsAlignment: MainAxisAlignment.center,
                         actions: [
@@ -228,6 +195,9 @@ class ProductsTab extends StatelessWidget {
           itemBuilder: (context, index) {
             return ProductWidget(
               active: index % 2 == 0,
+              onTap: () {
+                Get.to(() => ProductDetailsPage());
+              },
             );
           },
         ))
@@ -257,8 +227,8 @@ class ProductsTab extends StatelessWidget {
         Center(
           child: Container(
             margin: const EdgeInsets.only(top: 25.0),
-            width: 70.0.sp,
-            height: 90.0.sp,
+            width: 55.0.sp,
+            height: 70.0.sp,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(

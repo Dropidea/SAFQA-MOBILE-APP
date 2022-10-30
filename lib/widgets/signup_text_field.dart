@@ -18,6 +18,8 @@ class SignUpTextField extends StatelessWidget {
     this.padding = const EdgeInsets.only(left: 15, right: 15, top: 5),
     this.suffixIcon,
     this.suffix,
+    this.fillColor,
+    this.textInputAction,
   });
 
   final String? hintText;
@@ -25,12 +27,14 @@ class SignUpTextField extends StatelessWidget {
   final Widget? prefix;
   final Widget? suffixIcon;
   final Widget? suffix;
+  final TextInputAction? textInputAction;
   final TextInputType? keyBoardType;
   final String? Function(String? s)? validator;
   final String? initialValue;
   final TextEditingController? controller;
   final Function(String? s)? onchanged;
   List<TextInputFormatter>? inputFormatters;
+  final Color? fillColor;
   bool obsecureText = false;
   bool readOnly = false;
   EdgeInsetsGeometry? padding = EdgeInsets.only(left: 15, right: 15, top: 5);
@@ -41,10 +45,11 @@ class SignUpTextField extends StatelessWidget {
       child: Padding(
         padding: padding!,
         child: TextFormField(
+          textInputAction: textInputAction ?? TextInputAction.next,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: keyBoardType,
           decoration: InputDecoration(
-              fillColor: Colors.grey.shade200,
+              fillColor: fillColor ?? Colors.grey.shade200,
               filled: true,
               border: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(10.0),

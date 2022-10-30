@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/my_store.dart';
+import 'package:safqa/pages/home/menu_pages/products/tabs/product_ordered_tab.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
@@ -29,6 +30,8 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
         return ProductsTab();
       case 1:
         return MyStoreTab();
+      case 2:
+        return ProductsOrderedTab();
       default:
         return ProductsTab();
     }

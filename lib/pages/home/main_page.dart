@@ -97,7 +97,7 @@ class _MainPageState extends State<MainPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            width: 0.40 * w,
+                            width: 0.43 * w,
                             height: 0.2 * h,
                             decoration: BoxDecoration(
                               image: DecorationImage(
@@ -131,7 +131,7 @@ class _MainPageState extends State<MainPage> {
                             ),
                           ),
                           Container(
-                            width: 0.40 * w,
+                            width: 0.43 * w,
                             height: 0.2 * h,
                             decoration: BoxDecoration(
                               image: DecorationImage(
