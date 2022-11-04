@@ -669,7 +669,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
 
                           return DropdownButtonFormField<String>(
                             decoration: InputDecoration(
-                              fillColor: Colors.grey.shade200,
+                              fillColor: Color(0xffF8F8F8),
                               filled: true,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -748,7 +748,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             .toList();
                         return DropdownButtonFormField<String>(
                           decoration: InputDecoration(
-                            fillColor: Colors.grey.shade200,
+                            fillColor: Color(0xffF8F8F8),
                             filled: true,
                             border: OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(10.0),
@@ -992,7 +992,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             .toList();
                         return DropdownButtonFormField<String>(
                           decoration: InputDecoration(
-                            fillColor: Colors.grey.shade200,
+                            fillColor: Color(0xffF8F8F8),
                             filled: true,
                             border: OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(10.0),

@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
@@ -6,6 +7,7 @@ import 'package:safqa/pages/home/menu_pages/products/product_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/products_create_page.dart';
 import 'package:safqa/widgets/my_button.dart';
+import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/product.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -117,11 +119,11 @@ class ProductsTab extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          height: 50,
+          height: 40,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              productBTN(
+              listBTN(
                   text: "Select All",
                   onTap: () {
                     Get.dialog(
@@ -175,15 +177,54 @@ class ProductsTab extends StatelessWidget {
                     );
                   }),
               SizedBox(width: 5),
-              productBTN(text: "Copy", onTap: () {}),
+              listBTN(text: "Copy", onTap: () {}),
               SizedBox(width: 5),
-              productBTN(text: "Print", onTap: () {}),
+              // listBTN(text: "Print", onTap: () {}),
+              MyPopUpMenu(
+                menuList: [
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Icon(
+                          EvaIcons.file,
+                          color: Colors.grey.shade500,
+                        ),
+                        SizedBox(width: 10),
+                        Text("PDF"),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.print,
+                          color: Colors.grey.shade500,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Printer"),
+                      ],
+                    ),
+                  ),
+                ],
+                widget: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF9F9F9),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: blueText("print", 12),
+                  ),
+                ),
+              ),
               SizedBox(width: 5),
-              productBTN(text: "PDF", onTap: () {}),
+
+              listBTN(text: "Excel", onTap: () {}),
               SizedBox(width: 5),
-              productBTN(text: "Excel", onTap: () {}),
-              SizedBox(width: 5),
-              productBTN(text: "CSV", onTap: () {}),
+              listBTN(text: "CSV", onTap: () {}),
               SizedBox(width: 5),
             ],
           ),
@@ -202,22 +243,6 @@ class ProductsTab extends StatelessWidget {
           },
         ))
       ],
-    );
-  }
-
-  Widget productBTN({String? text, void Function()? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        decoration: BoxDecoration(
-          color: const Color(0xffF9F9F9),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Center(
-          child: blueText(text!, 12),
-        ),
-      ),
     );
   }
 
@@ -256,4 +281,21 @@ class ProductsTab extends StatelessWidget {
       ],
     );
   }
+}
+
+Widget listBTN({String? text, void Function()? onTap, double? width}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      width: width,
+      padding: EdgeInsets.symmetric(horizontal: 25),
+      decoration: BoxDecoration(
+        color: const Color(0xffF9F9F9),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: blueText(text!, 11),
+      ),
+    ),
+  );
 }

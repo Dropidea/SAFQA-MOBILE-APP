@@ -56,6 +56,7 @@ dependencies:
   syncfusion_flutter_sliders: ^20.3.50
   expandable: ^5.0.1
   flutter_switch: ^0.3.2
+  eva_icons_flutter: ^3.1.0
   # pinput: ^2.2.12
 
 dev_dependencies:

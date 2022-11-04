@@ -49,7 +49,7 @@ class SignUpTextField extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: keyBoardType,
           decoration: InputDecoration(
-              fillColor: fillColor ?? Colors.grey.shade200,
+              fillColor: fillColor ?? Color(0xffF8F8F8),
               filled: true,
               border: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(10.0),

@@ -147,30 +147,20 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                           child: Container(
                             width: 0.45 * w,
                             height: 50,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                             decoration: BoxDecoration(
                               color: Color(0xff00A7B3).withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add_rounded,
+                            child: Center(
+                              child: Text(
+                                fileName == "" ? "Choose" : fileName,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
                                   color: Color(0xff00A7B3),
+                                  fontSize: 13.0.sp,
                                 ),
-                                SizedBox(
-                                  width: 0.3 * w,
-                                  child: Text(
-                                    fileName == "" ? "Choose" : fileName,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Color(0xff00A7B3),
-                                      fontSize: 13.0.sp,
-                                    ),
-                                  ),
-                                )
-                              ],
+                              ),
                             ),
                           ),
                         ),

@@ -40,7 +40,7 @@ class MyStoreTab extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          height: 50,
+          height: 40,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [

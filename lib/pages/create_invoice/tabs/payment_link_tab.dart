@@ -100,7 +100,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     value: 0,
@@ -120,7 +120,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
@@ -187,7 +187,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
           margin: const EdgeInsets.symmetric(vertical: 5),
           padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+            color: Color(0xffF8F8F8),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
@@ -209,7 +209,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     value: 0,
@@ -229,7 +229,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
@@ -257,7 +257,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     value: 0,
@@ -277,7 +277,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,

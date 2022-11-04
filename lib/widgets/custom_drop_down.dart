@@ -24,7 +24,7 @@ class CustomDropdown extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Color(0xffF8F8F8),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: DropdownButtonFormField(

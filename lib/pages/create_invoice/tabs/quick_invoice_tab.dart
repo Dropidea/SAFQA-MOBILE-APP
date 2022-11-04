@@ -119,7 +119,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     value: 0,
@@ -141,7 +141,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,

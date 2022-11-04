@@ -65,7 +65,7 @@ class CustomerInfoPage extends StatelessWidget {
               dropdownIconPosition: IconPosition.trailing,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                fillColor: Colors.grey.shade200,
+                fillColor: Color(0xffF8F8F8),
                 filled: true,
                 border: OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(10.0),
@@ -164,14 +164,15 @@ class CustomerInfoPage extends StatelessWidget {
   }
 }
 
-Text blueText(String text, double size, {bool underline = false}) {
+Text blueText(String text, double size,
+    {bool underline = false, FontWeight? fontWeight}) {
   return Text(
     text,
     style: TextStyle(
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,
         color: Color(0xff2F6782),
-        fontWeight: FontWeight.w500,
+        fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),
   );
 }
@@ -190,19 +191,21 @@ Text blackText(String text, double size,
   );
 }
 
-Text whiteText(String text, double size, {bool underline = false}) {
+Text whiteText(String text, double size,
+    {bool underline = false, FontWeight? fontWeight}) {
   return Text(
     text,
     style: TextStyle(
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,
         color: Colors.white,
-        fontWeight: FontWeight.w500,
+        fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),
   );
 }
 
-Text greyText(String text, double size, {bool underline = false}) {
+Text greyText(String text, double size,
+    {bool underline = false, FontWeight? fontWeight}) {
   return Text(
     text,
     softWrap: true,
@@ -210,12 +213,13 @@ Text greyText(String text, double size, {bool underline = false}) {
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,
         color: const Color(0xff8B8B8B),
-        fontWeight: FontWeight.w500,
+        fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),
   );
 }
 
-Text greyARText(String text, double size, {bool underline = false}) {
+Text greyARText(String text, double size,
+    {bool underline = false, FontWeight? fontWeight}) {
   return Text(
     text,
     textAlign: TextAlign.end,
@@ -224,12 +228,13 @@ Text greyARText(String text, double size, {bool underline = false}) {
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,
         color: const Color(0xff8B8B8B),
-        fontWeight: FontWeight.w500,
+        fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),
   );
 }
 
-Text greenText(String text, double size, {bool underline = false}) {
+Text greenText(String text, double size,
+    {bool underline = false, FontWeight? fontWeight}) {
   return Text(
     text,
     softWrap: true,
@@ -237,12 +242,13 @@ Text greenText(String text, double size, {bool underline = false}) {
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,
         color: const Color(0xff58D241),
-        fontWeight: FontWeight.w500,
+        fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),
   );
 }
 
-Text redText(String text, double size, {bool underline = false}) {
+Text redText(String text, double size,
+    {bool underline = false, FontWeight? fontWeight}) {
   return Text(
     text,
     softWrap: true,
@@ -250,7 +256,7 @@ Text redText(String text, double size, {bool underline = false}) {
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,
         color: const Color(0xffE47E7B),
-        fontWeight: FontWeight.w500,
+        fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),
   );
 }

@@ -336,7 +336,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomerNameTextfield(),
+              expanded: buildCustomNameTextfield(hint: "Customer Name ..."),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
@@ -387,31 +387,6 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
     );
   }
 
-  Widget buildCustomerNameTextfield() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: Colors.grey.shade300,
-        ),
-      ),
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          hintText: "Customer Name ...",
-          fillColor: Colors.white,
-          filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget buildRadioButton(
       int value, String text, int groupValue, void Function(int)? onChanged) {
     return Container(
@@ -442,4 +417,29 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
       ),
     );
   }
+}
+
+Widget buildCustomNameTextfield({String? hint}) {
+  return Container(
+    margin: EdgeInsets.only(top: 20),
+    height: 50,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10.0),
+      border: Border.all(
+        color: Colors.grey.shade300,
+      ),
+    ),
+    child: TextFormField(
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        hintText: hint,
+        fillColor: Colors.white,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    ),
+  );
 }

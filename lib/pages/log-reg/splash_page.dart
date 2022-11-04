@@ -1,14 +1,11 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:safqa/pages/log-reg/login.dart';
-import 'package:safqa/services/end_points.dart';
+import 'package:safqa/pages/home/home_page.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/first_time_using_app.dart';
 import '../../controllers/login_controller.dart';
-import '../home/home_page.dart';
 import 'select_language_page.dart';
 import 'welcome_page.dart';
 
@@ -30,20 +27,29 @@ class SplashPage extends StatelessWidget {
       } else {
         var token = await loginController.loadToken();
         if (token != "") {
-          try {
-            await Dio().post(EndPoints.baseURL + EndPoints.meEndPoint,
-                data: {'token': token});
-            Get.offAll(
-              () => HomePage(),
-              duration: Duration(milliseconds: 1200),
-              transition: Transition.zoom,
-            );
-          } catch (e) {
-            Get.offAll(
-              () => LoginPage(),
-              duration: Duration(milliseconds: 1200),
-            );
-          }
+          Get.offAll(
+            () => HomePage(),
+            duration: Duration(milliseconds: 1200),
+            transition: Transition.zoom,
+          );
+          // try {
+          //   await Dio().post(EndPoints.baseURL + EndPoints.meEndPoint,
+          //       data: {'token': token},
+          //       options: Options(
+          //         receiveTimeout: 20 * 1000,
+          //         sendTimeout: 20 * 1000,
+          //       ));
+          //   Get.offAll(
+          //     () => HomePage(),
+          //     duration: Duration(milliseconds: 1200),
+          //     transition: Transition.zoom,
+          //   );
+          // } catch (e) {
+          //   Get.offAll(
+          //     () => LoginPage(),
+          //     duration: Duration(milliseconds: 1200),
+          //   );
+          // }
         } else {
           Get.offAll(
             () => WelcomePage(),

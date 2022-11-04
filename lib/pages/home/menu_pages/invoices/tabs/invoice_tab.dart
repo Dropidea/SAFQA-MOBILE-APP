@@ -103,7 +103,7 @@ class InvoiceWidget extends StatelessWidget {
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Colors.grey.shade200,
+                  color: Color(0xffF8F8F8),
                 ),
                 child: inv.type == InvoiceTypes.pending
                     ? Image(

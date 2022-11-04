@@ -2,19 +2,21 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/widgets/signup_text_field.dart';
+import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:sizer/sizer.dart';
 
-class CategoryFilterPage extends StatefulWidget {
-  const CategoryFilterPage({super.key});
+class CustomerSearchFilterPage extends StatefulWidget {
+  const CustomerSearchFilterPage({super.key});
 
   @override
-  State<CategoryFilterPage> createState() => _CategoryFilterPage();
+  State<CustomerSearchFilterPage> createState() =>
+      _CustomertSearchFilterPageState();
 }
 
-class _CategoryFilterPage extends State<CategoryFilterPage> {
-  int isActive = 0;
+class _CustomertSearchFilterPageState extends State<CustomerSearchFilterPage> {
+  TextEditingController customerPhoneNumberControler = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,66 +62,47 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: [
-                    buildRadioButton(
-                        0,
-                        "All",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        1,
-                        "Active",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        2,
-                        "Inactive",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
-                  ],
-                ),
-              ),
+              expanded: buildCustomNameTextfield(),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Is Active", 15),
+                child: blackText("Customer Name", 15),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 30),
             ExpandablePanel(
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
               expanded: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    SignUpTextField(
-                      padding: EdgeInsets.all(0),
-                      hintText: "Category Name (En / Ar)",
-                    ),
-                  ],
+                margin: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.only(top: 15),
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                  ),
+                ),
+                child: IntlPhoneField(
+                  flagsButtonPadding: EdgeInsets.symmetric(horizontal: 20),
+                  dropdownIconPosition: IconPosition.trailing,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    border: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none),
+                  ),
+                  initialCountryCode: 'IN',
+                  onChanged: (phone) {},
+                  onCountryChanged: (value) {},
+                  controller: customerPhoneNumberControler,
                 ),
               ),
               header: Container(
@@ -128,11 +111,23 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Category Name", 15),
+                child: blackText("Mobile Number", 15),
               ),
             ),
-            SizedBox(
-              height: 20,
+            SizedBox(height: 30),
+            ExpandablePanel(
+              controller: ExpandableController(initialExpanded: true),
+              collapsed: Container(),
+              theme: ExpandableThemeData(hasIcon: false),
+              expanded: buildCustomNameTextfield(),
+              header: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey, width: 0.5),
+                  ),
+                ),
+                child: blackText("Customer Refrence", 15),
+              ),
             ),
             Align(
               child: Container(
@@ -144,7 +139,7 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     color: Color(0xff1BAFB2)),
                 child: Center(child: whiteText("Apply", 15)),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -164,31 +159,6 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           hintText: "Invoice value ...",
-          fillColor: Colors.white,
-          filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildCustomerNameTextfield() {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: Colors.grey.shade300,
-        ),
-      ),
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          hintText: "Customer Name ...",
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(

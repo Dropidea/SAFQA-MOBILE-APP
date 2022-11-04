@@ -1,9 +1,12 @@
 import 'package:badges/badges.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/order_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_ordered_search_filter_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
+import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/product.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -44,20 +47,53 @@ class ProductsOrderedTab extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          height: 50,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
+          height: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              productBTN(text: "Copy", onTap: () {}),
-              SizedBox(width: 5),
-              productBTN(text: "Print", onTap: () {}),
-              SizedBox(width: 5),
-              productBTN(text: "PDF", onTap: () {}),
-              SizedBox(width: 5),
-              productBTN(text: "Excel", onTap: () {}),
-              SizedBox(width: 5),
-              productBTN(text: "CSV", onTap: () {}),
-              SizedBox(width: 5),
+              listBTN(text: "Copy", onTap: () {}, width: w / 4.5),
+              MyPopUpMenu(
+                menuList: [
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Icon(
+                          EvaIcons.file,
+                          color: Colors.grey.shade500,
+                        ),
+                        SizedBox(width: 10),
+                        Text("PDF"),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.print,
+                          color: Colors.grey.shade500,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Printer"),
+                      ],
+                    ),
+                  ),
+                ],
+                widget: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF9F9F9),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: blueText("print", 12),
+                  ),
+                ),
+              ),
+              listBTN(text: "Excel", onTap: () {}, width: w / 4.5),
+              listBTN(text: "CSV", onTap: () {}, width: w / 4.5),
             ],
           ),
         ),
@@ -77,22 +113,6 @@ class ProductsOrderedTab extends StatelessWidget {
           },
         ))
       ],
-    );
-  }
-
-  Widget productBTN({String? text, void Function()? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        decoration: BoxDecoration(
-          color: const Color(0xffF9F9F9),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Center(
-          child: blueText(text!, 12),
-        ),
-      ),
     );
   }
 

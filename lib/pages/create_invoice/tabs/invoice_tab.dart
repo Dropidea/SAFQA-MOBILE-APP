@@ -139,7 +139,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           margin: const EdgeInsets.symmetric(vertical: 5),
           padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+            color: Color(0xffF8F8F8),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: DropdownButtonFormField(
@@ -170,7 +170,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           margin: const EdgeInsets.symmetric(vertical: 5),
           padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+            color: Color(0xffF8F8F8),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: DropdownButtonFormField(
@@ -205,7 +205,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: Color(0xffF8F8F8),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: DropdownButtonFormField(
@@ -262,7 +262,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
+                    color: Color(0xffF8F8F8),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Center(
@@ -296,7 +296,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
+                    color: Color(0xffF8F8F8),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Center(
@@ -360,7 +360,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           margin: const EdgeInsets.symmetric(vertical: 5),
           padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+            color: Color(0xffF8F8F8),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: DropdownButtonFormField(
@@ -418,7 +418,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         margin: const EdgeInsets.symmetric(vertical: 5),
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color: Color(0xffF8F8F8),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: Center(
@@ -452,7 +452,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         margin: const EdgeInsets.symmetric(vertical: 5),
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color: Color(0xffF8F8F8),
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: Center(
@@ -493,7 +493,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     value: 0,
@@ -518,7 +518,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
@@ -585,7 +585,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               width: w,
               height: 60,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Color(0xff00A7B3).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -618,7 +618,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           margin: const EdgeInsets.symmetric(vertical: 5),
           padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+            color: Color(0xffF8F8F8),
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
@@ -644,7 +644,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     value: 0,
@@ -665,7 +665,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                     radioColor: Color(0xff66B4D2),
                     inactiveIcon: Icon(
                       Icons.circle,
-                      color: Colors.grey.shade200,
+                      color: Color(0xffF8F8F8),
                     ),
                     size: GFSize.SMALL,
                     inactiveBorderColor: Colors.transparent,
@@ -686,7 +686,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: Color(0xffF8F8F8),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: TextField(

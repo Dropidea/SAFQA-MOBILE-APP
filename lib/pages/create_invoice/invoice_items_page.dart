@@ -82,7 +82,7 @@ class InvoiceItemsPage extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 5),
                       padding: EdgeInsets.symmetric(vertical: 5),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
+                        color: Color(0xffF8F8F8),
                         borderRadius: new BorderRadius.circular(10.0),
                       ),
                       child: NumericStepButton(
