@@ -2,8 +2,9 @@ import 'package:badges/badges.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/customer_details.dart';
+import 'package:safqa/pages/home/menu_pages/customers/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
 import 'package:safqa/widgets/popup_menu.dart';
@@ -108,34 +109,31 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              //TODO:
+                              Get.to(() => AddCustomerPage());
                             },
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                width: 0.44 * w,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff00A7B3).withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add_rounded,
+                            child: Container(
+                              width: 0.44 * w,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Color(0xff00A7B3).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add_rounded,
+                                    color: Color(0xff00A7B3),
+                                  ),
+                                  Text(
+                                    "Create Customer",
+                                    style: TextStyle(
                                       color: Color(0xff00A7B3),
+                                      fontSize: 13.0.sp,
                                     ),
-                                    Text(
-                                      "Create Customer",
-                                      style: TextStyle(
-                                        color: Color(0xff00A7B3),
-                                        fontSize: 13.0.sp,
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -234,7 +232,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                           primary: false,
                           itemBuilder: (context, index) => ListTile(
                               onTap: () {
-                                logSuccess(index);
+                                Get.to(() => CustomerDetailsPage());
                               },
                               title: blackText(
                                 "Samer Abd El-Fattah",
