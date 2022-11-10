@@ -139,7 +139,7 @@ class ProductsTab extends StatelessWidget {
                             borderRadius: 10,
                             textColor: Color(0xff2D5571),
                             text: "Open",
-                            textSize: 15.0.sp,
+                            textSize: 15.0,
                             func: () {},
                           ),
                           MyButton(
@@ -149,7 +149,7 @@ class ProductsTab extends StatelessWidget {
                             borderRadius: 10,
                             text: "Copy Link",
                             textColor: Colors.white,
-                            textSize: 15.0.sp,
+                            textSize: 13.0,
                             func: () {},
                           )
                         ],

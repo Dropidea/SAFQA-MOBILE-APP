@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,20 +10,24 @@ import 'end_points.dart';
 
 class AuthService {
   final Dio _dio = Dio();
+
   Future<String?> login(String email, String password) async {
+    _dio.options.headers['content-Type'] = 'multipart/form-data';
     try {
       var data = {
         'email': email,
         'password': password,
       };
-
+      final body = d.FormData.fromMap(data);
+      logSuccess(EndPoints.baseURL + EndPoints.loginEndPoint);
       var res = await _dio.post(EndPoints.baseURL + EndPoints.loginEndPoint,
-          data: data);
+          data: body);
       var jsonRes = res.data;
       logSuccess("login success");
       logSuccess(jsonRes['access_token'].toString());
       return jsonRes['access_token'];
     } on DioError catch (e) {
+      // logError(e);
       logError(e.response!.data['error']);
       logError(e.response!.statusCode!);
       Get.showSnackbar(GetSnackBar(
@@ -49,14 +54,14 @@ class AuthService {
       // );
       Map<String, dynamic> obj = e.response!.data;
 
+      Get.showSnackbar(GetSnackBar(
+        duration: Duration(milliseconds: 2000),
+        backgroundColor: Colors.red,
+        message: e.response!.data['error'] +
+            " " +
+            e.response!.statusCode!.toString(),
+      ));
       return obj;
-      // Get.showSnackbar(GetSnackBar(
-      //   duration: Duration(milliseconds: 2000),
-      //   backgroundColor: Colors.red,
-      //   message: e.response!.data['error'] +
-      //       " " +
-      //       e.response!.statusCode!.toString(),
-      // ));
       // return e.response!.data;
     }
   }

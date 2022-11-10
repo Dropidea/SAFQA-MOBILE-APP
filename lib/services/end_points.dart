@@ -1,5 +1,5 @@
 class EndPoints {
-  static const String _baseURL = "https://api.safqapay.com/";
+  static const String _baseURL = "https://api.safqapay.com/api";
   static String get baseURL => _baseURL;
 
   static String get loginEndPoint => "/login";

@@ -10,25 +10,30 @@ class CustomDropdown extends StatelessWidget {
       required this.items,
       this.selectedItem,
       this.hint,
-      required this.onchanged});
+      required this.onchanged,
+      this.backgroundColor,
+      this.borderColor,
+      this.border});
   final double width;
   final List<String> items;
   final String? selectedItem;
   final String? hint;
   final Function(String? s)? onchanged;
-
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final InputBorder? border;
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+      padding: const EdgeInsets.only(left: 15, right: 15),
       decoration: BoxDecoration(
-        color: Color(0xffF8F8F8),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
+          color: backgroundColor ?? Color(0xffF8F8F8),
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: borderColor ?? Colors.transparent)),
       child: DropdownButtonFormField(
-        decoration: const InputDecoration(border: InputBorder.none),
+        decoration: InputDecoration(border: border ?? InputBorder.none),
         items: items
             .map(
               (e) => DropdownMenuItem(
