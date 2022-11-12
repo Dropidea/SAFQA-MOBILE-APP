@@ -113,6 +113,7 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
             Get.to(() => CreateCategoryPage());
           },
           child: DottedBorder(
+            padding: EdgeInsets.all(0),
             customPath: (size) {
               return Path()
                 ..moveTo(10, 0)
@@ -128,29 +129,32 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                 ..lineTo(0, 10)
                 ..arcToPoint(Offset(10, 0), radius: Radius.circular(10));
             },
-            color: Color(0xff00A7B3),
+            color: Color(0xff2F6782).withOpacity(0.4),
             strokeWidth: 1,
             dashPattern: [10, 5],
             child: Container(
               width: w,
               height: 40,
               decoration: BoxDecoration(
-                color: Color(0xff00A7B3).withOpacity(0.1),
+                color: Color(0xff2F6782).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.add_rounded,
-                    color: Color(0xff00A7B3),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Icon(
+                      Icons.add_rounded,
+                      color: Color(0xff2F6782),
+                    ),
                   ),
                   SizedBox(width: 10),
                   Text(
                     "Create a new one",
                     style: TextStyle(
-                      color: Color(0xff00A7B3),
+                      color: Color(0xff2F6782),
                       fontSize: 13.0.sp,
                     ),
                   )
@@ -173,53 +177,53 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 padding: EdgeInsets.all(20),
                 width: w,
-                height: 150,
+                height: 110,
                 decoration: BoxDecoration(
                   color: Color(0xffF8F8F8),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         blackText("Electronic Devices", 15),
                         SizedBox(height: 10),
-                        greyText("اجهزه الكترونيه", 15),
+                        Row(
+                          children: [
+                            Text(
+                              isToggled[index] ? "Active" : "Inactive",
+                              style: TextStyle(
+                                color: isToggled[index]
+                                    ? Color(0xff1BAFB2)
+                                    : Colors.grey,
+                                fontSize: 13.0.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            FlutterSwitch(
+                              height: 25.0,
+                              width: 50.0,
+                              padding: 3.0,
+                              toggleSize: 25.0,
+                              borderRadius: 20.0,
+                              activeColor: Color(0xff1BAFB2),
+                              value: isToggled[index],
+                              onToggle: (value) {
+                                logSuccess(value);
+                                setState(() {
+                                  isToggled[index] = value;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          isToggled[index] ? "Active" : "Inactive",
-                          style: TextStyle(
-                            color: isToggled[index]
-                                ? Color(0xff1BAFB2)
-                                : Colors.grey,
-                            fontSize: 13.0.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        FlutterSwitch(
-                          height: 30.0,
-                          width: 60.0,
-                          padding: 4.0,
-                          toggleSize: 30.0,
-                          borderRadius: 20.0,
-                          activeColor: Color(0xff1BAFB2),
-                          value: isToggled[index],
-                          onToggle: (value) {
-                            logSuccess(value);
-                            setState(() {
-                              isToggled[index] = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                    greyText("اجهزه الكترونيه", 15),
                   ],
                 ),
               ),

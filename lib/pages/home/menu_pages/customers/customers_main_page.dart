@@ -3,8 +3,8 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/customer_add_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_details.dart';
-import 'package:safqa/pages/home/menu_pages/customers/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
 import 'package:safqa/widgets/popup_menu.dart';
@@ -72,8 +72,8 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
                     ),
                   ),
                   child: Column(
@@ -115,22 +115,27 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                               width: 0.44 * w,
                               height: 60,
                               decoration: BoxDecoration(
-                                color: Color(0xff00A7B3).withOpacity(0.1),
+                                color: Color(0xff2F6782).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    Icons.add_rounded,
-                                    color: Color(0xff00A7B3),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 5),
+                                    child: Icon(
+                                      Icons.add_rounded,
+                                      color: Color(0xff2F6782),
+                                    ),
                                   ),
+                                  SizedBox(width: 5),
                                   Text(
                                     "Create Customer",
                                     style: TextStyle(
-                                      color: Color(0xff00A7B3),
+                                      color: Color(0xff2F6782),
                                       fontSize: 13.0.sp,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   )
                                 ],
@@ -152,15 +157,20 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    Icons.file_download_outlined,
-                                    color: Color(0xff8B8B8B),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 5),
+                                    child: Icon(
+                                      Icons.file_download_outlined,
+                                      color: Color(0xff8B8B8B),
+                                    ),
                                   ),
+                                  SizedBox(width: 5),
                                   Text(
                                     "Import Customer",
                                     style: TextStyle(
                                       color: Color(0xff8B8B8B),
                                       fontSize: 13.0.sp,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   )
                                 ],
@@ -234,12 +244,19 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                               onTap: () {
                                 Get.to(() => CustomerDetailsPage());
                               },
-                              title: blackText(
-                                "Samer Abd El-Fattah",
-                                14,
-                                fontWeight: FontWeight.normal,
+                              title: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  blackText(
+                                    "Samer Abd El-Fattah",
+                                    14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                  greyText("+9715678951432", 13)
+                                ],
                               ),
-                              subtitle: greyText("+9715678951432", 13),
                               dense: true,
                               visualDensity: VisualDensity(vertical: 4),
                               leading: Container(

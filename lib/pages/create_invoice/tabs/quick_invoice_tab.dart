@@ -113,22 +113,25 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    inactiveBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    value: 0,
-                    groupValue: invoicesLangValue,
-                    onChanged: (value) => setState(() {
-                          invoicesLangValue = value;
-                          addInvoiceController
-                              .dataToCreateQuickInvoice.languageId = 1;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      inactiveBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      value: 0,
+                      groupValue: invoicesLangValue,
+                      onChanged: (value) => setState(() {
+                            invoicesLangValue = value;
+                            addInvoiceController
+                                .dataToCreateQuickInvoice.languageId = 1;
+                          })),
+                ),
                 greyText("English", 16),
               ],
             ),
@@ -136,22 +139,25 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    inactiveBorderColor: Colors.transparent,
-                    value: 1,
-                    groupValue: invoicesLangValue,
-                    onChanged: (value) => setState(() {
-                          invoicesLangValue = value;
-                          addInvoiceController
-                              .dataToCreateQuickInvoice.languageId = 2;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      inactiveBorderColor: Colors.transparent,
+                      value: 1,
+                      groupValue: invoicesLangValue,
+                      onChanged: (value) => setState(() {
+                            invoicesLangValue = value;
+                            addInvoiceController
+                                .dataToCreateQuickInvoice.languageId = 2;
+                          })),
+                ),
                 greyText("Arabic", 16),
               ],
             ),
@@ -210,7 +216,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(40),
                   ),
                   padding: EdgeInsets.all(20),
                   child: Icon(

@@ -9,8 +9,7 @@ import 'package:sizer/sizer.dart';
 
 class AddCustomerPage extends StatelessWidget {
   AddCustomerPage({super.key});
-  TextEditingController firstNameControler = TextEditingController();
-  TextEditingController lastNameControler = TextEditingController();
+  TextEditingController fullNameControler = TextEditingController();
   TextEditingController customerPhoneNumberControler = TextEditingController();
   TextEditingController customerRefrenceControler = TextEditingController();
   TextEditingController emailControler = TextEditingController();
@@ -41,16 +40,10 @@ class AddCustomerPage extends StatelessWidget {
         child: ListView(
           primary: false,
           children: [
-            blackText("First Name", 16),
+            blackText("Full Name", 16),
             SignUpTextField(
               padding: EdgeInsets.all(0),
-              controller: firstNameControler,
-            ),
-            const SizedBox(height: 10),
-            blackText("Last Name", 16),
-            SignUpTextField(
-              padding: EdgeInsets.all(0),
-              controller: lastNameControler,
+              controller: fullNameControler,
             ),
             const SizedBox(height: 10),
             blackText("Mobile number", 16),
@@ -141,13 +134,13 @@ class AddCustomerPage extends StatelessWidget {
                   SizedBox(width: 10),
                   InkWell(
                     customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(40),
                     ),
                     onTap: () async {},
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.black,
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(40),
                       ),
                       padding: EdgeInsets.all(20),
                       child: Icon(

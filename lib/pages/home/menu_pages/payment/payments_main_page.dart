@@ -64,7 +64,7 @@ class PaymentsMainPageState extends State<PaymentsMainPage> {
                         Get.back();
                       },
                     ),
-                    whiteText("Payments", 17, fontWeight: FontWeight.w600),
+                    whiteText("Commissions", 17, fontWeight: FontWeight.w600),
                     Opacity(
                       opacity: 0,
                       child: whiteText("text", 16),
@@ -79,8 +79,8 @@ class PaymentsMainPageState extends State<PaymentsMainPage> {
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(50),
-                        topRight: Radius.circular(50),
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
                       ),
                     ),
                     child: ExpandableNotifier(
@@ -99,12 +99,13 @@ class PaymentsMainPageState extends State<PaymentsMainPage> {
                                 SizedBox(height: 20),
                                 blackText("Choose API Payment Mode", 13),
                                 ChipsChoice<String>.multiple(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
                                   value: tags,
                                   choiceStyle: C2ChipStyle.filled(
                                     foregroundColor: Color(0xff2F6782),
                                     borderWidth: 1,
                                     borderStyle: BorderStyle.solid,
-                                    backgroundOpacity: 0.1,
+                                    backgroundOpacity: 0.05,
                                     color: Color(0xff2F6782),
                                     selectedStyle: C2ChipStyle.toned(
                                       // color: Color(0xff2F6782),
@@ -113,7 +114,7 @@ class PaymentsMainPageState extends State<PaymentsMainPage> {
                                       borderWidth: 1,
                                       borderStyle: BorderStyle.solid,
                                       backgroundColor: Color(0xff2F6782),
-                                      backgroundOpacity: 0.2,
+                                      backgroundOpacity: 0.1,
                                       height: 40,
 
                                       padding: EdgeInsets.symmetric(
@@ -179,15 +180,16 @@ class PaymentsMainPageState extends State<PaymentsMainPage> {
                                           greyText(
                                               "Consequat aliqua sunt dolor pariatur reprehenderit et dolor cillum occaecat culpa mollit cillum aliquip in.",
                                               12),
-                                          SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                          SizedBox(height: 30),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              greyText("Commission From", 12),
+                                              greyText("Commission From:", 14),
                                               CustomDropdown(
                                                 borderColor: Color(0xffA8A8A8),
-                                                width: 0.4 * w,
+                                                width: w,
+                                                height: 50,
                                                 hint: "Choose",
                                                 items: ["1", "2", "3"],
                                                 onchanged: (s) {},

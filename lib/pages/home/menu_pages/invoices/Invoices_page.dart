@@ -157,6 +157,7 @@ class _InvoicesPageState extends State<InvoicesPage>
                 }
               },
               child: DottedBorder(
+                padding: EdgeInsets.all(0),
                 customPath: (size) {
                   return Path()
                     ..moveTo(10, 0)
@@ -172,14 +173,14 @@ class _InvoicesPageState extends State<InvoicesPage>
                     ..lineTo(0, 10)
                     ..arcToPoint(Offset(10, 0), radius: Radius.circular(10));
                 },
-                color: Color(0xff00A7B3),
+                color: Color(0xff2F6782).withOpacity(0.4),
                 strokeWidth: 1,
                 dashPattern: [10, 5],
                 child: Container(
                   width: w,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: Color(0xff2F6782).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
@@ -188,12 +189,12 @@ class _InvoicesPageState extends State<InvoicesPage>
                     children: [
                       Icon(
                         Icons.add_rounded,
-                        color: Color(0xff00A7B3),
+                        color: Color(0xff2F6782),
                       ),
                       Text(
                         "Create a new one",
                         style: TextStyle(
-                          color: Color(0xff00A7B3),
+                          color: Color(0xff2F6782),
                           fontSize: 13.0.sp,
                         ),
                       )

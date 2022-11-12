@@ -91,24 +91,27 @@ class _ConsolidatedTaxInvoiceState extends State<ConsolidatedTaxInvoice> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GFRadio(
-                      activeBorderColor: Colors.transparent,
-                      inactiveBorderColor: Colors.transparent,
-                      radioColor: Color(0xff66B4D2),
-                      inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
-                      ),
-                      size: GFSize.SMALL,
-                      value: 0,
-                      groupValue: langValue,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            langValue = value;
-                          },
-                        );
-                      }),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 7),
+                    child: GFRadio(
+                        activeBorderColor: Colors.transparent,
+                        inactiveBorderColor: Colors.transparent,
+                        radioColor: Color(0xff66B4D2),
+                        inactiveIcon: Icon(
+                          Icons.circle,
+                          color: Color(0xffF8F8F8),
+                        ),
+                        size: GFSize.SMALL,
+                        value: 0,
+                        groupValue: langValue,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              langValue = value;
+                            },
+                          );
+                        }),
+                  ),
                   greyText("English", 16),
                 ],
               ),
@@ -116,24 +119,27 @@ class _ConsolidatedTaxInvoiceState extends State<ConsolidatedTaxInvoice> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GFRadio(
-                      activeBorderColor: Colors.transparent,
-                      radioColor: Color(0xff66B4D2),
-                      inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
-                      ),
-                      size: GFSize.SMALL,
-                      inactiveBorderColor: Colors.transparent,
-                      value: 1,
-                      groupValue: langValue,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            langValue = value;
-                          },
-                        );
-                      }),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 7),
+                    child: GFRadio(
+                        activeBorderColor: Colors.transparent,
+                        radioColor: Color(0xff66B4D2),
+                        inactiveIcon: Icon(
+                          Icons.circle,
+                          color: Color(0xffF8F8F8),
+                        ),
+                        size: GFSize.SMALL,
+                        inactiveBorderColor: Colors.transparent,
+                        value: 1,
+                        groupValue: langValue,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              langValue = value;
+                            },
+                          );
+                        }),
+                  ),
                   greyText("Arabic", 16),
                 ],
               ),

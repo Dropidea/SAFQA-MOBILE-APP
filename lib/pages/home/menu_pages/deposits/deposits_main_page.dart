@@ -71,8 +71,8 @@ class DepositsMainPageState extends State<DepositsMainPage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
                     ),
                   ),
                   child: Column(
@@ -82,7 +82,7 @@ class DepositsMainPageState extends State<DepositsMainPage> {
                         width: w,
                         height: 60,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                             color: Color(0xff2F6782)),
                         child: Center(
                             child: whiteText("Total Deposits: 0.000", 16)),

@@ -62,22 +62,27 @@ class ProductsTab extends StatelessWidget {
                   width: 0.45 * w,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: Color(0xff00A7B3).withOpacity(0.1),
+                    color: Color(0xff2F6782).withOpacity(0.16),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.add_rounded,
-                        color: Color(0xff00A7B3),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          Icons.add_rounded,
+                          color: Color(0xff428994),
+                        ),
                       ),
+                      SizedBox(width: 5),
                       Text(
                         "Create Product",
                         style: TextStyle(
-                          color: Color(0xff00A7B3),
+                          color: Color(0xff428994),
                           fontSize: 13.0.sp,
+                          fontWeight: FontWeight.w500,
                         ),
                       )
                     ],
@@ -100,15 +105,20 @@ class ProductsTab extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.file_download_outlined,
-                      color: Color(0xff8B8B8B),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Icon(
+                        Icons.file_download_outlined,
+                        color: Color(0xff8B8B8B),
+                      ),
                     ),
+                    SizedBox(width: 5),
                     Text(
                       "Import Product",
                       style: TextStyle(
                         color: Color(0xff8B8B8B),
                         fontSize: 13.0.sp,
+                        fontWeight: FontWeight.w500,
                       ),
                     )
                   ],

@@ -57,31 +57,6 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
           ],
         ),
         const SizedBox(height: 30),
-        blackText("Invoice Date", 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomDropdown(
-              items: addInvoiceController.days,
-              selectedItem: addInvoiceController.selectedDay,
-              width: 0.25 * w,
-              onchanged: addInvoiceController.setDay,
-            ),
-            CustomDropdown(
-              items: addInvoiceController.monthes,
-              selectedItem: addInvoiceController.selectedMonth,
-              width: 0.25 * w,
-              onchanged: addInvoiceController.setMonth,
-            ),
-            CustomDropdown(
-              items: addInvoiceController.years,
-              selectedItem: addInvoiceController.selectedYear,
-              width: 0.35 * w,
-              onchanged: addInvoiceController.setYear,
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
         blackText("Payment Url Title", 16),
         SignUpTextField(
           padding: EdgeInsets.all(0),
@@ -94,20 +69,23 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    inactiveBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    value: 0,
-                    groupValue: paymentActive,
-                    onChanged: (value) => setState(() {
-                          paymentActive = value;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      inactiveBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      value: 0,
+                      groupValue: paymentActive,
+                      onChanged: (value) => setState(() {
+                            paymentActive = value;
+                          })),
+                ),
                 greyText("Yes", 16),
               ],
             ),
@@ -115,20 +93,23 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    inactiveBorderColor: Colors.transparent,
-                    value: 1,
-                    groupValue: paymentActive,
-                    onChanged: (value) => setState(() {
-                          paymentActive = value;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      inactiveBorderColor: Colors.transparent,
+                      value: 1,
+                      groupValue: paymentActive,
+                      onChanged: (value) => setState(() {
+                            paymentActive = value;
+                          })),
+                ),
                 greyText("No", 16),
               ],
             ),
@@ -203,20 +184,23 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    inactiveBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    value: 0,
-                    groupValue: invoicesLangValue,
-                    onChanged: (value) => setState(() {
-                          invoicesLangValue = value;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      inactiveBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      value: 0,
+                      groupValue: invoicesLangValue,
+                      onChanged: (value) => setState(() {
+                            invoicesLangValue = value;
+                          })),
+                ),
                 greyText("English", 16),
               ],
             ),
@@ -224,20 +208,23 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    inactiveBorderColor: Colors.transparent,
-                    value: 1,
-                    groupValue: invoicesLangValue,
-                    onChanged: (value) => setState(() {
-                          invoicesLangValue = value;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      inactiveBorderColor: Colors.transparent,
+                      value: 1,
+                      groupValue: invoicesLangValue,
+                      onChanged: (value) => setState(() {
+                            invoicesLangValue = value;
+                          })),
+                ),
                 greyText("Arabic", 16),
               ],
             ),
@@ -251,20 +238,23 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    inactiveBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    value: 0,
-                    groupValue: termsAndConditions,
-                    onChanged: (value) => setState(() {
-                          termsAndConditions = value;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      inactiveBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      value: 0,
+                      groupValue: termsAndConditions,
+                      onChanged: (value) => setState(() {
+                            termsAndConditions = value;
+                          })),
+                ),
                 greyText("Disable", 16),
               ],
             ),
@@ -272,20 +262,23 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    inactiveBorderColor: Colors.transparent,
-                    value: 1,
-                    groupValue: termsAndConditions,
-                    onChanged: (value) => setState(() {
-                          termsAndConditions = value;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      inactiveBorderColor: Colors.transparent,
+                      value: 1,
+                      groupValue: termsAndConditions,
+                      onChanged: (value) => setState(() {
+                            termsAndConditions = value;
+                          })),
+                ),
                 greyText("Enable", 16),
               ],
             ),
@@ -302,7 +295,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
               Container(
                 decoration: BoxDecoration(
                   color: Colors.black,
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(40),
                 ),
                 padding: EdgeInsets.all(20),
                 child: Icon(

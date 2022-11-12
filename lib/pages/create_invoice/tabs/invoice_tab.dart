@@ -487,25 +487,28 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    inactiveBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    value: 0,
-                    groupValue: invoicesLangValue,
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          invoicesLangValue = value;
-                        },
-                      );
-                      addInvoiceController.dataToCreateInvoice.languageId = 1;
-                    }),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      inactiveBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      value: 0,
+                      groupValue: invoicesLangValue,
+                      onChanged: (value) {
+                        setState(
+                          () {
+                            invoicesLangValue = value;
+                          },
+                        );
+                        addInvoiceController.dataToCreateInvoice.languageId = 1;
+                      }),
+                ),
                 greyText("English", 16),
               ],
             ),
@@ -513,25 +516,28 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    inactiveBorderColor: Colors.transparent,
-                    value: 1,
-                    groupValue: invoicesLangValue,
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          invoicesLangValue = value;
-                        },
-                      );
-                      addInvoiceController.dataToCreateInvoice.languageId = 2;
-                    }),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      inactiveBorderColor: Colors.transparent,
+                      value: 1,
+                      groupValue: invoicesLangValue,
+                      onChanged: (value) {
+                        setState(
+                          () {
+                            invoicesLangValue = value;
+                          },
+                        );
+                        addInvoiceController.dataToCreateInvoice.languageId = 2;
+                      }),
+                ),
                 greyText("Arabic", 16),
               ],
             ),
@@ -563,6 +569,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             }
           },
           child: DottedBorder(
+            padding: EdgeInsets.all(0),
             customPath: (size) {
               return Path()
                 ..moveTo(10, 0)
@@ -578,14 +585,14 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 ..lineTo(0, 10)
                 ..arcToPoint(Offset(10, 0), radius: Radius.circular(10));
             },
-            color: Color(0xff00A7B3),
+            color: Color(0xff2F6782).withOpacity(0.4),
             strokeWidth: 1,
             dashPattern: [10, 5],
             child: Container(
               width: w,
-              height: 60,
+              height: 40,
               decoration: BoxDecoration(
-                color: Color(0xff00A7B3).withOpacity(0.1),
+                color: Color(0xff2F6782).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
@@ -638,21 +645,24 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    inactiveBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    value: 0,
-                    groupValue: termsAndConditions,
-                    onChanged: (value) => setState(() {
-                          termsAndConditions = value;
-                          termsConditionsFlag = false;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      inactiveBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      value: 0,
+                      groupValue: termsAndConditions,
+                      onChanged: (value) => setState(() {
+                            termsAndConditions = value;
+                            termsConditionsFlag = false;
+                          })),
+                ),
                 greyText("Disable", 16),
               ],
             ),
@@ -660,21 +670,24 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GFRadio(
-                    activeBorderColor: Colors.transparent,
-                    radioColor: Color(0xff66B4D2),
-                    inactiveIcon: Icon(
-                      Icons.circle,
-                      color: Color(0xffF8F8F8),
-                    ),
-                    size: GFSize.SMALL,
-                    inactiveBorderColor: Colors.transparent,
-                    value: 1,
-                    groupValue: termsAndConditions,
-                    onChanged: (value) => setState(() {
-                          termsAndConditions = value;
-                          termsConditionsFlag = true;
-                        })),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: GFRadio(
+                      activeBorderColor: Colors.transparent,
+                      radioColor: Color(0xff66B4D2),
+                      inactiveIcon: Icon(
+                        Icons.circle,
+                        color: Color(0xffF8F8F8),
+                      ),
+                      size: GFSize.SMALL,
+                      inactiveBorderColor: Colors.transparent,
+                      value: 1,
+                      groupValue: termsAndConditions,
+                      onChanged: (value) => setState(() {
+                            termsAndConditions = value;
+                            termsConditionsFlag = true;
+                          })),
+                ),
                 greyText("Enable", 16),
               ],
             ),
@@ -796,7 +809,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               SizedBox(width: 10),
               InkWell(
                 customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(40),
                 ),
                 onTap: () async {
                   var expiryTime = expiryTimeController.text.split(" ")[0];
@@ -830,7 +843,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.black,
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(40),
                   ),
                   padding: EdgeInsets.all(20),
                   child: Icon(

@@ -322,20 +322,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          inactiveBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          value: 0,
-                          groupValue: isActiveVal,
-                          onChanged: (value) => setState(() {
-                                isActiveVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              inactiveBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              value: 0,
+                              groupValue: isActiveVal,
+                              onChanged: (value) => setState(() {
+                                    isActiveVal = value;
+                                  }))),
                       greyText("Yes", 16),
                     ],
                   ),
@@ -343,20 +345,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          inactiveBorderColor: Colors.transparent,
-                          value: 1,
-                          groupValue: isActiveVal,
-                          onChanged: (value) => setState(() {
-                                isActiveVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              inactiveBorderColor: Colors.transparent,
+                              value: 1,
+                              groupValue: isActiveVal,
+                              onChanged: (value) => setState(() {
+                                    isActiveVal = value;
+                                  }))),
                       greyText("No", 16),
                     ],
                   ),
@@ -370,20 +374,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          inactiveBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          value: 0,
-                          groupValue: isStockableVal,
-                          onChanged: (value) => setState(() {
-                                isStockableVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              inactiveBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              value: 0,
+                              groupValue: isStockableVal,
+                              onChanged: (value) => setState(() {
+                                    isStockableVal = value;
+                                  }))),
                       greyText("Yes", 16),
                     ],
                   ),
@@ -391,20 +397,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          inactiveBorderColor: Colors.transparent,
-                          value: 1,
-                          groupValue: isStockableVal,
-                          onChanged: (value) => setState(() {
-                                isStockableVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              inactiveBorderColor: Colors.transparent,
+                              value: 1,
+                              groupValue: isStockableVal,
+                              onChanged: (value) => setState(() {
+                                    isStockableVal = value;
+                                  }))),
                       greyText("No", 16),
                     ],
                   ),
@@ -418,20 +426,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          inactiveBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          value: 0,
-                          groupValue: addToStoreVal,
-                          onChanged: (value) => setState(() {
-                                addToStoreVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              inactiveBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              value: 0,
+                              groupValue: addToStoreVal,
+                              onChanged: (value) => setState(() {
+                                    addToStoreVal = value;
+                                  }))),
                       greyText("Yes", 16),
                     ],
                   ),
@@ -439,20 +449,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          inactiveBorderColor: Colors.transparent,
-                          value: 1,
-                          groupValue: addToStoreVal,
-                          onChanged: (value) => setState(() {
-                                addToStoreVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              inactiveBorderColor: Colors.transparent,
+                              value: 1,
+                              groupValue: addToStoreVal,
+                              onChanged: (value) => setState(() {
+                                    addToStoreVal = value;
+                                  }))),
                       greyText("No", 16),
                     ],
                   ),
@@ -466,20 +478,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          inactiveBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          value: 0,
-                          groupValue: isShippableVal,
-                          onChanged: (value) => setState(() {
-                                isShippableVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              inactiveBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              value: 0,
+                              groupValue: isShippableVal,
+                              onChanged: (value) => setState(() {
+                                    isShippableVal = value;
+                                  }))),
                       greyText("Yes", 16),
                     ],
                   ),
@@ -487,20 +501,22 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GFRadio(
-                          activeBorderColor: Colors.transparent,
-                          radioColor: Color(0xff66B4D2),
-                          inactiveIcon: Icon(
-                            Icons.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          size: GFSize.SMALL,
-                          inactiveBorderColor: Colors.transparent,
-                          value: 1,
-                          groupValue: isShippableVal,
-                          onChanged: (value) => setState(() {
-                                isShippableVal = value;
-                              })),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 7),
+                          child: GFRadio(
+                              activeBorderColor: Colors.transparent,
+                              radioColor: Color(0xff66B4D2),
+                              inactiveIcon: Icon(
+                                Icons.circle,
+                                color: Colors.grey.shade200,
+                              ),
+                              size: GFSize.SMALL,
+                              inactiveBorderColor: Colors.transparent,
+                              value: 1,
+                              groupValue: isShippableVal,
+                              onChanged: (value) => setState(() {
+                                    isShippableVal = value;
+                                  }))),
                       greyText("No", 16),
                     ],
                   ),
@@ -519,7 +535,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.black,
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(40),
                         ),
                         padding: EdgeInsets.all(20),
                         child: Icon(

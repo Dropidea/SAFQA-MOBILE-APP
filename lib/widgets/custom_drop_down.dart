@@ -13,8 +13,10 @@ class CustomDropdown extends StatelessWidget {
       required this.onchanged,
       this.backgroundColor,
       this.borderColor,
-      this.border});
-  final double width;
+      this.border,
+      this.height});
+  final double? width;
+  final double? height;
   final List<String> items;
   final String? selectedItem;
   final String? hint;
@@ -26,6 +28,7 @@ class CustomDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
+      height: height,
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.only(left: 15, right: 15),
       decoration: BoxDecoration(

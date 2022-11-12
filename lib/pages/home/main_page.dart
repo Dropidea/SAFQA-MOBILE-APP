@@ -215,7 +215,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: 0.4 * h,
+                        height: 0.3 * h,
                         width: w,
                         child: Align(
                           child: ListView(
@@ -223,7 +223,7 @@ class _MainPageState extends State<MainPage> {
                             scrollDirection: Axis.horizontal,
                             children: [
                               SizedBox(
-                                height: 0.45 * h,
+                                height: 0.3 * h,
                                 width: w + 200,
                                 child: BarChart(
                                   BarChartData(
@@ -260,17 +260,18 @@ class _MainPageState extends State<MainPage> {
                                       maxY: 100,
                                       groupsSpace: 12,
                                       barTouchData: BarTouchData(
-                                          enabled: true,
-                                          touchTooltipData: BarTouchTooltipData(
-                                            tooltipBgColor: Colors.transparent,
-                                            tooltipMargin: 0,
-                                            getTooltipItem: (group, groupIndex,
-                                                    rod, rodIndex) =>
-                                                BarTooltipItem(
-                                              rod.toY.round().toString(),
-                                              TextStyle(),
-                                            ),
-                                          )),
+                                        enabled: true,
+                                        touchTooltipData: BarTouchTooltipData(
+                                          tooltipBgColor: Colors.transparent,
+                                          tooltipMargin: -10,
+                                          getTooltipItem: (group, groupIndex,
+                                                  rod, rodIndex) =>
+                                              BarTooltipItem(
+                                            rod.toY.round().toString(),
+                                            TextStyle(),
+                                          ),
+                                        ),
+                                      ),
                                       barGroups: _chartsController.data
                                           .map(
                                             (e) => BarChartGroupData(

@@ -207,20 +207,23 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GFRadio(
-            activeBorderColor: Colors.transparent,
-            inactiveBorderColor: Colors.transparent,
-            inactiveBgColor: Colors.transparent,
-            activeBgColor: Colors.transparent,
-            radioColor: Color(0xff66B4D2),
-            inactiveIcon: Icon(
-              Icons.circle_outlined,
-              color: Colors.grey.shade300,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 7),
+            child: GFRadio(
+              activeBorderColor: Colors.transparent,
+              inactiveBorderColor: Colors.transparent,
+              inactiveBgColor: Colors.transparent,
+              activeBgColor: Colors.transparent,
+              radioColor: Color(0xff66B4D2),
+              inactiveIcon: Icon(
+                Icons.circle_outlined,
+                color: Colors.grey.shade300,
+              ),
+              size: GFSize.SMALL,
+              value: value,
+              groupValue: groupValue,
+              onChanged: onChanged,
             ),
-            size: GFSize.SMALL,
-            value: value,
-            groupValue: groupValue,
-            onChanged: onChanged,
           ),
           SizedBox(
             width: 15,
