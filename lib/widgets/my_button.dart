@@ -14,6 +14,8 @@ class MyButton extends StatelessWidget {
     required this.textSize,
     this.textColor,
     this.padding,
+    this.icon,
+    this.border,
   });
   final double? width;
   final double? heigt;
@@ -23,7 +25,9 @@ class MyButton extends StatelessWidget {
   final String text;
   final Callback? func;
   final double textSize;
+  final Icon? icon;
   final EdgeInsetsGeometry? padding;
+  final BoxBorder? border;
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -35,18 +39,26 @@ class MyButton extends StatelessWidget {
         width: width,
         height: heigt,
         decoration: BoxDecoration(
-          color: func == null ? Color(0xffE8E8E8) : color,
-          borderRadius: BorderRadius.circular(borderRadius),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: func == null ? Color(0xffBBBBBB) : textColor,
-              fontSize: textSize.sp,
-              fontWeight: FontWeight.w500,
+            color: func == null ? Color(0xffE8E8E8) : color,
+            borderRadius: BorderRadius.circular(borderRadius),
+            border: border),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 7),
+              child: icon,
             ),
-          ),
+            icon != null ? SizedBox(width: 5) : Container(),
+            Text(
+              text,
+              style: TextStyle(
+                color: func == null ? Color(0xffBBBBBB) : textColor,
+                fontSize: textSize.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );

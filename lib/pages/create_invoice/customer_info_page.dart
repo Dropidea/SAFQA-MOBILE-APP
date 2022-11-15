@@ -191,6 +191,20 @@ Text blackText(String text, double size,
   );
 }
 
+Text prblackText(String text, double size,
+    {bool underline = false, FontWeight? fontWeight}) {
+  return Text(
+    text,
+    softWrap: true,
+    style: TextStyle(
+        decoration: underline ? TextDecoration.underline : null,
+        decorationThickness: 4,
+        color: Color(0xff484848),
+        fontWeight: fontWeight ?? FontWeight.w500,
+        fontSize: size.sp),
+  );
+}
+
 Text whiteText(String text, double size,
     {bool underline = false, FontWeight? fontWeight}) {
   return Text(

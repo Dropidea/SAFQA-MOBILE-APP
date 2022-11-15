@@ -109,6 +109,7 @@ flutter:
     - assets/images/done.png
     - assets/images/menu.png
     - assets/images/t.png
+    - assets/images/t2.png
     - assets/images/inv_item.png
     - assets/images/tick.png
     - assets/images/double_forward_icon.png

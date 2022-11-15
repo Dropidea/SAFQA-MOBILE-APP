@@ -174,7 +174,7 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                 Get.to(() => CategoryDetailsPage());
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
+                // margin: EdgeInsets.symmetric(horizontal: 10),
                 padding: EdgeInsets.all(20),
                 width: w,
                 height: 110,

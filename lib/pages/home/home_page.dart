@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/home/menu_pages/account_statment/ac_main_page.dart';
+import 'package:safqa/pages/home/menu_pages/contact/contact_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customers_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/deposits/deposits_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/Invoices_page.dart';
@@ -43,9 +44,9 @@ class _HomePageState extends State<HomePage> {
                   angle: 0,
                   borderRadius: 30,
                   controller: c.zoomDrawerController,
-                  menuScreenWidth: 70.0.w,
+                  menuScreenWidth: 60.0.w,
                   isRtl: snapshot.hasData ? snapshot.data! : false,
-                  slideWidth: 70.0.w,
+                  slideWidth: 60.0.w,
                   menuScreen: MenuPage(
                     currentItem: _currnetMenuItem,
                     onSelectedItem: (value) {
@@ -80,6 +81,8 @@ class _HomePageState extends State<HomePage> {
         return DepositsMainPage();
       case MyMenuItems.multiFactorAuthentication:
         return MultiFactorAuthMainPage();
+      case MyMenuItems.contact:
+        return ContactPage();
 
       default:
         return MainPage();

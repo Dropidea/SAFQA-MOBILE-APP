@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/services/auth_service.dart';
@@ -89,18 +90,19 @@ class MenuPage extends StatelessWidget {
 
 class MyMenuItems {
   // static const dashboard = mi.MenuItem("Dashboard", Icons.abc);
-  static const invoices = mi.MenuItem("Invoices", Icons.abc);
-  static const products = mi.MenuItem("Products", Icons.abc);
-  static const customers = mi.MenuItem("Customers", Icons.abc);
-  static const payments = mi.MenuItem("Payments", Icons.abc);
-  static const accountStatement = mi.MenuItem("Account statement", Icons.abc);
-  static const deposits = mi.MenuItem("Deposits", Icons.abc);
-  static const refunds = mi.MenuItem("Refunds", Icons.abc);
+  static const invoices = mi.MenuItem("Invoices", EvaIcons.fileText);
+  static const products = mi.MenuItem("Products", EvaIcons.shoppingBag);
+  static const customers = mi.MenuItem("Customers", EvaIcons.people);
+  static const payments = mi.MenuItem("Commisions", EvaIcons.creditCard);
+  static const accountStatement =
+      mi.MenuItem("Account statement", EvaIcons.activity);
+  static const deposits = mi.MenuItem("Deposits", EvaIcons.arrowCircleDown);
+  static const refunds = mi.MenuItem("Refunds", EvaIcons.refresh);
   static const multiFactorAuthentication =
-      mi.MenuItem("multi-factor authentication", Icons.abc);
-  static const help = mi.MenuItem("Help", Icons.abc);
-  static const settings = mi.MenuItem("Settings", Icons.abc);
-  static const logOut = mi.MenuItem("Log out", Icons.abc);
+      mi.MenuItem("Multi-factor authentication", EvaIcons.lock);
+  static const contact = mi.MenuItem("Contact", EvaIcons.messageCircle);
+  static const settings = mi.MenuItem("Settings", EvaIcons.settings);
+  static const logOut = mi.MenuItem("Log out", EvaIcons.logOut);
   static const all = <mi.MenuItem>[
     // dashboard,
     invoices,
@@ -111,7 +113,7 @@ class MyMenuItems {
     deposits,
     refunds,
     multiFactorAuthentication,
-    help,
+    contact,
     settings,
     logOut
   ];

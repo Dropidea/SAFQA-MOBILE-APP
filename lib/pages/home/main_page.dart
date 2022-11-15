@@ -1,11 +1,15 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/create_invoice_page.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/notification_page.dart';
+import 'package:safqa/pages/home/pass_change_page.dart';
+import 'package:safqa/pages/home/profile/profile.dart';
+import 'package:safqa/widgets/popup_menu.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/charts_controller.dart';
@@ -630,12 +634,55 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
             const SizedBox(width: 10),
-            Image(
-              image: AssetImage("assets/images/t.png"),
-              width: 30.0.sp,
-              height: 30.0.sp,
-              fit: BoxFit.cover,
-            ),
+            MyPopUpMenu(
+              menuList: [
+                PopupMenuItem(
+                    onTap: () {
+                      Future(() => Get.to(() => ProfilePage(),
+                          transition: Transition.rightToLeft));
+                    },
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Icon(
+                            EvaIcons.personOutline,
+                            size: 20,
+                            color: Color.fromARGB(255, 118, 118, 118),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        greyText("Profile", 12, fontWeight: FontWeight.bold),
+                      ],
+                    )),
+                PopupMenuItem(
+                    onTap: () {
+                      Future(() => Get.to(() => PasswordChangePage(),
+                          transition: Transition.rightToLeft));
+                    },
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Icon(
+                            EvaIcons.lockOutline,
+                            size: 20,
+                            color: Color.fromARGB(255, 118, 118, 118),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        greyText("Change Password", 12,
+                            fontWeight: FontWeight.bold),
+                      ],
+                    )),
+              ],
+              widget: Image(
+                image: AssetImage("assets/images/t.png"),
+                width: 30.0.sp,
+                height: 30.0.sp,
+                fit: BoxFit.cover,
+              ),
+            )
           ],
         ),
       ],

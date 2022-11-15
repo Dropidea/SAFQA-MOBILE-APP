@@ -113,8 +113,9 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                   ),
                   Expanded(
                     child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       width: w,
-                      padding: EdgeInsets.all(10),
+                      // padding: EdgeInsets.all(10),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -176,7 +177,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                                     ),
                                   ]),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 10),
+                                  horizontal: 20, vertical: 10),
                               margin: EdgeInsets.only(
                                   left: 10,
                                   right: 10,

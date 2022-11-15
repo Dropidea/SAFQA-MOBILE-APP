@@ -42,7 +42,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
             children: [
               Container(
                 height: 90,
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
