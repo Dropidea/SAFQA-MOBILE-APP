@@ -23,6 +23,7 @@ class SignUpTextField extends StatelessWidget {
     this.autovalidateMode,
     this.width,
     this.height,
+    this.focusNode,
   });
 
   final String? hintText;
@@ -32,7 +33,7 @@ class SignUpTextField extends StatelessWidget {
   final Widget? suffix;
   final double? width;
   final double? height;
-
+  final FocusNode? focusNode;
   final TextInputAction? textInputAction;
   final TextInputType? keyBoardType;
   final String? Function(String? s)? validator;
@@ -54,6 +55,7 @@ class SignUpTextField extends StatelessWidget {
       child: Padding(
         padding: padding!,
         child: TextFormField(
+          focusNode: focusNode,
           textInputAction: textInputAction ?? TextInputAction.next,
           autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
           keyboardType: keyBoardType,

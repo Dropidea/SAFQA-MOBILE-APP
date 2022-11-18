@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +13,24 @@ import 'end_points.dart';
 
 class AuthService {
   final Dio _dio = Dio();
+  Future<String> loadToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token') == null ? "" : prefs.getString('token');
+  }
+
+  sslProblem() {
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   Future<String?> login(String email, String password) async {
     _dio.options.headers['content-Type'] = 'multipart/form-data';
     try {
+      sslProblem();
       var data = {
         'email': email,
         'password': password,
@@ -27,7 +44,7 @@ class AuthService {
       logSuccess(jsonRes['access_token'].toString());
       return jsonRes['access_token'];
     } on DioError catch (e) {
-      // logError(e);
+      logError("fuck");
       logError(e.response!.data['error']);
       logError(e.response!.statusCode!);
       Get.showSnackbar(GetSnackBar(
@@ -43,6 +60,7 @@ class AuthService {
 
   Future register(data) async {
     try {
+      sslProblem();
       var res = await _dio.post(EndPoints.baseURL + EndPoints.registerEndPoint,
           data: data);
       var jsonRes = res.data;
@@ -52,17 +70,19 @@ class AuthService {
       // Map<String, dynamic> x = json.decode(
       //   json.encode(e.response!.data[0].toString()),
       // );
-      Map<String, dynamic> obj = e.response!.data;
+      logError(e);
+      //   Map<String, dynamic> obj = e.response!.data;
 
-      Get.showSnackbar(GetSnackBar(
-        duration: Duration(milliseconds: 2000),
-        backgroundColor: Colors.red,
-        message: e.response!.data['error'] +
-            " " +
-            e.response!.statusCode!.toString(),
-      ));
-      return obj;
-      // return e.response!.data;
+      //   Get.showSnackbar(GetSnackBar(
+      //     duration: Duration(milliseconds: 2000),
+      //     backgroundColor: Colors.red,
+      //     message: e.response!.data['error'] +
+      //         " " +
+      //         e.response!.statusCode!.toString(),
+      //   ));
+      //   return obj;
+      //   // return e.response!.data;
+      // }
     }
   }
 

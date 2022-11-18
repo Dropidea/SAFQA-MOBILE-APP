@@ -170,7 +170,7 @@ Text blueText(String text, double size,
     text,
     style: TextStyle(
         decoration: underline ? TextDecoration.underline : null,
-        decorationThickness: 4,
+        decorationThickness: 6,
         color: Color(0xff2F6782),
         fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),

@@ -117,6 +117,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 .map<String>(
                   (e) => e['currency'].toString(),
                 )
+                .toSet()
                 .toList();
             addInvoiceController.selectCurrencyDrop(countriesCurrencies[0]);
 
@@ -494,8 +495,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       inactiveBorderColor: Colors.transparent,
                       radioColor: Color(0xff66B4D2),
                       inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
+                        Icons.circle_outlined,
+                        color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
                       value: 0,
@@ -522,8 +523,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       activeBorderColor: Colors.transparent,
                       radioColor: Color(0xff66B4D2),
                       inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
+                        Icons.circle_outlined,
+                        color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
                       inactiveBorderColor: Colors.transparent,
@@ -652,8 +653,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       inactiveBorderColor: Colors.transparent,
                       radioColor: Color(0xff66B4D2),
                       inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
+                        Icons.circle_outlined,
+                        color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
                       value: 0,
@@ -676,8 +677,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       activeBorderColor: Colors.transparent,
                       radioColor: Color(0xff66B4D2),
                       inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
+                        Icons.circle_outlined,
+                        color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
                       inactiveBorderColor: Colors.transparent,

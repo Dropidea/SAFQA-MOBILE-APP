@@ -1,45 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/my_store.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_category_tab.dart';
-import 'package:safqa/pages/home/menu_pages/products/tabs/product_ordered_tab.dart';
-import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
+import 'package:safqa/pages/home/menu_pages/settings/tabs/manage_users_tab.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
-class ProductsMainPage extends StatefulWidget {
-  ProductsMainPage({super.key});
+class SettingsPage extends StatefulWidget {
+  SettingsPage({super.key});
 
   @override
-  State<ProductsMainPage> createState() => _ProductsMainPageState();
+  State<SettingsPage> createState() => SsettingsPageState();
 }
 
-class _ProductsMainPageState extends State<ProductsMainPage> {
+class SsettingsPageState extends State<SettingsPage> {
   int selectedTab = 0;
   List<String> tabsNames = [
-    "Products",
-    "My Store",
-    "Products Ordered",
-    "Product Category",
+    "Manage Users",
+    "Integration",
+    "Adresses",
   ];
 
   Widget getPage() {
     switch (selectedTab) {
       case 0:
-        return ProductsTab();
+        return ManageUsersTab();
       case 1:
         return MyStoreTab();
-      case 2:
-        return ProductsOrderedTab();
+
       default:
         return ProductsCategoryTab();
     }
   }
-
-  ProductsController _productsController = Get.put(ProductsController());
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +120,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                           topRight: Radius.circular(40),
                         ),
                       ),
-                      child: FutureBuilder(
-                          future: _productsController.getProductCategories(),
-                          builder: (context, snp) {
-                            return getPage();
-                          }),
+                      child: getPage(),
                     ),
                   )
                 ],

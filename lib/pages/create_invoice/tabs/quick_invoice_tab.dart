@@ -66,11 +66,13 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                 .map<String>(
                   (e) => e['id'].toString(),
                 )
+                .toSet()
                 .toList();
             List<String> countriesCurrencies = countries
                 .map<String>(
                   (e) => e['currency'].toString(),
                 )
+                .toSet()
                 .toList();
             addInvoiceController.selectCurrencyDrop(countriesCurrencies[0]);
 
@@ -120,8 +122,8 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                       inactiveBorderColor: Colors.transparent,
                       radioColor: Color(0xff66B4D2),
                       inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
+                        Icons.circle_outlined,
+                        color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
                       value: 0,
@@ -145,8 +147,8 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                       activeBorderColor: Colors.transparent,
                       radioColor: Color(0xff66B4D2),
                       inactiveIcon: Icon(
-                        Icons.circle,
-                        color: Color(0xffF8F8F8),
+                        Icons.circle_outlined,
+                        color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
                       inactiveBorderColor: Colors.transparent,

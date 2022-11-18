@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -78,7 +81,6 @@ class SignUpController extends GetxController {
     Get.locale!.toString() == "ar_SYR"
         ? obj['language_id'] = 1
         : obj['language_id'] = 2;
-
     Map<String, dynamic> res = await AuthService().register(obj);
     Navigator.of(Get.overlayContext!).pop();
 
@@ -89,11 +91,20 @@ class SignUpController extends GetxController {
 
   Future getGlobalData() async {
     try {
-      var res = await Dio().get(EndPoints.baseURL + EndPoints.globalData);
+      Dio dio = new Dio();
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+      var res = await dio.get(EndPoints.baseURL + EndPoints.globalData);
       globalData = res.data;
-      logInfo(globalData);
+
+      logSuccess("global data success");
       return globalData;
     } on DioError catch (e) {
+      logError("msg");
       logError(e.message);
     }
   }

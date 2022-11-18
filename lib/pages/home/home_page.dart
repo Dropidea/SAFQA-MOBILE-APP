@@ -9,6 +9,7 @@ import 'package:safqa/pages/home/menu_pages/invoices/Invoices_page.dart';
 import 'package:safqa/pages/home/menu_pages/mf_auth/mf_auth_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/payment/payments_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/products_main_page.dart';
+import 'package:safqa/pages/home/menu_pages/settings/settings_main_page.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/locals_controller.dart';
@@ -83,6 +84,8 @@ class _HomePageState extends State<HomePage> {
         return MultiFactorAuthMainPage();
       case MyMenuItems.contact:
         return ContactPage();
+      case MyMenuItems.settings:
+        return SettingsPage();
 
       default:
         return MainPage();

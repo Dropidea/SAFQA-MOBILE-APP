@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as d;
 import 'package:flutter/material.dart';
@@ -17,10 +20,20 @@ class AddInvoiceController extends GetxController {
   DataToCreateQuickInvoice dataToCreateQuickInvoice =
       DataToCreateQuickInvoice();
   CustomerInfo customerInfo = CustomerInfo();
+  final Dio dio = Dio();
+
+  sslProblem() {
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   Future createInvoice() async {
     // logWarning(dataToCreateInvoice.toJson());
-    Dio dio = Dio();
+
     dio.options.headers['content-Type'] = 'multipart/form-data';
     // dio.options.headers["authorization"] =
     //     "Bearer ${dataToCreateInvoice.token}";
@@ -42,8 +55,13 @@ class AddInvoiceController extends GetxController {
       "discount_value": dataToCreateInvoice.discountValue,
       "expiry_date": dataToCreateInvoice.expiryDate,
       "remind_after": dataToCreateInvoice.remindAfter,
-      "recurring_end_date": dataToCreateInvoice.recurringEndDate,
-      "recurring_start_date": dataToCreateInvoice.recurringStartDate,
+      "recurring_end_date": dataToCreateInvoice.recurringEndDate == "dd/MM/yyyy"
+          ? null
+          : dataToCreateInvoice.recurringEndDate,
+      "recurring_start_date":
+          dataToCreateInvoice.recurringStartDate == "dd/MM/yyyy"
+              ? null
+              : dataToCreateInvoice.recurringStartDate,
       "language_id": dataToCreateInvoice.languageId,
       "comment": dataToCreateInvoice.comments,
       "is_open_invoice": dataToCreateInvoice.isOpenInvoice,
@@ -59,7 +77,9 @@ class AddInvoiceController extends GetxController {
       ));
     }
     logSuccess(body.files.first.value.contentType!);
+
     try {
+      sslProblem();
       var res = await dio.post(EndPoints.baseURL + EndPoints.createInvoice,
           data: body);
       customerInfo = CustomerInfo();
@@ -134,15 +154,15 @@ class AddInvoiceController extends GetxController {
   }
 
   Future createQuickInvoice() async {
-    logWarning(dataToCreateQuickInvoice.toJson());
-    Dio dio = Dio();
     dio.options.headers['content-Type'] = 'multipart/form-data';
+
+    sslProblem();
     // dio.options.headers["authorization"] =
     //     "Bearer ${dataToCreateInvoice.token}";
     Get.dialog(Center(
       child: CircularProgressIndicator(),
     ));
-    logSuccess(dataToCreateQuickInvoice.token!);
+    logSuccess(dataToCreateQuickInvoice);
     final body = d.FormData.fromMap(dataToCreateQuickInvoice.toJson());
     logSuccess(dataToCreateQuickInvoice.token!);
     try {

@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/log-reg/signup_done.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/my_stepper.dart';
@@ -10,7 +11,6 @@ import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/signup_controller.dart';
-import '../../main.dart';
 
 class CompleteSignUpPage extends StatefulWidget {
   CompleteSignUpPage({super.key});
@@ -584,7 +584,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         .map<String>(
                           (e) => e['code'].toString(),
                         )
+                        .toSet()
                         .toList();
+                    logError(countriesCodes);
                     _signUpController
                         .selectPhoneNumberCodeDrop(countriesCodes[4]);
                     return SignUpTextField(
@@ -658,14 +660,16 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                       padding: EdgeInsets.only(left: 15, right: 15, top: 5),
                       child: Obx(
                         () {
+                          logSuccess(_signUpController.globalData['category']);
                           List categories =
                               _signUpController.globalData['category'];
                           List<String> ids = categories
                               .map<String>((e) => e['id'].toString())
                               .toList();
-                          List<String> categoryNames = categories
-                              .map<String>((e) => e['name'].toString())
+                          List<String> categoryNamesEn = categories
+                              .map<String>((e) => e['name_en'].toString())
                               .toList();
+                          logError(categoryNamesEn);
 
                           return DropdownButtonFormField<String>(
                             decoration: InputDecoration(
@@ -676,7 +680,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            items: categoryNames
+                            items: categoryNamesEn
                                 .map((e) => DropdownMenuItem<String>(
                                       child: Text(e),
                                       value: e,
@@ -692,7 +696,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                               _signUpController.selectCategoryDrop(value!);
 
                               _signUpController.dataToRegister['category_id'] =
-                                  ids[categoryNames.indexOf(value)];
+                                  ids[categoryNamesEn.indexOf(value)];
                             },
                           );
                         },
@@ -882,6 +886,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         .map<String>(
                           (e) => e['code'].toString(),
                         )
+                        .toSet()
                         .toList();
                     _signUpController
                         .selectPhoneNumberManagerCodeDrop(countriesCodes[4]);
@@ -989,6 +994,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             .map<String>(
                               (e) => e['name_en'].toString(),
                             )
+                            .toSet()
                             .toList();
                         return DropdownButtonFormField<String>(
                           decoration: InputDecoration(

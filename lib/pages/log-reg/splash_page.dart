@@ -34,8 +34,8 @@ class SplashPage extends StatelessWidget {
             await Dio().post(EndPoints.baseURL + EndPoints.meEndPoint,
                 data: {'token': token},
                 options: Options(
-                  receiveTimeout: 20 * 1000,
-                  sendTimeout: 20 * 1000,
+                  receiveTimeout: 5 * 1000,
+                  sendTimeout: 5 * 1000,
                 ));
             Get.offAll(
               () => HomePage(),
