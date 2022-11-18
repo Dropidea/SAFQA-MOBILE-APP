@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/home/menu_pages/account_statment/ac_main_page.dart';
+import 'package:safqa/pages/home/menu_pages/commisions/commisions_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/contact/contact_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customers_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/deposits/deposits_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/Invoices_page.dart';
 import 'package:safqa/pages/home/menu_pages/mf_auth/mf_auth_main_page.dart';
-import 'package:safqa/pages/home/menu_pages/payment/payments_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/products_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/settings_main_page.dart';
 import 'package:sizer/sizer.dart';
@@ -74,8 +74,8 @@ class _HomePageState extends State<HomePage> {
         return ProductsMainPage();
       case MyMenuItems.customers:
         return CustomersMainPage();
-      case MyMenuItems.payments:
-        return PaymentsMainPage();
+      case MyMenuItems.commissions:
+        return CommisionsMainPage();
       case MyMenuItems.accountStatement:
         return AccountStateMainPage();
       case MyMenuItems.deposits:

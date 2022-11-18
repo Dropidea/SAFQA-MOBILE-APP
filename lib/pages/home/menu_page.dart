@@ -93,7 +93,7 @@ class MyMenuItems {
   static const invoices = mi.MenuItem("Invoices", EvaIcons.fileText);
   static const products = mi.MenuItem("Products", EvaIcons.shoppingBag);
   static const customers = mi.MenuItem("Customers", EvaIcons.people);
-  static const payments = mi.MenuItem("Commisions", EvaIcons.creditCard);
+  static const commissions = mi.MenuItem("Commisions", EvaIcons.creditCard);
   static const accountStatement =
       mi.MenuItem("Account statement", EvaIcons.activity);
   static const deposits = mi.MenuItem("Deposits", EvaIcons.arrowCircleDown);
@@ -108,7 +108,7 @@ class MyMenuItems {
     invoices,
     products,
     customers,
-    payments,
+    commissions,
     accountStatement,
     deposits,
     refunds,

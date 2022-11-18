@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/products/tabs/my_store.dart';
-import 'package:safqa/pages/home/menu_pages/products/tabs/product_category_tab.dart';
+import 'package:safqa/pages/home/menu_pages/settings/tabs/address_tab.dart';
+import 'package:safqa/pages/home/menu_pages/settings/tabs/integration_tab.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/manage_users_tab.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
@@ -19,7 +19,7 @@ class SsettingsPageState extends State<SettingsPage> {
   int selectedTab = 0;
   List<String> tabsNames = [
     "Manage Users",
-    "Integration",
+    "Webhook",
     "Adresses",
   ];
 
@@ -28,10 +28,10 @@ class SsettingsPageState extends State<SettingsPage> {
       case 0:
         return ManageUsersTab();
       case 1:
-        return MyStoreTab();
+        return WebhookTab();
 
       default:
-        return ProductsCategoryTab();
+        return AdressesTab();
     }
   }
 

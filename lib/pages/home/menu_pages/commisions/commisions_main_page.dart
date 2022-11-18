@@ -9,14 +9,14 @@ import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
-class PaymentsMainPage extends StatefulWidget {
-  PaymentsMainPage({super.key});
+class CommisionsMainPage extends StatefulWidget {
+  CommisionsMainPage({super.key});
 
   @override
-  State<PaymentsMainPage> createState() => PaymentsMainPageState();
+  State<CommisionsMainPage> createState() => CommisionsMainPageState();
 }
 
-class PaymentsMainPageState extends State<PaymentsMainPage> {
+class CommisionsMainPageState extends State<CommisionsMainPage> {
   List<String> tags = [];
   bool isToggled = false;
   List<String> options = [

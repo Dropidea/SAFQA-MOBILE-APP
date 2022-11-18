@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -43,10 +44,13 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.edit_outlined,
-                      color: Color(0xff58D241),
-                      size: 18.0.sp,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Icon(
+                        EvaIcons.edit,
+                        color: Color(0xff58D241),
+                        size: 18.0.sp,
+                      ),
                     ),
                     SizedBox(width: 10),
                     Text(
@@ -71,10 +75,13 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.delete_outline_outlined,
-                      color: Color(0xffE47E7B),
-                      size: 18.0.sp,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Icon(
+                        EvaIcons.trash2,
+                        color: Color(0xffE47E7B),
+                        size: 18.0.sp,
+                      ),
                     ),
                     SizedBox(width: 10),
                     Text(

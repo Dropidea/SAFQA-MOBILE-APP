@@ -2,26 +2,20 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/profile/pr_bank_details.dart';
 import 'package:sizer/sizer.dart';
 
-class CategoryDetailsPage extends StatelessWidget {
-  const CategoryDetailsPage({super.key});
+class AddressDetailsPage extends StatelessWidget {
+  const AddressDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Category Details", 17),
-      ),
+      appBar: WhiteAppBar(title: "Address Details"),
       body: Column(
         children: [
-          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -48,7 +42,7 @@ class CategoryDetailsPage extends StatelessWidget {
                     Text(
                       "Edit",
                       style: TextStyle(
-                        fontSize: 12.0.sp,
+                        fontSize: 14.0.sp,
                         color: Color(0xff58D241),
                         fontWeight: FontWeight.w500,
                       ),
@@ -79,7 +73,7 @@ class CategoryDetailsPage extends StatelessWidget {
                     Text(
                       "Remove",
                       style: TextStyle(
-                        fontSize: 12.0.sp,
+                        fontSize: 14.0.sp,
                         color: Color(0xffE47E7B),
                         fontWeight: FontWeight.w500,
                       ),
@@ -98,16 +92,36 @@ class CategoryDetailsPage extends StatelessWidget {
                 ),
                 primary: false,
                 children: [
-                  SizedBox(height: 20),
-                  blackText("Category Name (En)", 15),
-                  greyText("Electronic Devices", 15),
-                  SizedBox(height: 20),
-                  blackText("Category Name (Ar)", 15),
-                  greyText("أجهزة إلكتونية", 15),
-                  SizedBox(height: 20),
-                  blackText("Is Active", 15),
-                  greyText("No", 15),
-                  SizedBox(height: 20),
+                  invoiceInfoMethod(
+                    title1: "Address Type",
+                    content1: "Appartment",
+                    title2: "City",
+                    content2: "Dubai",
+                  ),
+                  invoiceInfoMethod(
+                    title1: "Area",
+                    content1: "Sharka",
+                    title2: "Block",
+                    content2: "Sharka",
+                  ),
+                  invoiceInfoMethod(
+                    title1: "Avenue",
+                    content1: "lorem",
+                    title2: "House/Bldg No.",
+                    content2: "56/4",
+                  ),
+                  invoiceInfoMethod(
+                    title1: "Street",
+                    content1: "lorem ipsum",
+                    title2: "Floor",
+                    content2: "1",
+                  ),
+                  invoiceInfoMethod(
+                    title1: "Appartment",
+                    content1: "2",
+                    title2: "Instructions",
+                    content2: "No Instructions",
+                  ),
                 ],
               ),
             ),
@@ -129,7 +143,7 @@ class CategoryDetailsPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
-            width: 48.0.w,
+            width: 50.0.w,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -141,7 +155,7 @@ class CategoryDetailsPage extends StatelessWidget {
           ),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 blackText("$title2", 13),
                 SizedBox(height: 5),
