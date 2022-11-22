@@ -7,15 +7,149 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:safqa/main.dart';
-import 'package:safqa/models/product.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product_filter.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
 
 class ProductsController extends GetxController {
   final Dio dio = Dio();
 
+// -------------Product Category ----------------------
   List<ProductCategory> productCategories = [];
+  List<ProductCategory> productCategoriesToShow = [];
+
+// ----------------Product -------------------
+  List<Product> products = [];
+  List<Product> productsToShow = [];
+  List<Product> filteredProducts = [];
+  double minPriceProduct() {
+    double min = double.maxFinite;
+
+    for (var i in products) {
+      if (i.price! <= min) min = i.price!.toDouble();
+    }
+    return min;
+  }
+
+  double maxPriceProduct() {
+    double max = -1;
+
+    for (var i in products) {
+      if (i.price! >= max) max = i.price!.toDouble();
+    }
+    return max;
+  }
+// -----------------------------------
+
+  ProductFilter productFilter = ProductFilter(
+    filterActive: false,
+    category: null,
+    isActive: 0,
+    name: "",
+    priceMin: null,
+    priceMax: null,
+    priceType: 0,
+    price: null,
+  );
+
+  activeFilter() {
+    productFilter.filterActive = true;
+    List<Product> tmp1 = [];
+    switch (productFilter.isActive) {
+      case 0:
+        tmp1.addAll(products);
+        break;
+      case 1:
+        for (var i in products) {
+          if (i.isActive == 1) tmp1.add(i);
+          logSuccess("active product added");
+        }
+        break;
+      default:
+        for (var i in products) {
+          logSuccess("inactive product added");
+          if (i.isActive != 1) tmp1.add(i);
+        }
+    }
+    List<Product> tmp2 = [];
+
+    if (productFilter.category != null) {
+      for (var i in tmp1) {
+        if (i.category!.nameEn == productFilter.category!.nameEn) tmp2.add(i);
+      }
+    } else {
+      tmp2.addAll(tmp1);
+    }
+    tmp1 = [];
+
+    if (productFilter.price != null) {
+      for (var i in tmp2) {
+        if (i.price == productFilter.price) tmp1.add(i);
+      }
+    } else if (productFilter.priceMin != null &&
+        productFilter.priceMax != null) {
+      for (var i in tmp2) {
+        if (i.price! <= productFilter.priceMax! &&
+            i.price! >= productFilter.priceMin!) tmp1.add(i);
+      }
+    } else {
+      tmp1.addAll(tmp2);
+    }
+    tmp2 = [];
+
+    if (productFilter.name != "") {
+      for (var i in tmp1) {
+        if (i.nameEn == productFilter.name || i.nameAr == productFilter.name) {
+          tmp2.add(i);
+        }
+      }
+    } else {
+      tmp2.addAll(tmp1);
+    }
+    tmp1 = [];
+
+    filteredProducts = tmp2;
+    productsToShow = filteredProducts;
+    update();
+  }
+
+  clearFilter() {
+    productFilter = ProductFilter(
+      filterActive: false,
+      category: null,
+      isActive: 0,
+      name: "",
+      price: null,
+      priceMin: null,
+      priceMax: null,
+      priceType: 0,
+    );
+    filteredProducts = products;
+    productsToShow = products;
+    update();
+  }
+
+  void searchForProductsWithName(String name) {
+    if (name == "") {
+      productsToShow = filteredProducts;
+    } else {
+      List<Product> tmp = [];
+      for (var i in filteredProducts) {
+        if (i.nameEn!.contains(name) || i.nameAr!.contains(name)
+            // ||
+            // i.category!.nameAr!.contains(name) ||
+            // i.category!.nameEn!.contains(name)
+
+            ) {
+          tmp.add(i);
+        }
+        productsToShow = tmp;
+      }
+    }
+  }
+
   sslProblem() {
     dio.options.headers['content-Type'] = 'multipart/form-data';
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
@@ -25,6 +159,9 @@ class ProductsController extends GetxController {
       return client;
     };
   }
+
+  RxBool getProductsFlag = false.obs;
+  RxBool getProductsCategoryFlag = false.obs;
 
   Future<bool?> createProduct(Product product) async {
     Get.dialog(Center(
@@ -67,6 +204,7 @@ class ProductsController extends GetxController {
               InkWell(
                 onTap: () {
                   Get.back();
+                  Get.back();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
@@ -81,6 +219,7 @@ class ProductsController extends GetxController {
           ),
         ),
       );
+      await getProducts();
       return true;
     } on DioError catch (e) {
       Get.back();
@@ -151,6 +290,7 @@ class ProductsController extends GetxController {
               InkWell(
                 onTap: () {
                   Get.back();
+                  Get.back();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
@@ -205,21 +345,26 @@ class ProductsController extends GetxController {
   }
 
   Future getProductCategories() async {
+    getProductsCategoryFlag.value = true;
     try {
-      final body = d.FormData();
+      // final body = d.FormData();
       String token = await AuthService().loadToken();
-      body.fields.add(MapEntry("token", token));
+      dio.options.headers["authorization"] = "bearer  $token";
+
+      // body.fields.add(MapEntry("token", token));
 
       sslProblem();
-      var res = await dio
-          .post(EndPoints.baseURL + EndPoints.getProductCategories, data: body);
+      var res =
+          await dio.get(EndPoints.baseURL + EndPoints.getProductCategories);
       List<ProductCategory> tmp = [];
       for (var element in res.data['data']) {
         tmp.add(ProductCategory.fromJson(element));
       }
       productCategories = tmp;
       logSuccess("product category done");
+      getProductsCategoryFlag.value = false;
     } on DioError catch (e) {
+      getProductsCategoryFlag.value = false;
       logError(e.response!);
       // logError(e.response!.data);
       // Map<String, dynamic> m = e.response!.data;
@@ -254,6 +399,40 @@ class ProductsController extends GetxController {
       //     ),
       //   ),
       // );
+    }
+  }
+
+  Future getProducts() async {
+    getProductsFlag.value = true;
+    logSuccess("msg");
+    try {
+      // final body = d.FormData();
+      String token = await AuthService().loadToken();
+      dio.options.headers["authorization"] = "bearer  $token";
+
+      // body.fields.add(MapEntry("token", token));
+
+      sslProblem();
+      var res = await dio.get(
+        EndPoints.baseURL + EndPoints.getProducts,
+      );
+      List<Product> tmpList = [];
+      var decodedData = res.data["data"];
+      for (var element in decodedData) {
+        Product tmp = Product.fromJson(element);
+        tmpList.add(tmp);
+      }
+
+      products = tmpList;
+      productsToShow = products;
+      getProductsFlag.value = false;
+    } on DioError catch (e) {
+      getProductsFlag.value = false;
+      logError(e.response!);
+      return null;
+    } catch (e) {
+      getProductsFlag.value = false;
+      logError(e);
     }
   }
 }

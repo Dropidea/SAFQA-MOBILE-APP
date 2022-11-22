@@ -60,6 +60,8 @@ dependencies:
   # awesome_select: ^6.0.0
   chips_choice: ^3.0.0
   multiselect: ^0.0.7
+  lottie: ^2.0.0
+  font_awesome_flutter: ^10.2.1
   # pinput: ^2.2.12
 
 dev_dependencies:
@@ -122,6 +124,7 @@ flutter:
     - assets/images/filter.png
     - assets/images/pending.png
     - assets/images/barcode.png
+    - assets/email.zip
 
 
 

@@ -8,7 +8,7 @@ class DataToCreateInvoice {
   String? customerRefrence;
   int? customerSendBy = 1;
   String? currencyId = "1";
-  String? discountType;
+  bool? discountType;
   String? discountValue;
   String? expiryDate;
   String? remindAfter;
@@ -38,7 +38,7 @@ class DataToCreateInvoice {
     this.remindAfter,
     this.recurringEndDate,
     this.recurringStartDate,
-    this.languageId,
+    this.languageId = 1,
     this.attachFile,
     this.comments,
     this.termsAndConditions,

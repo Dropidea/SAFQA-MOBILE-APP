@@ -226,11 +226,13 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                     addInvoiceController.selectDiscountTypesDrop(value!);
                     if (value == "Fixed") {
                       discountTypeFlag = true;
+                      addInvoiceController.dataToCreateInvoice.discountType =
+                          true;
                     } else {
                       discountTypeFlag = false;
+                      addInvoiceController.dataToCreateInvoice.discountType =
+                          false;
                     }
-                    addInvoiceController.dataToCreateInvoice.discountType =
-                        value;
                     setState(() {});
                   },
                 ),

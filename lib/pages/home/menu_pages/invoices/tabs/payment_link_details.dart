@@ -34,7 +34,7 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: w / 3,
+                width: w / 2.5,
                 height: 50,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -65,7 +65,7 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
                 ),
               ),
               Container(
-                width: w / 3,
+                width: w / 2.5,
                 height: 50,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(

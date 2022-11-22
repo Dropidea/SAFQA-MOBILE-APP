@@ -1,10 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/pages/log-reg/forget%20password/forget_passwrod_page.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/login_controller.dart';
-import '../../main.dart';
 import '../../widgets/zero_app_bar.dart';
 import 'signup.dart';
 
@@ -167,20 +167,22 @@ class _LoginPageState extends State<LoginPage> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      //TODO:Forgot Your Password Function
-                                      logSuccess("Forgot Your Password?");
+                                      Get.to(() => ForgetPasswordPage(),
+                                          transition: Transition.downToUp);
                                     },
                                     child: Text(
                                       "forget_pass".tr,
                                       style: TextStyle(
                                         color: Color(0xff00A7B3),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12.0.sp,
                                       ),
                                     ),
                                   )
                                 ],
                               ),
                               SizedBox(
-                                height: 5.0.sp,
+                                height: 10.0.sp,
                               ),
                               SizedBox(
                                 height: 30,
@@ -191,26 +193,36 @@ class _LoginPageState extends State<LoginPage> {
                                     SizedBox(
                                       width: 25,
                                       height: 30,
-                                      child: Checkbox(
-                                        activeColor: Color(0xff00A7B3),
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0),
-                                          ),
-                                        ), // Rounded Checkbox
-                                        onChanged: (value) {
-                                          _rememberMeFlag = value!;
-                                          setState(() {});
-                                        },
-                                        value: _rememberMeFlag,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 7),
+                                        child: Checkbox(
+                                          activeColor: Color(0xff00A7B3),
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(5.0),
+                                            ),
+                                          ), // Rounded Checkbox
+                                          onChanged: (value) {
+                                            _rememberMeFlag = value!;
+                                            setState(() {});
+                                          },
+                                          value: _rememberMeFlag,
+                                        ),
                                       ),
                                     ),
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Text(
-                                      "remember".tr,
-                                      style: TextStyle(fontSize: 17.0.sp),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _rememberMeFlag = !_rememberMeFlag;
+                                        setState(() {});
+                                      },
+                                      child: Text(
+                                        "remember".tr,
+                                        style: TextStyle(fontSize: 17.0.sp),
+                                      ),
                                     )
                                   ],
                                 ),

@@ -1,9 +1,11 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/profile/controller/profile_controller.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
+import 'package:safqa/widgets/gradient_icon.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 
@@ -39,27 +41,45 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                 borderRadius: BorderRadius.circular(10.0),
                 border: Border.all(color: Colors.transparent)),
             child: DropdownButtonFormField(
+              onSaved: (newValue) {},
               decoration: InputDecoration(border: InputBorder.none),
-              items: ["Facebook", "Instagram", "Twitter"]
+              items: ["Facebook", "Instagram", "Twitter", "Whatsapp"]
                   .map(
                     (e) => DropdownMenuItem(
+                      onTap: () {
+                        socialMediaURLController.text = "www.$e.com/";
+                      },
                       value: e,
                       child: DropdownMenuItem(
                         child: Row(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 7),
-                              child: Icon(
-                                e == "Facebook"
-                                    ? EvaIcons.facebook
-                                    : e == "Twitter"
-                                        ? EvaIcons.twitter
-                                        : EvaIcons.globe,
-                                color: Colors.grey,
-                              ),
-                            ),
+                            e == "Instagram"
+                                ? GradientIcon(
+                                    FontAwesomeIcons.instagram,
+                                    24,
+                                    LinearGradient(
+                                      begin: Alignment.bottomLeft,
+                                      end: Alignment.topRight,
+                                      colors: [
+                                        Color(0xfffbad50),
+                                        Color(0xffe95950),
+                                        Color(0xff8a3ab9),
+                                      ],
+                                    ))
+                                : Icon(
+                                    e == "Facebook"
+                                        ? FontAwesomeIcons.facebook
+                                        : e == "Twitter"
+                                            ? FontAwesomeIcons.twitter
+                                            : FontAwesomeIcons.whatsapp,
+                                    color: e == "Facebook"
+                                        ? Color(0xff4267B2)
+                                        : e == "Twitter"
+                                            ? Color(0xff1DA1F2)
+                                            : Color(0xff4FCE5D),
+                                  ),
                             const SizedBox(width: 10),
-                            greyText(e, 13)
+                            blackText(e, 13)
                           ],
                         ),
                       ),

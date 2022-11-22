@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class Product {
   int? id;
   String? nameEn;
@@ -8,18 +6,18 @@ class Product {
   String? height;
   String? width;
   String? length;
-  File? productImage;
+  var productImage;
   String? descriptionEn;
   String? descriptionAr;
-  String? quantity;
-  String? price;
+  int? quantity;
+  int? price;
   int? isStockable;
   int? disableProductOnSold;
   int? isActive;
   int? isShippingProduct;
   int? managerUserId;
   int? profileBusinessId;
-  String? categoryId;
+  int? categoryId;
   ProductCategory? category;
 
   Product(

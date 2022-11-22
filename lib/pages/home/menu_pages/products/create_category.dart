@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:safqa/models/product.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
@@ -77,7 +77,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                                 color: Colors.grey.shade300,
                               ),
                               size: GFSize.SMALL,
-                              value: 0,
+                              value: 1,
                               groupValue: isActive,
                               onChanged: (value) => setState(() {
                                     isActive = value;
@@ -101,7 +101,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                               ),
                               size: GFSize.SMALL,
                               inactiveBorderColor: Colors.transparent,
-                              value: 1,
+                              value: 0,
                               groupValue: isActive,
                               onChanged: (value) => setState(() {
                                     isActive = value;

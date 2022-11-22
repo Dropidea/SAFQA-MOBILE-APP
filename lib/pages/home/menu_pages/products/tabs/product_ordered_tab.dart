@@ -3,6 +3,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/pages/home/menu_pages/products/order_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_ordered_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
@@ -103,12 +104,17 @@ class ProductsOrderedTab extends StatelessWidget {
           itemCount: 10,
           itemBuilder: (context, index) {
             return ProductWidget(
-              active: index % 2 == 0,
               orderedFlag: true,
-              orderedState: index % 2 == 0 ? "Delivered" : "Prepared",
+              orderedState: index % 2 != 0 ? "Delivered" : "Prepared",
               onTap: () {
                 Get.to(() => OrderDetailsPage());
               },
+              product: Product(
+                nameEn: "test",
+                isActive: index % 2,
+                quantity: 10,
+                price: 10,
+              ),
             );
           },
         ))

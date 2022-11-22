@@ -165,12 +165,14 @@ class CustomerInfoPage extends StatelessWidget {
 }
 
 Text blueText(String text, double size,
-    {bool underline = false, FontWeight? fontWeight}) {
+    {bool underline = false,
+    FontWeight? fontWeight,
+    double? decorationThickness}) {
   return Text(
     text,
     style: TextStyle(
         decoration: underline ? TextDecoration.underline : null,
-        decorationThickness: 6,
+        decorationThickness: decorationThickness ?? 6,
         color: Color(0xff2F6782),
         fontWeight: fontWeight ?? FontWeight.w500,
         fontSize: size.sp),
@@ -219,10 +221,11 @@ Text whiteText(String text, double size,
 }
 
 Text greyText(String text, double size,
-    {bool underline = false, FontWeight? fontWeight}) {
+    {bool underline = false, FontWeight? fontWeight, TextAlign? textAlign}) {
   return Text(
     text,
     softWrap: true,
+    textAlign: textAlign,
     style: TextStyle(
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,

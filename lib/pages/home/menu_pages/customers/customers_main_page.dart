@@ -68,7 +68,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
               Expanded(
                 child: Container(
                   width: w,
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(15),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -112,7 +112,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                               Get.to(() => AddCustomerPage());
                             },
                             child: Container(
-                              width: 0.44 * w,
+                              width: 0.45 * w,
                               height: 60,
                               decoration: BoxDecoration(
                                 color: Color(0xff2F6782).withOpacity(0.1),
@@ -129,12 +129,12 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                                       color: Color(0xff2F6782),
                                     ),
                                   ),
-                                  SizedBox(width: 5),
+                                  // SizedBox(width: 5),
                                   Text(
                                     "Create Customer",
                                     style: TextStyle(
                                       color: Color(0xff2F6782),
-                                      fontSize: 13.0.sp,
+                                      fontSize: 12.0.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   )
@@ -147,7 +147,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                               //TODO:
                             },
                             child: Container(
-                              width: 0.44 * w,
+                              width: 0.45 * w,
                               height: 60,
                               decoration: BoxDecoration(
                                 color: Color(0xff8B8B8B).withOpacity(0.1),
@@ -164,12 +164,12 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                                       color: Color(0xff8B8B8B),
                                     ),
                                   ),
-                                  SizedBox(width: 5),
+                                  // SizedBox(width: 5),
                                   Text(
                                     "Import Customer",
                                     style: TextStyle(
                                       color: Color(0xff8B8B8B),
-                                      fontSize: 13.0.sp,
+                                      fontSize: 12.0.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   )

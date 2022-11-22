@@ -119,7 +119,7 @@ class _DocWidgetState extends State<DocWidget> {
                                 ),
                                 child: Center(
                                   child: Icon(
-                                    EvaIcons.edit,
+                                    EvaIcons.download,
                                     color: Color(0xff58D241),
                                   ),
                                 ),

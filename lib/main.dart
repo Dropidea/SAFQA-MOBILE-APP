@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,10 +11,21 @@ import 'controllers/locals_controller.dart';
 import 'locals.dart';
 import 'pages/log-reg/splash_page.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   bool lang = prefs.getBool('lang') ?? false;
+  HttpOverrides.global = new MyHttpOverrides();
+
   runApp(MyApp(
     lang: lang,
   ));

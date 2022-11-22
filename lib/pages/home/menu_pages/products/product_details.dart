@@ -2,11 +2,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:sizer/sizer.dart';
 
 class ProductDetailsPage extends StatelessWidget {
-  const ProductDetailsPage({super.key});
-
+  const ProductDetailsPage({super.key, required this.product});
+  final Product product;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -17,7 +18,7 @@ class ProductDetailsPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Invoice Details", 17),
+        title: blackText("Product Details", 17),
       ),
       body: Column(
         children: [
@@ -25,7 +26,7 @@ class ProductDetailsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: w / 3,
+                width: w / 2.5,
                 height: 50,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -56,7 +57,7 @@ class ProductDetailsPage extends StatelessWidget {
                 ),
               ),
               Container(
-                width: w / 3,
+                width: w / 2.5,
                 height: 50,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -117,29 +118,30 @@ class ProductDetailsPage extends StatelessWidget {
                         children: [
                           invoiceInfoMethod(
                               title1: "Product Name (En)",
-                              content1: "Nokia 105",
+                              content1: product.nameEn,
                               title2: "Product Name (Ar)",
-                              content2: "موبايل نوكيا"),
+                              content2: product.nameAr),
                           invoiceInfoMethod(
                               title1: "Category",
-                              content1: "Electronic Devices",
+                              content1: product.category!.nameEn,
                               title2: "Remaining Quantity",
-                              content2: "1"),
-                          invoiceInfoMethod(
-                              title1: "Product Picture",
-                              content1: "product_picture.png",
-                              title2: "",
-                              content2: ""),
+                              content2: product.quantity.toString()),
+                          // invoiceInfoMethod(
+                          //     title1: "Product Picture",
+                          //     content1: "product_picture.png",
+                          //     title2: "",
+                          //     content2: ""),
                           invoiceInfoMethod(
                               title1: "Unit Price",
-                              content1: "\$ 150",
+                              content1: "\$ ${product.price}",
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "Is Active?",
-                              content1: "Yes",
+                              content1: product.isActive == 1 ? "Yes" : "No",
                               title2: "Is Stockable?",
-                              content2: "Yes"),
+                              content2:
+                                  product.isStockable == 1 ? "Yes" : "No"),
                           SizedBox(height: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +154,8 @@ class ProductDetailsPage extends StatelessWidget {
                           SizedBox(height: 10),
                           invoiceInfoMethod(
                               title1: "Is it shippable??",
-                              content1: "Yes",
+                              content1:
+                                  product.isShippingProduct == 1 ? "Yes" : "No",
                               title2: "",
                               content2: ""),
                           SizedBox(height: 10),
@@ -166,26 +169,31 @@ class ProductDetailsPage extends StatelessWidget {
                                 decorationColor: Color(0xff27b4be)),
                           ),
                           SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              blackText("Discription (EN)", 13),
-                              SizedBox(height: 5),
-                              greyText(
-                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam",
-                                  13),
-                            ],
+                          SizedBox(
+                            width: w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                blackText("Discription (EN)", 13),
+                                SizedBox(height: 5),
+                                greyText(product.descriptionEn!, 13),
+                              ],
+                            ),
                           ),
                           SizedBox(height: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              blackText("Discription (AR)", 13),
-                              SizedBox(height: 5),
-                              greyARText(
-                                  "لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد على محتوى ذي معنى. يمكن استخدام لوريم إيبسوم قبل نشر النسخة النهائية",
-                                  13),
-                            ],
+                          SizedBox(
+                            width: w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                blackText("Discription (AR)", 13),
+                                SizedBox(height: 5),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: greyARText("شسيش", 13),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

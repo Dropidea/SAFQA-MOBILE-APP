@@ -32,6 +32,7 @@ class AddInvoiceController extends GetxController {
   }
 
   Future createInvoice() async {
+    logError(dataToCreateInvoice.discountType!);
     // logWarning(dataToCreateInvoice.toJson());
 
     dio.options.headers['content-Type'] = 'multipart/form-data';
@@ -62,7 +63,7 @@ class AddInvoiceController extends GetxController {
           dataToCreateInvoice.recurringStartDate == "dd/MM/yyyy"
               ? null
               : dataToCreateInvoice.recurringStartDate,
-      "language_id": dataToCreateInvoice.languageId,
+      "language_id": dataToCreateInvoice.languageId ?? 1,
       "comment": dataToCreateInvoice.comments,
       "is_open_invoice": dataToCreateInvoice.isOpenInvoice,
       "recurring_interval_id": dataToCreateInvoice.recurringIntervalId,
@@ -76,7 +77,7 @@ class AddInvoiceController extends GetxController {
             contentType: MediaType('document', 'pdf')),
       ));
     }
-    logSuccess(body.files.first.value.contentType!);
+    // logSuccess(body.files.first.value.contentType!);
 
     try {
       sslProblem();

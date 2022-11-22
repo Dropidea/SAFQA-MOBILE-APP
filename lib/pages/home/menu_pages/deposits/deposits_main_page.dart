@@ -77,7 +77,7 @@ class DepositsMainPageState extends State<DepositsMainPage> {
                   ),
                   child: Column(
                     children: [
-                      SizedBox(height: 30),
+                      SizedBox(height: 20),
                       Container(
                         width: w,
                         height: 60,

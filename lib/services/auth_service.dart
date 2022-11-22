@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' as IO;
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart' as d;
@@ -20,9 +20,9 @@ class AuthService {
 
   sslProblem() {
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (HttpClient client) {
+        (IO.HttpClient client) {
       client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+          (IO.X509Certificate cert, String host, int port) => true;
       return client;
     };
   }
@@ -44,7 +44,6 @@ class AuthService {
       logSuccess(jsonRes['access_token'].toString());
       return jsonRes['access_token'];
     } on DioError catch (e) {
-      logError("fuck");
       logError(e.response!.data['error']);
       logError(e.response!.statusCode!);
       Get.showSnackbar(GetSnackBar(
@@ -67,22 +66,19 @@ class AuthService {
       logSuccess("register success");
       return null;
     } on DioError catch (e) {
-      // Map<String, dynamic> x = json.decode(
-      //   json.encode(e.response!.data[0].toString()),
-      // );
-      logError(e);
-      //   Map<String, dynamic> obj = e.response!.data;
+      logWarning(e.response!.data);
 
-      //   Get.showSnackbar(GetSnackBar(
-      //     duration: Duration(milliseconds: 2000),
-      //     backgroundColor: Colors.red,
-      //     message: e.response!.data['error'] +
-      //         " " +
-      //         e.response!.statusCode!.toString(),
-      //   ));
-      //   return obj;
-      //   // return e.response!.data;
-      // }
+      Map<String, dynamic> obj = e.response!.data;
+
+      // Get.showSnackbar(GetSnackBar(
+      //   duration: Duration(milliseconds: 2000),
+      //   backgroundColor: Colors.red,
+      //   message: e.response!.data.toString() +
+      //       " " +
+      //       e.response!.statusCode!.toString(),
+      // ));
+      return obj;
+      // return e.response!.data;
     }
   }
 

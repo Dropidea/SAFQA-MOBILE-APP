@@ -126,11 +126,11 @@ class AccountStateMainPageState extends State<AccountStateMainPage> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Consolidated Tax Invoice",
+                                  "Consolidated ",
                                   style: TextStyle(
                                     color: Colors.white,
                                     // fontWeight: FontWeight.bold,
-                                    fontSize: 12.0.sp,
+                                    fontSize: 13.0.sp,
                                   ),
                                 ),
                               ),
@@ -154,7 +154,7 @@ class AccountStateMainPageState extends State<AccountStateMainPage> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Export Filtered as CSV",
+                                  "Export as CSV",
                                   style: TextStyle(
                                     color: Colors.white,
                                     // fontWeight: FontWeight.bold,

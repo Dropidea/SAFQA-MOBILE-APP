@@ -9,11 +9,11 @@ import 'package:getwidget/getwidget.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
-import 'package:safqa/models/product.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/invoices_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/create_category.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -102,7 +102,6 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     padding: EdgeInsets.all(0),
                     fillColor: Color(0xffF8F8F8),
                     hintText: "Name ...",
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: productNameENController,
                     validator: (s) {
                       if (s!.isEmpty) return "Can't be empty";
@@ -117,7 +116,6 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     fillColor: Color(0xffF8F8F8),
                     hintText: "Name ...",
                     controller: productNameARController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (s) {
                       if (s!.isEmpty) return "Can't be empty";
                       return null;
@@ -138,8 +136,6 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                               keyBoardType: TextInputType.number,
                               padding: EdgeInsets.all(0),
                               fillColor: Color(0xffF8F8F8),
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
                               hintText: "1",
                               validator: (s) {
                                 if (s!.isEmpty) return "Can't be empty";
@@ -230,8 +226,6 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                               keyBoardType: TextInputType.number,
                               padding: EdgeInsets.all(0),
                               fillColor: Color(0xffF8F8F8),
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
                               hintText: "0",
                               validator: (s) {
                                 if (s!.isEmpty) return "Can't be empty";
@@ -351,7 +345,6 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             borderRadius: new BorderRadius.circular(10.0),
                             borderSide: BorderSide.none),
                       ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (s) {
                         if (s!.isEmpty) return "Can't be empty";
                         return null;
@@ -378,7 +371,6 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             borderRadius: new BorderRadius.circular(10.0),
                             borderSide: BorderSide.none),
                       ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (s) {
                         if (s!.isEmpty) return "Can't be empty";
                         return null;
@@ -607,10 +599,11 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                               Product product = Product(
                                 nameEn: productNameENController.text,
                                 nameAr: productNameARController.text,
-                                quantity: remainingQuantitiyController.text,
+                                quantity: int.parse(
+                                    remainingQuantitiyController.text),
                                 productImage: file,
-                                price: unitPriceController.text,
-                                categoryId: selectedCategoryId,
+                                price: int.parse(unitPriceController.text),
+                                categoryId: int.parse(selectedCategoryId),
                                 descriptionAr: discriptionARController.text,
                                 descriptionEn: discriptionENController.text,
                                 isActive: isActiveVal,

@@ -67,6 +67,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
         appBar: ZeroAppBar(),
         body: ListView(
           primary: false,
+          // primary: false,
           children: [
             Container(
               decoration: BoxDecoration(
@@ -109,347 +110,296 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         topRight: Radius.circular(40),
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     Container(
-                        //       margin: const EdgeInsets.only(top: 20),
-                        //       child: Text(
-                        //         "SignUp",
-                        //         style: TextStyle(
-                        //             color: Color(0xff2F6782),
-                        //             fontSize: 20.0.sp,
-                        //             fontWeight: FontWeight.bold),
+                    child: Theme(
+                        data: Theme.of(context),
+                        child: Form(
+                          autovalidateMode: AutovalidateMode.always,
+                          key: formKey,
+                          child: MyStepper(
+                            type: MyStepperType.horizontal,
+                            onStepContinue: continued,
+                            elevation: 0,
+                            onStepCancel: cancel,
+                            onStepTapped: tapped,
+                            currentStep: _currentStep,
+                            steps: stepList(h, w),
+                            physics: NeverScrollableScrollPhysics(),
+                            controlsBuilder: (context, details) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  _currentStep == 3
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            Get.dialog(
+                                              AlertDialog(
+                                                titlePadding: EdgeInsets.all(0),
+                                                actionsAlignment:
+                                                    MainAxisAlignment.center,
+                                                actions: [
+                                                  MyButton(
+                                                      width: 0.5 * w,
+                                                      heigt: 35.0.sp,
+                                                      color: Color(0xff2D5571),
+                                                      borderRadius: 20,
+                                                      text: "Send",
+                                                      func: () async {
+                                                        formKey.currentState!
+                                                            .validate();
+                                                        var res = await _signUpController
+                                                            .register(
+                                                                _signUpController
+                                                                    .dataToRegister);
+
+                                                        if (res == null)
+                                                          Get.to(() =>
+                                                              SignUpDonePage());
+                                                        else {
+                                                          if (res.containsKey(
+                                                                  "email") ||
+                                                              res.containsKey(
+                                                                  "phone_number_manager") ||
+                                                              res.containsKey(
+                                                                  "full_name") ||
+                                                              res.containsKey(
+                                                                  "password") ||
+                                                              res.containsKey(
+                                                                  "password_confirmation"))
+                                                            _currentStep = 2;
+                                                          else if (res.containsKey(
+                                                                  "phone_number") ||
+                                                              res.containsKey(
+                                                                  "company_name") ||
+                                                              res.containsKey(
+                                                                  "name_en") ||
+                                                              res.containsKey(
+                                                                  "name_ar") ||
+                                                              res.containsKey(
+                                                                  "category_id") ||
+                                                              res.containsKey(
+                                                                  "work_email"))
+                                                            _currentStep = 0;
+                                                          else
+                                                            _currentStep = 1;
+                                                          setState(() {});
+                                                          formKey.currentState!
+                                                              .validate();
+                                                        }
+                                                      },
+                                                      textSize: 15.0.sp)
+                                                ],
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(32.0),
+                                                  ),
+                                                ),
+                                                title: _dialogeTitle(),
+                                                content: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.all(5),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                            Radius.circular(15),
+                                                          ),
+                                                          border: Border.all(
+                                                            color: Color(
+                                                                0xffBBBBBB),
+                                                          )),
+                                                      height: 50,
+                                                      width: 0.35 * w,
+                                                      child: PinCodeTextField(
+                                                          validator: (s) {
+                                                            if (s!.length < 6)
+                                                              return null;
+                                                            return s == '222222'
+                                                                ? null
+                                                                : 'Pin is incorrect';
+                                                          },
+                                                          pinTheme:
+                                                              defaultPinTheme,
+                                                          appContext: context,
+                                                          length: 6,
+                                                          onChanged: (val) {}),
+                                                    ),
+                                                    MyButton(
+                                                      width: 0.30 * w,
+                                                      heigt: 35.0,
+                                                      color: Color(0xff2D5571),
+                                                      borderRadius: 15,
+                                                      text: "resend (40)",
+                                                      textSize: 13,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            width: 0.7 * w,
+                                            height: 42.0.sp,
+                                            margin: EdgeInsets.only(top: 2.0.h),
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff00A7B3),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Send OTP",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.0.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: continued,
+                                          child: Container(
+                                            width: 0.7 * w,
+                                            height: 40.0.sp,
+                                            margin: EdgeInsets.only(top: 5.h),
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff2F6782),
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    "assets/images/btn_wallpaper.png"),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Next",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.0.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                        //  MyStepper(
+                        //   elevation: 0,
+                        //   controlsBuilder: (context, details) {
+                        //     return Row(
+                        //       children: <Widget>[
+                        //         TextButton(
+                        //           onPressed: () {},
+                        //           child: const Text('NEXT'),
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        //   type: MyStepperType.horizontal,
+                        //   physics: const ScrollPhysics(),
+                        //   currentStep: _currentStep,
+                        //   onStepTapped: (step) => tapped(step),
+                        //   onStepContinue: continued,
+                        //   onStepCancel: cancel,
+                        //   steps: [
+                        //     MyStep(
+                        //       title: new Text(''),
+                        //       label: _currentStep == 0
+                        //           ? new Text('Account')
+                        //           : Text(""),
+                        //       content: Column(
+                        //         children: <Widget>[
+                        //           TextFormField(
+                        //             decoration: InputDecoration(
+                        //                 labelText: 'Email Address'),
+                        //           ),
+                        //           TextFormField(
+                        //             decoration: InputDecoration(
+                        //                 labelText: 'Password'),
+                        //           ),
+                        //         ],
                         //       ),
+                        //       isActive: _currentStep >= 0,
+                        //       state: _currentStep >= 0
+                        //           ? MyStepState.complete
+                        //           : MyStepState.disabled,
+                        //     ),
+                        //     MyStep(
+                        //       title: new Text(''),
+                        //       label: _currentStep == 1
+                        //           ? new Text('Address')
+                        //           : Text(""),
+                        //       content: Column(
+                        //         children: <Widget>[
+                        //           TextFormField(
+                        //             decoration: InputDecoration(
+                        //                 labelText: 'Home Address'),
+                        //           ),
+                        //           TextFormField(
+                        //             decoration: InputDecoration(
+                        //                 labelText: 'Postcode'),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       isActive: _currentStep >= 1,
+                        //       state: _currentStep >= 1
+                        //           ? MyStepState.complete
+                        //           : MyStepState.disabled,
+                        //     ),
+                        //     MyStep(
+                        //       title: new Text(''),
+                        //       label: _currentStep == 2
+                        //           ? new Text('Mobile Number')
+                        //           : Text(""),
+                        //       content: Column(
+                        //         children: <Widget>[
+                        //           TextFormField(
+                        //             decoration: InputDecoration(
+                        //                 labelText: 'Mobile Number'),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       isActive: _currentStep >= 2,
+                        //       state: _currentStep >= 2
+                        //           ? MyStepState.complete
+                        //           : MyStepState.disabled,
+                        //     ),
+                        //     MyStep(
+                        //       title: new Text(''),
+                        //       label: _currentStep == 3
+                        //           ? new Text('test')
+                        //           : Text(""),
+                        //       content: Column(
+                        //         children: <Widget>[
+                        //           TextFormField(
+                        //             decoration: InputDecoration(
+                        //                 labelText: 'Mobile Number'),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //       isActive: _currentStep >= 3,
+                        //       state: _currentStep >= 3
+                        //           ? MyStepState.complete
+                        //           : MyStepState.disabled,
                         //     ),
                         //   ],
                         // ),
-                        Expanded(
-                          child: Theme(
-                              data: Theme.of(context),
-                              child: Form(
-                                autovalidateMode: AutovalidateMode.always,
-                                key: formKey,
-                                child: MyStepper(
-                                  type: MyStepperType.horizontal,
-                                  onStepContinue: continued,
-                                  elevation: 0,
-                                  onStepCancel: cancel,
-                                  onStepTapped: tapped,
-                                  currentStep: _currentStep,
-                                  steps: stepList(h, w),
-                                  physics: NeverScrollableScrollPhysics(),
-                                  controlsBuilder: (context, details) {
-                                    return Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: <Widget>[
-                                        _currentStep == 3
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  Get.dialog(
-                                                    AlertDialog(
-                                                      titlePadding:
-                                                          EdgeInsets.all(0),
-                                                      actionsAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      actions: [
-                                                        MyButton(
-                                                            width: 0.5 * w,
-                                                            heigt: 35.0.sp,
-                                                            color: Color(
-                                                                0xff2D5571),
-                                                            borderRadius: 20,
-                                                            text: "Send",
-                                                            func: () async {
-                                                              formKey
-                                                                  .currentState!
-                                                                  .validate();
-                                                              var res = await _signUpController
-                                                                  .register(
-                                                                      _signUpController
-                                                                          .dataToRegister);
 
-                                                              if (res == null)
-                                                                Get.to(() =>
-                                                                    SignUpDonePage());
-                                                              else {
-                                                                if (res.containsKey("email") ||
-                                                                    res.containsKey(
-                                                                        "phone_number_manager") ||
-                                                                    res.containsKey(
-                                                                        "full_name") ||
-                                                                    res.containsKey(
-                                                                        "password") ||
-                                                                    res.containsKey(
-                                                                        "password_confirmation"))
-                                                                  _currentStep =
-                                                                      2;
-                                                                else if (res
-                                                                        .containsKey(
-                                                                            "phone_number") ||
-                                                                    res.containsKey(
-                                                                        "company_name") ||
-                                                                    res.containsKey(
-                                                                        "name_en") ||
-                                                                    res.containsKey(
-                                                                        "name_ar") ||
-                                                                    res.containsKey(
-                                                                        "category_id") ||
-                                                                    res.containsKey(
-                                                                        "work_email"))
-                                                                  _currentStep =
-                                                                      0;
-                                                                else
-                                                                  _currentStep =
-                                                                      1;
-                                                                setState(() {});
-                                                                formKey
-                                                                    .currentState!
-                                                                    .validate();
-                                                              }
-                                                            },
-                                                            textSize: 15.0.sp)
-                                                      ],
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                          Radius.circular(32.0),
-                                                        ),
-                                                      ),
-                                                      title: _dialogeTitle(),
-                                                      content: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Container(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    5),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .all(
-                                                                      Radius.circular(
-                                                                          15),
-                                                                    ),
-                                                                    border:
-                                                                        Border
-                                                                            .all(
-                                                                      color: Color(
-                                                                          0xffBBBBBB),
-                                                                    )),
-                                                            height: 50,
-                                                            width: 0.35 * w,
-                                                            child:
-                                                                PinCodeTextField(
-                                                                    validator:
-                                                                        (s) {
-                                                                      if (s!.length <
-                                                                          6)
-                                                                        return null;
-                                                                      return s ==
-                                                                              '222222'
-                                                                          ? null
-                                                                          : 'Pin is incorrect';
-                                                                    },
-                                                                    pinTheme:
-                                                                        defaultPinTheme,
-                                                                    appContext:
-                                                                        context,
-                                                                    length: 6,
-                                                                    onChanged:
-                                                                        (val) {}),
-                                                          ),
-                                                          MyButton(
-                                                            width: 0.30 * w,
-                                                            heigt: 35.0.sp,
-                                                            color: Color(
-                                                                0xff2D5571),
-                                                            borderRadius: 15,
-                                                            text: "resend (40)",
-                                                            textSize: 13.0.sp,
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Container(
-                                                  width: 0.7 * w,
-                                                  height: 42.0.sp,
-                                                  margin: EdgeInsets.only(
-                                                      top: 2.0.h),
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xff00A7B3),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Send OTP",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 18.0.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            : GestureDetector(
-                                                onTap: continued,
-                                                child: Container(
-                                                  width: 0.7 * w,
-                                                  height: 40.0.sp,
-                                                  margin:
-                                                      EdgeInsets.only(top: 5.h),
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xff2F6782),
-                                                    image: DecorationImage(
-                                                      image: AssetImage(
-                                                          "assets/images/btn_wallpaper.png"),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Next",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 18.0.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              )
-                              //  MyStepper(
-                              //   elevation: 0,
-                              //   controlsBuilder: (context, details) {
-                              //     return Row(
-                              //       children: <Widget>[
-                              //         TextButton(
-                              //           onPressed: () {},
-                              //           child: const Text('NEXT'),
-                              //         ),
-                              //       ],
-                              //     );
-                              //   },
-                              //   type: MyStepperType.horizontal,
-                              //   physics: const ScrollPhysics(),
-                              //   currentStep: _currentStep,
-                              //   onStepTapped: (step) => tapped(step),
-                              //   onStepContinue: continued,
-                              //   onStepCancel: cancel,
-                              //   steps: [
-                              //     MyStep(
-                              //       title: new Text(''),
-                              //       label: _currentStep == 0
-                              //           ? new Text('Account')
-                              //           : Text(""),
-                              //       content: Column(
-                              //         children: <Widget>[
-                              //           TextFormField(
-                              //             decoration: InputDecoration(
-                              //                 labelText: 'Email Address'),
-                              //           ),
-                              //           TextFormField(
-                              //             decoration: InputDecoration(
-                              //                 labelText: 'Password'),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //       isActive: _currentStep >= 0,
-                              //       state: _currentStep >= 0
-                              //           ? MyStepState.complete
-                              //           : MyStepState.disabled,
-                              //     ),
-                              //     MyStep(
-                              //       title: new Text(''),
-                              //       label: _currentStep == 1
-                              //           ? new Text('Address')
-                              //           : Text(""),
-                              //       content: Column(
-                              //         children: <Widget>[
-                              //           TextFormField(
-                              //             decoration: InputDecoration(
-                              //                 labelText: 'Home Address'),
-                              //           ),
-                              //           TextFormField(
-                              //             decoration: InputDecoration(
-                              //                 labelText: 'Postcode'),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //       isActive: _currentStep >= 1,
-                              //       state: _currentStep >= 1
-                              //           ? MyStepState.complete
-                              //           : MyStepState.disabled,
-                              //     ),
-                              //     MyStep(
-                              //       title: new Text(''),
-                              //       label: _currentStep == 2
-                              //           ? new Text('Mobile Number')
-                              //           : Text(""),
-                              //       content: Column(
-                              //         children: <Widget>[
-                              //           TextFormField(
-                              //             decoration: InputDecoration(
-                              //                 labelText: 'Mobile Number'),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //       isActive: _currentStep >= 2,
-                              //       state: _currentStep >= 2
-                              //           ? MyStepState.complete
-                              //           : MyStepState.disabled,
-                              //     ),
-                              //     MyStep(
-                              //       title: new Text(''),
-                              //       label: _currentStep == 3
-                              //           ? new Text('test')
-                              //           : Text(""),
-                              //       content: Column(
-                              //         children: <Widget>[
-                              //           TextFormField(
-                              //             decoration: InputDecoration(
-                              //                 labelText: 'Mobile Number'),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //       isActive: _currentStep >= 3,
-                              //       state: _currentStep >= 3
-                              //           ? MyStepState.complete
-                              //           : MyStepState.disabled,
-                              //     ),
-                              //   ],
-                              // ),
-
-                              ),
-                        )
-                      ],
-                    ),
+                        ),
                   ))
                 ],
               ),
@@ -518,8 +468,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
         MyStep(
             label: myLabel(0, 'Company information'),
             content: SizedBox(
-              height: h < 600 ? 43.0.h : 55.0.h,
+              height: h < 600 ? 43.0.h : 50.0.h,
               child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 primary: false,
                 children: [
                   SignUpTextField(
@@ -713,8 +664,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
         MyStep(
             label: myLabel(1, 'Bank Account Details'),
             content: SizedBox(
-              height: h < 600 ? 43.0.h : 55.0.h,
+              height: h < 600 ? 43.0.h : 50.0.h,
               child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 primary: false,
                 children: [
                   SignUpTextField(
@@ -833,8 +785,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
         MyStep(
             label: myLabel(2, 'Company Manager User Login Information'),
             content: SizedBox(
-              height: h < 600 ? 43.0.h : 55.0.h,
+              height: h < 600 ? 43.0.h : 50.0.h,
               child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 primary: false,
                 children: [
                   SignUpTextField(
@@ -1035,8 +988,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
         MyStep(
             label: myLabel(3, 'Send OPT'),
             content: SizedBox(
-              height: h < 600 ? 45.0.h : 55.0.h,
+              height: h < 600 ? 45.0.h : 50.0.h,
               child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 primary: false,
                 children: [
                   Container(
@@ -1136,7 +1090,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: text.split(" ").length >= 3 ? 10.sp : 12.0.sp),
+                fontSize: text.split(" ").length >= 3 ? 9.sp : 11.0.sp),
             softWrap: true,
           ),
         )

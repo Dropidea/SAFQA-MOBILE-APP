@@ -85,7 +85,7 @@ class MultiFactorAuthMainPageState extends State<MultiFactorAuthMainPage> {
                         SizedBox(height: 5),
                         greyText(
                           "Configure Multi-Factor Authentication to better protect your users, Select the factor that the user can use as an additional safety factor ",
-                          13,
+                          12,
                         ),
                         SizedBox(height: 20),
                         blackText("Factors", 15, fontWeight: FontWeight.bold),
@@ -118,46 +118,29 @@ class MultiFactorAuthMainPageState extends State<MultiFactorAuthMainPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                          width: 0.45 * w,
+                                          width: 0.5 * w,
                                           child: blackText(
-                                              "SMS Verification Code", 13)),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            smsIsToggled
-                                                ? "Active"
-                                                : "Inactive",
-                                            style: TextStyle(
-                                              color: smsIsToggled
-                                                  ? Color(0xff1BAFB2)
-                                                  : Colors.grey,
-                                              fontSize: 11.0.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          FlutterSwitch(
-                                            height: 25.0,
-                                            width: 50.0,
-                                            padding: 4.0,
-                                            toggleSize: 25.0,
-                                            borderRadius: 20.0,
-                                            activeColor: Color(0xff1BAFB2),
-                                            value: smsIsToggled,
-                                            onToggle: (value) {
-                                              setState(() {
-                                                smsIsToggled = value;
-                                              });
-                                            },
-                                          ),
-                                        ],
+                                              "SMS Verification Code", 12)),
+                                      FlutterSwitch(
+                                        height: 25.0,
+                                        width: 50.0,
+                                        padding: 4.0,
+                                        toggleSize: 25.0,
+                                        borderRadius: 20.0,
+                                        activeColor: Color(0xff1BAFB2),
+                                        value: smsIsToggled,
+                                        onToggle: (value) {
+                                          setState(() {
+                                            smsIsToggled = value;
+                                          });
+                                        },
                                       ),
                                     ],
                                   ),
                                   SizedBox(height: 5),
                                   greyText(
                                       "Receive a phone message with a verification code",
-                                      13)
+                                      12)
                                 ],
                               ),
                             )
@@ -192,46 +175,29 @@ class MultiFactorAuthMainPageState extends State<MultiFactorAuthMainPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                          width: 0.45 * w,
+                                          width: 0.5 * w,
                                           child: blackText(
-                                              "Email Verification Code", 13)),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            emailIsToggled
-                                                ? "Active"
-                                                : "Inactive",
-                                            style: TextStyle(
-                                              color: emailIsToggled
-                                                  ? Color(0xff1BAFB2)
-                                                  : Colors.grey,
-                                              fontSize: 11.0.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          FlutterSwitch(
-                                            height: 25.0,
-                                            width: 50.0,
-                                            padding: 4.0,
-                                            toggleSize: 25.0,
-                                            borderRadius: 20.0,
-                                            activeColor: Color(0xff1BAFB2),
-                                            value: emailIsToggled,
-                                            onToggle: (value) {
-                                              setState(() {
-                                                emailIsToggled = value;
-                                              });
-                                            },
-                                          ),
-                                        ],
+                                              "Email Verification Code", 12)),
+                                      FlutterSwitch(
+                                        height: 25.0,
+                                        width: 50.0,
+                                        padding: 4.0,
+                                        toggleSize: 25.0,
+                                        borderRadius: 20.0,
+                                        activeColor: Color(0xff1BAFB2),
+                                        value: emailIsToggled,
+                                        onToggle: (value) {
+                                          setState(() {
+                                            emailIsToggled = value;
+                                          });
+                                        },
                                       ),
                                     ],
                                   ),
                                   SizedBox(height: 5),
                                   greyText(
                                       "Receive an email with a verification code",
-                                      13)
+                                      12)
                                 ],
                               ),
                             )
@@ -266,45 +232,30 @@ class MultiFactorAuthMainPageState extends State<MultiFactorAuthMainPage> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                          width: 0.45 * w,
+                                          width: 0.5 * w,
                                           child: blackText(
                                               "Receive an email with a verification code",
-                                              13)),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            gToggled ? "Active" : "Inactive",
-                                            style: TextStyle(
-                                              color: gToggled
-                                                  ? Color(0xff1BAFB2)
-                                                  : Colors.grey,
-                                              fontSize: 11.0.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          FlutterSwitch(
-                                            height: 25.0,
-                                            width: 50.0,
-                                            padding: 4.0,
-                                            toggleSize: 25.0,
-                                            borderRadius: 20.0,
-                                            activeColor: Color(0xff1BAFB2),
-                                            value: gToggled,
-                                            onToggle: (value) {
-                                              setState(() {
-                                                gToggled = value;
-                                              });
-                                            },
-                                          ),
-                                        ],
+                                              12)),
+                                      FlutterSwitch(
+                                        height: 25.0,
+                                        width: 50.0,
+                                        padding: 4.0,
+                                        toggleSize: 25.0,
+                                        borderRadius: 20.0,
+                                        activeColor: Color(0xff1BAFB2),
+                                        value: gToggled,
+                                        onToggle: (value) {
+                                          setState(() {
+                                            gToggled = value;
+                                          });
+                                        },
                                       ),
                                     ],
                                   ),
                                   SizedBox(height: 5),
                                   greyText(
                                       "When Google Authenticator is activated,\ you will see a QR code below, Scan this QR code with the Google Authenticator app on your mobile device, after that press \"Next\" to enter the verified code which is generated from the app.",
-                                      13),
+                                      12),
                                   gToggled ? SizedBox(height: 20) : Container(),
                                   gToggled
                                       ? Align(

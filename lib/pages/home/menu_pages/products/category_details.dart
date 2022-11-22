@@ -1,12 +1,16 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:sizer/sizer.dart';
 
 class CategoryDetailsPage extends StatelessWidget {
-  const CategoryDetailsPage({super.key});
-
+  CategoryDetailsPage({super.key, required this.productCategory});
+  final ProductCategory productCategory;
+  ProductsController productsController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -26,7 +30,7 @@ class CategoryDetailsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: w / 3,
+                width: w / 2.5,
                 height: 50,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -56,35 +60,64 @@ class CategoryDetailsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                width: w / 3,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xffE47E7B).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.trash2,
-                        color: Color(0xffE47E7B),
-                        size: 18.0.sp,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Remove",
+              GestureDetector(
+                onTap: () {
+                  Get.dialog(AlertDialog(
+                    title: Text(
+                      "Change Password",
                       style: TextStyle(
-                        fontSize: 12.0.sp,
-                        color: Color(0xffE47E7B),
-                        fontWeight: FontWeight.w500,
+                          color: Colors.red.shade700,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 22),
+                    ),
+                    content: Text("Are You Sure?"),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text("YES"),
+                        onPressed: () {
+                          Future(() => Get.back());
+                          Future(() => Get.back());
+                        },
                       ),
-                    )
-                  ],
+                      TextButton(
+                        child: Text("NO"),
+                        onPressed: () {
+                          Get.back();
+                        },
+                      ),
+                    ],
+                  ));
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE47E7B).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.trash2,
+                          color: Color(0xffE47E7B),
+                          size: 18.0.sp,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Remove",
+                        style: TextStyle(
+                          fontSize: 12.0.sp,
+                          color: Color(0xffE47E7B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
@@ -100,13 +133,16 @@ class CategoryDetailsPage extends StatelessWidget {
                 children: [
                   SizedBox(height: 20),
                   blackText("Category Name (En)", 15),
-                  greyText("Electronic Devices", 15),
+                  SizedBox(height: 5),
+                  greyText(productCategory.nameEn!, 15),
                   SizedBox(height: 20),
                   blackText("Category Name (Ar)", 15),
-                  greyText("أجهزة إلكتونية", 15),
+                  SizedBox(height: 5),
+                  greyText(productCategory.nameAr!, 15),
                   SizedBox(height: 20),
                   blackText("Is Active", 15),
-                  greyText("No", 15),
+                  SizedBox(height: 5),
+                  greyText(productCategory.isActive == 1 ? "Yes" : "No", 15),
                   SizedBox(height: 20),
                 ],
               ),

@@ -85,7 +85,7 @@ class SignUpController extends GetxController {
     Navigator.of(Get.overlayContext!).pop();
 
     errors = res;
-    logSuccess(res);
+    // logSuccess(res);
     return res;
   }
 

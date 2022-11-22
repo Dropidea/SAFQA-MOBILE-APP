@@ -124,6 +124,10 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 20),
+          Align(
+            child: blackText("Username user", 15),
+          ),
           SizedBox(height: 40),
           profileOption(
             w,

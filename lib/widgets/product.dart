@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:sizer/sizer.dart';
 
 class ProductWidget extends StatefulWidget {
   ProductWidget(
       {super.key,
-      required this.active,
       this.onTap,
       this.orderedFlag = false,
-      this.orderedState});
-  final bool active;
+      this.orderedState,
+      required this.product});
+  final Product product;
   bool orderedFlag;
   String? orderedState;
   final void Function()? onTap;
@@ -42,11 +43,18 @@ class _ProductWidgetState extends State<ProductWidget> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
-                child: Icon(
-                  Icons.photo_rounded,
-                  size: 60.0.sp,
-                  color: Colors.grey.shade400,
-                ),
+                child: widget.product.productImage != null
+                    ? Image(
+                        image: NetworkImage(widget.product.productImage),
+                        fit: BoxFit.contain,
+                        width: 60.0.sp,
+                        height: 60.0.sp,
+                      )
+                    : Icon(
+                        Icons.photo_rounded,
+                        size: 60.0.sp,
+                        color: Colors.grey.shade400,
+                      ),
               ),
             ),
             SizedBox(width: 20),
@@ -58,16 +66,16 @@ class _ProductWidgetState extends State<ProductWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    blackText("Nokia 105", 16),
-                    greyText("Remaining : 5", 15),
+                    blackText(widget.product.nameEn!, 15),
+                    greyText("Remaining : ${widget.product.quantity!}", 14),
                     !widget.orderedFlag
-                        ? widget.active
-                            ? greenText("Active", 15)
-                            : redText("Inactive", 15)
-                        : widget.active
-                            ? greenText(widget.orderedState!, 15,
+                        ? widget.product.isActive == 1
+                            ? greenText("Active", 14)
+                            : redText("Inactive", 14)
+                        : widget.product.isActive == 1
+                            ? greenText(widget.orderedState!, 14,
                                 underline: true)
-                            : greyText(widget.orderedState!, 15,
+                            : greyText(widget.orderedState!, 14,
                                 underline: true)
                   ],
                 ),
@@ -89,9 +97,9 @@ class _ProductWidgetState extends State<ProductWidget> {
                             value: checked)
                         : Container(),
                     Text(
-                      "\$ 150",
+                      "\$ ${widget.product.price! < 10000 ? widget.product.price : widget.product.price.toString().substring(0, 3) + ".."}",
                       style: TextStyle(
-                          fontSize: 18.0.sp,
+                          fontSize: 15.0.sp,
                           fontWeight: FontWeight.bold,
                           color: Color(0xff2F6782)),
                     )

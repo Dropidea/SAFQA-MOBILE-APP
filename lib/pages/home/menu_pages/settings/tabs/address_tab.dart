@@ -265,81 +265,70 @@ class AddressWidget extends StatelessWidget {
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Color(0xffF8F8F8),
-            borderRadius: BorderRadius.circular(10),
+    return Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Color(0xffF8F8F8),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ExpandablePanel(
+          theme: ExpandableThemeData(iconColor: Color(0xff2F6782)),
+          header: Container(
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 7),
+                  child: Icon(Icons.location_pin, color: Color(0xff2F6782)),
+                ),
+                SizedBox(width: 10),
+                blueText(address, 15, fontWeight: FontWeight.bold),
+              ],
+            ),
           ),
-          child: ExpandablePanel(
-            theme: ExpandableThemeData(iconColor: Color(0xff2F6782)),
-            header: Container(
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 7),
-                    child: Icon(Icons.location_pin, color: Color(0xff2F6782)),
-                  ),
-                  SizedBox(width: 10),
-                  blueText(address, 15, fontWeight: FontWeight.bold),
-                ],
-              ),
+          controller: ExpandableController(initialExpanded: true),
+          collapsed: Container(),
+          expanded: Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    greyText("Address Type:", 13),
+                    SizedBox(width: 5),
+                    blackText(addressType, 13)
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    greyText("Area:", 13),
+                    SizedBox(width: 5),
+                    blackText(area, 13)
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    greyText("Block:", 13),
+                    SizedBox(width: 5),
+                    blackText(block, 13)
+                  ],
+                ),
+                SizedBox(height: 10),
+                GestureDetector(
+                  onTap: onTap,
+                  child: blueText("More", 13,
+                      fontWeight: FontWeight.bold,
+                      underline: true,
+                      decorationThickness: 10),
+                ),
+                SizedBox(height: 10),
+              ],
             ),
-            controller: ExpandableController(initialExpanded: true),
-            collapsed: Container(),
-            expanded: Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      greyText("Address Type:", 13),
-                      SizedBox(width: 5),
-                      blackText(addressType, 13)
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      greyText("Area:", 13),
-                      SizedBox(width: 5),
-                      blackText(area, 13)
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      greyText("Block:", 13),
-                      SizedBox(width: 5),
-                      blackText(block, 13)
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      greyText("Avenue:", 13),
-                      SizedBox(width: 5),
-                      blackText(avenue, 13)
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      greyText("Street:", 13),
-                      SizedBox(width: 5),
-                      blackText(street, 13)
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ),
-          )),
-    );
+          ),
+        ));
   }
 }
 

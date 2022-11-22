@@ -212,7 +212,7 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            greyText("Knet", 15,
+                                            greyText("Knet", 14,
                                                 fontWeight: FontWeight.bold),
                                             Row(
                                               children: [
@@ -224,7 +224,7 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                                     color: isToggled
                                                         ? Color(0xff1BAFB2)
                                                         : Colors.grey,
-                                                    fontSize: 13.0.sp,
+                                                    fontSize: 11.0.sp,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
@@ -274,15 +274,16 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                           greyText(
                                               "Consequat aliqua sunt dolor pariatur reprehenderit et dolor cillum occaecat culpa mollit cillum aliquip in.",
                                               12),
-                                          SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                          SizedBox(height: 30),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              greyText("Commission From", 12),
+                                              greyText("Commission From:", 14),
                                               CustomDropdown(
                                                 borderColor: Color(0xffA8A8A8),
-                                                width: 0.4 * w,
+                                                width: w,
+                                                height: 50,
                                                 hint: "Choose",
                                                 items: ["1", "2", "3"],
                                                 onchanged: (s) {},
@@ -305,7 +306,7 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            greyText("Visa/MasterCard", 15,
+                                            greyText("Visa/MasterCard", 13,
                                                 fontWeight: FontWeight.bold),
                                             Row(
                                               children: [
@@ -317,7 +318,7 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                                     color: isToggled
                                                         ? Color(0xff1BAFB2)
                                                         : Colors.grey,
-                                                    fontSize: 13.0.sp,
+                                                    fontSize: 11.0.sp,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),
@@ -366,7 +367,7 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          greyText("Visa/MasterCard", 15,
+                                          greyText("Test", 13,
                                               fontWeight: FontWeight.bold),
                                           redText("Disabled By Admin!", 11),
                                         ],
@@ -395,15 +396,16 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                           greyText(
                                               "Consequat aliqua sunt dolor pariatur reprehenderit et dolor cillum occaecat culpa mollit cillum aliquip in.",
                                               12),
-                                          SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                          SizedBox(height: 30),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              greyText("Commission From", 12),
+                                              greyText("Commission From:", 14),
                                               CustomDropdown(
                                                 borderColor: Color(0xffA8A8A8),
-                                                width: 0.4 * w,
+                                                width: w,
+                                                height: 50,
                                                 hint: "Choose",
                                                 items: ["1", "2", "3"],
                                                 onchanged: (s) {},
@@ -426,7 +428,7 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            greyText("Amex", 15,
+                                            greyText("Amex", 14,
                                                 fontWeight: FontWeight.bold),
                                             Row(
                                               children: [
@@ -438,7 +440,7 @@ class CommisionsMainPageState extends State<CommisionsMainPage> {
                                                     color: isToggled
                                                         ? Color(0xff1BAFB2)
                                                         : Colors.grey,
-                                                    fontSize: 13.0.sp,
+                                                    fontSize: 11.0.sp,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                                 ),

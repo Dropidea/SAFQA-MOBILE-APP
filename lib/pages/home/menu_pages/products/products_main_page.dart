@@ -25,6 +25,13 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
     "Products Ordered",
     "Product Category",
   ];
+  ProductsController _productsController = Get.put(ProductsController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _productsController.getProductCategories();
+  }
 
   Widget getPage() {
     switch (selectedTab) {
@@ -38,8 +45,6 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
         return ProductsCategoryTab();
     }
   }
-
-  ProductsController _productsController = Get.put(ProductsController());
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +131,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
                           topRight: Radius.circular(40),
                         ),
                       ),
-                      child: FutureBuilder(
-                          future: _productsController.getProductCategories(),
-                          builder: (context, snp) {
-                            return getPage();
-                          }),
+                      child: getPage(),
                     ),
                   )
                 ],

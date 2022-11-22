@@ -20,7 +20,7 @@ class AddressDetailsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                width: w / 3,
+                width: w / 2.5,
                 height: 50,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class AddressDetailsPage extends StatelessWidget {
                 ),
               ),
               Container(
-                width: w / 3,
+                width: w / 2.5,
                 height: 50,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(

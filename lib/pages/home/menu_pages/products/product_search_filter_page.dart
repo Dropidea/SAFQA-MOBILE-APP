@@ -2,9 +2,8 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -17,19 +16,28 @@ class ProductSearchFilterPage extends StatefulWidget {
 }
 
 class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
-  SignUpController _signUpController = Get.find();
-  int isActive = 0;
-  int price = 0;
-  int dateCreated = 0;
-  SfRangeValues _values = SfRangeValues(0, 100);
-  double sMin = 0;
-  double sMax = 100;
-  double sInterval = 20;
+  ProductsController productController = Get.find();
+
+  SfRangeValues _values = const SfRangeValues(0, 100);
+
   TextEditingController maxController = TextEditingController();
   TextEditingController minController = TextEditingController();
-  TextEditingController fixedDateController = TextEditingController();
-  TextEditingController startDateController = TextEditingController();
-  TextEditingController endDateController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _values = SfRangeValues(
+        productController.productFilter.priceMin ?? 0,
+        productController.productFilter.priceMax ??
+            productController.maxPriceProduct());
+    if (productController.productFilter.price != null) {
+      priceController.text = productController.productFilter.price.toString();
+    } else if (productController.productFilter.priceMin != null &&
+        productController.productFilter.priceMax != null) {
+      minController.text = productController.productFilter.priceMin.toString();
+      maxController.text = productController.productFilter.priceMax.toString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,324 +50,313 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
         elevation: 0,
       ),
       backgroundColor: Color(0xffFBFBFB),
-      body: ExpandableNotifier(
-        child: ListView(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: Icon(
-                    Icons.close,
-                    size: 25.0.sp,
+      body: GetBuilder<ProductsController>(builder: (context) {
+        return ExpandableNotifier(
+          child: ListView(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icon(
+                      Icons.close,
+                      size: 25.0.sp,
+                    ),
                   ),
-                ),
-                Text(
-                  "Clear",
-                  style: TextStyle(
-                    fontSize: 16.0.sp,
-                    color: Color(0xff00A7B3),
-                    decoration: TextDecoration.underline,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ExpandablePanel(
-              controller: ExpandableController(initialExpanded: true),
-              collapsed: Container(),
-              theme: ExpandableThemeData(hasIcon: false),
-              expanded: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: [
-                    buildRadioButton(
-                        0,
-                        "All",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        1,
-                        "Active",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        2,
-                        "Inactive",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
-                  ],
-                ),
+                  ClearFilterBTN(
+                    onTap: () {
+                      productController.clearFilter();
+                      Get.back();
+                    },
+                  )
+                ],
               ),
-              header: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 0.5),
-                  ),
-                ),
-                child: blackText("Is Active", 15),
+              SizedBox(
+                height: 20,
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ExpandablePanel(
-              controller: ExpandableController(initialExpanded: true),
-              collapsed: Container(),
-              theme: ExpandableThemeData(hasIcon: false),
-              expanded: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: [
-                    buildRadioButton(
-                        0,
-                        "Fixed Value",
-                        price,
-                        (p0) => setState(
-                              () {
-                                price = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        1,
-                        "Min/Max",
-                        price,
-                        (p0) => setState(
-                              () {
-                                price = p0;
-                              },
-                            )),
-                    SizedBox(height: 10),
-                    price == 0
-                        ? buildpriceFixedTextfield()
-                        : Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      border: Border.all(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    width: 0.4 * w,
-                                    height: 50,
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      controller: minController,
-                                      onChanged: (value) {
-                                        if (value != "") {
-                                          setState(() {
-                                            if (double.parse(value) > 0 &&
-                                                double.parse(value) < sMax) {
-                                              sMin = double.parse(value);
-                                              _values =
-                                                  SfRangeValues(sMin, sMax);
-                                            }
-                                          });
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                        hintText: "Min",
-                                        fillColor: Colors.white,
-                                        filled: true,
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      border: Border.all(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    width: 0.4 * w,
-                                    height: 50,
-                                    child: TextFormField(
-                                      onChanged: (value) {
-                                        if (value != "") {
-                                          setState(() {
-                                            if (double.parse(value) > 100 &&
-                                                double.parse(value) > sMin) {
-                                              sMax = double.parse(value);
-                                              sInterval = sMax / 5;
-                                              _values =
-                                                  SfRangeValues(sMin, sMax);
-                                            }
-                                          });
-                                        }
-                                      },
-                                      keyboardType: TextInputType.number,
-                                      controller: maxController,
-                                      decoration: InputDecoration(
-                                        hintText: "Max",
-                                        fillColor: Colors.white,
-                                        filled: true,
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SfRangeSlider(
-                                // shouldAlwaysShowTooltip: true,
-
-                                min: sMin,
-                                max: sMax,
-                                values: _values,
-                                interval: sInterval,
-                                activeColor: Color(0xff1BAFB2),
-                                showTicks: true,
-                                showLabels: true,
-                                enableTooltip: true,
-                                minorTicksPerInterval: 1,
-                                stepSize: 1,
-                                onChanged: (value) {
-                                  logWarning(_signUpController.globalData);
-                                  setState(() {
-                                    _values = value;
-                                  });
+              ExpandablePanel(
+                controller: ExpandableController(initialExpanded: true),
+                collapsed: Container(),
+                theme: ExpandableThemeData(hasIcon: false),
+                expanded: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      buildRadioButton(
+                          0,
+                          "All",
+                          productController.productFilter.isActive!,
+                          (p0) => setState(
+                                () {
+                                  productController.productFilter.isActive = p0;
                                 },
-                              )
-                            ],
-                          )
-                  ],
-                ),
-              ),
-              header: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 0.5),
+                              )),
+                      buildRadioButton(
+                          1,
+                          "Active",
+                          productController.productFilter.isActive!,
+                          (p0) => setState(
+                                () {
+                                  productController.productFilter.isActive = p0;
+                                },
+                              )),
+                      buildRadioButton(
+                          2,
+                          "Inactive",
+                          productController.productFilter.isActive!,
+                          (p0) => setState(
+                                () {
+                                  productController.productFilter.isActive = p0;
+                                },
+                              )),
+                    ],
                   ),
                 ),
-                child: blackText("Price", 15),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ExpandablePanel(
-              controller: ExpandableController(initialExpanded: true),
-              collapsed: Container(),
-              theme: ExpandableThemeData(hasIcon: false),
-              expanded: Container(
-                height: 55,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 0.5),
-                  borderRadius: BorderRadius.circular(10.0),
+                header: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                    ),
+                  ),
+                  child: blackText("Is Active", 15),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 10),
-                child: Obx(
-                  () {
-                    List categories = _signUpController.globalData['category'];
-                    List<String> ids = categories
-                        .map<String>((e) => e['id'].toString())
-                        .toList();
-                    List<String> categoryNames = categories
-                        .map<String>((e) => e['name'].toString())
-                        .toList();
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ExpandablePanel(
+                controller: ExpandableController(initialExpanded: true),
+                collapsed: Container(),
+                theme: ExpandableThemeData(hasIcon: false),
+                expanded: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      buildRadioButton(
+                          0,
+                          "Fixed Value",
+                          productController.productFilter.priceType,
+                          (p0) => setState(
+                                () {
+                                  productController.productFilter.priceType =
+                                      p0;
+                                },
+                              )),
+                      buildRadioButton(
+                          1,
+                          "Min/Max",
+                          productController.productFilter.priceType,
+                          (p0) => setState(
+                                () {
+                                  productController.productFilter.priceType =
+                                      p0;
+                                },
+                              )),
+                      SizedBox(height: 10),
+                      productController.productFilter.priceType == 0
+                          ? buildpriceFixedTextfield()
+                          : Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        border: Border.all(
+                                          color: Colors.grey.shade300,
+                                        ),
+                                      ),
+                                      width: 0.4 * w,
+                                      height: 50,
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: minController,
+                                        onChanged: (value) {
+                                          productController.productFilter
+                                              .priceMin = int.parse(value);
+                                          productController
+                                              .productFilter.price = null;
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText: "Min",
+                                          fillColor: Colors.white,
+                                          filled: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        border: Border.all(
+                                          color: Colors.grey.shade300,
+                                        ),
+                                      ),
+                                      width: 0.4 * w,
+                                      height: 50,
+                                      child: TextFormField(
+                                        onChanged: (value) {
+                                          productController.productFilter
+                                              .priceMax = int.parse(value);
+                                          productController
+                                              .productFilter.price = null;
+                                        },
+                                        keyboardType: TextInputType.number,
+                                        controller: maxController,
+                                        decoration: InputDecoration(
+                                          hintText: "Max",
+                                          fillColor: Colors.white,
+                                          filled: true,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SfRangeSlider(
+                                  // shouldAlwaysShowTooltip: true,
 
-                    return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide.none,
-                        ),
+                                  min: productController.minPriceProduct(),
+                                  max: productController.maxPriceProduct(),
+                                  values: _values,
+                                  interval:
+                                      productController.maxPriceProduct() / 6,
+                                  activeColor: Color(0xff1BAFB2),
+                                  showTicks: true,
+                                  // showLabels: true,
+                                  enableTooltip: true,
+                                  // showDividers: true,
+                                  // shouldAlwaysShowTooltip: true,
+                                  minorTicksPerInterval: 1,
+                                  stepSize:
+                                      productController.maxPriceProduct() / 100,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _values = value;
+                                      minController.text =
+                                          value.start.round().toString();
+                                      maxController.text =
+                                          value.end.round().toString();
+                                      productController.productFilter.priceMin =
+                                          value.start.round();
+                                      productController.productFilter.priceMax =
+                                          value.end.round();
+                                    });
+                                  },
+                                )
+                              ],
+                            )
+                    ],
+                  ),
+                ),
+                header: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                    ),
+                  ),
+                  child: blackText("Price", 15),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ExpandablePanel(
+                controller: ExpandableController(initialExpanded: true),
+                collapsed: Container(),
+                theme: ExpandableThemeData(hasIcon: false),
+                expanded: Container(
+                  height: 55,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 0.5),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
                       ),
-                      items: categoryNames
-                          .map((e) => DropdownMenuItem<String>(
-                                child: Text(e),
-                                value: e,
-                              ))
-                          .toList(),
-                      value: _signUpController.selectedCategoryDrop == ""
-                          ? null
-                          : _signUpController.selectedCategoryDrop,
-                      hint: Text("Categories"),
-                      onChanged: (value) {
-                        _signUpController.errors = {};
+                    ),
+                    items: productController.productCategories
+                        .map((e) => DropdownMenuItem<String>(
+                              child: blackText(e.nameEn!, 13),
+                              value: e.nameEn,
+                            ))
+                        .toList(),
+                    value: productController.productFilter.category == null
+                        ? null
+                        : productController.productFilter.category!.nameEn,
+                    hint: Text("Categories"),
+                    onChanged: (value) {
+                      int ind = productController.productCategories
+                          .indexWhere((element) => element.nameEn == value);
 
-                        _signUpController.selectCategoryDrop(value!);
-
-                        _signUpController.dataToRegister['category_id'] =
-                            ids[categoryNames.indexOf(value)];
-                      },
-                    );
+                      productController.productFilter.category =
+                          productController.productCategories[ind];
+                    },
+                  ),
+                ),
+                header: Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                    ),
+                  ),
+                  child: blackText("Product Category", 15),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ExpandablePanel(
+                controller: ExpandableController(initialExpanded: true),
+                collapsed: Container(),
+                theme: ExpandableThemeData(hasIcon: false),
+                expanded: buildCustomNameTextfield(
+                  onChanged: (p0) {
+                    productController.productFilter.name = p0;
                   },
                 ),
-              ),
-              header: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 0.5),
+                header: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.grey, width: 0.5),
+                    ),
                   ),
+                  child: blackText("Product Name", 15),
                 ),
-                child: blackText("Product Category", 15),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ExpandablePanel(
-              controller: ExpandableController(initialExpanded: true),
-              collapsed: Container(),
-              theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomNameTextfield(hint: "Customer Name ..."),
-              header: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 0.5),
-                  ),
-                ),
-                child: blackText("Product Name", 15),
-              ),
-            ),
-            Align(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
+              ApplyFilterBTN(
                 width: 0.7 * w,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff1BAFB2)),
-                child: Center(child: whiteText("Apply", 15)),
-              ),
-            )
-          ],
-        ),
-      ),
+                onTap: () {
+                  productController.activeFilter();
+                  Get.back();
+                },
+              )
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -373,9 +370,15 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
         ),
       ),
       child: TextFormField(
+        controller: priceController,
         keyboardType: TextInputType.number,
+        onChanged: (value) {
+          productController.productFilter.price = int.parse(value);
+          productController.productFilter.priceMax = null;
+          productController.productFilter.priceMin = null;
+        },
         decoration: InputDecoration(
-          hintText: "Invoice value ...",
+          hintText: "Fixed Value",
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
@@ -422,7 +425,64 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
   }
 }
 
-Widget buildCustomNameTextfield({String? hint}) {
+class ClearFilterBTN extends StatelessWidget {
+  const ClearFilterBTN({
+    Key? key,
+    this.onTap,
+  }) : super(key: key);
+  final void Function()? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Text(
+        "Clear",
+        style: TextStyle(
+          fontSize: 16.0.sp,
+          color: Color(0xff00A7B3),
+          decoration: TextDecoration.underline,
+        ),
+      ),
+    );
+  }
+}
+
+class ApplyFilterBTN extends StatelessWidget {
+  const ApplyFilterBTN({
+    Key? key,
+    this.width,
+    this.height,
+    this.onTap,
+  }) : super(key: key);
+
+  final double? width;
+  final double? height;
+  final void Function()? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 30),
+          width: width,
+          height: height,
+          padding: EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color(0xff1BAFB2),
+          ),
+          child: Center(
+            child: whiteText("Apply", 15),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget buildCustomNameTextfield(
+    {String? hint, void Function(String)? onChanged}) {
   return Container(
     margin: EdgeInsets.only(top: 20),
     height: 50,
@@ -433,6 +493,7 @@ Widget buildCustomNameTextfield({String? hint}) {
       ),
     ),
     child: TextFormField(
+      onChanged: onChanged,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         hintText: hint,
