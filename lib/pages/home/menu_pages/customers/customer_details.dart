@@ -2,11 +2,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomerDetailsPage extends StatelessWidget {
-  const CustomerDetailsPage({super.key});
-
+  const CustomerDetailsPage({super.key, required this.customer});
+  final Customer customer;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -118,22 +119,25 @@ class CustomerDetailsPage extends StatelessWidget {
                         children: [
                           invoiceInfoMethod(
                               title1: "Full Name",
-                              content1: "Samer Samer",
+                              content1: customer.fullName,
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "Mobile Number",
-                              content1: "+9715678951432",
+                              content1: customer.country!.code! +
+                                  " " +
+                                  customer.phoneNumber!,
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "Email",
-                              content1: "ab@cd.ef",
+                              content1: customer.email,
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "Customer reference",
-                              content1: "No Reference",
+                              content1:
+                                  customer.customerReference ?? "No Reference",
                               title2: "",
                               content2: ""),
                           SizedBox(height: 10),
@@ -157,26 +161,37 @@ class CustomerDetailsPage extends StatelessWidget {
                     expanded: Container(
                       margin: EdgeInsets.only(top: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          invoiceInfoMethod(
-                              title1: "Bank Name",
-                              content1: "lorem ipsum",
-                              title2: "",
-                              content2: ""),
-                          invoiceInfoMethod(
-                              title1: "Bank Account",
-                              content1: "9715678951432",
-                              title2: "",
-                              content2: ""),
-                          invoiceInfoMethod(
-                              title1: "IBAN",
-                              content1: "95266621238322146433",
-                              title2: "",
-                              content2: ""),
-                        ],
-                      ),
+                      child: customer.bank == null
+                          ? Container(
+                              width: w,
+                              height: 100,
+                              child: Center(
+                                child: greyText("No Bank", 20),
+                              ),
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                invoiceInfoMethod(
+                                    title1: "Bank Name",
+                                    content1:
+                                        customer.bank!.name ?? "No Bank Name",
+                                    title2: "",
+                                    content2: ""),
+                                invoiceInfoMethod(
+                                    title1: "Bank Account",
+                                    content1: customer.bank!.bankAccount ??
+                                        "No Bank Account",
+                                    title2: "",
+                                    content2: ""),
+                                invoiceInfoMethod(
+                                    title1: "IBAN",
+                                    content1:
+                                        customer.bank!.iban ?? "No IBAN Found",
+                                    title2: "",
+                                    content2: ""),
+                              ],
+                            ),
                     ),
                   ),
                 ],

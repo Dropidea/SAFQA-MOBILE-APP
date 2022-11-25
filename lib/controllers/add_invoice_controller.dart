@@ -32,7 +32,7 @@ class AddInvoiceController extends GetxController {
   }
 
   Future createInvoice() async {
-    logError(dataToCreateInvoice.discountType!);
+    // logError(dataToCreateInvoice.discountType!);
     // logWarning(dataToCreateInvoice.toJson());
 
     dio.options.headers['content-Type'] = 'multipart/form-data';
@@ -373,9 +373,10 @@ class AddInvoiceController extends GetxController {
     update();
   }
 
-  void saveCustomerInfo(String name, int sendBy, String phoneNum,
+  void saveCustomerInfo(String name, int sendBy, String email, String phoneNum,
       String phoneNumCode, String? customerRef) {
     customerInfo.customerName = name;
+    customerInfo.customerEmail = name;
     customerInfo.customerMobileNumbr = phoneNum;
     customerInfo.customerMobileNumbrCode = phoneNumCode;
     customerInfo.customerSendBy = sendBy;

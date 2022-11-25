@@ -344,6 +344,90 @@ class ProductsController extends GetxController {
     }
   }
 
+  // Future deleteProductCategory(ProductCategory category) async {
+  //   Get.dialog(Center(
+  //     child: CircularProgressIndicator(),
+  //   ));
+  //   try {
+  //     final body = d.FormData.fromMap(category.toJson());
+  //     String token = await AuthService().loadToken();
+  //     dio.options.headers["authorization"] = "bearer  $token";
+
+  //     sslProblem();
+  //     var res = await dio.post(
+  //         EndPoints.baseURL + EndPoints.createProductCategory,
+  //         data: body);
+  //     Get.back();
+  //     Get.defaultDialog(
+  //       title: "",
+  //       content: Container(
+  //         padding: EdgeInsets.symmetric(horizontal: 30),
+  //         child: Column(
+  //           children: [
+  //             Image(
+  //               image: AssetImage("assets/images/tick.png"),
+  //               height: 100,
+  //             ),
+  //             SizedBox(height: 10),
+  //             blackText("Created successfully", 16),
+  //             SizedBox(height: 10),
+  //             InkWell(
+  //               onTap: () {
+  //                 Get.back();
+  //                 Get.back();
+  //               },
+  //               child: Container(
+  //                 padding: EdgeInsets.symmetric(vertical: 10),
+  //                 decoration: BoxDecoration(
+  //                   color: Color(0xff2D5571),
+  //                   borderRadius: BorderRadius.circular(20),
+  //                 ),
+  //                 child: Center(child: whiteText("close", 17)),
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   } on DioError catch (e) {
+  //     Get.back();
+  //     logError(e.response!);
+  //     // logError(e.response!.data);
+  //     // Map<String, dynamic> m = e.response!.data;
+  //     // String errors = "";
+  //     // int c = 0;
+  //     // for (var i in m.values) {
+  //     //   for (var j = 0; j < i.length; j++) {
+  //     //     if (j == i.length - 1) {
+  //     //       errors = errors + i[j];
+  //     //     } else {
+  //     //       errors = "${errors + i[j]}\n";
+  //     //     }
+  //     //   }
+
+  //     //   c++;
+  //     //   if (c != m.values.length) {
+  //     //     errors += "\n";
+  //     //   }
+  //     // }
+
+  //     // Get.showSnackbar(
+  //     //   GetSnackBar(
+  //     //     duration: Duration(milliseconds: 2000),
+  //     //     backgroundColor: Colors.red,
+  //     //     // message: errors,
+  //     //     messageText: Text(
+  //     //       errors,
+  //     //       style: TextStyle(
+  //     //         color: Colors.white,
+  //     //         fontSize: 17,
+  //     //       ),
+  //     //     ),
+  //     //   ),
+  //     // );
+  //   }
+  // }
+
   Future getProductCategories() async {
     getProductsCategoryFlag.value = true;
     try {

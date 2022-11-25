@@ -8,12 +8,16 @@ class WallpepredBTN extends StatelessWidget {
       this.text,
       this.onTap,
       this.haveWallpaper = true,
-      this.alignment});
+      this.alignment,
+      this.icon,
+      this.height});
   final double? width;
+  final double? height;
   final String? text;
   final void Function()? onTap;
   final AlignmentGeometry? alignment;
   final bool haveWallpaper;
+  final IconData? icon;
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -22,7 +26,7 @@ class WallpepredBTN extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(10),
             color: Color(0xff2F6782),
             image: haveWallpaper
                 ? DecorationImage(
@@ -32,15 +36,30 @@ class WallpepredBTN extends StatelessWidget {
                 : null,
           ),
           width: width,
+          height: height,
           padding: EdgeInsets.all(15),
-          child: Center(
-            child: Text(
-              text!,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.0.sp,
-                  fontWeight: FontWeight.w500),
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 7),
+                child: icon != null
+                    ? Icon(
+                        icon,
+                        // size: 26,
+                        color: Colors.white,
+                      )
+                    : Container(),
+              ),
+              icon != null ? SizedBox(width: 10) : Container(),
+              Text(
+                text!,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0.sp,
+                    fontWeight: FontWeight.w500),
+              ),
+            ],
           ),
         ),
       ),

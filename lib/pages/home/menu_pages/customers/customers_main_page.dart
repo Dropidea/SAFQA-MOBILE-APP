@@ -3,6 +3,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_add_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_details.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_search_filter_page.dart';
@@ -20,6 +21,7 @@ class CustomersMainPage extends StatefulWidget {
 }
 
 class CustomersMainPageState extends State<CustomersMainPage> {
+  CustomersController _customersController = Get.find();
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -238,44 +240,59 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                       ),
                       SizedBox(height: 20),
                       Expanded(
-                        child: ListView.separated(
-                          primary: false,
-                          itemBuilder: (context, index) => ListTile(
-                              onTap: () {
-                                Get.to(() => CustomerDetailsPage());
-                              },
-                              title: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  blackText(
-                                    "Samer Abd El-Fattah",
-                                    14,
-                                    fontWeight: FontWeight.normal,
+                        child: GetBuilder<CustomersController>(builder: (c) {
+                          return c.getCustomerFlag
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ListView.separated(
+                                  primary: false,
+                                  itemBuilder: (context, index) => ListTile(
+                                      onTap: () {
+                                        Get.to(() => CustomerDetailsPage(
+                                              customer: c.customers[index],
+                                            ));
+                                      },
+                                      title: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          blackText(
+                                            c.customers[index].fullName!,
+                                            14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                          greyText(
+                                              c.customers[index].phoneNumber!,
+                                              13)
+                                        ],
+                                      ),
+                                      dense: true,
+                                      visualDensity: VisualDensity(vertical: 4),
+                                      leading: Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Color(0xffF9F9F9),
+                                        ),
+                                        child: Center(
+                                          child: greyText(
+                                              c.customers[index].fullName![0],
+                                              15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )),
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(
+                                    height: 20,
                                   ),
-                                  greyText("+9715678951432", 13)
-                                ],
-                              ),
-                              dense: true,
-                              visualDensity: VisualDensity(vertical: 4),
-                              leading: Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xffF9F9F9),
-                                ),
-                                child: Center(
-                                  child: greyText("A", 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 20,
-                          ),
-                          itemCount: 10,
-                        ),
+                                  itemCount: c.customers.length,
+                                );
+                        }),
                       ),
                     ],
                   ),

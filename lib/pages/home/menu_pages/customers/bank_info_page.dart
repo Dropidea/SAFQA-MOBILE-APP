@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
+import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
+import 'package:searchfield/searchfield.dart';
 import 'package:sizer/sizer.dart';
 
 class BankInfoPage extends StatelessWidget {
   BankInfoPage({super.key});
   TextEditingController bankNameControler = TextEditingController();
-  TextEditingController bankAccountControler = TextEditingController();
-  TextEditingController ibanControler = TextEditingController();
-
+  String bankAccountControler = "";
+  String ibanControler = "";
+  final SignUpController _signUpController = Get.find();
+  final CustomersController _customersController = Get.find();
+  int bankId = 1;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
@@ -37,57 +45,90 @@ class BankInfoPage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             blackText("Bank Name", 16),
-            SignUpTextField(
-              padding: EdgeInsets.all(0),
+            SearchField<Bank>(
+              itemHeight: 40,
+              initialValue: _customersController.customerToCreate.bank!.name ==
+                      null
+                  ? null
+                  : SearchFieldListItem<Bank>(
+                      _customersController.customerToCreate.bank!.name ?? "",
+                      item: _customersController.customerToCreate.bank!,
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 10),
+                        child: greyText(
+                            _customersController.customerToCreate.bank!.name ??
+                                "",
+                            15),
+                      )),
+              searchInputDecoration: InputDecoration(
+                fillColor: Color(0xffF8F8F8),
+                filled: true,
+                border: OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none),
+              ),
+              searchStyle: TextStyle(fontSize: 13.0.sp),
+              suggestionStyle: TextStyle(fontSize: 13.0.sp),
+              // onSubmit: (p0) => logSuccess(p0),
+
+              suggestionItemDecoration:
+                  BoxDecoration(border: Border.all(color: Colors.white)),
+
+              onSuggestionTap: (p0) {
+                FocusScope.of(context).unfocus();
+                bankId = p0.item!.id!;
+              },
               controller: bankNameControler,
+              suggestions: _signUpController.banks
+                  .map(
+                    (e) => SearchFieldListItem<Bank>(e.name!,
+                        item: e,
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.only(start: 10),
+                          child: greyText(e.name!, 15),
+                        )),
+                  )
+                  .toList(),
             ),
-            //TODO:Bank dropdown need to be fixed
             const SizedBox(height: 20),
             blackText("Bank Account", 16),
             SignUpTextField(
               padding: EdgeInsets.all(0),
-              controller: bankAccountControler,
+              keyBoardType: TextInputType.number,
+              onchanged: (s) => bankAccountControler = s!,
+              initialValue:
+                  _customersController.customerToCreate.bank!.bankAccount ?? "",
             ),
             const SizedBox(height: 20),
             blackText("Iban", 16),
             SignUpTextField(
               padding: EdgeInsets.all(0),
-              controller: ibanControler,
               textInputAction: TextInputAction.done,
+              onchanged: (s) => ibanControler = s!,
               keyBoardType: TextInputType.number,
+              initialValue:
+                  _customersController.customerToCreate.bank!.iban ?? "",
             ),
             SizedBox(height: 50),
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Get.defaultDialog(
-                    title: "",
-                    content: Column(
-                      children: [
-                        Image(
-                          image: AssetImage("assets/images/tick.png"),
-                          height: 100,
-                        ),
-                        SizedBox(height: 10),
-                        blackText("Saved successfully", 16),
-                        SizedBox(height: 10),
-                        InkWell(
-                          onTap: () {
-                            Get.back();
-                            Get.back();
-                          },
-                          child: Container(
-                            width: w / 2,
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                              color: Color(0xff2D5571),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(child: whiteText("Next", 17)),
-                          ),
-                        )
-                      ],
-                    ),
+                  Bank bank = Bank(
+                    id: bankId,
+                    iban: ibanControler,
+                    bankAccount: bankAccountControler,
+                    name: bankNameControler.text,
+                  );
+                  _customersController.customerToCreate.bank = bank;
+                  logSuccess(
+                      _customersController.customerToCreate.bank!.toJson());
+                  MyDialogs.showSavedSuccessfullyDialoge(
+                    title: "Saved Successfully",
+                    btnTXT: "close",
+                    onTap: () {
+                      Get.back();
+                      Get.back();
+                    },
                   );
                 },
                 child: Container(

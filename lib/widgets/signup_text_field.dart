@@ -24,8 +24,9 @@ class SignUpTextField extends StatelessWidget {
     this.width,
     this.height,
     this.focusNode,
+    this.style,
   });
-
+  final TextStyle? style;
   final String? hintText;
   final Widget? prefixIcon;
   final Widget? prefix;
@@ -74,6 +75,7 @@ class SignUpTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           obscureText: obsecureText,
           initialValue: initialValue,
+          style: style,
           onChanged: onchanged,
           readOnly: readOnly,
           controller: controller,

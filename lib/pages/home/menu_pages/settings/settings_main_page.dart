@@ -4,7 +4,6 @@ import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/address_tab.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/integration_tab.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/manage_users_tab.dart';
-import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,7 +18,7 @@ class SsettingsPageState extends State<SettingsPage> {
   int selectedTab = 0;
   List<String> tabsNames = [
     "Manage Users",
-    "Webhook",
+    "Integration",
     "Adresses",
   ];
 
@@ -28,7 +27,7 @@ class SsettingsPageState extends State<SettingsPage> {
       case 0:
         return ManageUsersTab();
       case 1:
-        return WebhookTab();
+        return IntegrationTab();
 
       default:
         return AdressesTab();
@@ -74,37 +73,6 @@ class SsettingsPageState extends State<SettingsPage> {
                             Get.back();
                           },
                         ),
-                        selectedTab == 1
-                            ? MyPopUpMenu(
-                                iconColor: Colors.white,
-                                menuList: [
-                                  PopupMenuItem(
-                                      child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.copy,
-                                        size: 20,
-                                      ),
-                                      SizedBox(width: 5),
-                                      blackText("Copy Store Link", 11),
-                                    ],
-                                  )),
-                                  PopupMenuItem(
-                                      child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.share,
-                                        size: 20,
-                                      ),
-                                      SizedBox(width: 5),
-                                      blackText("Share Store", 11),
-                                    ],
-                                  )),
-                                ],
-                              )
-                            : Container(),
                       ],
                     ),
                   ),

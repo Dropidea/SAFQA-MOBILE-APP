@@ -1,22 +1,26 @@
+// import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
-import 'package:safqa/main.dart';
+import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
+import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
+import 'package:searchfield/searchfield.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomerInfoPage extends StatelessWidget {
   CustomerInfoPage({super.key});
   TextEditingController customerNameControler = TextEditingController();
   TextEditingController customerPhoneNumberControler = TextEditingController();
+  TextEditingController customerEmailControler = TextEditingController();
   TextEditingController customerRefrenceControler = TextEditingController();
+  CustomersController _customersController = Get.find();
+  AddInvoiceController _addInvoiceController = Get.find();
   String customerMobileCode = "+20";
 
   @override
   Widget build(BuildContext context) {
-    AddInvoiceController addInvoiceController = Get.find();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -44,41 +48,87 @@ class CustomerInfoPage extends StatelessWidget {
             Divider(thickness: 1.5),
             const SizedBox(height: 20),
             blackText("Customer Name", 16),
-            SignUpTextField(
-              padding: EdgeInsets.all(0),
-              controller: customerNameControler,
-            ),
-            const SizedBox(height: 20),
-            blackText("Send invoice By", 16),
-            CustomDropdown(
-              items: addInvoiceController.sendByItems,
-              selectedItem: addInvoiceController.selectedSendBy,
-              width: 2,
-              onchanged: (s) {
-                addInvoiceController.selectSendBy(s);
-              },
-            ),
-            const SizedBox(height: 20),
-            blackText("Customer phone number", 16),
-            IntlPhoneField(
-              flagsButtonPadding: EdgeInsets.symmetric(horizontal: 20),
-              dropdownIconPosition: IconPosition.trailing,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+            // SignUpTextField(
+            //   padding: EdgeInsets.all(0),
+            // ),
+            SearchField<Customer>(
+              itemHeight: 40,
+
+              searchInputDecoration: InputDecoration(
                 fillColor: Color(0xffF8F8F8),
                 filled: true,
                 border: OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(10.0),
                     borderSide: BorderSide.none),
               ),
-              initialCountryCode: 'IN',
-              onChanged: (phone) {
-                logSuccess(customerPhoneNumberControler.text);
+              searchStyle: TextStyle(fontSize: 13.0.sp),
+              suggestionStyle: TextStyle(fontSize: 13.0.sp),
+              // onSubmit: (p0) => logSuccess(p0),
+
+              suggestionItemDecoration:
+                  BoxDecoration(border: Border.all(color: Colors.white)),
+
+              onSuggestionTap: (p0) {
+                FocusScope.of(context).unfocus();
+
+                customerPhoneNumberControler.text = p0.item!.phoneNumber!;
+                customerEmailControler.text = p0.item!.email!;
               },
-              onCountryChanged: (value) =>
-                  customerMobileCode = "+${value.dialCode}",
-              controller: customerPhoneNumberControler,
+              controller: customerNameControler,
+              suggestions: _customersController.customers
+                  .map(
+                    (e) => SearchFieldListItem<Customer>(e.fullName!,
+                        item: e,
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.only(start: 10),
+                          child: greyText(e.fullName!, 15),
+                        )),
+                  )
+                  .toList(),
             ),
+            const SizedBox(height: 20),
+            blackText("Send invoice By", 16),
+            CustomDropdown(
+              items: _addInvoiceController.sendByItems,
+              selectedItem: _addInvoiceController.selectedSendBy,
+              width: 2,
+              onchanged: (s) {
+                _addInvoiceController.selectSendBy(s);
+              },
+            ),
+            const SizedBox(height: 20),
+            blackText("Customer phone number", 16),
+            SignUpTextField(
+              padding: EdgeInsets.all(0),
+              controller: customerPhoneNumberControler,
+              keyBoardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            blackText("Customer email", 16),
+            SignUpTextField(
+              padding: EdgeInsets.all(0),
+              controller: customerEmailControler,
+              keyBoardType: TextInputType.number,
+            ),
+            // IntlPhoneField(
+            //   flagsButtonPadding: EdgeInsets.symmetric(horizontal: 20),
+            //   dropdownIconPosition: IconPosition.trailing,
+            //   keyboardType: TextInputType.number,
+            //   decoration: InputDecoration(
+            //     fillColor: Color(0xffF8F8F8),
+            //     filled: true,
+            //     border: OutlineInputBorder(
+            //         borderRadius: new BorderRadius.circular(10.0),
+            //         borderSide: BorderSide.none),
+            //   ),
+            //   initialCountryCode: 'AE',
+            //   onChanged: (phone) {
+            //     logSuccess(customerPhoneNumberControler.text);
+            //   },
+            //   onCountryChanged: (value) =>
+            //       customerMobileCode = "+${value.dialCode}",
+            //   controller: customerPhoneNumberControler,
+            // ),
             const SizedBox(height: 10),
             Row(
               children: [
@@ -95,11 +145,12 @@ class CustomerInfoPage extends StatelessWidget {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  addInvoiceController.saveCustomerInfo(
+                  _addInvoiceController.saveCustomerInfo(
                       customerNameControler.text,
-                      addInvoiceController.sendByItems
-                              .indexOf(addInvoiceController.selectedSendBy) +
+                      _addInvoiceController.sendByItems
+                              .indexOf(_addInvoiceController.selectedSendBy) +
                           1,
+                      customerEmailControler.text,
                       customerPhoneNumberControler.text,
                       customerMobileCode,
                       customerRefrenceControler.text);
@@ -180,9 +231,10 @@ Text blueText(String text, double size,
 }
 
 Text blackText(String text, double size,
-    {bool underline = false, FontWeight? fontWeight}) {
+    {bool underline = false, FontWeight? fontWeight, TextAlign? textAlign}) {
   return Text(
     text,
+    textAlign: textAlign,
     softWrap: true,
     style: TextStyle(
         decoration: underline ? TextDecoration.underline : null,

@@ -8,7 +8,7 @@ class DataToCreateInvoice {
   String? customerRefrence;
   int? customerSendBy = 1;
   String? currencyId = "1";
-  bool? discountType;
+  int? discountType;
   String? discountValue;
   String? expiryDate;
   String? remindAfter;

@@ -3,10 +3,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
-import 'package:safqa/controllers/filter_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/create_invoice_page.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
 import 'package:safqa/pages/home/notification_page.dart';
 import 'package:safqa/pages/home/pass_change_page.dart';
 import 'package:safqa/pages/home/profile/profile.dart';
@@ -31,14 +31,16 @@ class _MainPageState extends State<MainPage> {
   SignUpController _signUpController = Get.put(SignUpController());
 
   ChartsController _chartsController = Get.put(ChartsController());
-  FilterController _filterController = Get.put(FilterController());
+  CustomersController _customersController = Get.put(CustomersController());
   double _x = 0;
   double _y = 0;
   String i = "This Month";
   @override
   void initState() {
     // TODO: implement initState
+    _customersController.getMyCustomers();
     _signUpController.getGlobalData();
+    _signUpController.getBanks();
     super.initState();
   }
 

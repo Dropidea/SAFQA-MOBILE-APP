@@ -4,6 +4,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 
 import '../main.dart';
 import '../services/auth_service.dart';
@@ -11,6 +12,8 @@ import '../services/end_points.dart';
 
 class SignUpController extends GetxController {
   var globalData;
+  List<Bank> banks = [];
+  List<Country> countries = [];
   var dataToRegister = {
     "country_id": 3,
     "phone_number_code_id": 7,
@@ -102,6 +105,58 @@ class SignUpController extends GetxController {
       globalData = res.data;
 
       logSuccess("global data success");
+      return globalData;
+    } on DioError catch (e) {
+      logError("msg");
+      logError(e.message);
+    }
+  }
+
+  Future getBanks() async {
+    try {
+      Dio dio = Dio();
+      String token = await AuthService().loadToken();
+      dio.options.headers["authorization"] = "bearer  $token";
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+      var res = await dio.get(EndPoints.getBanks);
+      List<Bank> tmp = [];
+      for (var i in res.data['data']) {
+        Bank b = Bank.fromJson(i);
+        tmp.add(b);
+      }
+      banks = tmp;
+      logSuccess(banks.length);
+      return globalData;
+    } on DioError catch (e) {
+      logError("msg");
+      logError(e.message);
+    }
+  }
+
+  Future getCountries() async {
+    try {
+      Dio dio = Dio();
+      String token = await AuthService().loadToken();
+      dio.options.headers["authorization"] = "bearer  $token";
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+      var res = await dio.get(EndPoints.getCountries);
+      List<Country> tmp = [];
+      for (var i in res.data['data']) {
+        Country b = Country.fromJson(i);
+        tmp.add(b);
+      }
+      countries = tmp;
+      logSuccess(countries.length);
       return globalData;
     } on DioError catch (e) {
       logError("msg");

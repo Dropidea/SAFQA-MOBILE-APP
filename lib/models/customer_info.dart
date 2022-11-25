@@ -4,14 +4,15 @@ class CustomerInfo {
   String? customerMobileNumbr;
   String? customerMobileNumbrCode;
   String? customerRefrence;
+  String? customerEmail;
 
-  CustomerInfo({
-    this.customerName,
-    this.customerMobileNumbr,
-    this.customerMobileNumbrCode,
-    this.customerRefrence,
-    this.customerSendBy,
-  });
+  CustomerInfo(
+      {this.customerName,
+      this.customerMobileNumbr,
+      this.customerMobileNumbrCode,
+      this.customerRefrence,
+      this.customerSendBy,
+      this.customerEmail});
 
   // CustomerInfo.fromJson(
   //   Map<String, dynamic> json,
@@ -24,6 +25,7 @@ class CustomerInfo {
     data["customer_mobile"] = customerMobileNumbr;
     data["customer_mobile_code"] = customerMobileNumbrCode;
     data["customer_reference"] = customerRefrence;
+    data["customer_email"] = customerEmail;
 
     return data;
   }
