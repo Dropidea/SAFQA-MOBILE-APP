@@ -11,7 +11,8 @@ import 'package:searchfield/searchfield.dart';
 import 'package:sizer/sizer.dart';
 
 class BankInfoPage extends StatelessWidget {
-  BankInfoPage({super.key});
+  BankInfoPage({super.key, this.bank});
+  final Bank? bank;
   TextEditingController bankNameControler = TextEditingController();
   String bankAccountControler = "";
   String ibanControler = "";
@@ -47,19 +48,28 @@ class BankInfoPage extends StatelessWidget {
             blackText("Bank Name", 16),
             SearchField<Bank>(
               itemHeight: 40,
-              initialValue: _customersController.customerToCreate.bank!.name ==
-                      null
-                  ? null
-                  : SearchFieldListItem<Bank>(
-                      _customersController.customerToCreate.bank!.name ?? "",
-                      item: _customersController.customerToCreate.bank!,
+              initialValue: bank != null
+                  ? SearchFieldListItem<Bank>(bank!.name!,
+                      item: bank!,
                       child: Padding(
                         padding: const EdgeInsetsDirectional.only(start: 10),
-                        child: greyText(
-                            _customersController.customerToCreate.bank!.name ??
-                                "",
-                            15),
-                      )),
+                        child: greyText(bank!.name ?? "", 15),
+                      ))
+                  : _customersController.customerToCreate.bank!.name == null
+                      ? null
+                      : SearchFieldListItem<Bank>(
+                          _customersController.customerToCreate.bank!.name ??
+                              "",
+                          item: _customersController.customerToCreate.bank!,
+                          child: Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(start: 10),
+                            child: greyText(
+                                _customersController
+                                        .customerToCreate.bank!.name ??
+                                    "",
+                                15),
+                          )),
               searchInputDecoration: InputDecoration(
                 fillColor: Color(0xffF8F8F8),
                 filled: true,
@@ -96,8 +106,10 @@ class BankInfoPage extends StatelessWidget {
               padding: EdgeInsets.all(0),
               keyBoardType: TextInputType.number,
               onchanged: (s) => bankAccountControler = s!,
-              initialValue:
-                  _customersController.customerToCreate.bank!.bankAccount ?? "",
+              initialValue: bank != null
+                  ? bank!.bankAccount ?? ""
+                  : _customersController.customerToCreate.bank!.bankAccount ??
+                      "",
             ),
             const SizedBox(height: 20),
             blackText("Iban", 16),
@@ -106,20 +118,25 @@ class BankInfoPage extends StatelessWidget {
               textInputAction: TextInputAction.done,
               onchanged: (s) => ibanControler = s!,
               keyBoardType: TextInputType.number,
-              initialValue:
-                  _customersController.customerToCreate.bank!.iban ?? "",
+              initialValue: bank != null
+                  ? bank!.iban ?? ""
+                  : _customersController.customerToCreate.bank!.iban ?? "",
             ),
             SizedBox(height: 50),
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Bank bank = Bank(
+                  Bank tmpbank = Bank(
                     id: bankId,
                     iban: ibanControler,
                     bankAccount: bankAccountControler,
                     name: bankNameControler.text,
                   );
-                  _customersController.customerToCreate.bank = bank;
+                  if (bank == null) {
+                    _customersController.customerToCreate.bank = tmpbank;
+                  } else {
+                    _customersController.customerToEdit.bank = tmpbank;
+                  }
                   logSuccess(
                       _customersController.customerToCreate.bank!.toJson());
                   MyDialogs.showSavedSuccessfullyDialoge(

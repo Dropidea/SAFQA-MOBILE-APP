@@ -14,6 +14,7 @@ import 'package:safqa/models/invoice_item.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/home_page.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/widgets/dialoges.dart';
 
 class AddInvoiceController extends GetxController {
   DataToCreateInvoice dataToCreateInvoice = DataToCreateInvoice();
@@ -171,35 +172,13 @@ class AddInvoiceController extends GetxController {
           data: body);
       customerInfo = CustomerInfo();
       Get.back();
-      Get.defaultDialog(
-        title: "",
-        content: Container(
-          padding: EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            children: [
-              Image(
-                image: AssetImage("assets/images/tick.png"),
-                height: 100,
-              ),
-              SizedBox(height: 10),
-              blackText("Created successfully", 16),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Color(0xff2D5571),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(child: whiteText("close", 17)),
-                ),
-              )
-            ],
-          ),
-        ),
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Created successfully",
+        btnTXT: "close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
       );
     } on DioError catch (e) {
       Get.back();

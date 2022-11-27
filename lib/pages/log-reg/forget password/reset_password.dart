@@ -4,8 +4,8 @@ import 'package:safqa/pages/home/profile/pr_bank_details.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:safqa/widgets/wallpapered_BTN.dart';
 
-class ResetPasswordPage extends StatelessWidget {
-  ResetPasswordPage({super.key});
+class ResetPasswordWithEmailPage extends StatelessWidget {
+  ResetPasswordWithEmailPage({super.key});
 
   final formKey = GlobalKey<FormState>();
   @override

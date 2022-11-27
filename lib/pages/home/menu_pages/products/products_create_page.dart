@@ -10,24 +10,24 @@ import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/invoices/invoices_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/create_category.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
+import 'package:safqa/widgets/circular_go_btn.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
 class ProductCreatePage extends StatefulWidget {
-  const ProductCreatePage({super.key});
-
+  const ProductCreatePage({super.key, this.product});
+  final Product? product;
   @override
   State<ProductCreatePage> createState() => _ProductCreatePageState();
 }
 
 class _ProductCreatePageState extends State<ProductCreatePage> {
-  InvoicesController invoiceController = Get.put(InvoicesController());
+  // InvoicesController invoiceController = Get.put(InvoicesController());
   AddInvoiceController addInvoiceController = Get.find();
   TextEditingController productNameENController = TextEditingController();
   TextEditingController productNameARController = TextEditingController();
@@ -38,6 +38,29 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String selectedCategoryId = "-1";
   String selectedCategory = "";
   String selectedCurrencyId = "1";
+  @override
+  void initState() {
+    super.initState();
+    // logSuccess(widget.product!.toJson());
+    if (widget.product != null) {
+      productNameENController.text = widget.product!.nameEn!;
+      productNameARController.text = widget.product!.nameAr!;
+      if (widget.product!.productImage != null) {
+        fileName = widget.product!.productImage.toString().substring(
+            widget.product!.productImage.toString().lastIndexOf("/") + 1);
+      }
+      remainingQuantitiyController.text = widget.product!.quantity!.toString();
+      unitPriceController.text = widget.product!.price!.toString();
+      selectedCategory = widget.product!.category!.nameEn!;
+      selectedCategoryId = widget.product!.categoryId!.toString();
+      discriptionARController.text = widget.product!.descriptionAr!;
+      discriptionENController.text = widget.product!.descriptionEn!;
+      isActiveVal = widget.product!.isActive!;
+      isStockableVal = widget.product!.isStockable!;
+      isShippableVal = widget.product!.isShippingProduct!;
+      //  addToStoreVal = widget.product!.is!;
+    }
+  }
 
   File? file = null;
   ProductsController _productsController = Get.find();
@@ -61,7 +84,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
           iconTheme: IconThemeData(color: Colors.black),
           elevation: 0,
           backgroundColor: Colors.white,
-          title: blackText("Create Product", 16),
+          title: blackText(
+              widget.product == null ? "Create Product" : "Edit Product", 16),
 
           centerTitle: true,
         ),
@@ -148,7 +172,20 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          blackText("Product Picture", 14),
+                          Row(
+                            children: [
+                              blackText("Product Picture", 14),
+                              fileName != ""
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        file = null;
+                                        fileName = "";
+                                        setState(() {});
+                                      },
+                                      child: greyText("clear", 12))
+                                  : Container(),
+                            ],
+                          ),
                           GestureDetector(
                             onTap: () async {
                               FilePickerResult? result =
@@ -586,61 +623,196 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        blackText("Create Product", 16),
-                        SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: () async {
-                            if (formKey.currentState!.validate()) {
-                              Product product = Product(
-                                nameEn: productNameENController.text,
-                                nameAr: productNameARController.text,
-                                quantity: int.parse(
-                                    remainingQuantitiyController.text),
-                                productImage: file,
-                                price: int.parse(unitPriceController.text),
-                                categoryId: int.parse(selectedCategoryId),
-                                descriptionAr: discriptionARController.text,
-                                descriptionEn: discriptionENController.text,
-                                isActive: isActiveVal,
-                                isStockable: isStockableVal,
-                                isShippingProduct: isShippableVal,
-                              );
-                              FocusScope.of(context).unfocus();
+                  CircularGoBTN(
+                    text: widget.product == null
+                        ? "Create Product"
+                        : "Edit Product",
+                    onTap: () async {
+                      if (widget.product == null) {
+                        if (formKey.currentState!.validate()) {
+                          Product product = Product(
+                            nameEn: productNameENController.text,
+                            nameAr: productNameARController.text,
+                            quantity:
+                                int.parse(remainingQuantitiyController.text),
+                            productImage: file,
+                            price: int.parse(unitPriceController.text),
+                            categoryId: int.parse(selectedCategoryId),
+                            descriptionAr: discriptionARController.text,
+                            descriptionEn: discriptionENController.text,
+                            isActive: isActiveVal,
+                            isStockable: isStockableVal,
+                            isShippingProduct: isShippableVal,
+                          );
+                          FocusScope.of(context).unfocus();
 
-                              bool? c = await _productsController
-                                  .createProduct(product);
-                              if (c != null && c) {
-                                productNameENController.text = "";
-                                productNameARController.text = "";
-                                remainingQuantitiyController.text = "";
-                                file = null;
-                                unitPriceController.text = "";
-                                discriptionARController.text = "";
-                                discriptionENController.text = "";
-                              }
-                            } else {}
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                            padding: EdgeInsets.all(20),
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                              size: 22.0.sp,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                          bool? c =
+                              await _productsController.createProduct(product);
+                          if (c != null && c) {
+                            productNameENController.text = "";
+                            productNameARController.text = "";
+                            remainingQuantitiyController.text = "";
+                            file = null;
+                            unitPriceController.text = "";
+                            discriptionARController.text = "";
+                            discriptionENController.text = "";
+                          }
+                        }
+                      } else {
+                        if (formKey.currentState!.validate()) {
+                          Product product = Product(
+                            id: widget.product!.id,
+                            nameEn: productNameENController.text,
+                            nameAr: productNameARController.text,
+                            quantity:
+                                int.parse(remainingQuantitiyController.text),
+                            productImage: file,
+                            price: int.parse(unitPriceController.text),
+                            categoryId: int.parse(selectedCategoryId),
+                            descriptionAr: discriptionARController.text,
+                            descriptionEn: discriptionENController.text,
+                            isActive: isActiveVal,
+                            isStockable: isStockableVal,
+                            isShippingProduct: isShippableVal,
+                            length: "0",
+                            height: "0",
+                            weight: "0",
+                            width: "0",
+                          );
+                          FocusScope.of(context).unfocus();
+
+                          bool? c =
+                              await _productsController.editProduct(product);
+                          if (c != null && c) {
+                            productNameENController.text = "";
+                            productNameARController.text = "";
+                            remainingQuantitiyController.text = "";
+                            file = null;
+                            unitPriceController.text = "";
+                            discriptionARController.text = "";
+                            discriptionENController.text = "";
+                          }
+                        }
+                      }
+                      // if (widget.product == null) {
+                      //   if (formKey.currentState!.validate()) {
+                      //     Product product = Product(
+                      //       nameEn: productNameENController.text,
+                      //       nameAr: productNameARController.text,
+                      //       quantity:
+                      //           int.parse(remainingQuantitiyController.text),
+                      //       productImage: file,
+                      //       price: int.parse(unitPriceController.text),
+                      //       categoryId: int.parse(selectedCategoryId),
+                      //       descriptionAr: discriptionARController.text,
+                      //       descriptionEn: discriptionENController.text,
+                      //       isActive: isActiveVal,
+                      //       isStockable: isStockableVal,
+                      //       isShippingProduct: isShippableVal,
+                      //     );
+                      //     FocusScope.of(context).unfocus();
+
+                      //     bool? c =
+                      //         await _productsController.createProduct(product);
+                      //     if (c != null && c) {
+                      //       productNameENController.text = "";
+                      //       productNameARController.text = "";
+                      //       remainingQuantitiyController.text = "";
+                      //       file = null;
+                      //       unitPriceController.text = "";
+                      //       discriptionARController.text = "";
+                      //       discriptionENController.text = "";
+                      //     }
+                      //   } else {
+                      //     if (formKey.currentState!.validate()) {
+                      //       Product product = Product(
+                      //         nameEn: productNameENController.text,
+                      //         nameAr: productNameARController.text,
+                      //         quantity:
+                      //             int.parse(remainingQuantitiyController.text),
+                      //         productImage: file,
+                      //         price: int.parse(unitPriceController.text),
+                      //         categoryId: int.parse(selectedCategoryId),
+                      //         descriptionAr: discriptionARController.text,
+                      //         descriptionEn: discriptionENController.text,
+                      //         isActive: isActiveVal,
+                      //         isStockable: isStockableVal,
+                      //         isShippingProduct: isShippableVal,
+                      //       );
+                      //       FocusScope.of(context).unfocus();
+                      //       logSuccess(product.toJson());
+                      //       bool? c =
+                      //           await _productsController.editProduct(product);
+                      //       if (c != null && c) {
+                      //         productNameENController.text = "";
+                      //         productNameARController.text = "";
+                      //         remainingQuantitiyController.text = "";
+                      //         file = null;
+                      //         unitPriceController.text = "";
+                      //         discriptionARController.text = "";
+                      //         discriptionENController.text = "";
+                      //       }
+                      //     }
+                      //   }
+
+                      // }
+                    },
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.end,
+                  //     children: [
+                  //       blackText("Create Product", 16),
+                  //       SizedBox(width: 10),
+                  //       GestureDetector(
+                  //         onTap: () async {
+                  //           if (formKey.currentState!.validate()) {
+                  //             Product product = Product(
+                  //               nameEn: productNameENController.text,
+                  //               nameAr: productNameARController.text,
+                  //               quantity: int.parse(
+                  //                   remainingQuantitiyController.text),
+                  //               productImage: file,
+                  //               price: int.parse(unitPriceController.text),
+                  //               categoryId: int.parse(selectedCategoryId),
+                  //               descriptionAr: discriptionARController.text,
+                  //               descriptionEn: discriptionENController.text,
+                  //               isActive: isActiveVal,
+                  //               isStockable: isStockableVal,
+                  //               isShippingProduct: isShippableVal,
+                  //             );
+                  //             FocusScope.of(context).unfocus();
+
+                  //             bool? c = await _productsController
+                  //                 .createProduct(product);
+                  //             if (c != null && c) {
+                  //               productNameENController.text = "";
+                  //               productNameARController.text = "";
+                  //               remainingQuantitiyController.text = "";
+                  //               file = null;
+                  //               unitPriceController.text = "";
+                  //               discriptionARController.text = "";
+                  //               discriptionENController.text = "";
+                  //             }
+                  //           } else {}
+                  //         },
+                  //         child: Container(
+                  //           decoration: BoxDecoration(
+                  //             color: Colors.black,
+                  //             borderRadius: BorderRadius.circular(40),
+                  //           ),
+                  //           padding: EdgeInsets.all(20),
+                  //           child: Icon(
+                  //             Icons.arrow_forward,
+                  //             color: Colors.white,
+                  //             size: 22.0.sp,
+                  //           ),
+                  //         ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // )
                 ],
               ),
             ),

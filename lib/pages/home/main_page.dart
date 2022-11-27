@@ -10,6 +10,7 @@ import 'package:safqa/pages/home/menu_pages/customers/controller/customers_contr
 import 'package:safqa/pages/home/notification_page.dart';
 import 'package:safqa/pages/home/pass_change_page.dart';
 import 'package:safqa/pages/home/profile/profile.dart';
+import 'package:safqa/pages/identity/identity_docs_page.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:sizer/sizer.dart';
 
@@ -66,6 +67,47 @@ class _MainPageState extends State<MainPage> {
                     primary: false,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
+                      const SizedBox(height: 10),
+                      Container(
+                        // width: w,
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Color(0xffE47E7B).withOpacity(0.07),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              EvaIcons.alertCircle,
+                              color: Color(0xffE47E7B),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  blackText(
+                                      "The identity must be documented first in order to be able to perform any operation on the system.",
+                                      13),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => IdentityConfirmDocsPage(),
+                                          transition: Transition.downToUp);
+                                    },
+                                    child: blueText(
+                                        "Confirm Your Identity now", 13,
+                                        fontWeight: FontWeight.bold,
+                                        underline: true),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -179,13 +221,13 @@ class _MainPageState extends State<MainPage> {
                         text: TextSpan(
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 20.0.sp,
+                            fontSize: 18.0.sp,
                           ),
                           children: const <TextSpan>[
                             TextSpan(
                               text: 'Invoices',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
                                 decorationThickness: 3,
                                 decorationColor: Color(0xffaaaaaa),
@@ -200,7 +242,7 @@ class _MainPageState extends State<MainPage> {
                             TextSpan(
                               text: ' Report',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 color: Colors.transparent,
                                 shadows: [
                                   Shadow(
@@ -340,14 +382,14 @@ class _MainPageState extends State<MainPage> {
                       RichText(
                         text: TextSpan(
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20.0.sp,
+                            // fontWeight: FontWeight.w500,
+                            fontSize: 18.0.sp,
                           ),
                           children: const <TextSpan>[
                             TextSpan(
                               text: 'Balance',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
                                 decorationThickness: 3,
                                 decorationColor: Color(0xffaaaaaa),
@@ -362,7 +404,7 @@ class _MainPageState extends State<MainPage> {
                             TextSpan(
                               text: ' Report',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 color: Colors.transparent,
                                 shadows: [
                                   Shadow(
@@ -435,9 +477,113 @@ class _MainPageState extends State<MainPage> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 60,
+                      SizedBox(height: 10),
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                            // fontWeight: FontWeight.w500,
+                            fontSize: 18.0.sp,
+                          ),
+                          children: const <TextSpan>[
+                            TextSpan(
+                              text: 'Payment',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 3,
+                                decorationColor: Color(0xffaaaaaa),
+                                color: Colors.transparent,
+                                shadows: [
+                                  Shadow(
+                                      color: Colors.black,
+                                      offset: Offset(0, -5))
+                                ],
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' Methods',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.transparent,
+                                shadows: [
+                                  Shadow(
+                                      color: Colors.black,
+                                      offset: Offset(0, -5))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 130,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 2,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              child: Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                child: Container(
+                                  padding: EdgeInsets.all(20),
+                                  width: w / 2,
+                                  height: 130,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.white,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 7),
+                                            child: Icon(EvaIcons.creditCard),
+                                          ),
+                                          SizedBox(width: 5),
+                                          greyText("VISA/MasterCard", 13,
+                                              fontWeight: FontWeight.bold)
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          greyText(
+                                            "Transaction No:",
+                                            13,
+                                          ),
+                                          SizedBox(width: 5),
+                                          blueText("2", 13)
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          greyText(
+                                            "Total Value:",
+                                            13,
+                                          ),
+                                          SizedBox(width: 5),
+                                          blueText("200\$", 13)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 60),
                     ],
                   ),
                 ))

@@ -4,23 +4,60 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/bank_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
+import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 import 'package:safqa/widgets/circular_go_btn.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
-class AddCustomerPage extends StatelessWidget {
-  AddCustomerPage({super.key});
-  TextEditingController fullNameControler = TextEditingController();
-  TextEditingController customerPhoneNumberControler = TextEditingController();
-  TextEditingController customerRefrenceControler = TextEditingController();
-  TextEditingController emailControler = TextEditingController();
+class AddCustomerPage extends StatefulWidget {
+  AddCustomerPage({super.key, this.customer});
+  final Customer? customer;
+  @override
+  State<AddCustomerPage> createState() => _AddCustomerPageState();
+}
+
+class _AddCustomerPageState extends State<AddCustomerPage> {
+  TextEditingController fullNameController = TextEditingController();
+
+  TextEditingController customerPhoneNumberController = TextEditingController();
+
+  TextEditingController customerRefrenceController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+
   CustomersController _customersController = Get.find();
+
   SignUpController _signUpController = Get.find();
+
   final formKey = GlobalKey<FormState>();
+
   String customerMobileCodeID = "1";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.customer != null) {
+      logSuccess(widget.customer!.toJson());
+      fullNameController.text = widget.customer!.fullName!;
+      customerMobileCodeID = widget.customer!.phoneNumberCodeId ?? "1";
+      customerPhoneNumberController.text = widget.customer!.phoneNumber!;
+      customerRefrenceController.text =
+          widget.customer!.customerReference ?? "";
+      emailController.text = widget.customer!.email!;
+      if (widget.customer!.bank != null) {
+        _customersController.customerToEdit.bank =
+            Bank.fromJson(widget.customer!.bank!.toJson());
+      } else {
+        _customersController.customerToEdit.bank = Bank();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -31,7 +68,7 @@ class AddCustomerPage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          "Add Customer",
+          widget.customer != null ? "Edit Customer" : "Add Customer",
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -51,7 +88,7 @@ class AddCustomerPage extends StatelessWidget {
               blackText("Full Name", 16),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
-                controller: fullNameControler,
+                controller: fullNameController,
                 validator: (s) {
                   if (s!.isEmpty) return "required";
                   return null;
@@ -76,7 +113,7 @@ class AddCustomerPage extends StatelessWidget {
                 _signUpController
                     .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
                 return SignUpTextField(
-                  controller: customerPhoneNumberControler,
+                  controller: customerPhoneNumberController,
                   padding: EdgeInsets.all(0),
                   keyBoardType: TextInputType.number,
                   prefixIcon: SizedBox(
@@ -132,17 +169,17 @@ class AddCustomerPage extends StatelessWidget {
               //   ),
               //   initialCountryCode: 'IN',
               //   onChanged: (phone) {
-              //     logSuccess(customerPhoneNumberControler.text);
+              //     logSuccess(customerPhoneNumberController.text);
               //   },
               //   onCountryChanged: (value) =>
               //       customerMobileCode = "+${value.dialCode}",
-              //   controller: customerPhoneNumberControler,
+              //   controller: customerPhoneNumberController,
               // ),
               const SizedBox(height: 10),
               blackText("Email", 16),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
-                controller: emailControler,
+                controller: emailController,
                 keyBoardType: TextInputType.emailAddress,
                 validator: (s) {
                   if (s!.isEmpty) {
@@ -162,7 +199,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
-                controller: customerRefrenceControler,
+                controller: customerRefrenceController,
                 textInputAction: TextInputAction.done,
               ),
               const SizedBox(height: 15),
@@ -186,8 +223,14 @@ class AddCustomerPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         FocusScope.of(context).unfocus();
-                        Get.to(() => BankInfoPage(),
-                            transition: Transition.rightToLeft);
+                        if (widget.customer != null) {
+                          Get.to(
+                              () => BankInfoPage(bank: widget.customer!.bank!),
+                              transition: Transition.rightToLeft);
+                        } else {
+                          Get.to(() => BankInfoPage(),
+                              transition: Transition.rightToLeft);
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.all(15),
@@ -205,19 +248,35 @@ class AddCustomerPage extends StatelessWidget {
               ),
               SizedBox(height: 30),
               CircularGoBTN(
-                text: "Add Customer",
+                text:
+                    widget.customer != null ? "Edit Customer" : "Add Customer",
                 onTap: () async {
                   if (formKey.currentState!.validate()) {
-                    _customersController.customerToCreate.fullName =
-                        fullNameControler.text;
-                    _customersController.customerToCreate.email =
-                        emailControler.text;
-                    _customersController.customerToCreate.phoneNumber =
-                        customerPhoneNumberControler.text;
-                    _customersController.customerToCreate.phoneNumberCodeId =
-                        customerMobileCodeID;
-                    // logSuccess(_customersController.customerToCreate.toJson());
-                    await _customersController.createCustomer();
+                    if (widget.customer == null) {
+                      _customersController.customerToCreate.fullName =
+                          fullNameController.text;
+                      _customersController.customerToCreate.email =
+                          emailController.text;
+                      _customersController.customerToCreate.phoneNumber =
+                          customerPhoneNumberController.text;
+                      _customersController.customerToCreate.phoneNumberCodeId =
+                          customerMobileCodeID;
+                      // logSuccess(_customersController.customerToCreate.toJson());
+                      await _customersController.createCustomer();
+                    } else {
+                      _customersController.customerToEdit.fullName =
+                          fullNameController.text;
+                      _customersController.customerToEdit.id =
+                          widget.customer!.id!;
+                      _customersController.customerToEdit.email =
+                          emailController.text;
+                      _customersController.customerToEdit.phoneNumber =
+                          customerPhoneNumberController.text;
+                      _customersController.customerToEdit.phoneNumberCodeId =
+                          customerMobileCodeID;
+                      // logSuccess(_customersController.customerToCreate.toJson());
+                      await _customersController.editCustomer();
+                    }
                   }
                 },
               )

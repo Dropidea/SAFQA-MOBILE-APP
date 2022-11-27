@@ -129,8 +129,12 @@ flutter:
     - assets/images/pending.png
     - assets/images/barcode.png
     - assets/images/warning.png
+    - assets/images/id.png
+    - assets/images/passport.png
+    - assets/images/license.png
     - assets/images/trash.svg
     - assets/email.zip
+    - assets/message.zip
 
 
 

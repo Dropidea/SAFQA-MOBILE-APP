@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
+import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
@@ -15,7 +17,7 @@ class CategoryFilterPage extends StatefulWidget {
 
 class _CategoryFilterPage extends State<CategoryFilterPage> {
   int isActive = 0;
-
+  ProductsController _productsController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -43,14 +45,20 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     size: 25.0.sp,
                   ),
                 ),
-                Text(
-                  "Clear",
-                  style: TextStyle(
-                    fontSize: 16.0.sp,
-                    color: Color(0xff00A7B3),
-                    decoration: TextDecoration.underline,
-                  ),
+                ClearFilterBTN(
+                  onTap: () {
+                    _productsController.clearProductCategoryFilter();
+                    Get.back();
+                  },
                 )
+                // Text(
+                //   "Clear",
+                //   style: TextStyle(
+                //     fontSize: 16.0.sp,
+                //     color: Color(0xff00A7B3),
+                //     decoration: TextDecoration.underline,
+                //   ),
+                // )
               ],
             ),
             SizedBox(
@@ -67,30 +75,27 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     buildRadioButton(
                         0,
                         "All",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
+                        _productsController.productCategoryFilter.isActive!,
+                        (p0) => setState(() {
+                              _productsController
+                                  .productCategoryFilter.isActive = p0;
+                            })),
                     buildRadioButton(
                         1,
                         "Active",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
+                        _productsController.productCategoryFilter.isActive!,
+                        (p0) => setState(() {
+                              _productsController
+                                  .productCategoryFilter.isActive = p0;
+                            })),
                     buildRadioButton(
                         2,
                         "Inactive",
-                        isActive,
-                        (p0) => setState(
-                              () {
-                                isActive = p0;
-                              },
-                            )),
+                        _productsController.productCategoryFilter.isActive!,
+                        (p0) => setState(() {
+                              _productsController
+                                  .productCategoryFilter.isActive = p0;
+                            })),
                   ],
                 ),
               ),
@@ -118,6 +123,11 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     SignUpTextField(
                       padding: EdgeInsets.all(0),
                       hintText: "Category Name (En / Ar)",
+                      onchanged: (s) {
+                        _productsController.productCategoryFilter.name = s;
+                      },
+                      initialValue:
+                          _productsController.productCategoryFilter.name ?? "",
                     ),
                   ],
                 ),
@@ -134,17 +144,24 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
             SizedBox(
               height: 20,
             ),
-            Align(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                width: 0.7 * w,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff1BAFB2)),
-                child: Center(child: whiteText("Apply", 15)),
-              ),
-            ),
+            ApplyFilterBTN(
+              width: 0.7 * w,
+              onTap: () {
+                _productsController.activeProductCategoryFilter();
+                Get.back();
+              },
+            )
+            // Align(
+            //   child: Container(
+            //     margin: EdgeInsets.symmetric(vertical: 30),
+            //     width: 0.7 * w,
+            //     padding: EdgeInsets.all(15),
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: Color(0xff1BAFB2)),
+            //     child: Center(child: whiteText("Apply", 15)),
+            //   ),
+            // ),
           ],
         ),
       ),

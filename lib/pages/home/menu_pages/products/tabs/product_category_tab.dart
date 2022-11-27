@@ -52,21 +52,28 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                   Icons.search_outlined,
                   color: Colors.grey,
                 ),
+                onchanged: (s) {
+                  _productController.searchForProductsCategoryWithName(s!);
+                  setState(() {});
+                },
                 suffixIcon: GestureDetector(
                   onTap: () {
                     FocusScope.of(context).unfocus();
                     Get.to(() => CategoryFilterPage());
                   },
-                  child: Badge(
-                    badgeColor: Color(0xff1BAFB2),
-                    showBadge: true,
-                    position: BadgePosition.topEnd(top: 8, end: 8),
-                    child: Image(
-                      image: AssetImage("assets/images/filter.png"),
-                      width: 18,
-                      height: 18,
-                    ),
-                  ),
+                  child: GetBuilder<ProductsController>(builder: (c) {
+                    return Badge(
+                      badgeColor: Color(0xff1BAFB2),
+                      showBadge:
+                          _productController.productCategoryFilter.filterActive,
+                      position: BadgePosition.topEnd(top: 8, end: 8),
+                      child: Image(
+                        image: AssetImage("assets/images/filter.png"),
+                        width: 18,
+                        height: 18,
+                      ),
+                    );
+                  }),
                 ),
               ),
               const SizedBox(height: 20),
@@ -180,30 +187,41 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                 ),
               ),
               const SizedBox(height: 20),
-              Expanded(
-                  child: ListView.separated(
-                primary: false,
-                itemCount: _productController.productCategories.length,
-                itemBuilder: (context, index) {
-                  return CategoryCard(
-                    onTap: () {
-                      Get.to(() => CategoryDetailsPage(
-                            productCategory:
-                                _productController.productCategories[index],
+              GetBuilder<ProductsController>(builder: (c) {
+                return Expanded(
+                    child: _productController.productCategoriesToShow.isEmpty
+                        ? Center(
+                            child: greyText("nothing to show !!", 20),
+                          )
+                        : ListView.separated(
+                            primary: false,
+                            itemCount: _productController
+                                .productCategoriesToShow.length,
+                            itemBuilder: (context, index) {
+                              return CategoryCard(
+                                onTap: () {
+                                  Get.to(() => CategoryDetailsPage(
+                                        productCategory: _productController
+                                            .productCategoriesToShow[index],
+                                      ));
+                                },
+                                width: w,
+                                isToggled: _productController
+                                        .productCategoriesToShow[index]
+                                        .isActive ==
+                                    1,
+                                nameEn: _productController
+                                    .productCategoriesToShow[index].nameEn,
+                                nameAr: _productController
+                                    .productCategoriesToShow[index].nameAr,
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return SizedBox(height: 20);
+                            },
                           ));
-                    },
-                    width: w,
-                    isToggled:
-                        _productController.productCategories[index].isActive ==
-                            1,
-                    nameEn: _productController.productCategories[index].nameEn,
-                    nameAr: _productController.productCategories[index].nameAr,
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 20);
-                },
-              ))
+              })
             ],
           );
         }

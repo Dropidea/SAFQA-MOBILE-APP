@@ -31,6 +31,7 @@ class CustomersController extends GetxController {
 //------------------------customers---------------------
   List<Customer> customers = [];
   Customer customerToCreate = Customer(bank: Bank());
+  Customer customerToEdit = Customer(bank: Bank());
   bool getCustomerFlag = false;
 //------------------------customers methods---------------------
   Future getMyCustomers() async {
@@ -87,6 +88,80 @@ class CustomersController extends GetxController {
       customerToCreate = Customer(bank: Bank());
     } on DioError catch (e) {
       Get.back();
+      Map<String, dynamic> m = e.response!.data;
+      String errors = "";
+      int c = 0;
+      for (var i in m.values) {
+        for (var j = 0; j < i.length; j++) {
+          if (j == i.length - 1) {
+            errors = errors + i[j];
+          } else {
+            errors = "${errors + i[j]}\n";
+          }
+        }
+
+        c++;
+        if (c != m.values.length) {
+          errors += "\n";
+        }
+      }
+
+      Get.showSnackbar(
+        GetSnackBar(
+          duration: Duration(milliseconds: 3000),
+          backgroundColor: Colors.red,
+          // message: errors,
+          messageText: Text(
+            errors,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future editCustomer() async {
+    // logSuccess(customerToEdit.toJson());
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
+      final body = d.FormData.fromMap(customerToEdit.toJson());
+      body.fields.add(MapEntry("_method", "PUT"));
+
+      if (customerToEdit.bank!.id != null &&
+          customerToEdit.bank!.bankAccount != null &&
+          customerToEdit.bank!.iban != null) {
+        body.fields
+            .add(MapEntry("bank_id", customerToEdit.bank!.id.toString()));
+        body.fields.add(MapEntry(
+            "bank_account", customerToEdit.bank!.bankAccount.toString()));
+        body.fields.add(MapEntry("iban", customerToEdit.bank!.iban.toString()));
+      }
+      logSuccess(customerToEdit.toJson());
+      var res = await dio.post(
+          EndPoints.updateCustomer + customerToEdit.id.toString(),
+          data: body);
+      logSuccess(res.data);
+      await getMyCustomers();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Customer Edited Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+          Get.back();
+          Get.back();
+        },
+      );
+      customerToCreate = Customer(bank: Bank());
+    } on DioError catch (e) {
+      Get.back();
+      // logError(e.message);
       Map<String, dynamic> m = e.response!.data;
       String errors = "";
       int c = 0;

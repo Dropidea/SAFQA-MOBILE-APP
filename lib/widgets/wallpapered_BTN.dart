@@ -10,14 +10,19 @@ class WallpepredBTN extends StatelessWidget {
       this.haveWallpaper = true,
       this.alignment,
       this.icon,
-      this.height});
+      this.height,
+      this.borderRadius,
+      this.color});
   final double? width;
   final double? height;
+  final double? borderRadius;
   final String? text;
   final void Function()? onTap;
   final AlignmentGeometry? alignment;
   final bool haveWallpaper;
   final IconData? icon;
+  final Color? color;
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -26,8 +31,8 @@ class WallpepredBTN extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color(0xff2F6782),
+            borderRadius: BorderRadius.circular(borderRadius ?? 10),
+            color: color ?? Color(0xff2F6782),
             image: haveWallpaper
                 ? DecorationImage(
                     image: AssetImage("assets/images/btn_wallpaper.png"),

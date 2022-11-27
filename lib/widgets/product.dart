@@ -78,7 +78,11 @@ class _ProductWidgetState extends State<ProductWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    blackText(widget.product.nameEn!, 15),
+                    blackText(
+                        widget.product.nameEn!.length < 15
+                            ? widget.product.nameEn!
+                            : widget.product.nameEn!.substring(0, 15) + "...",
+                        15),
                     greyText("Remaining : ${widget.product.quantity!}", 14),
                     !widget.orderedFlag
                         ? widget.product.isActive == 1

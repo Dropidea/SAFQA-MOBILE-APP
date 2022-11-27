@@ -69,7 +69,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                   ),
                   ClearFilterBTN(
                     onTap: () {
-                      productController.clearFilter();
+                      productController.clearProductFilter();
                       Get.back();
                     },
                   )
@@ -349,7 +349,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
               ApplyFilterBTN(
                 width: 0.7 * w,
                 onTap: () {
-                  productController.activeFilter();
+                  productController.activeProductFilter();
                   Get.back();
                 },
               )

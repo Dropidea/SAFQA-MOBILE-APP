@@ -16,6 +16,7 @@ class EndPoints {
   static String get getProductCategories => "/product/categories";
   static String get getMyCustomers => "$_baseURL/customers";
   static String get createCustomer => "$_baseURL/customer/store";
+  static String get updateCustomer => "$_baseURL/customer/update/";
   static String get getBanks => "https://api.safqapay.com/admin/banks";
   static String get getCountries => "https://api.safqapay.com/admin/countries";
 }

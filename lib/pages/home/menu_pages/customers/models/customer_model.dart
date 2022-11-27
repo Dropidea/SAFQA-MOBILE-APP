@@ -2,7 +2,7 @@ class Customer {
   int? id;
   String? fullName;
   String? email;
-  Null? customerReference;
+  String? customerReference;
   String? phoneNumber;
   String? phoneNumberCodeId;
 

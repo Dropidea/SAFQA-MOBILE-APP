@@ -6,8 +6,8 @@ import 'package:safqa/pages/home/profile/pr_bank_details.dart';
 import 'package:safqa/pages/log-reg/forget%20password/reset_password.dart';
 
 class CheckEmailPage extends StatelessWidget {
-  const CheckEmailPage({super.key});
-
+  const CheckEmailPage({super.key, required this.phoneEmailFlag});
+  final bool phoneEmailFlag;
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -20,12 +20,14 @@ class CheckEmailPage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Get.to(() => ResetPasswordPage(),
+              Get.to(() => ResetPasswordWithEmailPage(),
                   transition: Transition.rightToLeft);
             },
             child: Center(
-              child: Lottie.asset("assets/email.zip",
-                  width: w - 50, fit: BoxFit.cover
+              child: Lottie.asset(
+                  phoneEmailFlag ? "assets/message.zip" : "assets/email.zip",
+                  width: w - 50,
+                  fit: BoxFit.cover
 
                   // image: AssetImage("assets/images/email_check.gif"),
                   // fit: BoxFit.cover,
@@ -34,7 +36,7 @@ class CheckEmailPage extends StatelessWidget {
           ),
           Center(
             child: blackText(
-              "Check Your Email",
+              phoneEmailFlag ? "Check Your phone messages" : "Check Your Email",
               18,
               fontWeight: FontWeight.bold,
             ),
@@ -44,7 +46,9 @@ class CheckEmailPage extends StatelessWidget {
             child: SizedBox(
               width: 0.75 * w,
               child: greyText(
-                  "Messages will be sent to your email please check the message",
+                  phoneEmailFlag
+                      ? "Messages will be sent to your phone please check the message"
+                      : "Messages will be sent to your email please check the message",
                   14,
                   textAlign: TextAlign.center),
             ),
