@@ -261,6 +261,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                           customerPhoneNumberController.text;
                       _customersController.customerToCreate.phoneNumberCodeId =
                           customerMobileCodeID;
+                      _customersController.customerToCreate.customerReference =
+                          customerRefrenceController.text;
                       // logSuccess(_customersController.customerToCreate.toJson());
                       await _customersController.createCustomer();
                     } else {
@@ -274,6 +276,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                           customerPhoneNumberController.text;
                       _customersController.customerToEdit.phoneNumberCodeId =
                           customerMobileCodeID;
+                      _customersController.customerToEdit.customerReference =
+                          customerRefrenceController.text;
                       // logSuccess(_customersController.customerToCreate.toJson());
                       await _customersController.editCustomer();
                     }

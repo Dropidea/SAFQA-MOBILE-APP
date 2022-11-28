@@ -11,8 +11,6 @@ import 'package:safqa/models/customer_info.dart';
 import 'package:safqa/models/data_to_create_invoice.dart';
 import 'package:safqa/models/data_to_create_quick_invoice.dart';
 import 'package:safqa/models/invoice_item.dart';
-import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/home_page.dart';
 import 'package:safqa/services/end_points.dart';
 import 'package:safqa/widgets/dialoges.dart';
 
@@ -30,6 +28,11 @@ class AddInvoiceController extends GetxController {
           (X509Certificate cert, String host, int port) => true;
       return client;
     };
+  }
+
+  void removeInvoiceItem(int index) {
+    invoiceItems.removeAt(index);
+    update();
   }
 
   Future createInvoice() async {
@@ -85,38 +88,10 @@ class AddInvoiceController extends GetxController {
       var res = await dio.post(EndPoints.baseURL + EndPoints.createInvoice,
           data: body);
       customerInfo = CustomerInfo();
+      invoiceItems = [];
       Get.back();
-      Get.defaultDialog(
-        title: "",
-        content: Container(
-          padding: EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            children: [
-              Image(
-                image: AssetImage("assets/images/tick.png"),
-                height: 100,
-              ),
-              SizedBox(height: 10),
-              blackText("Created successfully", 16),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  Get.back();
-                  Get.off(() => HomePage());
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Color(0xff2D5571),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(child: whiteText("close", 17)),
-                ),
-              )
-            ],
-          ),
-        ),
-      );
+      MyDialogs.showSavedSuccessfullyDialoge(
+          title: "Created Successfully", btnTXT: "close");
     } on DioError catch (e) {
       Get.back();
       logError(e.response!.data);

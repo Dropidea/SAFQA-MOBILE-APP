@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/radio/gf_radio.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
@@ -48,6 +50,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       if (widget.product!.productImage != null) {
         fileName = widget.product!.productImage.toString().substring(
             widget.product!.productImage.toString().lastIndexOf("/") + 1);
+        downloadFile(widget.product!.productImage, fileName)
+            .then((value) => logSuccess(value));
       }
       remainingQuantitiyController.text = widget.product!.quantity!.toString();
       unitPriceController.text = widget.product!.price!.toString();
@@ -429,8 +433,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   inactiveBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   value: 1,
@@ -451,8 +455,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   activeBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   inactiveBorderColor: Colors.transparent,
@@ -481,8 +485,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   inactiveBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   value: 1,
@@ -503,8 +507,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   activeBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   inactiveBorderColor: Colors.transparent,
@@ -533,8 +537,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   inactiveBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   value: 1,
@@ -555,8 +559,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   activeBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   inactiveBorderColor: Colors.transparent,
@@ -585,8 +589,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   inactiveBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   value: 1,
@@ -607,8 +611,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   activeBorderColor: Colors.transparent,
                                   radioColor: Color(0xff66B4D2),
                                   inactiveIcon: Icon(
-                                    Icons.circle,
-                                    color: Colors.grey.shade200,
+                                    Icons.circle_outlined,
+                                    color: Colors.grey.shade300,
                                   ),
                                   size: GFSize.SMALL,
                                   inactiveBorderColor: Colors.transparent,
@@ -819,4 +823,15 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
           ),
         ));
   }
+}
+
+Future downloadFile(String url, String name) async {
+  Dio dio = Dio();
+  var dir = await getApplicationDocumentsDirectory();
+  var imageDownloadPath = '${dir.path}/$name';
+  await dio.download(
+    url,
+    imageDownloadPath,
+  );
+  return imageDownloadPath;
 }

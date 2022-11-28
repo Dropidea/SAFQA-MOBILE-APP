@@ -7,7 +7,7 @@ import 'package:sizer/sizer.dart';
 class MyDialogs {
   static void showDeleteDialoge(
       {required void Function()? onProceed,
-      required void Function()? onCancel,
+      void Function()? onCancel,
       required String message}) {
     Get.dialog(
       AlertDialog(
@@ -30,7 +30,10 @@ class MyDialogs {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: onCancel,
+                  onTap: onCancel ??
+                      () {
+                        Get.back();
+                      },
                   child: Container(
                     width: 28.0.w,
                     height: 50,
@@ -70,7 +73,7 @@ class MyDialogs {
 
   static void showWarningDialoge({
     required void Function()? onProceed,
-    required void Function()? onCancel,
+    void Function()? onCancel,
     required String message,
     required String yesBTN,
   }) {
@@ -95,7 +98,10 @@ class MyDialogs {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: onCancel,
+                  onTap: onCancel ??
+                      () {
+                        Get.back();
+                      },
                   child: Container(
                     width: 28.0.w,
                     height: 50,

@@ -83,6 +83,10 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                       SizedBox(height: 30),
                       SignUpTextField(
                         hintText: "Search ...",
+                        onchanged: (s) {
+                          _customersController.searchForCustomerWithName(s!);
+                          setState(() {});
+                        },
                         padding: EdgeInsets.all(0),
                         prefixIcon: Icon(
                           Icons.search_outlined,
@@ -93,16 +97,18 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                             FocusScope.of(context).unfocus();
                             Get.to(() => CustomerSearchFilterPage());
                           },
-                          child: Badge(
-                            badgeColor: Color(0xff1BAFB2),
-                            showBadge: true,
-                            position: BadgePosition.topEnd(top: 8, end: 8),
-                            child: Image(
-                              image: AssetImage("assets/images/filter.png"),
-                              width: 18,
-                              height: 18,
-                            ),
-                          ),
+                          child: GetBuilder<CustomersController>(builder: (c) {
+                            return Badge(
+                              badgeColor: Color(0xff1BAFB2),
+                              showBadge: c.customerFilter.filterActive,
+                              position: BadgePosition.topEnd(top: 8, end: 8),
+                              child: Image(
+                                image: AssetImage("assets/images/filter.png"),
+                                width: 18,
+                                height: 18,
+                              ),
+                            );
+                          }),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -245,53 +251,62 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                               ? Center(
                                   child: CircularProgressIndicator(),
                                 )
-                              : ListView.separated(
-                                  primary: false,
-                                  itemBuilder: (context, index) => ListTile(
-                                      onTap: () {
-                                        Get.to(() => CustomerDetailsPage(
-                                              customer: c.customers[index],
-                                            ));
-                                      },
-                                      title: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          blackText(
-                                            c.customers[index].fullName!,
-                                            14,
-                                            fontWeight: FontWeight.normal,
+                              : c.customersToShow.length == 0
+                                  ? Center(
+                                      child: greyText("nothing to show !!", 20),
+                                    )
+                                  : ListView.separated(
+                                      primary: false,
+                                      itemBuilder: (context, index) => ListTile(
+                                          onTap: () {
+                                            Get.to(() => CustomerDetailsPage(
+                                                  customer:
+                                                      c.customersToShow[index],
+                                                ));
+                                          },
+                                          title: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              blackText(
+                                                c.customersToShow[index]
+                                                    .fullName!,
+                                                14,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                              greyText(
+                                                  c.customersToShow[index]
+                                                      .phoneNumber!,
+                                                  13)
+                                            ],
                                           ),
-                                          greyText(
-                                              c.customers[index].phoneNumber!,
-                                              13)
-                                        ],
+                                          dense: true,
+                                          visualDensity:
+                                              VisualDensity(vertical: 4),
+                                          leading: Container(
+                                            width: 60,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Color(0xffF9F9F9),
+                                            ),
+                                            child: Center(
+                                              child: greyText(
+                                                  c.customersToShow[index]
+                                                      .fullName![0],
+                                                  15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          )),
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(
+                                        height: 20,
                                       ),
-                                      dense: true,
-                                      visualDensity: VisualDensity(vertical: 4),
-                                      leading: Container(
-                                        width: 60,
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Color(0xffF9F9F9),
-                                        ),
-                                        child: Center(
-                                          child: greyText(
-                                              c.customers[index].fullName![0],
-                                              15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )),
-                                  separatorBuilder: (context, index) =>
-                                      SizedBox(
-                                    height: 20,
-                                  ),
-                                  itemCount: c.customers.length,
-                                );
+                                      itemCount: c.customersToShow.length,
+                                    );
                         }),
                       ),
                     ],

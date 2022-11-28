@@ -29,7 +29,7 @@ class CustomerInfoPage extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          "Create a New Invoice",
+          "Customer Info",
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -73,6 +73,7 @@ class CustomerInfoPage extends StatelessWidget {
 
                 customerPhoneNumberControler.text = p0.item!.phoneNumber!;
                 customerEmailControler.text = p0.item!.email!;
+                customerRefrenceControler.text = p0.item!.customerReference!;
               },
               controller: customerNameControler,
               suggestions: _customersController.customers
@@ -146,14 +147,15 @@ class CustomerInfoPage extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   _addInvoiceController.saveCustomerInfo(
-                      customerNameControler.text,
-                      _addInvoiceController.sendByItems
-                              .indexOf(_addInvoiceController.selectedSendBy) +
-                          1,
-                      customerEmailControler.text,
-                      customerPhoneNumberControler.text,
-                      customerMobileCode,
-                      customerRefrenceControler.text);
+                    customerNameControler.text,
+                    _addInvoiceController.sendByItems
+                            .indexOf(_addInvoiceController.selectedSendBy) +
+                        1,
+                    customerEmailControler.text,
+                    customerPhoneNumberControler.text,
+                    customerMobileCode,
+                    customerRefrenceControler.text,
+                  );
 
                   Get.defaultDialog(
                     title: "",

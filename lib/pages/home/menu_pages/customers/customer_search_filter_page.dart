@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:sizer/sizer.dart';
 
@@ -17,6 +18,7 @@ class CustomerSearchFilterPage extends StatefulWidget {
 
 class _CustomertSearchFilterPageState extends State<CustomerSearchFilterPage> {
   TextEditingController customerPhoneNumberControler = TextEditingController();
+  CustomersController _customersController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +47,12 @@ class _CustomertSearchFilterPageState extends State<CustomerSearchFilterPage> {
                     size: 25.0.sp,
                   ),
                 ),
-                Text(
-                  "Clear",
-                  style: TextStyle(
-                    fontSize: 16.0.sp,
-                    color: Color(0xff00A7B3),
-                    decoration: TextDecoration.underline,
-                  ),
-                )
+                ClearFilterBTN(
+                  onTap: () {
+                    _customersController.clearCustomerFilter();
+                    Get.back();
+                  },
+                ),
               ],
             ),
             SizedBox(
@@ -62,7 +62,12 @@ class _CustomertSearchFilterPageState extends State<CustomerSearchFilterPage> {
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomNameTextfield(),
+              expanded: buildCustomNameTextfield(
+                initialValue: _customersController.customerFilter.name,
+                onChanged: (p0) {
+                  _customersController.customerFilter.name = p0;
+                },
+              ),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
@@ -79,30 +84,44 @@ class _CustomertSearchFilterPageState extends State<CustomerSearchFilterPage> {
               theme: ExpandableThemeData(hasIcon: false),
               expanded: Container(
                 margin: EdgeInsets.only(top: 20),
-                padding: EdgeInsets.only(top: 15),
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(
-                    color: Colors.grey.shade300,
-                  ),
-                ),
                 child: IntlPhoneField(
+                  initialValue:
+                      _customersController.customerFilter.mobileNumber,
                   flagsButtonPadding: EdgeInsets.symmetric(horizontal: 20),
                   dropdownIconPosition: IconPosition.trailing,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     fillColor: Colors.white,
                     filled: true,
-                    border: OutlineInputBorder(
+                    focusedBorder: OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(10.0),
-                        borderSide: BorderSide.none),
+                        borderSide: BorderSide(color: Colors.grey, width: 0.5)
+                        // borderSide: BorderSide,
+                        ),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.grey, width: 0.5)
+                        // borderSide: BorderSide,
+                        ),
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.grey, width: 0.5)
+                        // borderSide: BorderSide,
+                        ),
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.grey, width: 0.5)
+                        // borderSide: BorderSide,
+                        ),
                   ),
                   initialCountryCode: 'IN',
-                  onChanged: (phone) {},
+                  onChanged: (phone) {
+                    _customersController.customerFilter.mobileNumber =
+                        phone.number;
+                  },
                   onCountryChanged: (value) {},
-                  controller: customerPhoneNumberControler,
+
+                  // controller: customerPhoneNumberControler,
                 ),
               ),
               header: Container(
@@ -119,7 +138,13 @@ class _CustomertSearchFilterPageState extends State<CustomerSearchFilterPage> {
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomNameTextfield(),
+              expanded: buildCustomNameTextfield(
+                initialValue:
+                    _customersController.customerFilter.customerRefrence,
+                onChanged: (p0) {
+                  _customersController.customerFilter.customerRefrence = p0;
+                },
+              ),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
@@ -129,17 +154,24 @@ class _CustomertSearchFilterPageState extends State<CustomerSearchFilterPage> {
                 child: blackText("Customer Refrence", 15),
               ),
             ),
-            Align(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                width: 0.7 * w,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff1BAFB2)),
-                child: Center(child: whiteText("Apply", 15)),
-              ),
-            )
+            ApplyFilterBTN(
+              width: 0.7 * w,
+              onTap: () {
+                _customersController.activeCustomerFilter();
+                Get.back();
+              },
+            ),
+            // Align(
+            //   child: Container(
+            //     margin: EdgeInsets.symmetric(vertical: 30),
+            //     width: 0.7 * w,
+            //     padding: EdgeInsets.all(15),
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: Color(0xff1BAFB2)),
+            //     child: Center(child: whiteText("Apply", 15)),
+            //   ),
+            // )
           ],
         ),
       ),

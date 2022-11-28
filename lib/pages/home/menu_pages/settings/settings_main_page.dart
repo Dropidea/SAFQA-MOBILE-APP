@@ -4,6 +4,7 @@ import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/address_tab.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/integration_tab.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/manage_users_tab.dart';
+import 'package:safqa/pages/home/menu_pages/settings/tabs/preferences.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
@@ -20,6 +21,7 @@ class SsettingsPageState extends State<SettingsPage> {
     "Manage Users",
     "Integration",
     "Adresses",
+    "Preferences",
   ];
 
   Widget getPage() {
@@ -29,8 +31,10 @@ class SsettingsPageState extends State<SettingsPage> {
       case 1:
         return IntegrationTab();
 
-      default:
+      case 2:
         return AdressesTab();
+      default:
+        return PreferencesTab();
     }
   }
 

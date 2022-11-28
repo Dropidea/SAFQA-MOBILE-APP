@@ -4,15 +4,30 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/settings/controllers/manage_users_controller.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/add_user_page.dart';
+import 'package:safqa/pages/home/menu_pages/settings/tabs/user_details.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/users_search_filter_page.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
-class ManageUsersTab extends StatelessWidget {
-  const ManageUsersTab({super.key});
+class ManageUsersTab extends StatefulWidget {
+  ManageUsersTab({super.key});
+
+  @override
+  State<ManageUsersTab> createState() => _ManageUsersTabState();
+}
+
+class _ManageUsersTabState extends State<ManageUsersTab> {
+  ManageUserController _manageUserController = Get.put(ManageUserController());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _manageUserController.getManageUsers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,49 +224,61 @@ class ManageUsersTab extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
-            child: ListView.separated(
-                itemBuilder: (context, index) => index == 0
-                    ? SizedBox(
-                        height: 10,
-                      )
-                    : Row(
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Color(0xffF9F9F9),
-                            ),
-                            child: Center(
-                              child: greyText("A", 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                blackText("Ahmad Ahmad", 15),
-                                SizedBox(height: 5),
-                                blueText(
-                                  "Ahmad@gmail.com",
-                                  14,
-                                  underline: true,
+        Expanded(child: GetBuilder<ManageUserController>(builder: (c) {
+          return c.getManageUserFlag
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView.separated(
+                  itemBuilder: (context, index) => index == 0
+                      ? SizedBox(
+                          height: 10,
+                        )
+                      : GestureDetector(
+                          onTap: () => Get.to(() => ManageUserDetailsPage()),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Color(0xffF9F9F9),
                                 ),
-                                SizedBox(height: 5),
-                                greyText("+9876712313214", 14),
-                              ],
-                            ),
-                          )
-                        ],
+                                child: Center(
+                                  child: greyText("A", 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    blackText(
+                                        c.manageUsers[index - 1].fullName!, 15),
+                                    SizedBox(height: 5),
+                                    blueText(
+                                      c.manageUsers[index - 1].email!,
+                                      14,
+                                      // underline: true,
+                                    ),
+                                    SizedBox(height: 5),
+                                    greyText(
+                                        c.manageUsers[index - 1]
+                                            .phoneNumberManager!,
+                                        14),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                  separatorBuilder: (context, index) => SizedBox(
+                        height: 20,
                       ),
-                separatorBuilder: (context, index) => SizedBox(
-                      height: 20,
-                    ),
-                itemCount: 10))
+                  itemCount: c.manageUsers.length + 1);
+        }))
       ],
     );
   }

@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 class NumericStepButton extends StatefulWidget {
   final double minValue;
   final double maxValue;
+  double value = 0;
 
   final ValueChanged<double>? onChanged;
 
-  NumericStepButton(
-      {Key? key,
-      this.minValue = 0,
-      this.maxValue = double.maxFinite,
-      this.onChanged})
-      : super(key: key);
+  NumericStepButton({
+    Key? key,
+    this.minValue = 0,
+    this.maxValue = double.maxFinite,
+    this.onChanged,
+    this.value = 0,
+  }) : super(key: key);
 
   @override
   State<NumericStepButton> createState() {
@@ -20,8 +22,6 @@ class NumericStepButton extends StatefulWidget {
 }
 
 class _NumericStepButtonState extends State<NumericStepButton> {
-  double counter = 0;
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -30,10 +30,10 @@ class _NumericStepButtonState extends State<NumericStepButton> {
         GestureDetector(
           onTap: () {
             setState(() {
-              if (counter > widget.minValue) {
-                counter--;
+              if (widget.value > widget.minValue) {
+                widget.value--;
               }
-              widget.onChanged!(counter);
+              widget.onChanged!(widget.value);
             });
           },
           child: Container(
@@ -46,7 +46,7 @@ class _NumericStepButtonState extends State<NumericStepButton> {
           ),
         ),
         Text(
-          '${counter.round()}',
+          '${widget.value.round()}',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.black87,
@@ -57,10 +57,10 @@ class _NumericStepButtonState extends State<NumericStepButton> {
         GestureDetector(
           onTap: () {
             setState(() {
-              if (counter < widget.maxValue) {
-                counter++;
+              if (widget.value < widget.maxValue) {
+                widget.value++;
               }
-              widget.onChanged!(counter);
+              widget.onChanged!(widget.value);
             });
           },
           child: Container(

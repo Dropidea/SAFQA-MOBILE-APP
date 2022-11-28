@@ -3,13 +3,16 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_add_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomerDetailsPage extends StatelessWidget {
-  const CustomerDetailsPage({super.key, required this.customer});
+  CustomerDetailsPage({super.key, required this.customer});
   final Customer customer;
+  CustomersController _customersController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -65,35 +68,45 @@ class CustomerDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: w / 2.5,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xffE47E7B).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.trash2,
-                        color: Color(0xffE47E7B),
-                        size: 18.0.sp,
+              GestureDetector(
+                onTap: () async {
+                  MyDialogs.showDeleteDialoge(
+                      onProceed: () async {
+                        Get.back();
+                        await _customersController.deleteCustomer(customer.id!);
+                      },
+                      message: "Are you sure?");
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE47E7B).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.trash2,
+                          color: Color(0xffE47E7B),
+                          size: 18.0.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Remove",
-                      style: TextStyle(
-                        fontSize: 14.0.sp,
-                        color: Color(0xffE47E7B),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
+                      SizedBox(width: 10),
+                      Text(
+                        "Remove",
+                        style: TextStyle(
+                          fontSize: 14.0.sp,
+                          color: Color(0xffE47E7B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

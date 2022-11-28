@@ -1,14 +1,19 @@
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/login_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/home_page.dart';
 import 'package:safqa/pages/log-reg/login.dart';
+import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/first_time_using_app.dart';
-import '../../controllers/login_controller.dart';
 import 'select_language_page.dart';
 import 'welcome_page.dart';
 
@@ -28,21 +33,31 @@ class SplashPage extends StatelessWidget {
           duration: Duration(milliseconds: 1200),
         );
       } else {
-        var token = await loginController.loadToken();
+        var token = await AuthService().loadToken();
+        logSuccess(token);
         if (token != "") {
           try {
-            await Dio().post(EndPoints.baseURL + EndPoints.meEndPoint,
-                data: {'token': token},
+            Dio dio = Dio();
+            (dio.httpClientAdapter as DefaultHttpClientAdapter)
+                .onHttpClientCreate = (HttpClient client) {
+              client.badCertificateCallback =
+                  (X509Certificate cert, String host, int port) => true;
+              return client;
+            };
+            dio.options.headers["authorization"] = "Bearer $token";
+            var res = await dio.get(EndPoints.baseURL + EndPoints.meEndPoint,
                 options: Options(
                   receiveTimeout: 5 * 1000,
                   sendTimeout: 5 * 1000,
                 ));
+            logSuccess(res.data);
             Get.offAll(
               () => HomePage(),
               duration: Duration(milliseconds: 1200),
               transition: Transition.zoom,
             );
-          } catch (e) {
+          } on DioError catch (e) {
+            logError(e.message);
             Get.offAll(
               () => LoginPage(),
               duration: Duration(milliseconds: 1200),

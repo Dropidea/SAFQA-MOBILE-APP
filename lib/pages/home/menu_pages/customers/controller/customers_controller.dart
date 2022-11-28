@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/main.dart';
+import 'package:safqa/pages/home/menu_pages/customers/models/customer_filter.dart';
 import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
@@ -30,10 +31,85 @@ class CustomersController extends GetxController {
 
 //------------------------customers---------------------
   List<Customer> customers = [];
+  List<Customer> customersToShow = [];
+  List<Customer> filteredCustomers = [];
   Customer customerToCreate = Customer(bank: Bank());
   Customer customerToEdit = Customer(bank: Bank());
   bool getCustomerFlag = false;
-//------------------------customers methods---------------------
+//------------------------customers search and filter methods---------------------
+  void searchForCustomerWithName(String name) {
+    if (name == "") {
+      customersToShow = filteredCustomers;
+    } else {
+      List<Customer> tmp = [];
+      for (var i in filteredCustomers) {
+        if (i.fullName!.contains(name)) {
+          tmp.add(i);
+        }
+        customersToShow = tmp;
+      }
+    }
+  }
+
+  CustomerFilter customerFilter = CustomerFilter(
+      filterActive: false,
+      name: null,
+      customerRefrence: null,
+      mobileNumber: null);
+
+  activeCustomerFilter() {
+    customerFilter.filterActive = true;
+    List<Customer> tmp1 = [];
+    List<Customer> tmp2 = [];
+    if (customerFilter.name != null) {
+      for (var i in customers) {
+        if (i.fullName == customerFilter.name) {
+          tmp1.add(i);
+        }
+      }
+    } else {
+      tmp1.addAll(customers);
+    }
+
+    if (customerFilter.mobileNumber != null) {
+      for (var i in tmp1) {
+        if (i.phoneNumber == customerFilter.mobileNumber) {
+          tmp2.add(i);
+        }
+      }
+    } else {
+      tmp2.addAll(tmp1);
+    }
+    tmp1 = [];
+    if (customerFilter.customerRefrence != null) {
+      for (var i in tmp2) {
+        if (i.customerReference == customerFilter.customerRefrence) {
+          tmp1.add(i);
+        }
+      }
+    } else {
+      tmp1.addAll(tmp2);
+    }
+    tmp2 = [];
+
+    filteredCustomers = tmp1;
+    customersToShow = filteredCustomers;
+    update();
+  }
+
+  clearCustomerFilter() {
+    customerFilter = CustomerFilter(
+        filterActive: false,
+        name: null,
+        customerRefrence: null,
+        mobileNumber: null);
+    filteredCustomers = customers;
+    customersToShow = customers;
+    update();
+  }
+//---------
+//--------------customers api methods--------------
+
   Future getMyCustomers() async {
     try {
       getCustomerFlag = true;
@@ -45,6 +121,8 @@ class CustomersController extends GetxController {
         tmp.add(c);
       }
       customers = tmp;
+      customersToShow = tmp;
+      filteredCustomers = tmp;
       logSuccess("customers get done");
       getCustomerFlag = false;
       // return globalData;
@@ -120,6 +198,66 @@ class CustomersController extends GetxController {
           ),
         ),
       );
+    }
+  }
+
+  Future deleteCustomer(int customerId) async {
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
+
+      final body = d.FormData();
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res = await dio.post(EndPoints.deleteCustomer + customerId.toString(),
+          data: body);
+      logSuccess(res.data);
+      await getMyCustomers();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Customer Deleted Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
+      logError(e.message);
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 3000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
     }
   }
 

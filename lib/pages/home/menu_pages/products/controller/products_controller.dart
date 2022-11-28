@@ -322,6 +322,7 @@ class ProductsController extends GetxController {
     ));
     try {
       final body = d.FormData.fromMap(product.toJson());
+      logSuccess(product.toJson());
       body.fields.add(MapEntry("_method", "PUT"));
       if (product.productImage != null) {
         body.files.add(MapEntry(
