@@ -4,12 +4,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/category_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/category_search_filter.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/create_category.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -199,6 +199,15 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                                 .productCategoriesToShow.length,
                             itemBuilder: (context, index) {
                               return CategoryCard(
+                                onToggle: () {
+                                  ProductCategory c = _productController
+                                      .productCategoriesToShow[index];
+                                  c.isActive == 0
+                                      ? c.isActive = 1
+                                      : c.isActive = 0;
+                                  return _productController
+                                      .editProductCategory(c);
+                                },
                                 onTap: () {
                                   Get.to(() => CategoryDetailsPage(
                                         productCategory: _productController
@@ -275,6 +284,7 @@ class CategoryCard extends StatefulWidget {
     required this.nameAr,
     required this.nameEn,
     this.onTap,
+    required this.onToggle,
   });
   bool isToggled;
   final double? width;
@@ -282,6 +292,7 @@ class CategoryCard extends StatefulWidget {
   final String? nameAr;
   final String? nameEn;
   void Function()? onTap;
+  Future<bool> Function() onToggle;
   @override
   State<CategoryCard> createState() => _CategoryCardState();
 }
@@ -329,11 +340,11 @@ class _CategoryCardState extends State<CategoryCard> {
                       borderRadius: 20.0,
                       activeColor: Color(0xff1BAFB2),
                       value: widget.isToggled,
-                      onToggle: (value) {
-                        logSuccess(value);
-                        setState(() {
+                      onToggle: (value) async {
+                        bool f = await widget.onToggle();
+                        if (f) {
                           widget.isToggled = value;
-                        });
+                        }
                       },
                     ),
                   ],

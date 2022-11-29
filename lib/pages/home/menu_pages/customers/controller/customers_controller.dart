@@ -142,14 +142,13 @@ class CustomersController extends GetxController {
       ));
       final body = d.FormData.fromMap(customerToCreate.toJson());
       if (customerToCreate.bank!.id != null &&
-          customerToCreate.bank!.bankAccount != null &&
-          customerToCreate.bank!.iban != null) {
+          customerToCreate.bankAccount != null &&
+          customerToCreate.iban != null) {
         body.fields
             .add(MapEntry("bank_id", customerToCreate.bank!.id.toString()));
-        body.fields.add(MapEntry(
-            "bank_account", customerToCreate.bank!.bankAccount.toString()));
-        body.fields
-            .add(MapEntry("iban", customerToCreate.bank!.iban.toString()));
+        body.fields.add(
+            MapEntry("bank_account", customerToCreate.bankAccount.toString()));
+        body.fields.add(MapEntry("iban", customerToCreate.iban.toString()));
       }
       var res = await dio.post(EndPoints.createCustomer, data: body);
       logSuccess(res.data);
@@ -272,13 +271,13 @@ class CustomersController extends GetxController {
       body.fields.add(MapEntry("_method", "PUT"));
 
       if (customerToEdit.bank!.id != null &&
-          customerToEdit.bank!.bankAccount != null &&
-          customerToEdit.bank!.iban != null) {
+          customerToEdit.bankAccount != null &&
+          customerToEdit.iban != null) {
         body.fields
             .add(MapEntry("bank_id", customerToEdit.bank!.id.toString()));
-        body.fields.add(MapEntry(
-            "bank_account", customerToEdit.bank!.bankAccount.toString()));
-        body.fields.add(MapEntry("iban", customerToEdit.bank!.iban.toString()));
+        body.fields.add(
+            MapEntry("bank_account", customerToEdit.bankAccount.toString()));
+        body.fields.add(MapEntry("iban", customerToEdit.iban.toString()));
       }
       logSuccess(customerToEdit.toJson());
       var res = await dio.post(

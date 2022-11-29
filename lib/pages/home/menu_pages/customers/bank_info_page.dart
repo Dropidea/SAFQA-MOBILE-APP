@@ -10,15 +10,41 @@ import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:sizer/sizer.dart';
 
-class BankInfoPage extends StatelessWidget {
-  BankInfoPage({super.key, this.bank});
-  final Bank? bank;
+class BankInfoPage extends StatefulWidget {
+  BankInfoPage({super.key, this.customer});
+  final Customer? customer;
+
+  @override
+  State<BankInfoPage> createState() => _BankInfoPageState();
+}
+
+class _BankInfoPageState extends State<BankInfoPage> {
   TextEditingController bankNameControler = TextEditingController();
+
   String bankAccountControler = "";
+
   String ibanControler = "";
+
   final SignUpController _signUpController = Get.find();
+
   final CustomersController _customersController = Get.find();
+
   int bankId = 1;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.customer != null) {
+      ibanControler = widget.customer!.iban ?? "";
+      bankAccountControler = widget.customer!.bankAccount ?? "";
+    } else {
+      ibanControler = _customersController.customerToCreate.iban ?? "";
+      bankAccountControler =
+          _customersController.customerToCreate.bankAccount ?? "";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -48,12 +74,13 @@ class BankInfoPage extends StatelessWidget {
             blackText("Bank Name", 16),
             SearchField<Bank>(
               itemHeight: 40,
-              initialValue: bank != null
-                  ? SearchFieldListItem<Bank>(bank!.name!,
-                      item: bank!,
+              initialValue: widget.customer != null &&
+                      widget.customer!.bank != null
+                  ? SearchFieldListItem<Bank>(widget.customer!.bank!.name!,
+                      item: widget.customer!.bank,
                       child: Padding(
                         padding: const EdgeInsetsDirectional.only(start: 10),
-                        child: greyText(bank!.name ?? "", 15),
+                        child: greyText(widget.customer!.bank!.name ?? "", 15),
                       ))
                   : _customersController.customerToCreate.bank!.name == null
                       ? null
@@ -103,14 +130,10 @@ class BankInfoPage extends StatelessWidget {
             const SizedBox(height: 20),
             blackText("Bank Account", 16),
             SignUpTextField(
-              padding: EdgeInsets.all(0),
-              keyBoardType: TextInputType.number,
-              onchanged: (s) => bankAccountControler = s!,
-              initialValue: bank != null
-                  ? bank!.bankAccount ?? ""
-                  : _customersController.customerToCreate.bank!.bankAccount ??
-                      "",
-            ),
+                padding: EdgeInsets.all(0),
+                keyBoardType: TextInputType.number,
+                onchanged: (s) => bankAccountControler = s!,
+                initialValue: bankAccountControler),
             const SizedBox(height: 20),
             blackText("Iban", 16),
             SignUpTextField(
@@ -118,9 +141,7 @@ class BankInfoPage extends StatelessWidget {
               textInputAction: TextInputAction.done,
               onchanged: (s) => ibanControler = s!,
               keyBoardType: TextInputType.number,
-              initialValue: bank != null
-                  ? bank!.iban ?? ""
-                  : _customersController.customerToCreate.bank!.iban ?? "",
+              initialValue: ibanControler,
             ),
             SizedBox(height: 50),
             Center(
@@ -128,14 +149,18 @@ class BankInfoPage extends StatelessWidget {
                 onTap: () {
                   Bank tmpbank = Bank(
                     id: bankId,
-                    iban: ibanControler,
-                    bankAccount: bankAccountControler,
                     name: bankNameControler.text,
                   );
-                  if (bank == null) {
+                  if (widget.customer == null) {
                     _customersController.customerToCreate.bank = tmpbank;
+                    _customersController.customerToCreate.iban = ibanControler;
+                    _customersController.customerToCreate.bankAccount =
+                        bankAccountControler;
                   } else {
                     _customersController.customerToEdit.bank = tmpbank;
+                    _customersController.customerToEdit.iban = ibanControler;
+                    _customersController.customerToEdit.bankAccount =
+                        bankAccountControler;
                   }
                   logSuccess(
                       _customersController.customerToCreate.bank!.toJson());

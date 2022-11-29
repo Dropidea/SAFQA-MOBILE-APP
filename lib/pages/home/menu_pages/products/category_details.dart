@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
+import 'package:safqa/pages/home/menu_pages/products/create_category.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:sizer/sizer.dart';
 
 class CategoryDetailsPage extends StatelessWidget {
@@ -29,64 +31,53 @@ class CategoryDetailsPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: w / 2.5,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xff58D241).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.edit,
-                        color: Color(0xff58D241),
-                        size: 18.0.sp,
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => CreateCategoryPage(
+                        productCategory: productCategory,
+                      ));
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xff58D241).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.edit,
+                          color: Color(0xff58D241),
+                          size: 18.0.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Edit",
-                      style: TextStyle(
-                        fontSize: 12.0.sp,
-                        color: Color(0xff58D241),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
+                      SizedBox(width: 10),
+                      Text(
+                        "Edit",
+                        style: TextStyle(
+                          fontSize: 12.0.sp,
+                          color: Color(0xff58D241),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                  Get.dialog(AlertDialog(
-                    title: Text(
-                      "Change Password",
-                      style: TextStyle(
-                          color: Colors.red.shade700,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 22),
-                    ),
-                    content: Text("Are You Sure?"),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text("YES"),
-                        onPressed: () {
-                          Future(() => Get.back());
-                          Future(() => Get.back());
-                        },
-                      ),
-                      TextButton(
-                        child: Text("NO"),
-                        onPressed: () {
-                          Get.back();
-                        },
-                      ),
-                    ],
-                  ));
+                  MyDialogs.showDeleteDialoge(
+                      onProceed: () {
+                        Get.back();
+                        productsController
+                            .deleteProductCategory(productCategory);
+                      },
+                      message: "Atr you sure?");
                 },
                 child: Container(
                   width: w / 2.5,

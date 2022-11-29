@@ -5,7 +5,8 @@ class Customer {
   String? customerReference;
   String? phoneNumber;
   String? phoneNumberCodeId;
-
+  String? bankAccount;
+  String? iban;
   int? managerUserId;
   int? profileBusinessId;
   Country? country;
@@ -22,6 +23,8 @@ class Customer {
     this.profileBusinessId,
     this.country,
     this.bank,
+    this.bankAccount,
+    this.iban,
   });
 
   Customer.fromJson(Map<String, dynamic> json) {
@@ -31,7 +34,8 @@ class Customer {
     customerReference = json['customer_reference'];
     phoneNumber = json['phone_number'];
     phoneNumberCodeId = json['phone_number_code_id'];
-
+    bankAccount = json['bank_account'];
+    iban = json['iban'];
     managerUserId = json['manager_user_id'];
     profileBusinessId = json['profile_business_id'];
     country =
@@ -56,6 +60,8 @@ class Customer {
     if (this.bank != null) {
       data['bank'] = this.bank!.toJson();
     }
+    data['bank_account'] = this.bankAccount;
+    data['iban'] = this.iban;
     return data;
   }
 }
@@ -114,16 +120,12 @@ class Bank {
   String? name;
   int? isActive;
   int? countryId;
-  String? bankAccount;
-  String? iban;
 
   Bank({
     this.id,
     this.name,
     this.isActive,
     this.countryId,
-    this.bankAccount,
-    this.iban,
   });
 
   Bank.fromJson(Map<String, dynamic> json) {
@@ -131,8 +133,6 @@ class Bank {
     name = json['name'];
     isActive = json['is_active'];
     countryId = json['country_id'];
-    bankAccount = json['bank_account'];
-    iban = json['iban'];
   }
 
   Map<String, dynamic> toJson() {
@@ -141,8 +141,7 @@ class Bank {
     data['name'] = this.name;
     data['is_active'] = this.isActive;
     data['country_id'] = this.countryId;
-    data['bank_account'] = this.bankAccount;
-    data['iban'] = this.iban;
+
     return data;
   }
 }

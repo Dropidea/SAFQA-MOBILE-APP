@@ -14,6 +14,9 @@ class EndPoints {
   static String get getProducts => "/products";
   static String get createProductCategory => "/product/category/store";
   static String get getProductCategories => "/product/categories";
+  static String get deleteProductCategory =>
+      "$_baseURL/product/category/delete/";
+  static String get editProductCategory => "$_baseURL/product/category/update/";
   static String get getMyCustomers => "$_baseURL/customers";
   static String get createCustomer => "$_baseURL/customer/store";
   static String get deleteCustomer => "$_baseURL/customer/delete/";

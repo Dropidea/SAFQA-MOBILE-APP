@@ -202,14 +202,13 @@ class CustomerDetailsPage extends StatelessWidget {
                                     content2: ""),
                                 invoiceInfoMethod(
                                     title1: "Bank Account",
-                                    content1: customer.bank!.bankAccount ??
+                                    content1: customer.bankAccount ??
                                         "No Bank Account",
                                     title2: "",
                                     content2: ""),
                                 invoiceInfoMethod(
                                     title1: "IBAN",
-                                    content1:
-                                        customer.bank!.iban ?? "No IBAN Found",
+                                    content1: customer.iban ?? "No IBAN Found",
                                     title2: "",
                                     content2: ""),
                               ],

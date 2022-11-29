@@ -394,6 +394,68 @@ class ProductsController extends GetxController {
     }
   }
 
+  Future<bool> editProductCategory(ProductCategory category) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      final body = d.FormData.fromMap(category.toJson());
+
+      body.fields.add(MapEntry("_method", "PUT"));
+
+      logSuccess(EndPoints.baseURL +
+          EndPoints.editProductCategory +
+          category.id.toString());
+      await sslProblem();
+      var res = await dio.post(
+          EndPoints.editProductCategory + category.id.toString(),
+          data: body);
+      logSuccess(res.data);
+      // await getProductCategories();
+      Get.back();
+
+      clearProductFilter();
+      return true;
+    } on DioError catch (e) {
+      Get.back();
+      logError(e.message);
+      logError(e.response!.data);
+      Map<String, dynamic> m = e.response!.data;
+      String errors = "";
+      int c = 0;
+      for (var i in m.values) {
+        for (var j = 0; j < i.length; j++) {
+          if (j == i.length - 1) {
+            errors = errors + i[j];
+          } else {
+            errors = "${errors + i[j]}\n";
+          }
+        }
+
+        c++;
+        if (c != m.values.length) {
+          errors += "\n";
+        }
+      }
+
+      Get.showSnackbar(
+        GetSnackBar(
+          duration: Duration(milliseconds: 3000),
+          backgroundColor: Colors.red,
+          // message: errors,
+          messageText: Text(
+            errors,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+            ),
+          ),
+        ),
+      );
+      return false;
+    }
+  }
+
   Future createProductCategory(ProductCategory category) async {
     Get.dialog(Center(
       child: CircularProgressIndicator(),
@@ -453,6 +515,33 @@ class ProductsController extends GetxController {
       //     ),
       //   ),
       // );
+    }
+  }
+
+  Future deleteProductCategory(ProductCategory category) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData();
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res = await dio.post(
+          EndPoints.deleteProductCategory + category.id.toString(),
+          data: body);
+      await getProductCategories();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Deleted Successfullt",
+        btnTXT: "close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      logError(e.message);
+      Get.back();
     }
   }
 

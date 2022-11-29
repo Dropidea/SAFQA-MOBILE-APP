@@ -224,8 +224,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                       onTap: () {
                         FocusScope.of(context).unfocus();
                         if (widget.customer != null) {
-                          Get.to(
-                              () => BankInfoPage(bank: widget.customer!.bank!),
+                          Get.to(() => BankInfoPage(customer: widget.customer!),
                               transition: Transition.rightToLeft);
                         } else {
                           Get.to(() => BankInfoPage(),

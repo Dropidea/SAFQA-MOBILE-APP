@@ -4,12 +4,14 @@ import 'package:getwidget/getwidget.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
 class CreateCategoryPage extends StatefulWidget {
-  CreateCategoryPage({super.key});
+  CreateCategoryPage({super.key, this.productCategory});
 
+  final ProductCategory? productCategory;
   @override
   State<CreateCategoryPage> createState() => _CreateCategoryPageState();
 }
@@ -19,9 +21,18 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
   TextEditingController catNameARController = TextEditingController();
 
   ProductsController _productsController = Get.find();
-
   int isActive = 0;
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    if (widget.productCategory != null) {
+      catNameENController.text = widget.productCategory!.nameEn!;
+      catNameARController.text = widget.productCategory!.nameAr!;
+      isActive = widget.productCategory!.isActive!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +41,11 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
           iconTheme: IconThemeData(color: Colors.black),
           elevation: 0,
           backgroundColor: Colors.white,
-          title: blackText("Create Category", 16),
+          title: blackText(
+              widget.productCategory != null
+                  ? "Edit Category"
+                  : "Create Category",
+              16),
 
           centerTitle: true,
         ),
@@ -118,21 +133,48 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      blackText("Create Category", 16),
+                      blackText(
+                          widget.productCategory != null
+                              ? "Edit Category"
+                              : "Create Category",
+                          16),
                       SizedBox(width: 10),
                       GestureDetector(
                         onTap: () async {
+                          FocusScope.of(context).unfocus();
                           if (formKey.currentState!.validate()) {
-                            ProductCategory productCategory = ProductCategory(
-                              isActive: isActive,
-                              nameAr: catNameARController.text,
-                              nameEn: catNameENController.text,
-                            );
-                            await _productsController
-                                .createProductCategory(productCategory);
-                            catNameENController.text = "";
-                            catNameARController.text = "";
-                            await _productsController.getProductCategories();
+                            if (widget.productCategory != null) {
+                              ProductCategory c = ProductCategory(
+                                isActive: isActive,
+                                nameAr: catNameARController.text,
+                                nameEn: catNameENController.text,
+                                id: widget.productCategory!.id,
+                              );
+
+                              await _productsController.editProductCategory(c);
+                              await _productsController.getProductCategories();
+
+                              MyDialogs.showSavedSuccessfullyDialoge(
+                                title: "Edited Successfully",
+                                btnTXT: "close",
+                                onTap: () {
+                                  Get.back();
+                                  Get.back();
+                                  Get.back();
+                                },
+                              );
+                            } else {
+                              ProductCategory c = ProductCategory(
+                                isActive: isActive,
+                                nameAr: catNameARController.text,
+                                nameEn: catNameENController.text,
+                              );
+                              await _productsController
+                                  .createProductCategory(c);
+                              catNameENController.text = "";
+                              catNameARController.text = "";
+                              await _productsController.getProductCategories();
+                            }
                           }
                         },
                         child: Container(
