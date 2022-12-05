@@ -109,7 +109,8 @@ class ProductsController extends GetxController {
 
     if (productFilter.name != "") {
       for (var i in tmp1) {
-        if (i.nameEn == productFilter.name || i.nameAr == productFilter.name) {
+        if (i.nameEn!.contains(productFilter.name!) ||
+            i.nameAr!.contains(productFilter.name!)) {
           tmp2.add(i);
         }
       }
@@ -145,8 +146,8 @@ class ProductsController extends GetxController {
     List<ProductCategory> tmp2 = [];
     if (productCategoryFilter.name != "") {
       for (var i in tmp1) {
-        if (i.nameEn == productCategoryFilter.name ||
-            i.nameAr == productCategoryFilter.name) {
+        if (i.nameEn!.contains(productCategoryFilter.name!) ||
+            i.nameAr!.contains(productCategoryFilter.name!)) {
           tmp2.add(i);
         }
       }
@@ -334,9 +335,7 @@ class ProductsController extends GetxController {
           ),
         ));
       }
-      logSuccess(body.fields);
-      logSuccess(
-          EndPoints.baseURL + EndPoints.updateProduct + product.id.toString());
+
       await sslProblem();
       var res = await dio.post(
           EndPoints.baseURL + EndPoints.updateProduct + product.id.toString(),

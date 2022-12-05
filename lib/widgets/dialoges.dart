@@ -152,7 +152,14 @@ class MyDialogs {
             height: 100,
           ),
           SizedBox(height: 10),
-          blackText(title, 16),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: blackText(
+              title,
+              title.length > 30 ? 14 : 16,
+              textAlign: TextAlign.center,
+            ),
+          ),
           SizedBox(height: 10),
           InkWell(
             onTap: onTap ??

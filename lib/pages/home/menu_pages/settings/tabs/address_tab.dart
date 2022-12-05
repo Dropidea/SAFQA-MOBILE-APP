@@ -4,14 +4,28 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/settings/controllers/addresses_controller.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/address.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/add_address_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/address_details.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:sizer/sizer.dart';
 
-class AdressesTab extends StatelessWidget {
-  const AdressesTab({super.key});
+class AdressesTab extends StatefulWidget {
+  AdressesTab({super.key});
+
+  @override
+  State<AdressesTab> createState() => _AdressesTabState();
+}
+
+class _AdressesTabState extends State<AdressesTab> {
+  AddressesController _addressesController = Get.put(AddressesController());
+  @override
+  void initState() {
+    _addressesController.getAddresses();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,26 +197,38 @@ class AdressesTab extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
-            child: ExpandableNotifier(
-          child: ListView.separated(
-              itemBuilder: (context, index) => index == 0
-                  ? SizedBox(
-                      height: 10,
+        SizedBox(height: 20),
+        Expanded(child: ExpandableNotifier(
+          child: GetBuilder<AddressesController>(builder: (c) {
+            if (c.getAddressFlag) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return c.addresses.isEmpty
+                  ? Center(
+                      child: greyText("nothing to show !!", 20),
                     )
-                  : AddressWidget(
-                      address: 'Dubai',
-                      addressType: 'Appartment',
-                      area: 'Sharka',
-                      block: "21",
-                      avenue: 'Lorem',
-                      street: "Lorem absum, kghe wpfl bqwhd",
-                      onTap: () => Get.to(() => AddressDetailsPage()),
-                    ),
-              separatorBuilder: (context, index) => SizedBox(
-                    height: 20,
-                  ),
-              itemCount: 10),
+                  : ListView.separated(
+                      itemBuilder: (context, index) {
+                        Address address = c.addresses[index];
+                        return AddressWidget(
+                          address: address.city!.nameEn!,
+                          addressType: address.addressType!.nameEn!,
+                          area: address.area!.nameEn!,
+                          block: address.block ?? "Not Available",
+                          avenue: address.avenue ?? "Not Available",
+                          street: address.street ?? "Not Available",
+                          onTap: () => Get.to(
+                              () => AddressDetailsPage(address: address)),
+                        );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(
+                            height: 20,
+                          ),
+                      itemCount: c.addresses.length);
+            }
+          }),
         ))
       ],
     );

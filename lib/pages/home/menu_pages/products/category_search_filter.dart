@@ -5,7 +5,6 @@ import 'package:getwidget/getwidget.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
-import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
 class CategoryFilterPage extends StatefulWidget {
@@ -115,22 +114,13 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    SignUpTextField(
-                      padding: EdgeInsets.all(0),
-                      hintText: "Category Name (En / Ar)",
-                      onchanged: (s) {
-                        _productsController.productCategoryFilter.name = s;
-                      },
-                      initialValue:
-                          _productsController.productCategoryFilter.name ?? "",
-                    ),
-                  ],
-                ),
+              expanded: buildCustomNameTextfield(
+                hint: "Category Name (En / Ar)",
+                onChanged: (p0) {
+                  _productsController.productCategoryFilter.name = p0;
+                },
+                initialValue:
+                    _productsController.productCategoryFilter.name ?? "",
               ),
               header: Container(
                 decoration: BoxDecoration(

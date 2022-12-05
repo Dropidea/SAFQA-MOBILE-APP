@@ -144,6 +144,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                                       borderRadius: 20,
                                                       text: "Send",
                                                       func: () async {
+                                                        logSuccess(
+                                                            _signUpController
+                                                                .dataToRegister);
                                                         formKey.currentState!
                                                             .validate();
                                                         var res = await _signUpController
@@ -539,7 +542,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         .toList();
                     logError(countriesCodes);
                     _signUpController
-                        .selectPhoneNumberCodeDrop(countriesCodes[4]);
+                        .selectPhoneNumberCodeDrop(countriesCodes[0]);
                     return SignUpTextField(
                       keyBoardType: TextInputType.number,
                       prefixIcon: SizedBox(
@@ -842,7 +845,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         .toSet()
                         .toList();
                     _signUpController
-                        .selectPhoneNumberManagerCodeDrop(countriesCodes[4]);
+                        .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
                     return SignUpTextField(
                       keyBoardType: TextInputType.number,
                       prefixIcon: SizedBox(

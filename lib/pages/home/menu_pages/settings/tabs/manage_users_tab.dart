@@ -43,21 +43,27 @@ class _ManageUsersTabState extends State<ManageUsersTab> {
             Icons.search_outlined,
             color: Colors.grey,
           ),
+          onchanged: (s) {
+            _manageUserController.searchForProductsWithName(s!);
+            setState(() {});
+          },
           suffixIcon: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
               Get.to(() => MUsersSearchFilterPage());
             },
-            child: Badge(
-              badgeColor: Color(0xff1BAFB2),
-              showBadge: true,
-              position: BadgePosition.topEnd(top: 8, end: 8),
-              child: Image(
-                image: AssetImage("assets/images/filter.png"),
-                width: 18,
-                height: 18,
-              ),
-            ),
+            child: GetBuilder<ManageUserController>(builder: (c) {
+              return Badge(
+                badgeColor: Color(0xff1BAFB2),
+                showBadge: c.manageUserFilter.filterActive,
+                position: BadgePosition.topEnd(top: 8, end: 8),
+                child: Image(
+                  image: AssetImage("assets/images/filter.png"),
+                  width: 18,
+                  height: 18,
+                ),
+              );
+            }),
           ),
         ),
         const SizedBox(height: 20),
@@ -224,60 +230,64 @@ class _ManageUsersTabState extends State<ManageUsersTab> {
             ],
           ),
         ),
+        SizedBox(height: 20),
         Expanded(child: GetBuilder<ManageUserController>(builder: (c) {
           return c.getManageUserFlag
               ? Center(
                   child: CircularProgressIndicator(),
                 )
               : ListView.separated(
-                  itemBuilder: (context, index) => index == 0
-                      ? SizedBox(
-                          height: 10,
-                        )
-                      : GestureDetector(
-                          onTap: () => Get.to(() => ManageUserDetailsPage()),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Color(0xffF9F9F9),
-                                ),
-                                child: Center(
-                                  child: greyText("A", 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                  itemBuilder: (context, index) => GestureDetector(
+                        onTap: () => Get.to(() => ManageUserDetailsPage(
+                              manageUser: c.manageUsersToShow[index],
+                            )),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Color(0xffF9F9F9),
                               ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    blackText(
-                                        c.manageUsers[index - 1].fullName!, 15),
-                                    SizedBox(height: 5),
-                                    blueText(
-                                      c.manageUsers[index - 1].email!,
-                                      14,
-                                      // underline: true,
-                                    ),
-                                    SizedBox(height: 5),
-                                    greyText(
-                                        c.manageUsers[index - 1]
-                                            .phoneNumberManager!,
-                                        14),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                              child: Center(
+                                child: greyText("A", 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  blackText(
+                                      c.manageUsersToShow[index].fullName!, 15),
+                                  SizedBox(height: 5),
+                                  blueText(
+                                    c.manageUsersToShow[index].email!.length >
+                                            20
+                                        ? c.manageUsersToShow[index].email!
+                                                .substring(0, 20) +
+                                            "..."
+                                        : c.manageUsersToShow[index].email!,
+                                    14,
+                                    // underline: true,
+                                  ),
+                                  SizedBox(height: 5),
+                                  greyText(
+                                      c.manageUsersToShow[index]
+                                          .phoneNumberManager!,
+                                      14),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
+                      ),
                   separatorBuilder: (context, index) => SizedBox(
                         height: 20,
                       ),
-                  itemCount: c.manageUsers.length + 1);
+                  itemCount: c.manageUsersToShow.length);
         }))
       ],
     );

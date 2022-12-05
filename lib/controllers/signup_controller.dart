@@ -130,10 +130,10 @@ class SignUpController extends GetxController {
         tmp.add(b);
       }
       banks = tmp;
-      logSuccess(banks.length);
+      logSuccess("banks done");
       return globalData;
     } on DioError catch (e) {
-      logError("msg");
+      logError("banks failed");
       logError(e.message);
     }
   }

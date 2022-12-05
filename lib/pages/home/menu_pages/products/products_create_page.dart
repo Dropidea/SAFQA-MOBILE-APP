@@ -40,6 +40,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String selectedCategoryId = "-1";
   String selectedCategory = "";
   String selectedCurrencyId = "1";
+  String? width = "";
+  String? height = "";
+  String? weight = "";
+  String? length = "";
   @override
   void initState() {
     super.initState();
@@ -62,6 +66,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       isActiveVal = widget.product!.isActive!;
       isStockableVal = widget.product!.isStockable!;
       isShippableVal = widget.product!.isShippingProduct!;
+      width = widget.product!.width;
+      weight = widget.product!.weight;
+      height = widget.product!.height;
+      length = widget.product!.length;
       //  addToStoreVal = widget.product!.is!;
     }
   }
@@ -627,6 +635,76 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     ],
                   ),
                   SizedBox(height: 20),
+                  isShippableVal == 1
+                      ? Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SignUpTextField(
+                                  validator: (s) {
+                                    if (s!.isEmpty) return "Required";
+                                    return null;
+                                  },
+                                  hintText: "width",
+                                  padding: EdgeInsets.all(0),
+                                  width: w / 2 - 30,
+                                  initialValue: width,
+                                  onchanged: (s) {
+                                    width = s!;
+                                  },
+                                ),
+                                SignUpTextField(
+                                  validator: (s) {
+                                    if (s!.isEmpty) return "Required";
+                                    return null;
+                                  },
+                                  hintText: "length",
+                                  padding: EdgeInsets.all(0),
+                                  width: w / 2 - 30,
+                                  initialValue: length,
+                                  onchanged: (s) {
+                                    length = s!;
+                                  },
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SignUpTextField(
+                                  validator: (s) {
+                                    if (s!.isEmpty) return "Required";
+                                    return null;
+                                  },
+                                  hintText: "height",
+                                  padding: EdgeInsets.all(0),
+                                  width: w / 2 - 30,
+                                  initialValue: height,
+                                  onchanged: (s) {
+                                    height = s!;
+                                  },
+                                ),
+                                SignUpTextField(
+                                  validator: (s) {
+                                    if (s!.isEmpty) return "Required";
+                                    return null;
+                                  },
+                                  hintText: "weight",
+                                  padding: EdgeInsets.all(0),
+                                  width: w / 2 - 30,
+                                  initialValue: weight,
+                                  onchanged: (s) {
+                                    weight = s!;
+                                  },
+                                )
+                              ],
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  SizedBox(height: 20),
                   CircularGoBTN(
                     text: widget.product == null
                         ? "Create Product"
@@ -647,6 +725,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             isActive: isActiveVal,
                             isStockable: isStockableVal,
                             isShippingProduct: isShippableVal,
+                            width: isShippableVal == 1 ? width : null,
+                            height: isShippableVal == 1 ? height : null,
+                            length: isShippableVal == 1 ? length : null,
+                            weight: isShippableVal == 1 ? weight : null,
                           );
                           FocusScope.of(context).unfocus();
 
@@ -660,6 +742,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             unitPriceController.text = "";
                             discriptionARController.text = "";
                             discriptionENController.text = "";
+                            width = "";
+                            height = "";
+                            weight = "";
+                            length = "";
                           }
                         }
                       } else {
@@ -678,10 +764,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             isActive: isActiveVal,
                             isStockable: isStockableVal,
                             isShippingProduct: isShippableVal,
-                            length: "0",
-                            height: "0",
-                            weight: "0",
-                            width: "0",
+                            width: isShippableVal == 1 ? width : null,
+                            height: isShippableVal == 1 ? height : null,
+                            length: isShippableVal == 1 ? length : null,
+                            weight: isShippableVal == 1 ? weight : null,
                           );
                           FocusScope.of(context).unfocus();
 
@@ -695,6 +781,10 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             unitPriceController.text = "";
                             discriptionARController.text = "";
                             discriptionENController.text = "";
+                            width = "";
+                            height = "";
+                            weight = "";
+                            length = "";
                           }
                         }
                       }

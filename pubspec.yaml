@@ -66,6 +66,7 @@ dependencies:
   shimmer: ^2.0.0
   searchfield: ^0.7.2
   path_provider: ^1.6.28
+  flutter_form_builder: ^7.7.0
   # internet_file: ^1.2.0
   # dropdown_search: ^5.0.3
   # pinput: ^2.2.12

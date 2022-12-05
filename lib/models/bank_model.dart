@@ -48,33 +48,36 @@ class Country {
   String? nameEn;
   String? nameAr;
   String? code;
-  String? nationality;
+  String? nationalityEn;
+  String? nationalityAr;
   String? flag;
   String? currency;
   String? shortCurrency;
-  int? defaultC;
+  int? defaultc;
 
   Country(
       {this.id,
       this.nameEn,
       this.nameAr,
       this.code,
-      this.nationality,
+      this.nationalityEn,
+      this.nationalityAr,
       this.flag,
       this.currency,
       this.shortCurrency,
-      this.defaultC});
+      this.defaultc});
 
   Country.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nameEn = json['name_en'];
     nameAr = json['name_ar'];
     code = json['code'];
-    nationality = json['nationality'];
+    nationalityEn = json['nationality_en'];
+    nationalityAr = json['nationality_ar'];
     flag = json['flag'];
     currency = json['currency'];
     shortCurrency = json['short_currency'];
-    defaultC = json['default'];
+    defaultc = json['default'];
   }
 
   Map<String, dynamic> toJson() {
@@ -83,11 +86,12 @@ class Country {
     data['name_en'] = this.nameEn;
     data['name_ar'] = this.nameAr;
     data['code'] = this.code;
-    data['nationality'] = this.nationality;
+    data['nationality_en'] = this.nationalityEn;
+    data['nationality_ar'] = this.nationalityAr;
     data['flag'] = this.flag;
     data['currency'] = this.currency;
     data['short_currency'] = this.shortCurrency;
-    data['default'] = this.defaultC;
+    data['default'] = this.defaultc;
     return data;
   }
 }

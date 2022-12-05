@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/create_invoice_page.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
@@ -33,6 +34,7 @@ class _MainPageState extends State<MainPage> {
 
   ChartsController _chartsController = Get.put(ChartsController());
   CustomersController _customersController = Get.put(CustomersController());
+  GlobalDataController _globlDataController = Get.put(GlobalDataController());
   double _x = 0;
   double _y = 0;
   String i = "This Month";
@@ -42,6 +44,12 @@ class _MainPageState extends State<MainPage> {
     _customersController.getMyCustomers();
     _signUpController.getGlobalData();
     _signUpController.getBanks();
+    _globlDataController.getCountries();
+    _globlDataController.getCities();
+    _globlDataController.getAreas();
+    _globlDataController.getAdressTypes();
+    _globlDataController.getMe();
+    _globlDataController.getRoles();
     super.initState();
   }
 

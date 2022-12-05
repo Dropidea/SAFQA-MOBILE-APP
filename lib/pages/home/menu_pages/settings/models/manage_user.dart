@@ -2,12 +2,12 @@ class ManageUser {
   int? id;
   int? roleId;
   int? profileBusinessId;
-  int? phoneNumberCodeManagerId;
+  int phoneNumberCodeManagerId = 1;
   String? phoneNumberManager;
   String? email;
   String? fullName;
   int? nationalityId;
-  int? isEnable;
+  int isEnable = 0;
   String? avatar;
   int? enableBellSound;
   int? confirmEmail;
@@ -26,67 +26,279 @@ class ManageUser {
   int? accountStatements;
   int? orders;
   int? suppliers;
-  int? notificationCreateInvoice;
-  int? notificationInvoicePaid;
-  int? notificationNewOrder;
-  int? notificationCreateBatchInvoice;
-  int? notificationDeposit;
-  int? notificationCreateRecurringInvoice;
-  int? notificationRefundTransfered;
-  int? notificationNotificationsServiceRequest;
-  int? notificationNotificationsHourlyDepositRejected;
-  int? notificationApproveVendorAccount;
-  int? notificationCreateShippingInvoice;
+  int notificationCreateInvoice = 0;
+  int notificationInvoicePaid = 0;
+  int notificationNewOrder = 0;
+  int notificationCreateBatchInvoice = 0;
+  int notificationDeposit = 0;
+  int notificationCreateRecurringInvoice = 0;
+  int notificationRefundTransfered = 0;
+  int notificationNotificationsServiceRequest = 0;
+  int notificationNotificationsHourlyDepositRejected = 0;
+  int notificationApproveVendorAccount = 0;
+  int notificationCreateShippingInvoice = 0;
+
   String? emailVerifiedAt;
   String? createdAt;
   String? updatedAt;
   Nationality? nationality;
   UserRole? userRole;
+  ProfileBusines? profileBusines;
 
-  ManageUser(
-      {this.id,
-      this.roleId,
-      this.profileBusinessId,
-      this.phoneNumberCodeManagerId,
-      this.phoneNumberManager,
-      this.email,
-      this.fullName,
-      this.nationalityId,
-      this.isEnable,
-      this.avatar,
-      this.enableBellSound,
-      this.confirmEmail,
-      this.confirmPhone,
-      this.batchInvoices,
-      this.deposits,
-      this.paymentLinks,
-      this.profile,
-      this.users,
-      this.refund,
-      this.showAllInvoices,
-      this.customers,
-      this.invoices,
-      this.products,
-      this.commissions,
-      this.accountStatements,
-      this.orders,
-      this.suppliers,
-      this.notificationCreateInvoice,
-      this.notificationInvoicePaid,
-      this.notificationNewOrder,
-      this.notificationCreateBatchInvoice,
-      this.notificationDeposit,
-      this.notificationCreateRecurringInvoice,
-      this.notificationRefundTransfered,
-      this.notificationNotificationsServiceRequest,
-      this.notificationNotificationsHourlyDepositRejected,
-      this.notificationApproveVendorAccount,
-      this.notificationCreateShippingInvoice,
-      this.emailVerifiedAt,
-      this.createdAt,
-      this.updatedAt,
-      this.nationality,
-      this.userRole});
+  ManageUser({
+    this.id,
+    this.roleId,
+    this.profileBusinessId,
+    this.phoneNumberCodeManagerId = 1,
+    this.phoneNumberManager,
+    this.email,
+    this.fullName,
+    this.nationalityId,
+    this.isEnable = 0,
+    this.avatar,
+    this.enableBellSound,
+    this.confirmEmail,
+    this.confirmPhone,
+    this.batchInvoices,
+    this.deposits,
+    this.paymentLinks,
+    this.profile,
+    this.users,
+    this.refund,
+    this.showAllInvoices,
+    this.customers,
+    this.invoices,
+    this.products,
+    this.commissions,
+    this.accountStatements,
+    this.orders,
+    this.suppliers,
+    this.notificationCreateInvoice = 0,
+    this.notificationInvoicePaid = 0,
+    this.notificationNewOrder = 0,
+    this.notificationCreateBatchInvoice = 0,
+    this.notificationDeposit = 0,
+    this.notificationCreateRecurringInvoice = 0,
+    this.notificationRefundTransfered = 0,
+    this.notificationNotificationsServiceRequest = 0,
+    this.notificationNotificationsHourlyDepositRejected = 0,
+    this.notificationApproveVendorAccount = 0,
+    this.notificationCreateShippingInvoice = 0,
+    this.emailVerifiedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.nationality,
+    this.userRole,
+    this.profileBusines,
+  });
+  void superMaster() {
+    batchInvoices = 1;
+    deposits = 1;
+    paymentLinks = 1;
+    profile = 1;
+    users = 1;
+    refund = 1;
+    showAllInvoices = 1;
+    customers = 1;
+    invoices = 1;
+    products = 1;
+    commissions = 1;
+    accountStatements = 1;
+    orders = 1;
+    suppliers = 1;
+  }
+
+  List<String> getSelectedRoles() {
+    List<String> tmp = [];
+    if (batchInvoices == 1) {
+      tmp.add("Batch Invoices");
+    }
+    if (deposits == 1) {
+      tmp.add("Deposits");
+    }
+    if (paymentLinks == 1) {
+      tmp.add("Payment Links");
+    }
+    if (profile == 1) {
+      tmp.add("Profile");
+    }
+    if (users == 1) {
+      tmp.add("Users");
+    }
+    if (refund == 1) {
+      tmp.add("Refund");
+    }
+    if (showAllInvoices == 1) {
+      tmp.add("Show All Invoices");
+    }
+    if (customers == 1) {
+      tmp.add("Customers");
+    }
+    if (invoices == 1) {
+      tmp.add("Invoices");
+    }
+    if (products == 1) {
+      tmp.add("Products");
+    }
+    if (commissions == 1) {
+      tmp.add("Commissions");
+    }
+    if (accountStatements == 1) {
+      tmp.add("Account Statements");
+    }
+    if (orders == 1) {
+      tmp.add("Orders");
+    }
+    if (suppliers == 1) {
+      tmp.add("Suppliers");
+    }
+    return tmp;
+  }
+
+  List<String> getSelectedNotifications() {
+    List<String> tmp = [];
+    if (notificationCreateInvoice == 1) {
+      tmp.add("Notification Create Invoice");
+    }
+    if (notificationApproveVendorAccount == 1) {
+      tmp.add("Notification Approve Vendor Account");
+    }
+    if (notificationCreateBatchInvoice == 1) {
+      tmp.add("Notification Create Batch Invoice");
+    }
+    if (notificationCreateRecurringInvoice == 1) {
+      tmp.add("Notification Create Recurring Invoice");
+    }
+    if (notificationCreateShippingInvoice == 1) {
+      tmp.add("Notification Create Shipping Invoice");
+    }
+    if (notificationDeposit == 1) {
+      tmp.add("Notification Deposit");
+    }
+    if (notificationInvoicePaid == 1) {
+      tmp.add("Notification Invoice Paid");
+    }
+    if (notificationNewOrder == 1) {
+      tmp.add("Notification New Order");
+    }
+    if (notificationNotificationsHourlyDepositRejected == 1) {
+      tmp.add("Notification Notifications Hourly Deposit Rejected");
+    }
+    if (notificationNotificationsServiceRequest == 1) {
+      tmp.add("Notification Notifications Service Request");
+    }
+    if (notificationRefundTransfered == 1) {
+      tmp.add("Notification Refund Transfered");
+    }
+    return tmp;
+  }
+
+  void notificationSettingsSet(List<String> s) {
+    notificationCreateInvoice = 0;
+    notificationCreateBatchInvoice = 0;
+    notificationCreateRecurringInvoice = 0;
+    notificationCreateShippingInvoice = 0;
+    notificationDeposit = 0;
+    notificationInvoicePaid = 0;
+    notificationNewOrder = 0;
+    notificationNotificationsHourlyDepositRejected = 0;
+    notificationNotificationsServiceRequest = 0;
+    notificationRefundTransfered = 0;
+    notificationApproveVendorAccount = 0;
+    if (s.contains("Notification Create Invoice")) {
+      notificationCreateInvoice = 1;
+    }
+    if (s.contains("Notification Approve Vendor Account")) {
+      notificationApproveVendorAccount = 1;
+    }
+    if (s.contains("Notification Create Batch Invoice")) {
+      notificationCreateBatchInvoice = 1;
+    }
+    if (s.contains("Notification Create Recurring Invoice")) {
+      notificationCreateRecurringInvoice = 1;
+    }
+    if (s.contains("Notification Create Shipping Invoice")) {
+      notificationCreateShippingInvoice = 1;
+    }
+    if (s.contains("Notification Deposit")) {
+      notificationDeposit = 1;
+    }
+    if (s.contains("Notification Invoice Paid")) {
+      notificationInvoicePaid = 1;
+    }
+    if (s.contains("Notification New Order")) {
+      notificationNewOrder = 1;
+    }
+    if (s.contains("Notification Notifications Hourly Deposit Rejected")) {
+      notificationNotificationsHourlyDepositRejected = 1;
+    }
+    if (s.contains("Notification Notifications Service Request")) {
+      notificationNotificationsServiceRequest = 1;
+    }
+    if (s.contains("Notification Refund Transfered")) {
+      notificationRefundTransfered = 1;
+    }
+  }
+
+  void normalUser(List<String> s) {
+    batchInvoices = 0;
+    deposits = 0;
+    paymentLinks = 0;
+    profile = 0;
+    users = 0;
+    refund = 0;
+    showAllInvoices = 0;
+    customers = 0;
+    invoices = 0;
+    products = 0;
+    commissions = 0;
+    accountStatements = 0;
+    orders = 0;
+    suppliers = 0;
+
+    if (s.contains("Batch Invoices")) {
+      batchInvoices = 1;
+    }
+    if (s.contains("Deposits")) {
+      deposits = 1;
+    }
+    if (s.contains("Payment Links")) {
+      paymentLinks = 1;
+    }
+    if (s.contains("Profile")) {
+      profile = 1;
+    }
+    if (s.contains("Users")) {
+      users = 1;
+    }
+    if (s.contains("Refund")) {
+      refund = 1;
+    }
+    if (s.contains("Show All Invoices")) {
+      showAllInvoices = 1;
+    }
+    if (s.contains("Customers")) {
+      customers = 1;
+    }
+    if (s.contains("Invoices")) {
+      invoices = 1;
+    }
+    if (s.contains("Products")) {
+      products = 1;
+    }
+    if (s.contains("Commissions")) {
+      commissions = 1;
+    }
+    if (s.contains("Account Statements")) {
+      accountStatements = 1;
+    }
+    if (s.contains("Orders")) {
+      orders = 1;
+    }
+    if (s.contains("Suppliers")) {
+      suppliers = 1;
+    }
+  }
 
   ManageUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -141,62 +353,68 @@ class ManageUser {
     userRole = json['user_role'] != null
         ? new UserRole.fromJson(json['user_role'])
         : null;
+
+    profileBusines = json['profileBusines'] != null
+        ? new ProfileBusines.fromJson(json['profileBusines'][0])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['role_id'] = this.roleId;
-    data['profile_business_id'] = this.profileBusinessId;
-    data['phone_number_code_manager_id'] = this.phoneNumberCodeManagerId;
-    data['phone_number_manager'] = this.phoneNumberManager;
-    data['email'] = this.email;
-    data['full_name'] = this.fullName;
-    data['nationality_id'] = this.nationalityId;
-    data['is_enable'] = this.isEnable;
-    data['avatar'] = this.avatar;
-    data['enable_bell_sound'] = this.enableBellSound;
-    data['confirm_email'] = this.confirmEmail;
-    data['confirm_phone'] = this.confirmPhone;
-    data['batch_invoices'] = this.batchInvoices;
-    data['deposits'] = this.deposits;
-    data['payment_links'] = this.paymentLinks;
-    data['profile'] = this.profile;
-    data['users'] = this.users;
-    data['refund'] = this.refund;
-    data['show_all_invoices'] = this.showAllInvoices;
-    data['customers'] = this.customers;
-    data['invoices'] = this.invoices;
-    data['products'] = this.products;
-    data['commissions'] = this.commissions;
-    data['account_statements'] = this.accountStatements;
-    data['orders'] = this.orders;
-    data['suppliers'] = this.suppliers;
-    data['notification_create_invoice'] = this.notificationCreateInvoice;
-    data['notification_invoice_paid'] = this.notificationInvoicePaid;
-    data['notification_new_order'] = this.notificationNewOrder;
-    data['notification_create_batch_invoice'] =
-        this.notificationCreateBatchInvoice;
-    data['notification_deposit'] = this.notificationDeposit;
+    data['id'] = id;
+    data['role_id'] = roleId;
+    data['profile_business_id'] = profileBusinessId;
+    data['phone_number_code_manager_id'] = phoneNumberCodeManagerId;
+    data['phone_number_manager'] = phoneNumberManager;
+    data['email'] = email;
+    data['full_name'] = fullName;
+    data['nationality_id'] = nationalityId;
+    data['is_enable'] = isEnable;
+    data['avatar'] = avatar;
+    data['enable_bell_sound'] = enableBellSound;
+    data['confirm_email'] = confirmEmail;
+    data['confirm_phone'] = confirmPhone;
+    data['batch_invoices'] = batchInvoices;
+    data['deposits'] = deposits;
+    data['payment_links'] = paymentLinks;
+    data['profile'] = profile;
+    data['users'] = users;
+    data['refund'] = refund;
+    data['show_all_invoices'] = showAllInvoices;
+    data['customers'] = customers;
+    data['invoices'] = invoices;
+    data['products'] = products;
+    data['commissions'] = commissions;
+    data['account_statements'] = accountStatements;
+    data['orders'] = orders;
+    data['suppliers'] = suppliers;
+    data['notification_create_invoice'] = notificationCreateInvoice;
+    data['notification_invoice_paid'] = notificationInvoicePaid;
+    data['notification_new_order'] = notificationNewOrder;
+    data['notification_create_batch_invoice'] = notificationCreateBatchInvoice;
+    data['notification_deposit'] = notificationDeposit;
     data['notification_create_recurring_invoice'] =
-        this.notificationCreateRecurringInvoice;
-    data['notification_refund_transfered'] = this.notificationRefundTransfered;
+        notificationCreateRecurringInvoice;
+    data['notification_refund_transfered'] = notificationRefundTransfered;
     data['notification_notifications_service_request'] =
-        this.notificationNotificationsServiceRequest;
+        notificationNotificationsServiceRequest;
     data['notification_notifications_hourly_deposit_rejected'] =
-        this.notificationNotificationsHourlyDepositRejected;
+        notificationNotificationsHourlyDepositRejected;
     data['notification_approve_vendor_account'] =
-        this.notificationApproveVendorAccount;
+        notificationApproveVendorAccount;
     data['notification_create_shipping_invoice'] =
-        this.notificationCreateShippingInvoice;
-    data['email_verified_at'] = this.emailVerifiedAt;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.nationality != null) {
-      data['nationality'] = this.nationality!.toJson();
+        notificationCreateShippingInvoice;
+    data['email_verified_at'] = emailVerifiedAt;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (nationality != null) {
+      data['nationality'] = nationality!.toJson();
     }
-    if (this.userRole != null) {
-      data['user_role'] = this.userRole!.toJson();
+    if (userRole != null) {
+      data['user_role'] = userRole!.toJson();
+    }
+    if (profileBusines != null) {
+      data['profileBusines'][0] = profileBusines!.toJson();
     }
     return data;
   }
@@ -273,6 +491,156 @@ class UserRole {
     data['id'] = this.id;
     data['name_en'] = this.nameEn;
     data['name_ar'] = this.nameAr;
+    return data;
+  }
+}
+
+class ProfileBusines {
+  int? id;
+  int? countryId;
+  int? phoneNumberCodeId;
+  int? businessTypeId;
+  int? categoryId;
+  int? invoiceExpiryAfterNumber;
+  int? invoiceExpiryAfterTypeId;
+  int? languageId;
+  int? depositTermsId;
+  String? companyName;
+  String? nameEn;
+  String? nameAr;
+  String? logo;
+  String? websiteUrl;
+  String? workEmail;
+  String? phoneNumber;
+  String? customSmsAr;
+  String? customSmsEn;
+  String? termsAndConditions;
+  int? productsDeliveryFees;
+  String? promoCode;
+  int? approvalStatus;
+  String? bankAccountName;
+  String? bankName;
+  String? accountNumber;
+  String? iban;
+  String? bankAccountLetter;
+  String? others;
+  String? civilId;
+  String? civilIdBack;
+  String? themeColor;
+  int? enableNewDesign;
+  int? showAllCurrencies;
+  int? enableCardView;
+
+  ProfileBusines({
+    this.id,
+    this.countryId,
+    this.phoneNumberCodeId,
+    this.businessTypeId,
+    this.categoryId,
+    this.invoiceExpiryAfterNumber,
+    this.invoiceExpiryAfterTypeId,
+    this.languageId,
+    this.depositTermsId,
+    this.companyName,
+    this.nameEn,
+    this.nameAr,
+    this.logo,
+    this.websiteUrl,
+    this.workEmail,
+    this.phoneNumber,
+    this.customSmsAr,
+    this.customSmsEn,
+    this.termsAndConditions,
+    this.productsDeliveryFees,
+    this.promoCode,
+    this.approvalStatus,
+    this.bankAccountName,
+    this.bankName,
+    this.accountNumber,
+    this.iban,
+    this.bankAccountLetter,
+    this.others,
+    this.civilId,
+    this.civilIdBack,
+    this.themeColor,
+    this.enableNewDesign,
+    this.showAllCurrencies,
+    this.enableCardView,
+  });
+
+  ProfileBusines.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    countryId = json['country_id'];
+    phoneNumberCodeId = json['phone_number_code_id'];
+    businessTypeId = json['business_type_id'];
+    categoryId = json['category_id'];
+    invoiceExpiryAfterNumber = json['invoice_expiry_after_number'];
+    invoiceExpiryAfterTypeId = json['invoice_expiry_after_type_id'];
+    languageId = json['language_id'];
+    depositTermsId = json['deposit_terms_id'];
+    companyName = json['company_name'];
+    nameEn = json['name_en'];
+    nameAr = json['name_ar'];
+    logo = json['logo'];
+    websiteUrl = json['website_url'];
+    workEmail = json['work_email'];
+    phoneNumber = json['phone_number'];
+    customSmsAr = json['custom_sms_ar'];
+    customSmsEn = json['custom_sms_en'];
+    termsAndConditions = json['terms_and_conditions'];
+    productsDeliveryFees = json['products_delivery_fees'];
+    promoCode = json['promo_code'];
+    approvalStatus = json['approval_status'];
+    bankAccountName = json['bank_account_name'];
+    bankName = json['bank_name'];
+    accountNumber = json['account_number'];
+    iban = json['iban'];
+    bankAccountLetter = json['bank_account_letter'];
+    others = json['others'];
+    civilId = json['civil_id'];
+    civilIdBack = json['civil_id_back'];
+    themeColor = json['theme_color'];
+    enableNewDesign = json['enable_new_design'];
+    showAllCurrencies = json['show_all_currencies'];
+    enableCardView = json['enable_card_view'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['country_id'] = this.countryId;
+    data['phone_number_code_id'] = this.phoneNumberCodeId;
+    data['business_type_id'] = this.businessTypeId;
+    data['category_id'] = this.categoryId;
+    data['invoice_expiry_after_number'] = this.invoiceExpiryAfterNumber;
+    data['invoice_expiry_after_type_id'] = this.invoiceExpiryAfterTypeId;
+    data['language_id'] = this.languageId;
+    data['deposit_terms_id'] = this.depositTermsId;
+    data['company_name'] = this.companyName;
+    data['name_en'] = this.nameEn;
+    data['name_ar'] = this.nameAr;
+    data['logo'] = this.logo;
+    data['website_url'] = this.websiteUrl;
+    data['work_email'] = this.workEmail;
+    data['phone_number'] = this.phoneNumber;
+    data['custom_sms_ar'] = this.customSmsAr;
+    data['custom_sms_en'] = this.customSmsEn;
+    data['terms_and_conditions'] = this.termsAndConditions;
+    data['products_delivery_fees'] = this.productsDeliveryFees;
+    data['promo_code'] = this.promoCode;
+    data['approval_status'] = this.approvalStatus;
+    data['bank_account_name'] = this.bankAccountName;
+    data['bank_name'] = this.bankName;
+    data['account_number'] = this.accountNumber;
+    data['iban'] = this.iban;
+    data['bank_account_letter'] = this.bankAccountLetter;
+    data['others'] = this.others;
+    data['civil_id'] = this.civilId;
+    data['civil_id_back'] = this.civilIdBack;
+    data['theme_color'] = this.themeColor;
+    data['enable_new_design'] = this.enableNewDesign;
+    data['show_all_currencies'] = this.showAllCurrencies;
+    data['enable_card_view'] = this.enableCardView;
     return data;
   }
 }

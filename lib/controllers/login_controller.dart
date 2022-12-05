@@ -1,27 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 import '../pages/home/home_page.dart';
 import '../services/auth_service.dart';
 
 class LoginController extends GetxController {
-  Future saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
-  }
-
-  Future<String?> loadToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token') == null ? "" : prefs.getString('token');
-  }
-
-  Future removeToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('token');
-  }
-
   Future<void> login(String email, String password, bool rememberMe) async {
     logInfo("msg");
     logInfo("rememberMe flag is $rememberMe");
@@ -33,11 +17,9 @@ class LoginController extends GetxController {
             child: CircularProgressIndicator(),
           )),
     );
-    var res = await AuthService().login(email, password);
+    var res = await AuthService().login(email, password, rememberMe);
     Navigator.of(Get.overlayContext!).pop();
     if (res != null) {
-      logWarning("token:${res}");
-      if (rememberMe) saveToken(res);
       Get.offAll(() => HomePage());
     }
   }

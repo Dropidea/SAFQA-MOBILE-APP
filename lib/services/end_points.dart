@@ -21,7 +21,18 @@ class EndPoints {
   static String get createCustomer => "$_baseURL/customer/store";
   static String get deleteCustomer => "$_baseURL/customer/delete/";
   static String get updateCustomer => "$_baseURL/customer/update/";
-  static String get getBanks => "https://api.safqapay.com/admin/banks";
-  static String get getCountries => "https://api.safqapay.com/admin/countries";
+  static String get getBanks => "https://api.safqapay.com/api/banks";
+  static String get getCountries => "https://api.safqapay.com/api/countries";
+  static String get getCities => "https://api.safqapay.com/api/cities";
+  static String get getAreas => "https://api.safqapay.com/api/areas";
+  static String get getAdressTypes =>
+      "https://api.safqapay.com/api/address_type";
+  static String get getRoles => "$_baseURL/roles";
   static String get getManageUsers => "$_baseURL/manage_users";
+  static String get createManageUser => "$_baseURL/manage_user/store";
+  static String get editManageUser => "$_baseURL/manage_user/update/";
+  static String get createAddress => "$_baseURL/addresse/store";
+  static String get getAddresses => "$_baseURL/addresses";
+  static String get editAddresses => "$_baseURL/addresse/update/";
+  static String deleteAddresses(int id) => "$_baseURL/addresse/delete/$id";
 }

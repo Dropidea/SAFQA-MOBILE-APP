@@ -7,6 +7,7 @@ import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -207,7 +208,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
               GestureDetector(
                 onTap: () async {
                   addInvoiceController.dataToCreateQuickInvoice.token =
-                      await _loginController.loadToken();
+                      await AuthService().loadToken();
                   addInvoiceController.dataToCreateQuickInvoice.customerName =
                       addInvoiceController.customerInfo.customerName;
                   addInvoiceController.dataToCreateQuickInvoice.customerSendBy =

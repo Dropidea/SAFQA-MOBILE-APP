@@ -1,13 +1,19 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/settings/controllers/addresses_controller.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/address.dart';
+import 'package:safqa/pages/home/menu_pages/settings/tabs/add_address_page.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:sizer/sizer.dart';
 
 class AddressDetailsPage extends StatelessWidget {
-  const AddressDetailsPage({super.key});
-
+  AddressDetailsPage({super.key, required this.address});
+  final Address address;
+  AddressesController addressessController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -19,66 +25,83 @@ class AddressDetailsPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: w / 2.5,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xff58D241).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.edit,
-                        color: Color(0xff58D241),
-                        size: 18.0.sp,
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => AddAddressPage(
+                        addressToEdit: address,
+                      ));
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xff58D241).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.edit,
+                          color: Color(0xff58D241),
+                          size: 18.0.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Edit",
-                      style: TextStyle(
-                        fontSize: 14.0.sp,
-                        color: Color(0xff58D241),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
+                      SizedBox(width: 10),
+                      Text(
+                        "Edit",
+                        style: TextStyle(
+                          fontSize: 14.0.sp,
+                          color: Color(0xff58D241),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                width: w / 2.5,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xffE47E7B).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.trash2,
-                        color: Color(0xffE47E7B),
-                        size: 18.0.sp,
+              GestureDetector(
+                onTap: () {
+                  MyDialogs.showDeleteDialoge(
+                      onProceed: () {
+                        Get.back();
+                        addressessController.deleteAddress(address);
+                      },
+                      message: "Are you sure");
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE47E7B).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.trash2,
+                          color: Color(0xffE47E7B),
+                          size: 18.0.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Remove",
-                      style: TextStyle(
-                        fontSize: 14.0.sp,
-                        color: Color(0xffE47E7B),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
+                      SizedBox(width: 10),
+                      Text(
+                        "Remove",
+                        style: TextStyle(
+                          fontSize: 14.0.sp,
+                          color: Color(0xffE47E7B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
@@ -94,33 +117,33 @@ class AddressDetailsPage extends StatelessWidget {
                 children: [
                   invoiceInfoMethod(
                     title1: "Address Type",
-                    content1: "Appartment",
+                    content1: address.addressType!.nameEn,
                     title2: "City",
-                    content2: "Dubai",
+                    content2: address.city!.nameEn,
                   ),
                   invoiceInfoMethod(
                     title1: "Area",
-                    content1: "Sharka",
+                    content1: address.area!.nameEn,
                     title2: "Block",
-                    content2: "Sharka",
+                    content2: address.block,
                   ),
                   invoiceInfoMethod(
                     title1: "Avenue",
-                    content1: "lorem",
+                    content1: address.avenue,
                     title2: "House/Bldg No.",
-                    content2: "56/4",
+                    content2: address.bldgNo ?? "Not Found",
                   ),
                   invoiceInfoMethod(
                     title1: "Street",
-                    content1: "lorem ipsum",
+                    content1: address.street,
                     title2: "Floor",
-                    content2: "1",
+                    content2: address.floor ?? "Not Found",
                   ),
                   invoiceInfoMethod(
                     title1: "Appartment",
-                    content1: "2",
+                    content1: address.appartment ?? "Not Found",
                     title2: "Instructions",
-                    content2: "No Instructions",
+                    content2: address.instructions ?? "Not Found",
                   ),
                 ],
               ),

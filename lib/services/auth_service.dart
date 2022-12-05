@@ -28,7 +28,17 @@ class AuthService {
     };
   }
 
-  Future<String?> login(String email, String password) async {
+  Future saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  Future removeToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+  }
+
+  Future<String?> login(String email, String password, bool rememberMe) async {
     _dio.options.headers['content-Type'] = 'multipart/form-data';
     try {
       sslProblem();
@@ -43,6 +53,7 @@ class AuthService {
       var jsonRes = res.data;
       logSuccess("login success");
       logSuccess(jsonRes['access_token'].toString());
+      if (rememberMe) saveToken(jsonRes['access_token']);
       return jsonRes['access_token'];
     } on DioError catch (e) {
       logError(e.response!.data['error']);
@@ -61,15 +72,16 @@ class AuthService {
   Future register(data) async {
     try {
       sslProblem();
+      logError(data);
       var res = await _dio.post(EndPoints.baseURL + EndPoints.registerEndPoint,
           data: data);
       var jsonRes = res.data;
       logSuccess("register success");
       return null;
     } on DioError catch (e) {
-      logWarning(e.response!.data);
-
-      Map<String, dynamic> obj = e.response!.data;
+      // logWarning(e.response!.data);
+      logError(e.message);
+      // Map<String, dynamic> obj = e.response!.data;
 
       // Get.showSnackbar(GetSnackBar(
       //   duration: Duration(milliseconds: 2000),
@@ -78,7 +90,7 @@ class AuthService {
       //       " " +
       //       e.response!.statusCode!.toString(),
       // ));
-      return obj;
+      // return obj;
       // return e.response!.data;
     }
   }

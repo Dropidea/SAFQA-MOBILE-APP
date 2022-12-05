@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 
 class SignUpTextField extends StatelessWidget {
   SignUpTextField({
@@ -75,7 +76,7 @@ class SignUpTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           obscureText: obsecureText,
           initialValue: initialValue,
-          style: style,
+          style: style ?? blackText("text", 12.5).style,
           onChanged: onchanged,
           readOnly: readOnly,
           controller: controller,
