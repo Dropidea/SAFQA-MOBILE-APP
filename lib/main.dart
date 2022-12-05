@@ -50,7 +50,7 @@ void logError(Object msg) {
 class MyApp extends StatelessWidget {
   MyApp({super.key, this.lang});
   final bool? lang;
-  // This widget is the root of your application.
+  // This widget is the root of your application.aa
   @override
   Widget build(BuildContext context) {
     FirstTimeUsingAppController _firstTimeController =
