@@ -15,7 +15,7 @@ class DocsPage extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: WhiteAppBar(title: "Documents"),
+      appBar: MyAppBar(title: "Documents"),
       body: ListView(
         padding: EdgeInsets.all(20),
         primary: false,

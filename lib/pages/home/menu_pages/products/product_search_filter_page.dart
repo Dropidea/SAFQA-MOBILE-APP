@@ -179,10 +179,12 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                                         keyboardType: TextInputType.number,
                                         controller: minController,
                                         onChanged: (value) {
-                                          productController.productFilter
-                                              .priceMin = int.parse(value);
-                                          productController
-                                              .productFilter.price = null;
+                                          if (value.isNotEmpty) {
+                                            productController.productFilter
+                                                .priceMin = int.parse(value);
+                                            productController
+                                                .productFilter.price = null;
+                                          }
                                         },
                                         decoration: InputDecoration(
                                           hintText: "Min",
@@ -208,10 +210,12 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                                       height: 50,
                                       child: TextFormField(
                                         onChanged: (value) {
-                                          productController.productFilter
-                                              .priceMax = int.parse(value);
-                                          productController
-                                              .productFilter.price = null;
+                                          if (value.isNotEmpty) {
+                                            productController.productFilter
+                                                .priceMax = int.parse(value);
+                                            productController
+                                                .productFilter.price = null;
+                                          }
                                         },
                                         keyboardType: TextInputType.number,
                                         controller: maxController,

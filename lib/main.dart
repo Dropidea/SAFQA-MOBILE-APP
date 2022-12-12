@@ -2,7 +2,9 @@ import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:safqa/themes/themes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -25,7 +27,8 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   bool lang = prefs.getBool('lang') ?? false;
   HttpOverrides.global = new MyHttpOverrides();
-
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp(
     lang: lang,
   ));
@@ -62,16 +65,12 @@ class MyApp extends StatelessWidget {
               DeviceType deviceType) =>
           GetMaterialApp(
         debugShowCheckedModeBanner: false,
+        darkTheme: Themes().darkTheme,
+        themeMode: ThemeMode.light,
         locale: lang! ? Locale('ar', 'SYR') : Locale('en', 'US'),
         translations: LocaleString(),
         title: 'Flutter Demo',
-        theme: ThemeData(
-          // primarySwatch: Colors.,
-          // colorScheme: Colors.red,
-          primaryColor: Color(0xff2F6782),
-          canvasColor: Colors.white,
-          fontFamily: "Tajawal",
-        ),
+        theme: Themes().lightTheme,
         home: SplashPage(),
       ),
     );

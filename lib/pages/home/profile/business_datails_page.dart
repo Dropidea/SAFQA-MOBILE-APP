@@ -24,7 +24,7 @@ class _BusinessDetailsPageState extends State<BusinessDetailsPage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: WhiteAppBar(title: "Business Details"),
+      appBar: MyAppBar(title: "Business Details"),
       body: Container(
         width: w,
         height: h,

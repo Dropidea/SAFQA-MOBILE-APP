@@ -8,6 +8,7 @@ class EndPoints {
   static String get registerEndPoint => "/register";
   static String get globalData => "/globalData";
   static String get createInvoice => "/invoice/store";
+  static String get getInvoices => "$_baseURL/invoices";
   static String get createQuickInvoice => "/invoice/quick/store";
   static String get createProduct => "/product/store";
   static String get updateProduct => "/product/update/";
@@ -28,6 +29,7 @@ class EndPoints {
   static String get getAdressTypes =>
       "https://api.safqapay.com/api/address_type";
   static String get getRoles => "$_baseURL/roles";
+  static String get getSendOptions => "$_baseURL/send_invoice_options";
   static String get getManageUsers => "$_baseURL/manage_users";
   static String get createManageUser => "$_baseURL/manage_user/store";
   static String get editManageUser => "$_baseURL/manage_user/update/";

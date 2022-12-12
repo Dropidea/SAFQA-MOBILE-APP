@@ -11,17 +11,24 @@ import 'package:safqa/models/customer_info.dart';
 import 'package:safqa/models/data_to_create_invoice.dart';
 import 'package:safqa/models/data_to_create_quick_invoice.dart';
 import 'package:safqa/models/invoice_item.dart';
+import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/dialoges.dart';
 
 class AddInvoiceController extends GetxController {
   DataToCreateInvoice dataToCreateInvoice = DataToCreateInvoice();
+  DataToCreateInvoice? dataToEditInvoice;
   DataToCreateQuickInvoice dataToCreateQuickInvoice =
       DataToCreateQuickInvoice();
   CustomerInfo customerInfo = CustomerInfo();
   final Dio dio = Dio();
 
-  sslProblem() {
+  sslProblem() async {
+    dio.options.headers['content-Type'] = 'multipart/form-data';
+    String token = await AuthService().loadToken();
+    dio.options.headers["authorization"] = "bearer  $token";
+
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       client.badCertificateCallback =
@@ -37,42 +44,15 @@ class AddInvoiceController extends GetxController {
 
   Future createInvoice() async {
     // logError(dataToCreateInvoice.discountType!);
-    // logWarning(dataToCreateInvoice.toJson());
+    logWarning(dataToCreateInvoice.toJson());
 
-    dio.options.headers['content-Type'] = 'multipart/form-data';
     // dio.options.headers["authorization"] =
     //     "Bearer ${dataToCreateInvoice.token}";
-    Get.dialog(Center(
+    Get.dialog(const Center(
       child: CircularProgressIndicator(),
     ));
-    final body = d.FormData.fromMap({
-      "token": dataToCreateInvoice.token,
-      "customer_name": dataToCreateInvoice.customerName,
-      "send_invoice_option_id": dataToCreateInvoice.customerSendBy,
-      "customer_mobile": dataToCreateInvoice.customerMobileNumbr,
-      "customer_mobile_code": dataToCreateInvoice.customerMobileNumbrCode,
-      "customer_reference": dataToCreateInvoice.customerRefrence,
-      "product_name[]": dataToCreateInvoice.productName,
-      "product_quantity[]": dataToCreateInvoice.productQuantity,
-      "product_price[]": dataToCreateInvoice.productPrice,
-      "currency_id": dataToCreateInvoice.currencyId,
-      "discount_type": dataToCreateInvoice.discountType,
-      "discount_value": dataToCreateInvoice.discountValue,
-      "expiry_date": dataToCreateInvoice.expiryDate,
-      "remind_after": dataToCreateInvoice.remindAfter,
-      "recurring_end_date": dataToCreateInvoice.recurringEndDate == "dd/MM/yyyy"
-          ? null
-          : dataToCreateInvoice.recurringEndDate,
-      "recurring_start_date":
-          dataToCreateInvoice.recurringStartDate == "dd/MM/yyyy"
-              ? null
-              : dataToCreateInvoice.recurringStartDate,
-      "language_id": dataToCreateInvoice.languageId ?? 1,
-      "comment": dataToCreateInvoice.comments,
-      "is_open_invoice": dataToCreateInvoice.isOpenInvoice,
-      "recurring_interval_id": dataToCreateInvoice.recurringIntervalId,
-      "terms_and_conditions": dataToCreateInvoice.termsAndConditions,
-    });
+    final body = d.FormData.fromMap(dataToCreateInvoice.toJson());
+    // body.fields.add(MapEntry("currency_id", "1"));
     if (dataToCreateInvoice.attachFile != null) {
       body.files.add(MapEntry(
         "attach_file",
@@ -84,56 +64,68 @@ class AddInvoiceController extends GetxController {
     // logSuccess(body.files.first.value.contentType!);
 
     try {
-      sslProblem();
+      await sslProblem();
       var res = await dio.post(EndPoints.baseURL + EndPoints.createInvoice,
           data: body);
       customerInfo = CustomerInfo();
       invoiceItems = [];
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-          title: "Created Successfully", btnTXT: "close");
+        title: "Created Successfully",
+        btnTXT: "close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
     } on DioError catch (e) {
-      Get.back();
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
-          }
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createInvoice();
         }
-
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
+      } else {
+        Get.back();
+        logError(e.message);
       }
 
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 2000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-            ),
-          ),
-        ),
-      );
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 2000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
     }
   }
 
   Future createQuickInvoice() async {
-    dio.options.headers['content-Type'] = 'multipart/form-data';
-
-    sslProblem();
+    await sslProblem();
     // dio.options.headers["authorization"] =
     //     "Bearer ${dataToCreateInvoice.token}";
     Get.dialog(Center(
@@ -156,40 +148,47 @@ class AddInvoiceController extends GetxController {
         },
       );
     } on DioError catch (e) {
-      Get.back();
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createQuickInvoice();
+        }
+      } else {
+        Get.back();
+        logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 2000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 2000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -249,7 +248,7 @@ class AddInvoiceController extends GetxController {
     _selectedIsOpenInvoiceDrop.value = x;
   }
 
-  List<String> discountDrops = ["yes", "No"];
+  List<String> discountDrops = ["Yes", "No"];
   RxString _selectedDiscountDrop = "No".obs;
   String get selectedDiscountDrop => _selectedDiscountDrop.value;
   List<String> discountTypesDrops = ["Fixed", "Rate"];
@@ -272,13 +271,13 @@ class AddInvoiceController extends GetxController {
     _selectedRecurringInterval.value = x;
   }
 
-  List<String> sendByItems = ["SMS", "Email", "SMS & Email"];
-  String _selectedSendBy = "SMS";
-  String get selectedSendBy => _selectedSendBy;
+  // List<String> sendByItems = ["SMS", "Email", "SMS & Email"];
+  // String _selectedSendBy = "SMS";
+  // String get selectedSendBy => _selectedSendBy;
 
-  void selectSendBy(String? x) {
-    _selectedSendBy = x!;
-  }
+  // void selectSendBy(String? x) {
+  //   _selectedSendBy = x!;
+  // }
 
   List<String> invoicesLang = ["English", "Arabic "];
   Object invoicesLangValue = 0;
@@ -289,52 +288,60 @@ class AddInvoiceController extends GetxController {
   }
 
   List<InvoiceItem> invoiceItems = [];
-  List<String> productName = [];
-  List<int> productQuantity = [];
-  List<String> productPrice = [];
+  // List<String> productName = [];
+  // List<int> productQuantity = [];
+  // List<String> productPrice = [];
 
   void addInvoiceItem(InvoiceItem item) {
     invoiceItems.add(item);
+    dataToCreateInvoice.invoiceItems.add(item);
     update();
   }
 
-  void addInvoiceItemAsArrays(InvoiceItem item) {
-    productName.add(item.productName!);
-    productQuantity.add(item.quantity!);
-    productPrice.add(item.unitPrice!);
-    dataToCreateInvoice.productName = productName;
-    dataToCreateInvoice.productPrice = productPrice;
-    dataToCreateInvoice.productQuantity = productQuantity;
-    update();
-  }
+  // void addInvoiceItemAsArrays(InvoiceItem item) {
+  //   productName.add(item.productName!);
+  //   productQuantity.add(item.quantity!);
+  //   productPrice.add(item.unitPrice!);
+  //   dataToCreateInvoice.invoiceItems
+  //   dataToCreateInvoice.productName = productName;
+  //   dataToCreateInvoice.productPrice = productPrice;
+  //   dataToCreateInvoice.productQuantity = productQuantity;
+  //   update();
+  // }
 
-  List<InvoiceItem> getInvoiceItems() {
-    List<InvoiceItem> tmp = [];
-    for (var i = 0; i < productName.length; i++) {
-      tmp.add(
-        InvoiceItem(
-          productName: productName[i],
-          quantity: productQuantity[i],
-          unitPrice: productPrice[i],
-        ),
-      );
-    }
-    return tmp;
-  }
+  // List<InvoiceItem> getInvoiceItems() {
+  //   List<InvoiceItem> tmp = [];
+  //   for (var i = 0; i < productName.length; i++) {
+  //     tmp.add(
+  //       InvoiceItem(
+  //         productName: productName[i],
+  //         quantity: productQuantity[i],
+  //         unitPrice: productPrice[i],
+  //       ),
+  //     );
+  //   }
+  //   return tmp;
+  // }
 
   void deleteInvoiceItem(int ind) {
     invoiceItems.removeAt(ind);
     update();
   }
 
-  void saveCustomerInfo(String name, int sendBy, String email, String phoneNum,
-      String phoneNumCode, String? customerRef) {
+  void saveCustomerInfo(
+      {required String name,
+      required int sendBy,
+      required String email,
+      required String phoneNum,
+      required String phoneNumCodeId,
+      String? customerRef}) {
     customerInfo.customerName = name;
     customerInfo.customerEmail = name;
     customerInfo.customerMobileNumbr = phoneNum;
-    customerInfo.customerMobileNumbrCode = phoneNumCode;
+    customerInfo.customerMobileNumbrCodeID = phoneNumCodeId;
     customerInfo.customerSendBy = sendBy;
     customerInfo.customerRefrence = customerRef;
+    // customerInfo.customerRefrence = customerRef;
 
     logError(customerInfo.toJson());
   }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/models/invoice.dart';
+import 'package:intl/intl.dart';
 import 'package:safqa/models/invoice_types.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/invoices/invoices_controller.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/models/invoice.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoice_details.dart';
 import 'package:sizer/sizer.dart';
 
@@ -15,80 +16,105 @@ class InvoiceTab extends StatefulWidget {
 }
 
 class _InvoiceTabState extends State<InvoiceTab> {
-  InvoicesController invoiceController = Get.put(InvoicesController());
+  InvoicesController invoiceController = Get.find();
+  @override
+  void initState() {
+    invoiceController.getInvoices();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    return ListView(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [blackText("Today", 16), greyText("09 October 2022", 14)],
-        ),
-        ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => InvoiceWidget(
-            inv: invoiceController.invoices[index],
-            onTap: () {
-              Get.to(
-                () => InvoiceDetailsPage(),
-                transition: Transition.downToUp,
-              );
-            },
-          ),
-          itemCount: invoiceController.invoices.length,
-          separatorBuilder: (BuildContext context, int index) =>
-              SizedBox(height: 20),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return GetBuilder<InvoicesController>(builder: (c) {
+      if (c.getInvoicesFlag.value) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      } else {
+        return ListView(
           children: [
-            blackText("Yesterday", 16),
-            greyText("08 October 2022", 14)
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     blackText("Today", 16),
+            //     greyText("09 October 2022", 14)
+            //   ],
+            // ),
+            ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => InvoiceWidget(
+                inv: invoiceController.invoicesToShow[index],
+                onTap: () {
+                  Get.to(
+                    () => InvoiceDetailsPage(
+                        invoiceModel: invoiceController.invoicesToShow[index]),
+                    transition: Transition.downToUp,
+                  );
+                },
+                type: InvoiceTypes.paid,
+              ),
+              itemCount: invoiceController.invoicesToShow.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  SizedBox(height: 20),
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     blackText("Yesterday", 16),
+            //     greyText("08 October 2022", 14)
+            //   ],
+            // ),
+            // ListView.separated(
+            //   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            //   shrinkWrap: true,
+            //   physics: NeverScrollableScrollPhysics(),
+            //   itemBuilder: (context, index) => InvoiceWidget(
+            //     inv: invoiceController.invoices[index],
+            //     type: InvoiceTypes.pending,
+            //   ),
+            //   itemCount: invoiceController.invoices.length,
+            //   separatorBuilder: (BuildContext context, int index) =>
+            //       SizedBox(height: 20),
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     blackText("Last week", 16),
+            //     greyText("01 October 2022", 14)
+            //   ],
+            // ),
+            // ListView.separated(
+            //   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            //   shrinkWrap: true,
+            //   physics: NeverScrollableScrollPhysics(),
+            //   itemBuilder: (context, index) => InvoiceWidget(
+            //     inv: invoiceController.invoices[index],
+            //     type: InvoiceTypes.pending,
+            //   ),
+            //   itemCount: invoiceController.invoices.length,
+            //   separatorBuilder: (BuildContext context, int index) =>
+            //       SizedBox(height: 20),
+            // )
           ],
-        ),
-        ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) =>
-              InvoiceWidget(inv: invoiceController.invoices[index]),
-          itemCount: invoiceController.invoices.length,
-          separatorBuilder: (BuildContext context, int index) =>
-              SizedBox(height: 20),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            blackText("Last week", 16),
-            greyText("01 October 2022", 14)
-          ],
-        ),
-        ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) =>
-              InvoiceWidget(inv: invoiceController.invoices[index]),
-          itemCount: invoiceController.invoices.length,
-          separatorBuilder: (BuildContext context, int index) =>
-              SizedBox(height: 20),
-        )
-      ],
-    );
+        );
+      }
+    });
   }
 }
 
 class InvoiceWidget extends StatelessWidget {
-  final Invoice inv;
+  final InvoiceModel inv;
+  final InvoiceTypes type;
   final void Function()? onTap;
   InvoiceWidget({
     Key? key,
     required this.inv,
     this.onTap,
+    required this.type,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -105,22 +131,22 @@ class InvoiceWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   color: Color(0xffF8F8F8),
                 ),
-                child: inv.type == InvoiceTypes.pending
+                child: type == InvoiceTypes.pending
                     ? Image(
                         image: AssetImage("assets/images/pending.png"),
                         width: 24.0.sp,
                         height: 24.0.sp,
                       )
                     : Icon(
-                        inv.type == InvoiceTypes.paid
+                        type == InvoiceTypes.paid
                             ? Icons.check_rounded
-                            : inv.type == InvoiceTypes.unPaid
+                            : type == InvoiceTypes.unPaid
                                 ? Icons.close
                                 : Icons.remove_red_eye,
                         size: 24.0.sp,
-                        color: inv.type == InvoiceTypes.paid
+                        color: type == InvoiceTypes.paid
                             ? Color(0xff58D241)
-                            : inv.type == InvoiceTypes.unPaid
+                            : type == InvoiceTypes.unPaid
                                 ? Color(0xffE47E7B)
                                 : Color(0xff2F6782)),
               ),
@@ -131,7 +157,7 @@ class InvoiceWidget extends StatelessWidget {
                 children: [
                   blackText(inv.customerName!, 16),
                   SizedBox(height: 10),
-                  greyText(inv.id!, 12)
+                  greyText(inv.id!.toString(), 12)
                 ],
               )
             ],
@@ -140,9 +166,14 @@ class InvoiceWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              blackText(inv.price!, 16),
+              blackText(inv.invoiceValue!.toString(), 16),
               SizedBox(height: 10),
-              greyText(inv.time!, 12)
+              greyText(
+                  inv.invoiceItem!.isEmpty
+                      ? "no date"
+                      : DateFormat('hh:mm a').format(
+                          DateTime.parse(inv.invoiceItem![0].createdAt!)),
+                  12)
             ],
           )
         ],

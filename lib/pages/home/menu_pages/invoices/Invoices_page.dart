@@ -2,8 +2,10 @@ import 'package:badges/badges.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/zoom_drawer_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/invoice_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/payment_link_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoice_tab.dart';
@@ -27,8 +29,12 @@ class _InvoicesPageState extends State<InvoicesPage> {
   MyZoomDrawerController myZoomDrawerController = Get.find();
   int selectedTab = 0;
   List<String> tabsNames = ["Invoices", "Quick Invoice", "Payment Link"];
+  final AddInvoiceController _addInvoiceController =
+      Get.put(AddInvoiceController());
+  InvoicesController invoiceController = Get.put(InvoicesController());
 
   Widget getPage() {
+    invoiceController.clearInvoiceFilter();
     switch (selectedTab) {
       case 0:
         return InvoiceTab();
@@ -102,6 +108,12 @@ class _InvoicesPageState extends State<InvoicesPage> {
                         SizedBox(height: 60),
                         SignUpTextField(
                           padding: EdgeInsets.all(0),
+                          onchanged: (s) {
+                            if (selectedTab == 0) {
+                              invoiceController.searchForInvoicesWithName(s!);
+                            } else if (selectedTab == 1) {
+                            } else {}
+                          },
                           hintText: "Search ...",
                           prefixIcon: Icon(
                             Icons.search_outlined,
@@ -118,16 +130,20 @@ class _InvoicesPageState extends State<InvoicesPage> {
                                     transition: Transition.downToUp);
                               }
                             },
-                            child: Badge(
-                              badgeColor: Color(0xff1BAFB2),
-                              showBadge: true,
-                              position: BadgePosition.topEnd(top: 8, end: 8),
-                              child: Image(
-                                image: AssetImage("assets/images/filter.png"),
-                                width: 18,
-                                height: 18,
-                              ),
-                            ),
+                            child: GetBuilder<InvoicesController>(builder: (c) {
+                              return Badge(
+                                badgeColor: Color(0xff1BAFB2),
+                                showBadge: selectedTab == 0
+                                    ? c.invoiceFilter.filterActive
+                                    : false,
+                                position: BadgePosition.topEnd(top: 8, end: 8),
+                                child: Image(
+                                  image: AssetImage("assets/images/filter.png"),
+                                  width: 18,
+                                  height: 18,
+                                ),
+                              );
+                            }),
                           ),
                         ),
                         const SizedBox(height: 20),

@@ -32,7 +32,7 @@ class _IdentityConfirmDocsPageState extends State<IdentityConfirmDocsPage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: WhiteAppBar(title: "Identity documentation"),
+      appBar: MyAppBar(title: "Identity documentation"),
       body: ExpandableNotifier(
         child: ListView(
           padding: EdgeInsets.all(20),

@@ -57,7 +57,7 @@ class ManageUserDetailsPage extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: WhiteAppBar(title: "Address Details"),
+      appBar: MyAppBar(title: "Address Details"),
       body: Column(
         children: [
           GestureDetector(

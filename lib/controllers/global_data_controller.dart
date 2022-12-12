@@ -9,8 +9,10 @@ import 'package:safqa/pages/home/menu_pages/settings/models/address_type.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/city.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/manage_user.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/send_options.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/utils.dart';
 
 class GlobalDataController extends GetxController {
   Dio dio = Dio();
@@ -28,6 +30,7 @@ class GlobalDataController extends GetxController {
   }
 
   List<Country> countries = [];
+  List<SendOption> sendOptions = [];
   List<UserRole> roles = [];
   List<City> cities = [];
   List<Area> areas = [];
@@ -42,7 +45,14 @@ class GlobalDataController extends GetxController {
       me = ManageUser.fromJson(res.data);
       logSuccess("me get done");
     } on DioError catch (e) {
-      logError("me failed");
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getMe();
+        }
+      } else {
+        logError("me failed");
+      }
     }
   }
 
@@ -56,7 +66,35 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("roles get done");
     } on DioError catch (e) {
-      logError("roles failed");
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getRoles();
+        }
+      } else {
+        logError("roles failed");
+      }
+    }
+  }
+
+  Future getSendOptions() async {
+    try {
+      await sslProblem();
+      var res = await dio.get(EndPoints.getSendOptions);
+      for (var i in res.data['data']) {
+        SendOption tmp = SendOption.fromJson(i);
+        sendOptions.add(tmp);
+      }
+      logSuccess("Send Options get done");
+    } on DioError catch (e) {
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getSendOptions();
+        }
+      } else {
+        logError("Send Options failed");
+      }
     }
   }
 
@@ -70,7 +108,14 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("AddressTypes get done");
     } on DioError catch (e) {
-      logError("AddressTypes failed");
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getAdressTypes();
+        }
+      } else {
+        logError("AddressTypes failed");
+      }
     }
   }
 
@@ -84,7 +129,14 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("countries get done");
     } on DioError catch (e) {
-      logError("countries failed");
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getCountries();
+        }
+      } else {
+        logError("countries failed");
+      }
     }
   }
 
@@ -98,7 +150,14 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("Cities get done");
     } on DioError catch (e) {
-      logError("Cities failed");
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getCities();
+        }
+      } else {
+        logError("Cities failed");
+      }
     }
   }
 
@@ -112,7 +171,14 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("Areas get done");
     } on DioError catch (e) {
-      logError("Areas failed");
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getAreas();
+        }
+      } else {
+        logError("Areas failed");
+      }
     }
   }
 
@@ -138,5 +204,12 @@ class GlobalDataController extends GetxController {
     String code =
         countries[countries.indexWhere((element) => element.id == id)].code!;
     return code;
+  }
+
+  String getSendOption(int id) {
+    String sendOption =
+        sendOptions[sendOptions.indexWhere((element) => element.id == id)]
+            .nameEn!;
+    return sendOption;
   }
 }

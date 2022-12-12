@@ -11,7 +11,7 @@ class ProfileBankDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WhiteAppBar(title: "Bank Details"),
+      appBar: MyAppBar(title: "Bank Details"),
       body: ListView(
         primary: false,
         padding: const EdgeInsets.all(20),
@@ -56,8 +56,8 @@ class ProfileBankDetailsPage extends StatelessWidget {
   }
 }
 
-class WhiteAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const WhiteAppBar({super.key, required this.title});
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar({super.key, required this.title});
   final String title;
   @override
   Widget build(BuildContext context) {

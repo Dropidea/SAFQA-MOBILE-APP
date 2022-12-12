@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> {
     _globlDataController.getAdressTypes();
     _globlDataController.getMe();
     _globlDataController.getRoles();
+    _globlDataController.getSendOptions();
     super.initState();
   }
 

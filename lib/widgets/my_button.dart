@@ -7,7 +7,7 @@ class MyButton extends StatelessWidget {
     super.key,
     this.width,
     this.heigt,
-    required this.color,
+    this.color,
     required this.borderRadius,
     required this.text,
     this.func,
@@ -19,7 +19,7 @@ class MyButton extends StatelessWidget {
   });
   final double? width;
   final double? heigt;
-  final Color color;
+  final Color? color;
   final Color? textColor;
   final double borderRadius;
   final String text;
@@ -39,7 +39,10 @@ class MyButton extends StatelessWidget {
         width: width,
         height: heigt,
         decoration: BoxDecoration(
-            color: func == null ? Color(0xffE8E8E8) : color,
+            color: func == null
+                ? Color(0xffE8E8E8)
+                : color ??
+                    Theme.of(context).buttonTheme.colorScheme!.background,
             borderRadius: BorderRadius.circular(borderRadius),
             border: border),
         child: Row(

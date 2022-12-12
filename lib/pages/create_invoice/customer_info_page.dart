@@ -2,22 +2,63 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
 import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:sizer/sizer.dart';
 
-class CustomerInfoPage extends StatelessWidget {
-  CustomerInfoPage({super.key});
+class CustomerInfoPage extends StatefulWidget {
+  const CustomerInfoPage({super.key});
+
+  @override
+  State<CustomerInfoPage> createState() => _CustomerInfoPageState();
+}
+
+class _CustomerInfoPageState extends State<CustomerInfoPage> {
   TextEditingController customerNameControler = TextEditingController();
+
   TextEditingController customerPhoneNumberControler = TextEditingController();
+
   TextEditingController customerEmailControler = TextEditingController();
+
   TextEditingController customerRefrenceControler = TextEditingController();
-  CustomersController _customersController = Get.find();
-  AddInvoiceController _addInvoiceController = Get.find();
-  String customerMobileCode = "+20";
+
+  final CustomersController _customersController = Get.find();
+
+  final AddInvoiceController _addInvoiceController = Get.find();
+  final GlobalDataController _globalDataController = Get.find();
+
+  final SignUpController _signUpController = Get.find();
+
+  String? customerMobileCode;
+
+  String customerMobileCodeID = "1";
+  int? sendOptionId;
+  @override
+  void initState() {
+    if (_addInvoiceController.dataToEditInvoice != null) {
+      customerEmailControler.text =
+          _addInvoiceController.dataToEditInvoice!.customerEmail ?? "";
+      customerNameControler.text =
+          _addInvoiceController.dataToEditInvoice!.customerName ?? "";
+      customerPhoneNumberControler.text =
+          _addInvoiceController.dataToEditInvoice!.customerMobileNumbr ?? "";
+      customerRefrenceControler.text =
+          _addInvoiceController.dataToEditInvoice!.customerRefrence ?? "";
+      sendOptionId = _addInvoiceController.dataToEditInvoice!.customerSendBy;
+      customerMobileCode =
+          _addInvoiceController.dataToEditInvoice!.customerMobileNumbrCode;
+    } else {
+      customerMobileCode = _globalDataController.countries[0].code!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,20 +131,101 @@ class CustomerInfoPage extends StatelessWidget {
             const SizedBox(height: 20),
             blackText("Send invoice By", 16),
             CustomDropdown(
-              items: _addInvoiceController.sendByItems,
-              selectedItem: _addInvoiceController.selectedSendBy,
+              items: _globalDataController.sendOptions
+                  .map((e) => e.nameEn!)
+                  .toList(),
+              selectedItem: _addInvoiceController.dataToEditInvoice != null
+                  ? _globalDataController.sendOptions
+                          .map((e) => e.nameEn!)
+                          .toList()[
+                      _globalDataController.sendOptions.indexWhere((element) =>
+                          element.id ==
+                          _addInvoiceController
+                              .dataToEditInvoice!.customerSendBy!)]
+                  : _globalDataController.sendOptions
+                      .map((e) => e.nameEn!)
+                      .toList()[0],
               width: 2,
               onchanged: (s) {
-                _addInvoiceController.selectSendBy(s);
+                if (_addInvoiceController.dataToEditInvoice != null) {
+                  _addInvoiceController.dataToEditInvoice!.customerSendBy =
+                      _globalDataController
+                          .sendOptions[_globalDataController.sendOptions
+                              .indexWhere((element) => element.nameEn == s)]
+                          .id;
+                } else {
+                  _addInvoiceController.dataToCreateInvoice.customerSendBy =
+                      _globalDataController
+                          .sendOptions[_globalDataController.sendOptions
+                              .indexWhere((element) => element.nameEn == s)]
+                          .id;
+                }
+                sendOptionId = _globalDataController
+                    .sendOptions[_globalDataController.sendOptions
+                        .indexWhere((element) => element.nameEn == s)]
+                    .id;
+
+                // _addInvoiceController.selectSendBy(s);
               },
             ),
             const SizedBox(height: 20),
             blackText("Customer phone number", 16),
-            SignUpTextField(
-              padding: EdgeInsets.all(0),
-              controller: customerPhoneNumberControler,
-              keyBoardType: TextInputType.number,
-            ),
+            Obx(() {
+              List countries = _signUpController.globalData['country'];
+              List<String> ids = countries
+                  .map<String>(
+                    (e) => e['id'].toString(),
+                  )
+                  .toSet()
+                  .toList();
+              List<String> countriesCodes = countries
+                  .map<String>(
+                    (e) => e['code'].toString(),
+                  )
+                  .toSet()
+                  .toList();
+              if (_addInvoiceController.dataToEditInvoice != null) {
+                if (_addInvoiceController
+                        .dataToEditInvoice!.customerMobileNumbrCode !=
+                    null) {
+                  _signUpController.selectPhoneNumberManagerCodeDrop(
+                      _addInvoiceController
+                          .dataToEditInvoice!.customerMobileNumbrCode!);
+                } else {
+                  _signUpController
+                      .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
+                }
+              } else {
+                _signUpController
+                    .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
+              }
+              return SignUpTextField(
+                controller: customerPhoneNumberControler,
+                padding: EdgeInsets.all(0),
+                keyBoardType: TextInputType.number,
+                prefixIcon: SizedBox(
+                  width: 60,
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(border: InputBorder.none),
+                    isExpanded: true,
+                    items: countriesCodes
+                        .map((e) => DropdownMenuItem<String>(
+                              child: Center(child: Text(e)),
+                              value: e,
+                            ))
+                        .toList(),
+                    value: _signUpController.selectedPhoneNumberManagerCodeDrop,
+                    onChanged: (value) {
+                      customerMobileCodeID =
+                          ids[countriesCodes.indexOf(value!)];
+                      customerMobileCode =
+                          countriesCodes[countriesCodes.indexOf(value)];
+                    },
+                  ),
+                ),
+                hintText: 'Manager Mobile Number',
+              );
+            }),
             const SizedBox(height: 20),
             blackText("Customer email", 16),
             SignUpTextField(
@@ -146,45 +268,38 @@ class CustomerInfoPage extends StatelessWidget {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  _addInvoiceController.saveCustomerInfo(
-                    customerNameControler.text,
-                    _addInvoiceController.sendByItems
-                            .indexOf(_addInvoiceController.selectedSendBy) +
-                        1,
-                    customerEmailControler.text,
-                    customerPhoneNumberControler.text,
-                    customerMobileCode,
-                    customerRefrenceControler.text,
-                  );
-
-                  Get.defaultDialog(
-                    title: "",
-                    content: Column(
-                      children: [
-                        Image(
-                          image: AssetImage("assets/images/tick.png"),
-                          height: 100,
-                        ),
-                        SizedBox(height: 10),
-                        blackText("Saved successfully", 16),
-                        SizedBox(height: 10),
-                        InkWell(
-                          onTap: () {
-                            Get.back();
-                            Get.back();
-                          },
-                          child: Container(
-                            width: w / 2,
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                              color: Color(0xff2D5571),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Center(child: whiteText("Next", 17)),
-                          ),
-                        )
-                      ],
-                    ),
+                  if (_addInvoiceController.dataToEditInvoice != null) {
+                    _addInvoiceController.dataToEditInvoice!.customerName =
+                        customerNameControler.text;
+                    _addInvoiceController
+                            .dataToEditInvoice!.customerMobileNumbr =
+                        customerPhoneNumberControler.text;
+                    _addInvoiceController.dataToEditInvoice!
+                        .customerMobileNumbrCode = customerMobileCode;
+                    _addInvoiceController.dataToEditInvoice!.customerSendBy =
+                        sendOptionId;
+                    _addInvoiceController.dataToEditInvoice!.customerEmail =
+                        customerEmailControler.text;
+                    _addInvoiceController.dataToEditInvoice!.customerRefrence =
+                        customerRefrenceControler.text;
+                  } else {
+                    logError("msg");
+                    _addInvoiceController.saveCustomerInfo(
+                      customerRef: customerRefrenceControler.text,
+                      email: customerEmailControler.text,
+                      name: customerNameControler.text,
+                      phoneNum: customerPhoneNumberControler.text,
+                      phoneNumCodeId: customerMobileCode!,
+                      sendBy: sendOptionId!,
+                    );
+                  }
+                  MyDialogs.showSavedSuccessfullyDialoge(
+                    title: "Customer Saved",
+                    btnTXT: "Close",
+                    onTap: () {
+                      Get.back();
+                      Get.back();
+                    },
                   );
                 },
                 child: Container(

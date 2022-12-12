@@ -2,6 +2,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/log-reg/forget%20password/forget_passwrod_page.dart';
+import 'package:safqa/themes/themes.dart';
+import 'package:safqa/widgets/wallpapered_BTN.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/login_controller.dart';
@@ -39,10 +41,13 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/welcome_background.png"),
-                fit: BoxFit.cover,
-              ),
+              color: Theme.of(context).canvasColor,
+              image: Theme.of(context).brightness == Brightness.dark
+                  ? null
+                  : DecorationImage(
+                      image: AssetImage("assets/images/welcome_background.png"),
+                      fit: BoxFit.cover,
+                    ),
             ),
             width: w,
             // height: h,
@@ -57,7 +62,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: IconButton(
                         icon: Icon(
                           Icons.arrow_back,
-                          color: Colors.white,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Themes.arrowColorDark
+                              : Themes.arrowColorLight,
                           size: 22.0.sp,
                         ),
                         onPressed: () => Get.back(),
@@ -80,12 +87,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 10.0.sp,
+                  height: 20.0.sp,
                 ),
                 Container(
                   width: w,
+                  // height: h,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).canvasColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40),
@@ -230,45 +238,61 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(
                                 height: 10.0.sp,
                               ),
-                              Container(
+                              WallpepredBTN(
                                 width: 0.7 * w,
                                 height: 40.0.sp,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff2F6782),
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/btn_wallpaper.png"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: InkWell(
-                                  onTap: () async {
-                                    // Get.to(() => HomePage());
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
+                                borderRadius: 15,
+                                haveWallpaper: false,
+                                color: Theme.of(context)
+                                    .buttonTheme
+                                    .colorScheme!
+                                    .background,
+                                text: "login".tr,
+                                fontSize: 18.0.sp,
+                                onTap: () async {
+                                  // Get.to(() => HomePage());
 
-                                    final isValid =
-                                        formKey.currentState!.validate();
-                                    if (!isValid) return;
+                                  FocusManager.instance.primaryFocus?.unfocus();
 
-                                    await _loginController.login(
-                                        _emailController.text,
-                                        _passwordController.text,
-                                        _rememberMeFlag);
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      "login".tr,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18.0.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                  final isValid =
+                                      formKey.currentState!.validate();
+                                  if (!isValid) return;
+
+                                  await _loginController.login(
+                                      _emailController.text,
+                                      _passwordController.text,
+                                      _rememberMeFlag);
+                                },
                               ),
+                              // Container(
+                              //   width: 0.7 * w,
+                              //   height: 40.0.sp,
+                              //   decoration: BoxDecoration(
+                              //     color: Color(0xff2F6782),
+                              //     image: DecorationImage(
+                              //       image: AssetImage(
+                              //           "assets/images/btn_wallpaper.png"),
+                              //       fit: BoxFit.cover,
+                              //     ),
+                              //     borderRadius: BorderRadius.circular(15),
+                              //   ),
+                              //   child: InkWell(
+                              //     onTap: () async {
+
+                              //     },
+                              //     child: Center(
+                              //       child: Text(
+                              //         "login".tr,
+                              //         style: TextStyle(
+                              //           color: Colors.white,
+                              //           fontSize: 18.0.sp,
+                              //           fontWeight: FontWeight.w500,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+
                               SizedBox(
                                 height: 10.0.sp,
                               ),

@@ -11,6 +11,7 @@ import 'package:safqa/pages/home/menu_pages/customers/models/customer_filter.dar
 import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/dialoges.dart';
 
 class CustomersController extends GetxController {
@@ -128,8 +129,15 @@ class CustomersController extends GetxController {
       // return globalData;
     } on DioError catch (e) {
       getCustomerFlag = false;
-      logError("msg");
-      logError(e.message);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getMyCustomers();
+        }
+      } else {
+        logError("msg");
+        logError(e.message);
+      }
     }
     update();
   }
@@ -165,38 +173,45 @@ class CustomersController extends GetxController {
       customerToCreate = Customer(bank: Bank());
     } on DioError catch (e) {
       Get.back();
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createCustomer();
+        }
+      } else {
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -224,7 +239,14 @@ class CustomersController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      logError(e.message);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteCustomer(customerId);
+        }
+      } else {
+        logError(e.message);
+      }
       // Map<String, dynamic> m = e.response!.data;
       // String errors = "";
       // int c = 0;
@@ -298,39 +320,46 @@ class CustomersController extends GetxController {
       customerToCreate = Customer(bank: Bank());
     } on DioError catch (e) {
       Get.back();
-      // logError(e.message);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editCustomer();
+        }
+      } else {
+        // logError(e.message);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 }

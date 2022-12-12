@@ -13,7 +13,7 @@ class CheckEmailPage extends StatelessWidget {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: WhiteAppBar(title: ""),
+      appBar: MyAppBar(title: ""),
       body: ListView(
         primary: false,
         padding: EdgeInsets.all(20),

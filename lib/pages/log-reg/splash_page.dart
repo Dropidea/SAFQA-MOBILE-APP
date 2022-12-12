@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -10,7 +7,6 @@ import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/home_page.dart';
 import 'package:safqa/pages/log-reg/login.dart';
 import 'package:safqa/services/auth_service.dart';
-import 'package:safqa/services/end_points.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/first_time_using_app.dart';
@@ -33,24 +29,12 @@ class SplashPage extends StatelessWidget {
           duration: Duration(milliseconds: 1200),
         );
       } else {
-        var token = await AuthService().loadToken();
-        logSuccess(token);
-        if (token != "") {
+        var email = await AuthService().loadEmail();
+        var password = await AuthService().loadPassword();
+        var rem = await AuthService().loadRememberMe();
+        if (email != "" && password != "") {
           try {
-            Dio dio = Dio();
-            (dio.httpClientAdapter as DefaultHttpClientAdapter)
-                .onHttpClientCreate = (HttpClient client) {
-              client.badCertificateCallback =
-                  (X509Certificate cert, String host, int port) => true;
-              return client;
-            };
-            dio.options.headers["authorization"] = "Bearer $token";
-            var res = await dio.get(EndPoints.baseURL + EndPoints.meEndPoint,
-                options: Options(
-                  receiveTimeout: 5 * 1000,
-                  sendTimeout: 5 * 1000,
-                ));
-            logSuccess(res.data);
+            await AuthService().login(email, password, rem);
             Get.offAll(
               () => HomePage(),
               duration: Duration(milliseconds: 1200),

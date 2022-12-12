@@ -13,7 +13,7 @@ class ResetPasswordWithEmailPage extends StatelessWidget {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: WhiteAppBar(title: "Reset Password"),
+      appBar: MyAppBar(title: "Reset Password"),
       body: Form(
         key: formKey,
         child: ListView(

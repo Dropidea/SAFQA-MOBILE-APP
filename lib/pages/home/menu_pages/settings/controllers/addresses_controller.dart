@@ -9,6 +9,7 @@ import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/address.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/dialoges.dart';
 
 class AddressesController extends GetxController {
@@ -43,11 +44,14 @@ class AddressesController extends GetxController {
       getAddressFlag = false;
     } on DioError catch (e) {
       getAddressFlag = false;
-      logError(e.message);
-      logError(e.response!.data);
-      // logError(e.response!.data["message"]);
-      if (e.response!.data["message"] == "Please Login") {
-        await AuthService().login("x@x.x", "123456789", true);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getAddresses();
+        }
+      } else {
+        logError(e.message);
+        logError(e.response!.data);
       }
     } catch (e) {
       getAddressFlag = false;
@@ -77,39 +81,46 @@ class AddressesController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createAddress(address);
+        }
+      } else {
+        logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     } catch (e) {
       logError(e);
     }
@@ -139,40 +150,47 @@ class AddressesController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      logError(e.message);
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editAddress(address);
+        }
+      } else {
+        logError(e.message);
+        logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     } catch (e) {
       logError(e);
     }
@@ -201,40 +219,47 @@ class AddressesController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      logError(e.message);
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteAddress(address);
+        }
+      } else {
+        logError(e.message);
+        logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     } catch (e) {
       logError(e);
     }

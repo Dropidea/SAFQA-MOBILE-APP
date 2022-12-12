@@ -9,12 +9,12 @@ import 'package:getwidget/components/radio/gf_radio.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/create_invoice/invoice_items_page.dart';
-import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -29,8 +29,8 @@ class CreateInvoiceTab extends StatefulWidget {
 }
 
 class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
-  int invoicesLangValue = 0;
-  int termsAndConditions = 0;
+  int invoicesLangValue = 1;
+  int termsAndConditions = 1;
   String fileName = "";
   bool recurringIntervalFlag = false;
   bool discountAvailableFlag = false;
@@ -51,6 +51,56 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   AddInvoiceController addInvoiceController = Get.find();
   SignUpController _signUpController = Get.find();
   LoginController _loginController = Get.put(LoginController());
+  GlobalDataController globalDataController = Get.find();
+
+  @override
+  void initState() {
+    if (addInvoiceController.dataToEditInvoice != null) {
+      if (addInvoiceController.dataToEditInvoice!.discountValue != 0) {
+        discountAvailableFlag = true;
+        startDateController.text =
+            addInvoiceController.dataToEditInvoice!.recurringStartDate ??
+                "Start Date";
+        endDateController.text =
+            addInvoiceController.dataToEditInvoice!.recurringEndDate ??
+                "End Date";
+      }
+
+      invoicesLangValue = addInvoiceController.dataToEditInvoice!.languageId!;
+      if (addInvoiceController.dataToEditInvoice!.recurringIntervalId != 0) {
+        recurringIntervalFlag = true;
+      }
+      if (addInvoiceController.dataToEditInvoice!.attachFile != null) {
+        fileName = addInvoiceController.dataToEditInvoice!.attachFile.substring(
+            addInvoiceController.dataToEditInvoice!.attachFile
+                    .lastIndexOf("/") +
+                1);
+      }
+
+      if (addInvoiceController.dataToEditInvoice!.comments != null) {
+        commentsController.text =
+            addInvoiceController.dataToEditInvoice!.comments!;
+      }
+      if (addInvoiceController.dataToEditInvoice!.termsAndConditions != null) {
+        termsController.text =
+            addInvoiceController.dataToEditInvoice!.termsAndConditions!;
+        termsConditionsFlag = true;
+        termsAndConditions = 2;
+      }
+      expiryDateController.text =
+          addInvoiceController.dataToEditInvoice!.expiryDate!.split(" ")[0];
+      expiryTimeController.text = addInvoiceController
+          .dataToEditInvoice!.expiryDate!
+          .split(" ")[1]
+          .substring(
+              0,
+              addInvoiceController.dataToEditInvoice!.expiryDate!
+                  .split(" ")[1]
+                  .lastIndexOf(":"));
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -91,7 +141,11 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               children: [
                 blackText("Invoice ID", 14),
                 const SizedBox(height: 5),
-                greyText("2659986 / 2022000048", 12),
+                greyText(
+                    addInvoiceController.dataToEditInvoice != null
+                        ? addInvoiceController.dataToEditInvoice!.id!.toString()
+                        : "2659986 / 2022000048",
+                    12),
               ],
             ),
             Column(
@@ -120,7 +174,14 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 )
                 .toSet()
                 .toList();
-            addInvoiceController.selectCurrencyDrop(countriesCurrencies[0]);
+            // logSuccess(addInvoiceController.dataToEditInvoice!.currencyId!);
+            if (addInvoiceController.dataToEditInvoice != null) {
+              addInvoiceController.selectCurrencyDrop(countriesCurrencies[
+                  ids.indexOf(
+                      addInvoiceController.dataToEditInvoice!.currencyId!)]);
+            } else {
+              addInvoiceController.selectCurrencyDrop(countriesCurrencies[0]);
+            }
 
             return CustomDropdown(
               items: countriesCurrencies,
@@ -128,8 +189,13 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               width: w,
               onchanged: (s) {
                 addInvoiceController.selectCurrencyDrop(s);
-                addInvoiceController.dataToCreateInvoice.currencyId =
-                    ids[countriesCurrencies.indexOf(s!)];
+                if (addInvoiceController.dataToEditInvoice != null) {
+                  addInvoiceController.dataToEditInvoice!.currencyId =
+                      ids[countriesCurrencies.indexOf(s!)];
+                } else {
+                  addInvoiceController.dataToCreateInvoice.currencyId =
+                      ids[countriesCurrencies.indexOf(s!)];
+                }
               },
             );
           },
@@ -156,12 +222,19 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   ),
                 )
                 .toList(),
-            value: addInvoiceController.selectedIsOpenInvoiceDrop,
+            value: addInvoiceController.dataToEditInvoice != null
+                ? addInvoiceController.isOpenInvoiceDrops[
+                    addInvoiceController.dataToEditInvoice!.isOpenInvoice!]
+                : addInvoiceController.selectedIsOpenInvoiceDrop,
             onChanged: (value) {
               addInvoiceController.selectIsOpenInvoiceDrop(value!);
-              addInvoiceController.dataToCreateInvoice.isOpenInvoice = value;
-              logSuccess(
-                  addInvoiceController.dataToCreateInvoice.isOpenInvoice!);
+              if (addInvoiceController.dataToEditInvoice != null) {
+                addInvoiceController.dataToEditInvoice!.isOpenInvoice =
+                    value == "Fixed" ? 1 : 0;
+              } else {
+                addInvoiceController.dataToCreateInvoice.isOpenInvoice =
+                    value == "Fixed" ? 1 : 0;
+              }
             },
           ),
         ),
@@ -187,7 +260,11 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   ),
                 )
                 .toList(),
-            value: addInvoiceController.selectedDiscountDrop,
+            value: addInvoiceController.dataToEditInvoice != null
+                ? addInvoiceController.dataToEditInvoice!.discountValue != 0
+                    ? "Yes"
+                    : "No"
+                : addInvoiceController.selectedDiscountDrop,
             onChanged: (value) {
               addInvoiceController.selectDiscountDrop(value!);
               if (value == "No") {
@@ -200,6 +277,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           ),
         ),
         const SizedBox(height: 20),
+
         discountAvailableFlag ? blackText("Discount Type", 16) : Container(),
         discountAvailableFlag
             ? Container(
@@ -222,15 +300,32 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         ),
                       )
                       .toList(),
-                  value: addInvoiceController.selectedDiscountTypesDrop,
+                  value: addInvoiceController.dataToEditInvoice != null
+                      ? addInvoiceController.dataToEditInvoice!.discountType ==
+                              0
+                          ? "Fixed"
+                          : "Rate"
+                      : addInvoiceController.selectedDiscountTypesDrop,
                   onChanged: (value) {
                     addInvoiceController.selectDiscountTypesDrop(value!);
                     if (value == "Fixed") {
                       discountTypeFlag = true;
-                      addInvoiceController.dataToCreateInvoice.discountType = 1;
+                      if (addInvoiceController.dataToEditInvoice != null) {
+                        addInvoiceController.dataToEditInvoice!.discountType =
+                            1;
+                      } else {
+                        addInvoiceController.dataToCreateInvoice.discountType =
+                            1;
+                      }
                     } else {
                       discountTypeFlag = false;
-                      addInvoiceController.dataToCreateInvoice.discountType = 0;
+                      if (addInvoiceController.dataToEditInvoice != null) {
+                        addInvoiceController.dataToEditInvoice!.discountType =
+                            0;
+                      } else {
+                        addInvoiceController.dataToCreateInvoice.discountType =
+                            0;
+                      }
                     }
                     setState(() {});
                   },
@@ -241,12 +336,21 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
         discountAvailableFlag ? blackText("Discount Value", 16) : Container(),
         discountAvailableFlag
             ? SignUpTextField(
-                controller: discountValueController,
+                initialValue: addInvoiceController.dataToEditInvoice != null
+                    ? addInvoiceController.dataToEditInvoice!.discountValue
+                        .toString()
+                    : null,
                 padding: EdgeInsets.all(0),
                 hintText: discountTypeFlag ? "0 AED" : "0 %",
                 keyBoardType: TextInputType.number,
                 onchanged: (s) {
-                  addInvoiceController.dataToCreateInvoice.discountValue = s;
+                  if (addInvoiceController.dataToEditInvoice != null) {
+                    addInvoiceController.dataToEditInvoice!.discountValue =
+                        int.parse(s!);
+                  } else {
+                    addInvoiceController.dataToCreateInvoice.discountValue =
+                        int.parse(s!);
+                  }
                 },
               )
             : Container(),
@@ -333,13 +437,22 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               child: SignUpTextField(
                 padding: EdgeInsets.all(0),
                 keyBoardType: TextInputType.numberWithOptions(decimal: true),
-                controller: remindAfterController,
+                initialValue: addInvoiceController.dataToEditInvoice != null
+                    ? addInvoiceController.dataToEditInvoice!.remindAfter!
+                        .toString()
+                    : null,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9.,]')),
                 ],
                 hintText: "0",
                 onchanged: (s) {
-                  addInvoiceController.dataToCreateInvoice.remindAfter = s;
+                  if (addInvoiceController.dataToEditInvoice != null) {
+                    addInvoiceController.dataToEditInvoice!.remindAfter =
+                        int.parse(s!);
+                  } else {
+                    addInvoiceController.dataToCreateInvoice.remindAfter =
+                        int.parse(s!);
+                  }
                 },
               ),
             ),
@@ -377,7 +490,12 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   ),
                 )
                 .toList(),
-            value: addInvoiceController.selectedRecurringInterval,
+            value: addInvoiceController.dataToEditInvoice != null
+                ? addInvoiceController.dataToEditInvoice!.recurringIntervalId ==
+                        0
+                    ? "No Recurring"
+                    : "Monthly"
+                : addInvoiceController.selectedRecurringInterval,
             onChanged: (value) {
               addInvoiceController.selectRecurringInterval(value!);
               if (value != "No Recurring") {
@@ -390,8 +508,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 });
               }
               addInvoiceController.dataToCreateInvoice.recurringIntervalId =
-                  (addInvoiceController.recurringInterval.indexOf(value) + 1)
-                      .toString();
+                  (addInvoiceController.recurringInterval.indexOf(value) + 1);
               logSuccess(addInvoiceController
                   .dataToCreateInvoice.recurringIntervalId!);
             },
@@ -500,7 +617,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
-                      value: 0,
+                      value: 1,
                       groupValue: invoicesLangValue,
                       onChanged: (value) {
                         setState(
@@ -529,7 +646,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       ),
                       size: GFSize.SMALL,
                       inactiveBorderColor: Colors.transparent,
-                      value: 1,
+                      value: 2,
                       groupValue: invoicesLangValue,
                       onChanged: (value) {
                         setState(
@@ -633,7 +750,11 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           child: TextField(
             controller: commentsController,
             onChanged: (value) {
-              addInvoiceController.dataToCreateInvoice.comments = value;
+              if (addInvoiceController.dataToEditInvoice != null) {
+                addInvoiceController.dataToEditInvoice!.comments = value;
+              } else {
+                addInvoiceController.dataToCreateInvoice.comments = value;
+              }
             },
             maxLines: 3,
             decoration: const InputDecoration(border: InputBorder.none),
@@ -658,7 +779,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
-                      value: 0,
+                      value: 1,
                       groupValue: termsAndConditions,
                       onChanged: (value) => setState(() {
                             termsAndConditions = value;
@@ -683,7 +804,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       ),
                       size: GFSize.SMALL,
                       inactiveBorderColor: Colors.transparent,
-                      value: 1,
+                      value: 2,
                       groupValue: termsAndConditions,
                       onChanged: (value) => setState(() {
                             termsAndConditions = value;
@@ -709,8 +830,13 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   decoration: const InputDecoration(border: InputBorder.none),
                   controller: termsController,
                   onChanged: (value) {
-                    addInvoiceController
-                        .dataToCreateInvoice.termsAndConditions = value;
+                    if (addInvoiceController.dataToEditInvoice != null) {
+                      addInvoiceController
+                          .dataToEditInvoice!.termsAndConditions = value;
+                    } else {
+                      addInvoiceController
+                          .dataToCreateInvoice.termsAndConditions = value;
+                    }
                   },
                 ),
               )
@@ -814,33 +940,43 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   borderRadius: BorderRadius.circular(40),
                 ),
                 onTap: () async {
-                  var expiryTime = expiryTimeController.text.split(" ")[0];
-                  if (expiryTime.length == 4) {
-                    expiryTime = "0" + expiryTimeController.text.split(" ")[0];
+                  if (addInvoiceController.dataToEditInvoice != null) {
+                    logSuccess(
+                        addInvoiceController.dataToEditInvoice!.toJson());
+                    addInvoiceController.dataToEditInvoice = null;
+                    Get.back();
+//TODO:Stopped Here
+
+                  } else {
+                    var expiryTime = expiryTimeController.text.split(" ")[0];
+                    if (expiryTime.length == 4) {
+                      expiryTime =
+                          "0" + expiryTimeController.text.split(" ")[0];
+                    }
+                    String expiryDate =
+                        "${expiryDateController.text} $expiryTime";
+                    addInvoiceController.dataToCreateInvoice.customerName =
+                        addInvoiceController.customerInfo.customerName;
+                    addInvoiceController
+                            .dataToCreateInvoice.customerMobileNumbr =
+                        addInvoiceController.customerInfo.customerMobileNumbr;
+                    addInvoiceController
+                            .dataToCreateInvoice.customerMobileNumbrCode =
+                        addInvoiceController
+                            .customerInfo.customerMobileNumbrCodeID;
+                    addInvoiceController.dataToCreateInvoice.customerRefrence =
+                        addInvoiceController.customerInfo.customerRefrence;
+                    addInvoiceController.dataToCreateInvoice.customerSendBy =
+                        addInvoiceController.customerInfo.customerSendBy;
+                    addInvoiceController.dataToCreateInvoice.expiryDate =
+                        expiryDate;
+                    addInvoiceController.dataToCreateInvoice
+                        .recurringStartDate = startDateController.text;
+                    addInvoiceController.dataToCreateInvoice.recurringEndDate =
+                        endDateController.text;
+
+                    await addInvoiceController.createInvoice();
                   }
-                  String expiryDate =
-                      expiryDateController.text + " " + expiryTime;
-                  logSuccess(expiryDate);
-                  addInvoiceController.dataToCreateInvoice.customerName =
-                      addInvoiceController.customerInfo.customerName;
-                  addInvoiceController.dataToCreateInvoice.customerMobileNumbr =
-                      addInvoiceController.customerInfo.customerMobileNumbr;
-                  addInvoiceController
-                          .dataToCreateInvoice.customerMobileNumbrCode =
-                      addInvoiceController.customerInfo.customerMobileNumbrCode;
-                  addInvoiceController.dataToCreateInvoice.customerRefrence =
-                      addInvoiceController.customerInfo.customerRefrence;
-                  addInvoiceController.dataToCreateInvoice.customerSendBy =
-                      addInvoiceController.customerInfo.customerSendBy;
-                  addInvoiceController.dataToCreateInvoice.expiryDate =
-                      expiryDate;
-                  addInvoiceController.dataToCreateInvoice.recurringStartDate =
-                      startDateController.text;
-                  addInvoiceController.dataToCreateInvoice.recurringEndDate =
-                      endDateController.text;
-                  addInvoiceController.dataToCreateInvoice.token =
-                      await AuthService().loadToken();
-                  await addInvoiceController.createInvoice();
                 },
                 child: Container(
                   decoration: BoxDecoration(

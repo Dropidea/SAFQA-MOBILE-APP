@@ -44,7 +44,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: WhiteAppBar(
+      appBar: MyAppBar(
           title:
               widget.addressToEdit != null ? "Edit address" : "Create Address"),
       body: Form(

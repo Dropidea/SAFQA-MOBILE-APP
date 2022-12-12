@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:safqa/models/invoice.dart';
 import 'package:safqa/models/invoice_types.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/invoices/invoices_controller.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/quick_invoice_details.dart';
 import 'package:sizer/sizer.dart';
 
@@ -15,7 +15,7 @@ class QuickInvoiceTab extends StatefulWidget {
 }
 
 class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
-  InvoicesController invoiceController = Get.put(InvoicesController());
+  InvoicesController invoiceController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -31,7 +31,7 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) => InvoiceWidget(
-            inv: invoiceController.invoices[index],
+            inv: invoiceController.invoicest[index],
             onTap: () {
               Get.to(
                 () => QuickInvoiceDetailsPage(),
@@ -39,7 +39,7 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
               );
             },
           ),
-          itemCount: invoiceController.invoices.length,
+          itemCount: invoiceController.invoicest.length,
           separatorBuilder: (BuildContext context, int index) =>
               SizedBox(height: 20),
         ),
@@ -55,8 +55,8 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) =>
-              InvoiceWidget(inv: invoiceController.invoices[index]),
-          itemCount: invoiceController.invoices.length,
+              InvoiceWidget(inv: invoiceController.invoicest[index]),
+          itemCount: invoiceController.invoicest.length,
           separatorBuilder: (BuildContext context, int index) =>
               SizedBox(height: 20),
         ),
@@ -72,8 +72,8 @@ class _QuickInvoiceTabState extends State<QuickInvoiceTab> {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) =>
-              InvoiceWidget(inv: invoiceController.invoices[index]),
-          itemCount: invoiceController.invoices.length,
+              InvoiceWidget(inv: invoiceController.invoicest[index]),
+          itemCount: invoiceController.invoicest.length,
           separatorBuilder: (BuildContext context, int index) =>
               SizedBox(height: 20),
         )

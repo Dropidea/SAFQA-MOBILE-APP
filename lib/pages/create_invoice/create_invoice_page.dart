@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
-import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/tabs/invoice_tab.dart';
 import 'package:safqa/pages/create_invoice/tabs/payment_link_tab.dart';
 import 'package:safqa/pages/create_invoice/tabs/quick_invoice_tab.dart';
@@ -37,7 +36,6 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
   }
 
   AddInvoiceController addInvoiceController = Get.find();
-  SignUpController _signUpController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;

@@ -12,7 +12,7 @@ class InvoiceItem {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data["product_name"] = productName;
     data["product_quantity"] = quantity;
-    data["product_price"] = quantity;
+    data["product_price"] = unitPrice;
 
     return data;
   }

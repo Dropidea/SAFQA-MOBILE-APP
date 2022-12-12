@@ -11,6 +11,7 @@ import 'package:safqa/pages/home/menu_pages/settings/models/manage_user.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/manage_user_filter.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/dialoges.dart';
 
 class ManageUserController extends GetxController {
@@ -141,39 +142,46 @@ class ManageUserController extends GetxController {
       logSuccess(res.data);
     } on DioError catch (e) {
       Get.back();
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createManageUser(user);
+        }
+      } else {
+        logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -203,39 +211,46 @@ class ManageUserController extends GetxController {
       logSuccess(res.data);
     } on DioError catch (e) {
       Get.back();
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editManageUser(user);
+        }
+      } else {
+        logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -256,8 +271,15 @@ class ManageUserController extends GetxController {
       getManageUserFlag = false;
     } on DioError catch (e) {
       getManageUserFlag = false;
-      logError(e.message);
-      logError(e.response!.data);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getManageUsers();
+        }
+      } else {
+        logError(e.message);
+        logError(e.response!.data);
+      }
       // logError(e.response!.data["message"]);
       if (e.response!.data["message"] == "Please Login") {
         await AuthService().login("a@b.c", "123456789", true);

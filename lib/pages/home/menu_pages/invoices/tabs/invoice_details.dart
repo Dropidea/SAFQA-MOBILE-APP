@@ -1,12 +1,23 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/main.dart';
+import 'package:safqa/models/data_to_create_invoice.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/models/invoice.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_invoice.dart';
 import 'package:sizer/sizer.dart';
 
 class InvoiceDetailsPage extends StatelessWidget {
-  const InvoiceDetailsPage({super.key});
+  InvoiceDetailsPage({super.key, required this.invoiceModel});
+  final InvoiceModel invoiceModel;
+  DataToCreateInvoice? invoiceToEdit;
+  GlobalDataController globalDataController = Get.find();
+  AddInvoiceController addInvoiceController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -25,35 +36,55 @@ class InvoiceDetailsPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: w / 2.5,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xff58D241).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.edit,
-                        color: Color(0xff58D241),
-                        size: 18.0.sp,
+              GestureDetector(
+                onTap: () {
+                  invoiceToEdit =
+                      DataToCreateInvoice.fromJson(invoiceModel.toJson());
+                  addInvoiceController.dataToEditInvoice = invoiceToEdit;
+
+                  if (invoiceModel.currency != null) {
+                    addInvoiceController.dataToEditInvoice!.currencyId =
+                        invoiceModel.currency!.id!.toString();
+                  }
+                  if (invoiceModel.mobileCode != null)
+                    // ignore: curly_braces_in_flow_control_structures
+                    addInvoiceController
+                            .dataToEditInvoice!.customerMobileNumbrCode =
+                        invoiceModel.mobileCode!.code!.toString();
+
+                  logSuccess(invoiceToEdit!.toJson());
+                  Get.to(() => InvoiceSubCreateInvoice());
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xff58D241).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.edit,
+                          color: Color(0xff58D241),
+                          size: 18.0.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Edit",
-                      style: TextStyle(
-                        fontSize: 14.0.sp,
-                        color: Color(0xff58D241),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
+                      SizedBox(width: 10),
+                      Text(
+                        "Edit",
+                        style: TextStyle(
+                          fontSize: 14.0.sp,
+                          color: Color(0xff58D241),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Container(
@@ -124,7 +155,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                 children: [
                                   blackText("Invoice ID", 14),
                                   const SizedBox(height: 5),
-                                  greyText("2659986 / 2022000048", 12),
+                                  greyText(invoiceModel.id.toString(), 12),
                                 ],
                               ),
                               Column(
@@ -142,16 +173,24 @@ class InvoiceDetailsPage extends StatelessWidget {
                           ),
                           SizedBox(height: 15),
                           blackText("Customer Name", 14),
-                          greyText("Ahmad Amin", 14),
+                          greyText(invoiceModel.customerName!, 14),
                           SizedBox(height: 15),
                           blackText("Customer Email", 14),
-                          greyText("ahmad@gmail.com", 14),
+                          greyText(
+                              invoiceModel.customerEmail ?? "No Email", 14),
                           SizedBox(height: 15),
                           blackText("Customer Phone Number", 14),
-                          greyText("+96398765446", 14),
+                          greyText(
+                              invoiceModel.customerMobile == null
+                                  ? "No Mobile Number"
+                                  : "${invoiceModel.mobileCode != null ? invoiceModel.mobileCode!.code : ''} ${invoiceModel.customerMobile!}",
+                              14),
                           SizedBox(height: 15),
                           blackText("Customer Refrence", 14),
-                          greyText("Customer Refrence", 14),
+                          greyText(
+                              invoiceModel.customerReference ??
+                                  "No Customer Refrence",
+                              14),
                           SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +199,10 @@ class InvoiceDetailsPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   blackText("Comunication method", 14),
-                                  greyText("SMS", 14),
+                                  greyText(
+                                      globalDataController.getSendOption(
+                                          invoiceModel.sendInvoiceOptionId!),
+                                      14),
                                 ],
                               ),
                               Column(
@@ -212,7 +254,8 @@ class InvoiceDetailsPage extends StatelessWidget {
                               content2: "Visa/MasterCard"),
                           invoiceInfoMethod(
                               title1: "Currency",
-                              content1: "UAE (AED)",
+                              content1:
+                                  "${invoiceModel.currency!.currency!} (${invoiceModel.currency!.shortCurrency!})",
                               title2: "Date Created",
                               content2: DateFormat('dd/M/y').format(
                                 DateTime.now().subtract(
@@ -226,14 +269,15 @@ class InvoiceDetailsPage extends StatelessWidget {
                               Duration(days: 10),
                             )),
                             title2: "Expiry Date",
-                            content2:
-                                DateFormat('dd/M/y').format(DateTime.now()) +
-                                    " " +
-                                    TimeOfDay.now().format(context),
+                            content2: DateFormat('dd/M/y').format(
+                                    DateTime.parse(invoiceModel.expiryDate!)) +
+                                " " +
+                                DateFormat('hh:mm a').format(
+                                    DateTime.parse(invoiceModel.expiryDate!)),
                           ),
                           invoiceInfoMethod(
                               title1: "Remind After",
-                              content1: "20 Days",
+                              content1: "${invoiceModel.remindAfter!} Days",
                               title2: "",
                               content2: ""),
                           SizedBox(height: 10),
@@ -249,95 +293,131 @@ class InvoiceDetailsPage extends StatelessWidget {
                           SizedBox(height: 10),
                           invoiceInfoMethod(
                               title1: "Invoice Display Value",
-                              content1: "40 AED",
+                              content1:
+                                  "${invoiceModel.invoiceValue!} ${invoiceModel.currency!.shortCurrency!}",
                               title2: "Discount available",
-                              content2: "No"),
+                              content2: invoiceModel.discountType == null
+                                  ? "No"
+                                  : "Yes"),
                           invoiceInfoMethod(
                               title1: "Attach file",
-                              content1: "No File",
+                              content1:
+                                  invoiceModel.attachFile ?? "No File Attached",
                               title2: "Recurring Interval",
-                              content2: "No Recurring"),
+                              content2: invoiceModel.recurringIntervalId == null
+                                  ? "No Recurring"
+                                  : invoiceModel.recurringIntervalId
+                                      .toString()),
                           invoiceInfoMethod(
                               title1: "Comments",
-                              content1: "No Comments",
+                              content1:
+                                  invoiceModel.comments ?? "No Comments found",
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "Language of the invoice:",
-                              content1: "English",
+                              content1: invoiceModel.languageId!.toString(),
                               title2: "Terms & conditions",
-                              content2: "Disabled"),
+                              content2: invoiceModel.termsAndConditions ??
+                                  "No Terms & Conditions"),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  ExpandablePanel(
-                      header: Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.grey, width: 0.5),
+                  invoiceModel.invoiceItem!.isEmpty
+                      ? Container()
+                      : SizedBox(height: 20),
+                  invoiceModel.invoiceItem!.isEmpty
+                      ? Container()
+                      : ExpandablePanel(
+                          header: Container(
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom:
+                                    BorderSide(color: Colors.grey, width: 0.5),
+                              ),
+                            ),
+                            child: blackText("Invoice Items", 15),
+                          ),
+                          controller:
+                              ExpandableController(initialExpanded: true),
+                          collapsed: Container(),
+                          theme: ExpandableThemeData(hasIcon: false),
+                          expanded: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: invoiceModel.invoiceItem!.length,
+                            itemBuilder: (context, index) => Container(
+                              margin: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsetsDirectional.only(
+                                  end: 20, top: 10),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          blackText("Product Name", 13),
+                                          SizedBox(height: 10),
+                                          greyText(
+                                              invoiceModel.invoiceItem![index]
+                                                  .productName!,
+                                              13),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          blackText("Quantity", 13),
+                                          SizedBox(height: 10),
+                                          greyText(
+                                              invoiceModel.invoiceItem![index]
+                                                  .productQuantity!
+                                                  .toString(),
+                                              13),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          blackText("Unit Price", 13),
+                                          SizedBox(height: 10),
+                                          greyText(
+                                              "${invoiceModel.invoiceItem![index].productPrice!} ${invoiceModel.currency!.shortCurrency!}",
+                                              13),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        color: Colors.black,
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 20),
+                                        child: Center(
+                                          child: whiteText(
+                                              "Total: ${invoiceModel.invoiceItem![index].productPrice! * invoiceModel.invoiceItem![index].productQuantity!} ${invoiceModel.currency!.shortCurrency!} ",
+                                              14),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                        child: blackText("Invoice Items", 15),
-                      ),
-                      controller: ExpandableController(initialExpanded: true),
-                      collapsed: Container(),
-                      theme: ExpandableThemeData(hasIcon: false),
-                      expanded: Container(
-                        margin: EdgeInsets.only(top: 10),
-                        padding:
-                            const EdgeInsetsDirectional.only(end: 20, top: 10),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    blackText("Product Name", 13),
-                                    SizedBox(height: 10),
-                                    greyText("T-shirt", 13),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    blackText("Quantity", 13),
-                                    SizedBox(height: 10),
-                                    greyText("10", 13),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    blackText("Unit Price", 13),
-                                    SizedBox(height: 10),
-                                    greyText("40 AED", 13),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  color: Colors.black,
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 20),
-                                  child: Center(
-                                    child: whiteText("Total: 40", 14),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
                   SizedBox(height: 20),
                   ExpandablePanel(
                       header: Container(

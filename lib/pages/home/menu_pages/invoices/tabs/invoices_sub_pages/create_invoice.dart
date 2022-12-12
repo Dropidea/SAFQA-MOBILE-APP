@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/create_invoice/tabs/invoice_tab.dart';
 
 class InvoiceSubCreateInvoice extends StatelessWidget {
-  const InvoiceSubCreateInvoice({super.key});
-
+  InvoiceSubCreateInvoice({super.key});
+  final AddInvoiceController _addInvoiceController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +16,11 @@ class InvoiceSubCreateInvoice extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.white,
-        title: blackText("Create Invoice", 16),
+        title: blackText(
+            _addInvoiceController.dataToEditInvoice != null
+                ? "Edit Invoice"
+                : "Create Invoice",
+            16),
 
         centerTitle: true,
       ),

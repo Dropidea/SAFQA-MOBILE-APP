@@ -12,8 +12,10 @@ class WallpepredBTN extends StatelessWidget {
       this.icon,
       this.height,
       this.borderRadius,
-      this.color});
+      this.color,
+      this.fontSize});
   final double? width;
+  final double? fontSize;
   final double? height;
   final double? borderRadius;
   final String? text;
@@ -32,7 +34,8 @@ class WallpepredBTN extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius ?? 10),
-            color: color ?? Color(0xff2F6782),
+            color:
+                color ?? Theme.of(context).buttonTheme.colorScheme!.background,
             image: haveWallpaper
                 ? DecorationImage(
                     image: AssetImage("assets/images/btn_wallpaper.png"),
@@ -61,7 +64,7 @@ class WallpepredBTN extends StatelessWidget {
                 text!,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16.0.sp,
+                    fontSize: fontSize ?? 16.0.sp,
                     fontWeight: FontWeight.w500),
               ),
             ],

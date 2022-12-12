@@ -24,9 +24,14 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
   TextEditingController t1 = TextEditingController();
 
   TextEditingController t2 = TextEditingController();
+  AddInvoiceController addInvoiceController = Get.find();
 
   final formKey = GlobalKey<FormState>();
-  FocusNode d = new FocusNode();
+  FocusNode d = FocusNode();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +119,13 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
+                        InvoiceItem item = InvoiceItem(
+                          productName: t1.text,
+                          unitPrice: t2.text,
+                          quantity: quantity,
+                        );
                         if (formKey.currentState!.validate()) {
+                          // logSuccess(t2.text)
                           InvoiceItem item = InvoiceItem(
                             productName: t1.text,
                             unitPrice: t2.text,
@@ -124,12 +135,18 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                           t2.text = "";
                           quantity = 0;
                           setState(() {});
-                          addInvoiceController.addInvoiceItem(item);
-                          addInvoiceController.addInvoiceItemAsArrays(item);
+                          if (addInvoiceController.dataToEditInvoice != null) {
+                            addInvoiceController.dataToEditInvoice!.invoiceItems
+                                .add(item);
+                          } else {
+                            addInvoiceController.addInvoiceItem(item);
+                          }
+
+                          // addInvoiceController.addInvoiceItemAsArrays(item);
                           FocusScope.of(context).unfocus();
 
-                          MyDialogs.showSavedSuccessfullyDialoge(
-                              title: "Added Successfully", btnTXT: "close");
+                          // MyDialogs.showSavedSuccessfullyDialoge(
+                          //     title: "Added Successfully", btnTXT: "close");
                         }
                       },
                       child: Container(
@@ -161,8 +178,13 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
                       itemBuilder: (context, index) {
-                        InvoiceItem item =
-                            addInvoiceController.invoiceItems[index];
+                        InvoiceItem item;
+                        if (addInvoiceController.dataToEditInvoice != null) {
+                          item = addInvoiceController
+                              .dataToEditInvoice!.invoiceItems[index];
+                        } else {
+                          item = addInvoiceController.invoiceItems[index];
+                        }
                         return Container(
                           width: w,
                           height: h / 4,
@@ -224,8 +246,18 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                                 onTap: () {
                                                   MyDialogs.showDeleteDialoge(
                                                       onProceed: () {
-                                                        c.removeInvoiceItem(
-                                                            index);
+                                                        if (addInvoiceController
+                                                                .dataToEditInvoice !=
+                                                            null) {
+                                                          addInvoiceController
+                                                              .dataToEditInvoice!
+                                                              .invoiceItems
+                                                              .removeAt(index);
+                                                          setState(() {});
+                                                        } else {
+                                                          c.removeInvoiceItem(
+                                                              index);
+                                                        }
                                                         Get.back();
                                                       },
                                                       message: "Are you sure?");
@@ -246,17 +278,20 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                               SizedBox(width: 2),
                                               GestureDetector(
                                                 onTap: () {
-                                                  t1.text = c
-                                                      .invoiceItems[index]
-                                                      .productName!;
-                                                  t2.text = c
-                                                      .invoiceItems[index]
-                                                      .unitPrice!;
-                                                  quantity = c
-                                                      .invoiceItems[index]
-                                                      .quantity!;
+                                                  t1.text = item.productName!;
+                                                  t2.text = item.unitPrice!;
+                                                  quantity = item.quantity!;
+                                                  if (addInvoiceController
+                                                          .dataToEditInvoice !=
+                                                      null) {
+                                                    addInvoiceController
+                                                        .dataToEditInvoice!
+                                                        .invoiceItems
+                                                        .removeAt(index);
+                                                  } else {
+                                                    c.removeInvoiceItem(index);
+                                                  }
                                                   setState(() {});
-                                                  c.removeInvoiceItem(index);
                                                   d.requestFocus();
                                                 },
                                                 child: Container(
@@ -308,7 +343,10 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                           ),
                         );
                       },
-                      itemCount: addInvoiceController.invoiceItems.length,
+                      itemCount: addInvoiceController.dataToEditInvoice != null
+                          ? addInvoiceController
+                              .dataToEditInvoice!.invoiceItems.length
+                          : addInvoiceController.invoiceItems.length,
                     );
                   })
                 ],

@@ -12,6 +12,7 @@ import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product_filter.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/dialoges.dart';
 
 class ProductsController extends GetxController {
@@ -27,21 +28,21 @@ class ProductsController extends GetxController {
   List<Product> productsToShow = [];
   List<Product> filteredProducts = [];
   double minPriceProduct() {
-    double min = double.maxFinite;
+    double min = 10000000;
 
     for (var i in products) {
       if (i.price! <= min) min = i.price!.toDouble();
     }
-    return min;
+    return min != 10000000 ? min : 0;
   }
 
   double maxPriceProduct() {
-    double max = -1;
+    double max = 0;
 
     for (var i in products) {
       if (i.price! >= max) max = i.price!.toDouble();
     }
-    return max;
+    return max == 0 ? 1000 : max;
   }
 
 // -----------------------------------
@@ -280,40 +281,47 @@ class ProductsController extends GetxController {
       return true;
     } on DioError catch (e) {
       Get.back();
-      logError(e.response!);
-      // logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createProduct(product);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -356,7 +364,14 @@ class ProductsController extends GetxController {
       return true;
     } on DioError catch (e) {
       Get.back();
-      logError(e.message);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editProduct(product);
+        }
+      } else {
+        logError(e.message);
+      }
       // logError(e.response!.data);
       // Map<String, dynamic> m = e.response!.data;
       // String errors = "";
@@ -417,40 +432,47 @@ class ProductsController extends GetxController {
       return true;
     } on DioError catch (e) {
       Get.back();
-      logError(e.message);
-      logError(e.response!.data);
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editProductCategory(category);
+        }
+      } else {
+        logError(e.message);
+        logError(e.response!.data);
+        Map<String, dynamic> m = e.response!.data;
+        String errors = "";
+        int c = 0;
+        for (var i in m.values) {
+          for (var j = 0; j < i.length; j++) {
+            if (j == i.length - 1) {
+              errors = errors + i[j];
+            } else {
+              errors = "${errors + i[j]}\n";
+            }
+          }
+
+          c++;
+          if (c != m.values.length) {
+            errors += "\n";
           }
         }
 
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
+        Get.showSnackbar(
+          GetSnackBar(
+            duration: Duration(milliseconds: 3000),
+            backgroundColor: Colors.red,
+            // message: errors,
+            messageText: Text(
+              errors,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
       return false;
     }
   }
@@ -480,7 +502,14 @@ class ProductsController extends GetxController {
       clearProductCategoryFilter();
     } on DioError catch (e) {
       Get.back();
-      logError(e.response!);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createProductCategory(category);
+        }
+      } else {
+        logError(e.response!);
+      }
       // logError(e.response!.data);
       // Map<String, dynamic> m = e.response!.data;
       // String errors = "";
@@ -539,8 +568,15 @@ class ProductsController extends GetxController {
         },
       );
     } on DioError catch (e) {
-      logError(e.message);
       Get.back();
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteProductCategory(category);
+        }
+      } else {
+        logError(e.message);
+      }
     }
   }
 
@@ -651,7 +687,14 @@ class ProductsController extends GetxController {
       getProductsCategoryFlag.value = false;
     } on DioError catch (e) {
       getProductsCategoryFlag.value = false;
-      logError(e.response!);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getProductCategories();
+        }
+      } else {
+        logError(e.response!);
+      }
       // logError(e.response!.data);
       // Map<String, dynamic> m = e.response!.data;
       // String errors = "";
@@ -690,12 +733,7 @@ class ProductsController extends GetxController {
 
   Future getProducts() async {
     getProductsFlag.value = true;
-    logSuccess("msg");
     try {
-      // final body = d.FormData();
-      String token = await AuthService().loadToken();
-      dio.options.headers["authorization"] = "bearer  $token";
-
       // body.fields.add(MapEntry("token", token));
 
       await sslProblem();
@@ -715,7 +753,14 @@ class ProductsController extends GetxController {
       getProductsFlag.value = false;
     } on DioError catch (e) {
       getProductsFlag.value = false;
-      logError(e.response!);
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getProducts();
+        }
+      } else {
+        logError(e.response!);
+      }
       return null;
     } catch (e) {
       getProductsFlag.value = false;

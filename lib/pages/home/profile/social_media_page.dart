@@ -25,7 +25,7 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: const WhiteAppBar(title: "Social Media"),
+      appBar: const MyAppBar(title: "Social Media"),
       body: ListView(
         padding: const EdgeInsets.all(20),
         primary: false,
