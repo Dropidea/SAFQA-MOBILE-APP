@@ -79,13 +79,49 @@ class AddInvoiceController extends GetxController {
         },
       );
     } on DioError catch (e) {
+      Get.back();
+
       if (e.response!.statusCode == 404) {
-        bool res = await Utils.reLoginHelper(e);
-        if (res) {
-          await createInvoice();
+        if (e.response!.statusMessage == "Login Please") {
+          bool res = await Utils.reLoginHelper(e);
+          if (res) {
+            await createInvoice();
+          }
+        } else {
+          Map<String, dynamic> m = e.response!.data;
+          String errors = "";
+          int c = 0;
+          for (var i in m.values) {
+            for (var j = 0; j < i.length; j++) {
+              if (j == i.length - 1) {
+                errors = errors + i[j];
+              } else {
+                errors = "${errors + i[j]}\n";
+              }
+            }
+
+            c++;
+            if (c != m.values.length) {
+              errors += "\n";
+            }
+          }
+
+          Get.showSnackbar(
+            GetSnackBar(
+              duration: Duration(milliseconds: 2000),
+              backgroundColor: Colors.red,
+              // message: errors,
+              messageText: Text(
+                errors,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                ),
+              ),
+            ),
+          );
         }
       } else {
-        Get.back();
         logError(e.message);
       }
 
@@ -241,18 +277,18 @@ class AddInvoiceController extends GetxController {
     _selectedCurrencyDrop.value = x!;
   }
 
-  List<String> isOpenInvoiceDrops = ["Changeable", "Fixed"];
-  RxString _selectedIsOpenInvoiceDrop = "Changeable".obs;
+  List<String> isOpenInvoiceDrops = ["changable".tr, "fixed".tr];
+  RxString _selectedIsOpenInvoiceDrop = "changable".tr.obs;
   String get selectedIsOpenInvoiceDrop => _selectedIsOpenInvoiceDrop.value;
   void selectIsOpenInvoiceDrop(String x) {
     _selectedIsOpenInvoiceDrop.value = x;
   }
 
-  List<String> discountDrops = ["Yes", "No"];
-  RxString _selectedDiscountDrop = "No".obs;
+  List<String> discountDrops = ["yes".tr, "no".tr];
+  RxString _selectedDiscountDrop = "no".tr.obs;
   String get selectedDiscountDrop => _selectedDiscountDrop.value;
-  List<String> discountTypesDrops = ["Fixed", "Rate"];
-  RxString _selectedDiscountTypesDrop = "Fixed".obs;
+  List<String> discountTypesDrops = ["fixed".tr, "rate".tr];
+  RxString _selectedDiscountTypesDrop = "fixed".tr.obs;
   String get selectedDiscountTypesDrop => _selectedDiscountTypesDrop.value;
 
   void selectDiscountDrop(String x) {
@@ -336,7 +372,7 @@ class AddInvoiceController extends GetxController {
       required String phoneNumCodeId,
       String? customerRef}) {
     customerInfo.customerName = name;
-    customerInfo.customerEmail = name;
+    customerInfo.customerEmail = email;
     customerInfo.customerMobileNumbr = phoneNum;
     customerInfo.customerMobileNumbrCodeID = phoneNumCodeId;
     customerInfo.customerSendBy = sendBy;

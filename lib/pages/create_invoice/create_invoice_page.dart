@@ -45,15 +45,15 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
       backgroundColor: Colors.white,
       appBar: AppBar(
         // toolbarHeight: 100,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Color.fromARGB(255, 187, 169, 169)),
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
           _tabController.index == 0
-              ? "Create a New Invoice"
+              ? "create_new_invoice".tr
               : _tabController.index == 1
-                  ? "Create a Quick Invoice"
-                  : "Create a Payment Link",
+                  ? "create_quick_invoice".tr
+                  : "create_payment_link".tr,
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -80,7 +80,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
           tabs: [
             Tab(
               child: Text(
-                "Invoices",
+                "invoices".tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
@@ -93,7 +93,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
             Tab(
               child: Text(
                 textAlign: TextAlign.center,
-                "Quick Invoices",
+                "quick_invoices".tr,
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: _tabController.index == 1
@@ -105,7 +105,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage>
             Tab(
               child: Text(
                 textAlign: TextAlign.center,
-                "Payment Link",
+                "payment_links".tr,
                 style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: _tabController.index == 2

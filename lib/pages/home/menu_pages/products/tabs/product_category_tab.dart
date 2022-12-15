@@ -47,7 +47,7 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
               SizedBox(height: 60),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
-                hintText: "Search ...",
+                hintText: "search".tr,
                 prefixIcon: Icon(
                   Icons.search_outlined,
                   color: Colors.grey,

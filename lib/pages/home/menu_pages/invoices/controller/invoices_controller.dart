@@ -81,8 +81,9 @@ class InvoicesController extends GetxController {
     update();
   }
 
-  activeProductFilter() {
+  activeInvoiceFilter() {
     invoiceFilter.filterActive = true;
+    logSuccess(invoiceFilter.toJson());
     List<InvoiceModel> tmp1 = [];
     List<InvoiceModel> tmp2 = [];
     if (invoiceFilter.value != null) {
@@ -138,9 +139,9 @@ class InvoicesController extends GetxController {
         }
         logSuccess(tmp.length);
         invoicesToShow = tmp;
-        update();
       }
     }
+    update();
   }
 
   RxBool getInvoicesFlag = false.obs;

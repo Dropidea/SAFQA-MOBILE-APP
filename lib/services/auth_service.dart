@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/pages/log-reg/login.dart';
 import 'package:safqa/widgets/dialoges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,8 @@ import 'end_points.dart';
 
 class AuthService {
   final Dio _dio = Dio();
+  GlobalDataController _globalDataController = Get.put(GlobalDataController());
+
   Future<String> loadToken() async {
     // final prefs = await SharedPreferences.getInstance();
     // return prefs.getString('token') ?? "";
@@ -116,6 +119,7 @@ class AuthService {
         await saveCredentials(email, password, rememberMe ? "1" : "0");
       }
       await saveToken(jsonRes['access_token']);
+      await _globalDataController.getMe();
       return jsonRes['access_token'];
     } on DioError catch (e) {
       logError(e.response!.data['error']);
@@ -134,16 +138,16 @@ class AuthService {
   Future register(data) async {
     try {
       sslProblem();
-      logError(data);
+      final body = d.FormData.fromMap(data);
       var res = await _dio.post(EndPoints.baseURL + EndPoints.registerEndPoint,
-          data: data);
+          data: body);
       var jsonRes = res.data;
       logSuccess("register success");
       return null;
     } on DioError catch (e) {
-      // logWarning(e.response!.data);
-      logError(e.message);
-      // Map<String, dynamic> obj = e.response!.data;
+      logWarning(e.response!.data);
+
+      Map<String, dynamic> obj = e.response!.data;
 
       // Get.showSnackbar(GetSnackBar(
       //   duration: Duration(milliseconds: 2000),
@@ -152,7 +156,7 @@ class AuthService {
       //       " " +
       //       e.response!.statusCode!.toString(),
       // ));
-      // return obj;
+      return obj;
       // return e.response!.data;
     }
   }

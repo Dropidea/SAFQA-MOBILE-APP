@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/log-reg/signup_done.dart';
 import 'package:safqa/widgets/my_button.dart';
@@ -22,6 +23,7 @@ class CompleteSignUpPage extends StatefulWidget {
 class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   SignUpController _signUpController = Get.find();
   PageController _pageController = PageController();
+  LocalsController _localsController = Get.find();
   TextEditingController pw = TextEditingController();
   TextEditingController cpw = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -50,7 +52,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   }
 
   continued() {
-    _currentStep < stepList(0, 0).length - 1
+    _currentStep < stepList(0, 0, _localsController.currenetLocale).length - 1
         ? setState(() => _currentStep += 1)
         : null;
   }
@@ -122,7 +124,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             onStepCancel: cancel,
                             onStepTapped: tapped,
                             currentStep: _currentStep,
-                            steps: stepList(h, w),
+                            steps: stepList(
+                                h, w, _localsController.currenetLocale),
                             physics: NeverScrollableScrollPhysics(),
                             controlsBuilder: (context, details) {
                               return Column(
@@ -257,7 +260,11 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                "Send OTP",
+                                                _localsController
+                                                            .currenetLocale ==
+                                                        0
+                                                    ? "Send OPT"
+                                                    : "أرسل OPT",
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18.0.sp,
@@ -467,9 +474,10 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
     );
   }
 
-  List<MyStep> stepList(double h, double w) => [
+  List<MyStep> stepList(double h, double w, int lang) => [
         MyStep(
-            label: myLabel(0, 'Company information'),
+            label: myLabel(
+                0, lang == 0 ? 'Company information' : "معلومات الشركة"),
             content: SizedBox(
               height: h < 600 ? 43.0.h : 50.0.h,
               child: ListView(
@@ -477,7 +485,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 primary: false,
                 children: [
                   SignUpTextField(
-                    hintText: "Legal Company Name",
+                    hintText: lang == 0
+                        ? "Legal Company Name"
+                        : "اسم الشركة القانوني",
                     onchanged: (s) {
                       _signUpController.dataToRegister['company_name'] = s!;
                       _signUpController.errors = {};
@@ -494,7 +504,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     },
                   ),
                   SignUpTextField(
-                    hintText: "Company Brand Name (EN)",
+                    hintText: lang == 0
+                        ? "Company Brand Name (EN)"
+                        : "اسم العلامة التجارية للشركة باللغة الإنجليزية",
                     onchanged: (s) {
                       _signUpController.dataToRegister['name_en'] = s!;
                       _signUpController.errors = {};
@@ -511,7 +523,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     },
                   ),
                   SignUpTextField(
-                    hintText: "Company Brand Name (AR)",
+                    hintText: lang == 0
+                        ? "Company Brand Name (AR)"
+                        : "اسم العلامة التجارية للشركة باللغة العربية",
                     onchanged: (s) {
                       _signUpController.dataToRegister['name_ar'] = s!;
                       _signUpController.errors = {};
@@ -560,8 +574,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           value: _signUpController.selectedPhoneNumberCodeDrop,
                           onChanged: (value) {
                             _signUpController.selectPhoneNumberCodeDrop(value!);
-                            logError(
-                                _signUpController.selectedPhoneNumberCodeDrop);
+
                             _signUpController
                                     .dataToRegister['phone_number_code_id'] =
                                 ids[countriesCodes.indexOf(_signUpController
@@ -570,7 +583,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           },
                         ),
                       ),
-                      hintText: 'Company Phone Number',
+                      hintText: lang == 0
+                          ? 'Company Phone Number'
+                          : "رقم هاتف الشركة",
                       validator: (s) {
                         if (_signUpController.errors == null)
                           return null;
@@ -588,7 +603,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     );
                   }),
                   SignUpTextField(
-                    hintText: "Company Email",
+                    hintText: lang == 0 ? "Company Email" : "إيميل الشركة",
                     keyBoardType: TextInputType.emailAddress,
                     onchanged: (s) {
                       _signUpController.dataToRegister['work_email'] = s!;
@@ -620,10 +635,11 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           List<String> ids = categories
                               .map<String>((e) => e['id'].toString())
                               .toList();
-                          List<String> categoryNamesEn = categories
-                              .map<String>((e) => e['name_en'].toString())
+                          List<String> categoryNames = categories
+                              .map<String>((e) => lang == 0
+                                  ? e['name_en'].toString()
+                                  : e['name_ar'].toString())
                               .toList();
-                          logError(categoryNamesEn);
 
                           return DropdownButtonFormField<String>(
                             decoration: InputDecoration(
@@ -634,7 +650,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            items: categoryNamesEn
+                            items: categoryNames
                                 .map((e) => DropdownMenuItem<String>(
                                       child: Text(e),
                                       value: e,
@@ -643,14 +659,14 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             value: _signUpController.selectedCategoryDrop == ""
                                 ? null
                                 : _signUpController.selectedCategoryDrop,
-                            hint: Text("Categories"),
+                            hint: Text(lang == 0 ? "Categories" : "الفئات"),
                             onChanged: (value) {
                               _signUpController.errors = {};
 
                               _signUpController.selectCategoryDrop(value!);
 
                               _signUpController.dataToRegister['category_id'] =
-                                  ids[categoryNamesEn.indexOf(value)];
+                                  ids[categoryNames.indexOf(value)];
                             },
                           );
                         },
@@ -665,7 +681,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 ? MyStepState.complete
                 : MyStepState.disabled),
         MyStep(
-            label: myLabel(1, 'Bank Account Details'),
+            label: myLabel(1,
+                lang == 0 ? 'Bank Account Details' : "معلومات الحساب المصرفي"),
             content: SizedBox(
               height: h < 600 ? 43.0.h : 50.0.h,
               child: ListView(
@@ -673,17 +690,19 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 primary: false,
                 children: [
                   SignUpTextField(
-                    hintText: "Bank Account Name",
+                    hintText:
+                        lang == 0 ? "Bank Account Name" : "اسم الحساب المصرفي",
                     onchanged: (s) {
-                      _signUpController.dataToRegister['bank_account_ame'] = s!;
+                      _signUpController.dataToRegister['bank_account_name'] =
+                          s!;
                       _signUpController.errors = {};
                     },
                     validator: (s) {
                       if (_signUpController.errors == null)
                         return null;
                       else if (_signUpController.errors
-                          .containsKey('bank_account_ame')) {
-                        return _signUpController.errors['bank_account_ame'][0]
+                          .containsKey('bank_account_name')) {
+                        return _signUpController.errors['bank_account_name'][0]
                             .toString();
                       } else
                         return null;
@@ -722,7 +741,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           value: _signUpController.selectedBankDrop == ""
                               ? null
                               : _signUpController.selectedBankDrop,
-                          hint: Text("Banks"),
+                          hint: Text(lang == 0 ? "Banks" : "البنوك"),
                           onChanged: (value) {
                             _signUpController.selectBankDrop(value!);
                             _signUpController.errors = {};
@@ -745,7 +764,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     ),
                   ),
                   SignUpTextField(
-                    hintText: "Account Number",
+                    hintText: lang == 0 ? "Account Number" : "رقم الحساب",
                     keyBoardType: TextInputType.number,
                     onchanged: (s) {
                       _signUpController.dataToRegister['account_number'] = s!;
@@ -786,7 +805,11 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 ? MyStepState.complete
                 : MyStepState.disabled),
         MyStep(
-            label: myLabel(2, 'Company Manager User Login Information'),
+            label: myLabel(
+                2,
+                lang == 0
+                    ? 'Company Manager User Login Information'
+                    : "معلومات تسجيل دخول مستخدم مدير الشركة"),
             content: SizedBox(
               height: h < 600 ? 43.0.h : 50.0.h,
               child: ListView(
@@ -794,7 +817,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 primary: false,
                 children: [
                   SignUpTextField(
-                    hintText: "Manager Full Name",
+                    hintText:
+                        lang == 0 ? "Manager Full Name" : "الاسم الكامل للمدير",
                     onchanged: (s) {
                       _signUpController.dataToRegister['full_name'] = s!;
                       _signUpController.errors = {};
@@ -811,7 +835,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     },
                   ),
                   SignUpTextField(
-                    hintText: "Email",
+                    hintText: lang == 0 ? "Email" : "الإيميل",
                     keyBoardType: TextInputType.emailAddress,
                     onchanged: (s) {
                       _signUpController.dataToRegister['email'] = s!;
@@ -889,11 +913,13 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                 .toString()
                             : null;
                       },
-                      hintText: 'Manager Mobile Number',
+                      hintText: lang == 0
+                          ? 'Manager Mobile Number'
+                          : "رقم هاتف المدير",
                     );
                   }),
                   SignUpTextField(
-                    hintText: "Password",
+                    hintText: lang == 0 ? "Password" : "كلمة المرور",
                     obsecureText: true,
                     controller: pw,
                     onchanged: (s) {
@@ -913,7 +939,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     },
                   ),
                   SignUpTextField(
-                      hintText: "Confirm Password",
+                      hintText:
+                          lang == 0 ? "Confirm Password" : "تأكيد كلمة المرور",
                       controller: cpw,
                       obsecureText: true,
                       validator: (s) {
@@ -948,7 +975,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             .toList();
                         List<String> countriesNames = countries
                             .map<String>(
-                              (e) => e['name_en'].toString(),
+                              (e) => lang == 0
+                                  ? e['name_en'].toString()
+                                  : e['name_ar'].toString(),
                             )
                             .toSet()
                             .toList();
@@ -969,7 +998,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           value: _signUpController.selectedNationalityDrop == ""
                               ? null
                               : _signUpController.selectedNationalityDrop,
-                          hint: Text("Nationality"),
+                          hint: Text(lang == 0 ? "Nationality" : "الجنسية"),
                           onChanged: (value) {
                             _signUpController.selectNationalityDrop(value!);
                             _signUpController.errors = {};
@@ -989,7 +1018,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                 ? MyStepState.complete
                 : MyStepState.disabled),
         MyStep(
-            label: myLabel(3, 'Send OPT'),
+            label: myLabel(3, lang == 0 ? 'Send OPT' : "أرسل OPT"),
             content: SizedBox(
               height: h < 600 ? 45.0.h : 50.0.h,
               child: ListView(
@@ -1000,7 +1029,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     margin:
                         EdgeInsets.only(bottom: 5.0.sp, left: 15, right: 15),
                     child: Text(
-                      "We've almost done!",
+                      lang == 0 ? "We've almost done!" : "لقد انتهينا تقريبا!",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20.0.sp),
                     ),
@@ -1040,15 +1069,18 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(
-                                  text:
-                                      'By clicking on send OPT button, you agree that you are not acting as a fundraiser, Your activities are in compliance with the rules and regulations of your country and I agree to receive promotional content and special offers via email .You can unsubscribe anytime.You agree to ',
+                                  text: lang == 0
+                                      ? 'By clicking on send OPT button, you agree that you are not acting as a fundraiser, Your activities are in compliance with the rules and regulations of your country and I agree to receive promotional content and special offers via email .You can unsubscribe anytime.You agree to '
+                                      : " بالنقر على زر إرسال OPT ، فإنك توافق على أنك لا تعمل كجمع تبرعات وأن أنشطتك تتوافق مع القواعد واللوائح المعمول بها في بلدك وأوافق على تلقي محتوى ترويجي وعروض خاصة عبر البريد الإلكتروني ، ويمكنك إلغاء الاشتراك في أي وقت. أنت توافق على ",
                                   style: TextStyle(
                                     color: Color(0xff858585),
                                     fontSize: 12.0.sp,
                                   ),
                                 ),
                                 TextSpan(
-                                  text: 'Terms of Use',
+                                  text: lang == 0
+                                      ? 'Terms of Use'
+                                      : "شروط الاستخدام ",
                                   style: TextStyle(
                                     color: Color(0xff00A7B3),
                                     decoration: TextDecoration.underline,
@@ -1056,14 +1088,16 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: ' and ',
+                                  text: lang == 0 ? ' and ' : 'و',
                                   style: TextStyle(
                                     color: Color(0xff858585),
                                     fontSize: 12.0.sp,
                                   ),
                                 ),
                                 TextSpan(
-                                  text: 'Privacy Policy.',
+                                  text: lang == 0
+                                      ? 'Privacy Policy.'
+                                      : ".سياسة الخصوصية ",
                                   style: TextStyle(
                                     color: Color(0xff00A7B3),
                                     decoration: TextDecoration.underline,
@@ -1093,7 +1127,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: text.split(" ").length >= 3 ? 9.sp : 11.0.sp),
+                fontSize: text.split(" ").length >= 3 ? 8.sp : 11.0.sp),
             softWrap: true,
           ),
         )

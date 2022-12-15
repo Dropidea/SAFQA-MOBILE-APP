@@ -38,29 +38,25 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Color(0xff285B74),
       body: GetBuilder<MyZoomDrawerController>(
         builder: (c) {
-          return FutureBuilder(
-              future: localsController.getLocale(),
-              builder: (context, snapshot) {
-                return ZoomDrawer(
-                  angle: 0,
-                  borderRadius: 30,
-                  controller: c.zoomDrawerController,
-                  menuScreenWidth: 60.0.w,
-                  isRtl: snapshot.hasData ? snapshot.data! : false,
-                  slideWidth: 60.0.w,
-                  menuScreen: MenuPage(
-                    currentItem: _currnetMenuItem,
-                    onSelectedItem: (value) {
-                      setState(() {
-                        _currnetMenuItem = value;
-                      });
-                      // zoomDrawerController.zoomDrawerController.close!();
-                      Get.to(() => getScreen());
-                    },
-                  ),
-                  mainScreen: MainPage(),
-                );
-              });
+          return ZoomDrawer(
+            angle: 0,
+            borderRadius: 30,
+            controller: c.zoomDrawerController,
+            menuScreenWidth: 60.0.w,
+            isRtl: localsController.currenetLocale == 1,
+            slideWidth: 60.0.w,
+            menuScreen: MenuPage(
+              currentItem: _currnetMenuItem,
+              onSelectedItem: (value) {
+                setState(() {
+                  _currnetMenuItem = value;
+                });
+                // zoomDrawerController.zoomDrawerController.close!();
+                Get.to(() => getScreen());
+              },
+            ),
+            mainScreen: MainPage(),
+          );
         },
       ),
     );

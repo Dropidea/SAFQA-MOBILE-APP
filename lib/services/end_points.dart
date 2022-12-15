@@ -9,6 +9,7 @@ class EndPoints {
   static String get globalData => "/globalData";
   static String get createInvoice => "/invoice/store";
   static String get getInvoices => "$_baseURL/invoices";
+  static String get getPaymentLinks => "$_baseURL/payments";
   static String get createQuickInvoice => "/invoice/quick/store";
   static String get createProduct => "/product/store";
   static String get updateProduct => "/product/update/";
@@ -34,6 +35,7 @@ class EndPoints {
   static String get createManageUser => "$_baseURL/manage_user/store";
   static String get editManageUser => "$_baseURL/manage_user/update/";
   static String get createAddress => "$_baseURL/addresse/store";
+  static String get createPaymentLink => "$_baseURL/payment/store";
   static String get getAddresses => "$_baseURL/addresses";
   static String get editAddresses => "$_baseURL/addresse/update/";
   static String deleteAddresses(int id) => "$_baseURL/addresse/delete/$id";

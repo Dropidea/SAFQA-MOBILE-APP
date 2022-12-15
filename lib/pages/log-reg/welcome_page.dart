@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:safqa/pages/log-reg/signup.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../widgets/zero_app_bar.dart';
@@ -59,14 +60,17 @@ class WelcomePage extends StatelessWidget {
             SizedBox(
               height: 25.0.sp,
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                "Lorem ipsum dolor sit amet consectetur adipiscing elit",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16.0.sp,
-                  color: Colors.white,
+            Opacity(
+              opacity: 0,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16.0.sp,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -99,7 +103,9 @@ class WelcomePage extends StatelessWidget {
               height: 20.0.sp,
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.to(() => SignUpPage());
+              },
               child: Container(
                 width: 0.7 * w,
                 height: 45.0.sp,

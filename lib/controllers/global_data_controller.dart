@@ -19,7 +19,7 @@ class GlobalDataController extends GetxController {
   sslProblem() async {
     dio.options.headers['content-Type'] = 'multipart/form-data';
     String token = await AuthService().loadToken();
-    dio.options.headers["authorization"] = "bearer  $token";
+    dio.options.headers["authorization"] = "Bearer $token";
 
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
@@ -85,6 +85,7 @@ class GlobalDataController extends GetxController {
         SendOption tmp = SendOption.fromJson(i);
         sendOptions.add(tmp);
       }
+      logSuccess(sendOptions);
       logSuccess("Send Options get done");
     } on DioError catch (e) {
       if (e.response!.statusCode == 404) {

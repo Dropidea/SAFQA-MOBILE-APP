@@ -82,7 +82,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                     children: [
                       SizedBox(height: 30),
                       SignUpTextField(
-                        hintText: "Search ...",
+                        hintText: "search".tr,
                         onchanged: (s) {
                           _customersController.searchForCustomerWithName(s!);
                           setState(() {});

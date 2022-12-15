@@ -18,8 +18,8 @@ class InvoiceSubCreateInvoice extends StatelessWidget {
         backgroundColor: Colors.white,
         title: blackText(
             _addInvoiceController.dataToEditInvoice != null
-                ? "Edit Invoice"
-                : "Create Invoice",
+                ? "edit_invoice".tr
+                : "create_invoice".tr,
             16),
 
         centerTitle: true,

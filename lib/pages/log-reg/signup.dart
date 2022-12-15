@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/signup_controller.dart';
@@ -10,6 +11,7 @@ class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
   PageController _pageController = PageController();
   SignUpController _signUpController = Get.put(SignUpController());
+  LocalsController localsController = Get.find();
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -71,7 +73,7 @@ class SignUpPage extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 10),
                             child: Text(
-                              "SignUp",
+                              "signup".tr,
                               style: TextStyle(
                                   color: Color(0xff2F6782),
                                   fontSize: 20.0.sp,
@@ -117,7 +119,9 @@ class SignUpPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Select Your Country",
+                        localsController.currenetLocale == 0
+                            ? "Select Your Country"
+                            : "أختر بلدتك",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0.sp,
@@ -344,7 +348,9 @@ class SignUpPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Select Your Business Type",
+                localsController.currenetLocale == 0
+                    ? "Select Your Country"
+                    : "أختر بلدتك",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18.0.sp,

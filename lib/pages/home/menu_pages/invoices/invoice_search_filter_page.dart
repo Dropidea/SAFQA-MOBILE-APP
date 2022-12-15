@@ -521,7 +521,8 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                     customerNameController.text == ""
                         ? null
                         : customerNameController.text;
-                _invoicesController.activeProductFilter();
+                _invoicesController.activeInvoiceFilter();
+
                 Get.back();
               },
               width: 0.7 * w,

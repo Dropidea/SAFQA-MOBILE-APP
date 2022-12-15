@@ -28,13 +28,16 @@ class InvoicesPage extends StatefulWidget {
 class _InvoicesPageState extends State<InvoicesPage> {
   MyZoomDrawerController myZoomDrawerController = Get.find();
   int selectedTab = 0;
-  List<String> tabsNames = ["Invoices", "Quick Invoice", "Payment Link"];
+  List<String> tabsNames = [
+    "invoices".tr,
+    "quick_invoices".tr,
+    "payment_links".tr
+  ];
   final AddInvoiceController _addInvoiceController =
       Get.put(AddInvoiceController());
-  InvoicesController invoiceController = Get.put(InvoicesController());
+  InvoicesController invoiceController = Get.find();
 
   Widget getPage() {
-    invoiceController.clearInvoiceFilter();
     switch (selectedTab) {
       case 0:
         return InvoiceTab();
@@ -114,7 +117,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                             } else if (selectedTab == 1) {
                             } else {}
                           },
-                          hintText: "Search ...",
+                          hintText: "search".tr,
                           prefixIcon: Icon(
                             Icons.search_outlined,
                             color: Colors.grey,
@@ -363,7 +366,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
     //       children: [
     //         SignUpTextField(
     //           padding: EdgeInsets.all(0),
-    //           hintText: "Search ...",
+    //           hintText: "search".tr,
     //           prefixIcon: Icon(
     //             Icons.search_outlined,
     //             color: Colors.grey,

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:sizer/sizer.dart';
 
@@ -17,6 +19,14 @@ class PreferencesTab extends StatefulWidget {
 class _PreferencesTabState extends State<PreferencesTab> {
   int languageVal = 0;
   bool sv = false;
+
+  LocalsController localsController = Get.put(LocalsController());
+  @override
+  void initState() {
+    languageVal = localsController.currenetLocale;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -77,7 +87,9 @@ class _PreferencesTabState extends State<PreferencesTab> {
                             value: 0,
                             groupValue: languageVal,
                             onChanged: (value) => setState(() {
+                                  logSuccess("eng");
                                   languageVal = value;
+                                  localsController.SetEnglishLocale();
                                 })),
                       ),
                       greyText("English", 16),
@@ -103,7 +115,9 @@ class _PreferencesTabState extends State<PreferencesTab> {
                             value: 1,
                             groupValue: languageVal,
                             onChanged: (value) => setState(() {
+                                  logSuccess("ar");
                                   languageVal = value;
+                                  localsController.SetArabicLocale();
                                 })),
                       ),
                       greyText("العربية", 16),

@@ -81,6 +81,7 @@ class SignUpController extends GetxController {
   }
 
   Future<Map<String, dynamic>> register(obj) async {
+    logError("message");
     Get.locale!.toString() == "ar_SYR"
         ? obj['language_id'] = 1
         : obj['language_id'] = 2;
@@ -88,7 +89,6 @@ class SignUpController extends GetxController {
     Navigator.of(Get.overlayContext!).pop();
 
     errors = res;
-    // logSuccess(res);
     return res;
   }
 

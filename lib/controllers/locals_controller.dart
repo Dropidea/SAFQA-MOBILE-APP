@@ -3,17 +3,20 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalsController extends GetxController {
+  final _engLocal = const Locale('en', 'US');
+  final _arLocal = const Locale('ar', 'SYR');
   Locale _currentLocale = Locale('en', 'US');
-  Locale get currenetLocale => _currentLocale;
+  // Locale get currenetLocale => _currentLocale;
+  int get currenetLocale => _currentLocale == _engLocal ? 0 : 1;
   void SetEnglishLocale() {
-    _currentLocale = Locale('en', 'US');
+    _currentLocale = _engLocal;
     Get.updateLocale(_currentLocale);
     saveLocale(false);
     update();
   }
 
   void SetArabicLocale() {
-    _currentLocale = Locale('ar', 'SYR');
+    _currentLocale = _arLocal;
     Get.updateLocale(_currentLocale);
     saveLocale(true);
 
@@ -25,8 +28,13 @@ class LocalsController extends GetxController {
     await prefs.setBool("lang", lang);
   }
 
-  Future<bool> getLocale() async {
+  Future getLocale() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool("lang") ?? false;
+    if (prefs.getBool("lang") != null) {
+      _currentLocale = prefs.getBool("lang") ? _arLocal : _engLocal;
+    } else {
+      return _engLocal;
+    }
+    // return prefs.getBool("lang") ?? false;
   }
 }

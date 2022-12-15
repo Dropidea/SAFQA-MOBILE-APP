@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
@@ -33,15 +34,17 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
 
   final AddInvoiceController _addInvoiceController = Get.find();
   final GlobalDataController _globalDataController = Get.find();
-
+  final LocalsController _localsController = Get.find();
   final SignUpController _signUpController = Get.find();
 
   String? customerMobileCode;
 
   String customerMobileCodeID = "1";
   int? sendOptionId;
+  bool engFlag = false;
   @override
   void initState() {
+    engFlag = _localsController.currenetLocale == 0;
     if (_addInvoiceController.dataToEditInvoice != null) {
       customerEmailControler.text =
           _addInvoiceController.dataToEditInvoice!.customerEmail ?? "";
@@ -70,7 +73,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          "Customer Info",
+          "customer_info".tr,
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -85,10 +88,10 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
         child: ListView(
           primary: false,
           children: [
-            blueText("Customer Info.", 15),
+            blueText("customer_info".tr, 15),
             Divider(thickness: 1.5),
             const SizedBox(height: 20),
-            blackText("Customer Name", 16),
+            blackText("customer_name".tr, 16),
             // SignUpTextField(
             //   padding: EdgeInsets.all(0),
             // ),
@@ -129,21 +132,21 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                   .toList(),
             ),
             const SizedBox(height: 20),
-            blackText("Send invoice By", 16),
+            blackText("send_invoice_by".tr, 16),
             CustomDropdown(
               items: _globalDataController.sendOptions
-                  .map((e) => e.nameEn!)
+                  .map((e) => engFlag ? e.nameEn! : e.nameAr!)
                   .toList(),
               selectedItem: _addInvoiceController.dataToEditInvoice != null
                   ? _globalDataController.sendOptions
-                          .map((e) => e.nameEn!)
+                          .map((e) => engFlag ? e.nameEn! : e.nameAr!)
                           .toList()[
                       _globalDataController.sendOptions.indexWhere((element) =>
                           element.id ==
                           _addInvoiceController
                               .dataToEditInvoice!.customerSendBy!)]
                   : _globalDataController.sendOptions
-                      .map((e) => e.nameEn!)
+                      .map((e) => engFlag ? e.nameEn! : e.nameAr!)
                       .toList()[0],
               width: 2,
               onchanged: (s) {
@@ -151,25 +154,28 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                   _addInvoiceController.dataToEditInvoice!.customerSendBy =
                       _globalDataController
                           .sendOptions[_globalDataController.sendOptions
-                              .indexWhere((element) => element.nameEn == s)]
+                              .indexWhere((element) =>
+                                  element.nameEn == s || element.nameAr == s)]
                           .id;
                 } else {
                   _addInvoiceController.dataToCreateInvoice.customerSendBy =
                       _globalDataController
                           .sendOptions[_globalDataController.sendOptions
-                              .indexWhere((element) => element.nameEn == s)]
+                              .indexWhere((element) =>
+                                  element.nameEn == s || element.nameAr == s)]
                           .id;
                 }
                 sendOptionId = _globalDataController
-                    .sendOptions[_globalDataController.sendOptions
-                        .indexWhere((element) => element.nameEn == s)]
+                    .sendOptions[_globalDataController.sendOptions.indexWhere(
+                        (element) =>
+                            element.nameEn == s || element.nameAr == s)]
                     .id;
 
                 // _addInvoiceController.selectSendBy(s);
               },
             ),
             const SizedBox(height: 20),
-            blackText("Customer phone number", 16),
+            blackText("customer_phone_number".tr, 16),
             Obx(() {
               List countries = _signUpController.globalData['country'];
               List<String> ids = countries
@@ -223,11 +229,11 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                     },
                   ),
                 ),
-                hintText: 'Manager Mobile Number',
+                // hintText: 'Manager Mobile Number',
               );
             }),
             const SizedBox(height: 20),
-            blackText("Customer email", 16),
+            blackText("customer_email".tr, 16),
             SignUpTextField(
               padding: EdgeInsets.all(0),
               controller: customerEmailControler,
@@ -255,9 +261,9 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
             const SizedBox(height: 10),
             Row(
               children: [
-                blackText("Customer Reference", 16),
+                blackText("customer_refrence".tr, 16),
                 SizedBox(width: 10),
-                greyText("(optional)", 13)
+                greyText("(${"optional".tr})", 13)
               ],
             ),
             SignUpTextField(
@@ -290,7 +296,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                       name: customerNameControler.text,
                       phoneNum: customerPhoneNumberControler.text,
                       phoneNumCodeId: customerMobileCode!,
-                      sendBy: sendOptionId!,
+                      sendBy: sendOptionId ?? 1,
                     );
                   }
                   MyDialogs.showSavedSuccessfullyDialoge(
@@ -315,7 +321,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                   padding: EdgeInsets.all(15),
                   child: Center(
                     child: Text(
-                      "Save",
+                      "save".tr,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 17.0.sp,

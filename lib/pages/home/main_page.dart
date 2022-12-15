@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/controllers/payment_link_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/create_invoice_page.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
 import 'package:safqa/pages/home/notification_page.dart';
 import 'package:safqa/pages/home/pass_change_page.dart';
 import 'package:safqa/pages/home/profile/profile.dart';
@@ -34,23 +37,29 @@ class _MainPageState extends State<MainPage> {
 
   ChartsController _chartsController = Get.put(ChartsController());
   CustomersController _customersController = Get.put(CustomersController());
-  GlobalDataController _globlDataController = Get.put(GlobalDataController());
+  InvoicesController _invoicesController = Get.put(InvoicesController());
+  GlobalDataController _globlDataController = Get.find();
+  LocalsController _localsController = Get.find();
+  final PaymentLinkController _paymentLinkController =
+      Get.put(PaymentLinkController());
   double _x = 0;
   double _y = 0;
-  String i = "This Month";
+  bool engFlag = true;
   @override
   void initState() {
-    // TODO: implement initState
+    engFlag = _localsController.currenetLocale == 0;
+
     _customersController.getMyCustomers();
     _signUpController.getGlobalData();
     _signUpController.getBanks();
+    _invoicesController.getInvoices();
     _globlDataController.getCountries();
     _globlDataController.getCities();
     _globlDataController.getAreas();
     _globlDataController.getAdressTypes();
-    _globlDataController.getMe();
     _globlDataController.getRoles();
     _globlDataController.getSendOptions();
+
     super.initState();
   }
 
@@ -68,7 +77,8 @@ class _MainPageState extends State<MainPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: topSection(),
+                  child: topSection(
+                      name: _globlDataController.me.fullName ?? "no name"),
                 ),
                 Expanded(
                     child: Align(
@@ -99,7 +109,9 @@ class _MainPageState extends State<MainPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   blackText(
-                                      "The identity must be documented first in order to be able to perform any operation on the system.",
+                                      engFlag
+                                          ? "The identity must be documented first in order to be able to perform any operation on the system."
+                                          : "يجب توثيق الهوية أولاً حتى تتمكن من إجراء أي عملية على النظام.",
                                       13),
                                   GestureDetector(
                                     onTap: () {
@@ -107,7 +119,10 @@ class _MainPageState extends State<MainPage> {
                                           transition: Transition.downToUp);
                                     },
                                     child: blueText(
-                                        "Confirm Your Identity now", 13,
+                                        engFlag
+                                            ? "Confirm Your Identity now"
+                                            : "قم بتأكيد هويتك الآن",
+                                        13,
                                         fontWeight: FontWeight.bold,
                                         underline: true),
                                   )
@@ -134,7 +149,7 @@ class _MainPageState extends State<MainPage> {
                                 ),
                               ),
                               Text(
-                                "Total Balance",
+                                engFlag ? "Total Balance" : "إجمالي الرصيد",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 15.0.sp,
@@ -179,7 +194,7 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                 ),
                                 Text(
-                                  "Total Balance",
+                                  engFlag ? "Total Balance" : "إجمالي الرصيد",
                                   softWrap: true,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -213,7 +228,9 @@ class _MainPageState extends State<MainPage> {
                                   ),
                                 ),
                                 Text(
-                                  "Number Of Transactions",
+                                  engFlag
+                                      ? "Number Of Transactions"
+                                      : "عدد المعاملات",
                                   softWrap: true,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -232,9 +249,9 @@ class _MainPageState extends State<MainPage> {
                             fontWeight: FontWeight.w500,
                             fontSize: 18.0.sp,
                           ),
-                          children: const <TextSpan>[
+                          children: <TextSpan>[
                             TextSpan(
-                              text: 'Invoices',
+                              text: engFlag ? 'Invoices' : "تقرير ",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
@@ -249,7 +266,7 @@ class _MainPageState extends State<MainPage> {
                               ),
                             ),
                             TextSpan(
-                              text: ' Report',
+                              text: engFlag ? ' Report' : "الفواتير",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.transparent,
@@ -267,9 +284,14 @@ class _MainPageState extends State<MainPage> {
                       Column(
                         children: [
                           buildLegend(
-                              "Number of paid invoices", Color(0xff2F6782)),
+                              engFlag
+                                  ? "Number of paid invoices"
+                                  : "عدد الفواتير المدفوعة",
+                              Color(0xff2F6782)),
                           const SizedBox(height: 10),
-                          buildLegend("Number of invoices", Color(0xffaaaaaa)),
+                          buildLegend(
+                              engFlag ? "Number of invoices" : "عدد الفواتير",
+                              Color(0xffaaaaaa)),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -394,9 +416,9 @@ class _MainPageState extends State<MainPage> {
                             // fontWeight: FontWeight.w500,
                             fontSize: 18.0.sp,
                           ),
-                          children: const <TextSpan>[
+                          children: <TextSpan>[
                             TextSpan(
-                              text: 'Balance',
+                              text: engFlag ? 'Balance' : "تقرير ",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
@@ -411,7 +433,7 @@ class _MainPageState extends State<MainPage> {
                               ),
                             ),
                             TextSpan(
-                              text: ' Report',
+                              text: engFlag ? ' Report' : "الرصيد",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.transparent,
@@ -433,12 +455,22 @@ class _MainPageState extends State<MainPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               buildLegend2(
-                                  "50 K", "Total Balance", Color(0xff2F6782)),
+                                  "50 K",
+                                  engFlag ? "Total Balance" : "إجمالي الرصيد",
+                                  Color(0xff2F6782)),
                               SizedBox(height: 10),
-                              buildLegend2("25 K", "Awaiting Balance",
+                              buildLegend2(
+                                  "25 K",
+                                  engFlag
+                                      ? "Awaiting Balance"
+                                      : "الرصيد في الانتظار",
                                   Color(0xffE4E4E4)),
                               SizedBox(height: 10),
-                              buildLegend2("25 K", "Awaiting to Transfer",
+                              buildLegend2(
+                                  "25 K",
+                                  engFlag
+                                      ? "Awaiting to Transfer"
+                                      : "في انتظار النقل",
                                   Color(0xff00A7B3)),
                             ],
                           ),
@@ -462,7 +494,9 @@ class _MainPageState extends State<MainPage> {
                                       ),
                                       SizedBox(height: 5),
                                       Text(
-                                        "Total Balance",
+                                        engFlag
+                                            ? "Total Balance"
+                                            : "إجمالي الرصيد",
                                         style: TextStyle(
                                             fontSize: 12.0.sp,
                                             color: Color(0xff9D9D9D)),
@@ -493,9 +527,9 @@ class _MainPageState extends State<MainPage> {
                             // fontWeight: FontWeight.w500,
                             fontSize: 18.0.sp,
                           ),
-                          children: const <TextSpan>[
+                          children: <TextSpan>[
                             TextSpan(
-                              text: 'Payment',
+                              text: engFlag ? 'Payment' : "طرق ",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
@@ -510,7 +544,7 @@ class _MainPageState extends State<MainPage> {
                               ),
                             ),
                             TextSpan(
-                              text: ' Methods',
+                              text: engFlag ? ' Methods' : "الدفع",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.transparent,
@@ -625,7 +659,7 @@ class _MainPageState extends State<MainPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Create New Invoice",
+                        "create_new_invoice".tr,
                         style: TextStyle(
                             fontSize: 17.0.sp, fontWeight: FontWeight.w500),
                       ),
@@ -728,7 +762,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget topSection() {
+  Widget topSection({required String name}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -746,13 +780,13 @@ class _MainPageState extends State<MainPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Dashboard",
+                  engFlag ? "Dashboard" : "لوحة التحكم",
                   style:
                       TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0.sp),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "lafi s h m almutairi",
+                  name,
                   style: TextStyle(
                     fontSize: 13.0.sp,
                     color: Color(0xff858585),
@@ -811,7 +845,8 @@ class _MainPageState extends State<MainPage> {
                           ),
                         ),
                         SizedBox(width: 5),
-                        greyText("Profile", 12, fontWeight: FontWeight.bold),
+                        greyText(engFlag ? "Profile" : "الملف الشخصي", 12,
+                            fontWeight: FontWeight.bold),
                       ],
                     )),
                 PopupMenuItem(
@@ -830,7 +865,8 @@ class _MainPageState extends State<MainPage> {
                           ),
                         ),
                         SizedBox(width: 5),
-                        greyText("Change Password", 12,
+                        greyText(
+                            engFlag ? "Change Password" : "تغيير كلمة السر", 12,
                             fontWeight: FontWeight.bold),
                       ],
                     )),

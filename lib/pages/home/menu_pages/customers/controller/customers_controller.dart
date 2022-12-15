@@ -74,7 +74,7 @@ class CustomersController extends GetxController {
 
     if (customerFilter.mobileNumber != null) {
       for (var i in tmp1) {
-        if (i.phoneNumber == customerFilter.mobileNumber) {
+        if (i.phoneNumber!.contains(customerFilter.mobileNumber!)) {
           tmp2.add(i);
         }
       }

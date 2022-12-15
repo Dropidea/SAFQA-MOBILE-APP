@@ -89,7 +89,7 @@ class DepositsMainPageState extends State<DepositsMainPage> {
                       ),
                       SizedBox(height: 20),
                       SignUpTextField(
-                        hintText: "Search ...",
+                        hintText: "search".tr,
                         padding: EdgeInsets.all(0),
                         prefixIcon: Icon(
                           Icons.search_outlined,

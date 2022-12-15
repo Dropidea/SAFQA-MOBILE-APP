@@ -10,11 +10,13 @@ import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/create_invoice/invoice_items_page.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -51,10 +53,13 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   AddInvoiceController addInvoiceController = Get.find();
   SignUpController _signUpController = Get.find();
   LoginController _loginController = Get.put(LoginController());
+  InvoicesController _invoicesController = Get.find();
+  LocalsController _localsController = Get.find();
   GlobalDataController globalDataController = Get.find();
-
+  bool engFlag = false;
   @override
   void initState() {
+    engFlag = _localsController.currenetLocale == 0;
     if (addInvoiceController.dataToEditInvoice != null) {
       if (addInvoiceController.dataToEditInvoice!.discountValue != 0) {
         discountAvailableFlag = true;
@@ -108,58 +113,33 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
 
     return ListView(
       children: [
-        //    blackText("Invoice Date", 16),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     CustomDropdown(
-        //       items: addInvoiceController.days,
-        //       selectedItem: addInvoiceController.selectedDay,
-        //       width: 0.25 * w,
-        //       onchanged: addInvoiceController.setDay,
-        //     ),
-        //     CustomDropdown(
-        //       items: addInvoiceController.monthes,
-        //       selectedItem: addInvoiceController.selectedMonth,
-        //       width: 0.25 * w,
-        //       onchanged: addInvoiceController.setMonth,
-        //     ),
-        //     CustomDropdown(
-        //       items: addInvoiceController.years,
-        //       selectedItem: addInvoiceController.selectedYear,
-        //       width: 0.35 * w,
-        //       onchanged: addInvoiceController.setYear,
-        //     ),
-        //   ],
-        // ),
-        // const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackText("Invoice ID", 14),
+                blackText("invoice_id".tr, 14),
                 const SizedBox(height: 5),
                 greyText(
                     addInvoiceController.dataToEditInvoice != null
                         ? addInvoiceController.dataToEditInvoice!.id!.toString()
-                        : "2659986 / 2022000048",
+                        : "${_invoicesController.invoices.length + 1}",
                     12),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackText("Invoice Date", 14),
+                blackText("invoice_date".tr, 14),
                 const SizedBox(height: 5),
-                greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
+                greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 13),
               ],
             )
           ],
         ),
         const SizedBox(height: 30),
-        blackText("Currency", 16),
+        blackText("currency".tr, 16),
         Obx(
           () {
             List countries = _signUpController.globalData['country'];
@@ -201,7 +181,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           },
         ),
         const SizedBox(height: 20),
-        blackText("Is Open Invoice", 16),
+        blackText("is_open_invoice".tr, 16),
         Container(
           width: w,
           margin: const EdgeInsets.symmetric(vertical: 5),
@@ -230,16 +210,16 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               addInvoiceController.selectIsOpenInvoiceDrop(value!);
               if (addInvoiceController.dataToEditInvoice != null) {
                 addInvoiceController.dataToEditInvoice!.isOpenInvoice =
-                    value == "Fixed" ? 1 : 0;
+                    value == "fixed".tr ? 1 : 0;
               } else {
                 addInvoiceController.dataToCreateInvoice.isOpenInvoice =
-                    value == "Fixed" ? 1 : 0;
+                    value == "fixed".tr ? 1 : 0;
               }
             },
           ),
         ),
         const SizedBox(height: 20),
-        blackText("Discount Available", 16),
+        blackText("discount_available".tr, 16),
         Container(
           width: w,
           margin: const EdgeInsets.symmetric(vertical: 5),
@@ -262,12 +242,12 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 .toList(),
             value: addInvoiceController.dataToEditInvoice != null
                 ? addInvoiceController.dataToEditInvoice!.discountValue != 0
-                    ? "Yes"
-                    : "No"
+                    ? "yes".tr
+                    : "no".tr
                 : addInvoiceController.selectedDiscountDrop,
             onChanged: (value) {
               addInvoiceController.selectDiscountDrop(value!);
-              if (value == "No") {
+              if (value == "no".tr) {
                 discountAvailableFlag = false;
               } else {
                 discountAvailableFlag = true;
@@ -277,8 +257,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           ),
         ),
         const SizedBox(height: 20),
-
-        discountAvailableFlag ? blackText("Discount Type", 16) : Container(),
+        discountAvailableFlag ? blackText("discount_type".tr, 16) : Container(),
         discountAvailableFlag
             ? Container(
                 width: w,
@@ -303,12 +282,12 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   value: addInvoiceController.dataToEditInvoice != null
                       ? addInvoiceController.dataToEditInvoice!.discountType ==
                               0
-                          ? "Fixed"
-                          : "Rate"
+                          ? "fixed".tr
+                          : "rate".tr
                       : addInvoiceController.selectedDiscountTypesDrop,
                   onChanged: (value) {
                     addInvoiceController.selectDiscountTypesDrop(value!);
-                    if (value == "Fixed") {
+                    if (value == "fixed".tr) {
                       discountTypeFlag = true;
                       if (addInvoiceController.dataToEditInvoice != null) {
                         addInvoiceController.dataToEditInvoice!.discountType =
@@ -333,7 +312,9 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               )
             : Container(),
         discountAvailableFlag ? const SizedBox(height: 20) : Container(),
-        discountAvailableFlag ? blackText("Discount Value", 16) : Container(),
+        discountAvailableFlag
+            ? blackText("discount_value".tr, 16)
+            : Container(),
         discountAvailableFlag
             ? SignUpTextField(
                 initialValue: addInvoiceController.dataToEditInvoice != null
@@ -361,7 +342,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackText("Expiry date", 16),
+                blackText("expiry_date".tr, 16),
                 Container(
                   width: 0.5 * w,
                   height: 50,
@@ -395,7 +376,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackText("Time", 16),
+                blackText("time".tr, 16),
                 Container(
                   width: 0.3 * w,
                   height: 50,
@@ -425,9 +406,9 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
         const SizedBox(height: 20),
         Row(
           children: [
-            blackText("Remind after", 16),
+            blackText("remind_after".tr, 16),
             SizedBox(width: 10),
-            greyText("(optional)", 13)
+            greyText("(${"optional".tr})", 13)
           ],
         ),
         Row(
@@ -457,19 +438,21 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               ),
             ),
             SizedBox(width: 10),
-            greyText("Days", 15)
+            greyText("days".tr, 15)
           ],
         ),
         SizedBox(
           width: w,
           child: Text(
-            "You can create the invoice without sending it directly.The system can remind you to send the invoice at anothertime that you have to specify",
+            engFlag
+                ? "You can create the invoice without sending it directly.The system can remind you to send the invoice at anothertime that you have to specify"
+                : "يمكنك إنشاء الفاتورة دون إرسالها مباشرة ، ويمكن للنظام أن يذكرك بإرسال الفاتورة في وقت آخر عليك تحديده",
             softWrap: true,
             style: TextStyle(color: Color(0xff2F6782), fontSize: 11.0.sp),
           ),
         ),
         const SizedBox(height: 20),
-        blackText("Recurring Interval", 16),
+        blackText("recurring_interval".tr, 16),
         Container(
           width: w,
           margin: const EdgeInsets.symmetric(vertical: 5),
@@ -517,7 +500,9 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
         SizedBox(
           width: w,
           child: Text(
-            "If you have a fixed invoice, Instead of writing the same invoice again, you can repeat the invoice by activating the \"Recurring Interval\"",
+            engFlag
+                ? "If you have a fixed invoice, Instead of writing the same invoice again, you can repeat the invoice by activating the \"Recurring Interval\""
+                : "إذا كانت لديك فاتورة ثابتة ، فبدلاً من كتابة نفس الفاتورة مرة أخرى ، يمكنك تكرار الفاتورة عن طريق تنشيط \" Recurring Interval \"",
             softWrap: true,
             style: TextStyle(color: Color(0xff2F6782), fontSize: 11.0.sp),
           ),
@@ -530,7 +515,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      blackText("Start Date", 15),
+                      blackText("start_date".tr, 15),
                       Container(
                         width: 0.4 * w,
                         height: 50,
@@ -564,7 +549,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      blackText("End Date", 15),
+                      blackText("end_date".tr, 15),
                       Container(
                         width: 0.4 * w,
                         height: 50,
@@ -599,7 +584,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               )
             : Container(),
         const SizedBox(height: 20),
-        blackText("Language of the invoice", 16),
+        blackText("language_of_invoice".tr, 16),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -628,7 +613,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         addInvoiceController.dataToCreateInvoice.languageId = 1;
                       }),
                 ),
-                greyText("English", 16),
+                greyText("english".tr, 16),
               ],
             ),
             SizedBox(width: 20),
@@ -657,7 +642,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         addInvoiceController.dataToCreateInvoice.languageId = 2;
                       }),
                 ),
-                greyText("Arabic", 16),
+                greyText("arabic".tr, 16),
               ],
             ),
           ],
@@ -665,9 +650,9 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
         const SizedBox(height: 20),
         Row(
           children: [
-            blackText("Attach File", 16),
+            blackText("attach_file".tr, 16),
             SizedBox(width: 10),
-            greyText("(optional)", 13)
+            greyText("(${"optional".tr})", 13)
           ],
         ),
         GestureDetector(
@@ -734,9 +719,9 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
         const SizedBox(height: 20),
         Row(
           children: [
-            blackText("Comments", 16),
+            blackText("comments".tr, 16),
             SizedBox(width: 10),
-            greyText("(optional)", 13)
+            greyText("(${"optional".tr})", 13)
           ],
         ),
         Container(
@@ -761,7 +746,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           ),
         ),
         const SizedBox(height: 20),
-        blackText("Terms & Conditions", 16),
+        blackText("terms_conditions".tr, 16),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -786,7 +771,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                             termsConditionsFlag = false;
                           })),
                 ),
-                greyText("Disable", 16),
+                greyText("disable".tr, 16),
               ],
             ),
             SizedBox(width: 20),
@@ -811,7 +796,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                             termsConditionsFlag = true;
                           })),
                 ),
-                greyText("Enable", 16),
+                greyText("enable".tr, 16),
               ],
             ),
           ],
@@ -853,7 +838,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              blackText("Customer Info", 16),
+              blackText("customer_info".tr, 16),
               GestureDetector(
                 onTap: () {
                   FocusScope.of(context).unfocus();
@@ -885,7 +870,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              blackText("Invoice Items", 16),
+              blackText("invoice_items".tr, 16),
               GestureDetector(
                 onTap: () => Get.to(() => InvoiceItemsPage(),
                     transition: Transition.rightToLeft),
@@ -911,7 +896,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  blackText("Total", 14),
+                  blackText("total".tr, 14),
                   const SizedBox(height: 5),
                   greyText("\$ 350.00", 12),
                 ],
@@ -919,7 +904,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  blackText("Tax", 14),
+                  blackText("tax".tr, 14),
                   const SizedBox(height: 5),
                   greyText("\$ 0", 12),
                 ],
@@ -933,7 +918,11 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              blackText("Create Invoice", 16),
+              blackText(
+                  addInvoiceController.dataToEditInvoice != null
+                      ? "edit_invoice".tr
+                      : "create_invoice".tr,
+                  16),
               SizedBox(width: 10),
               InkWell(
                 customBorder: RoundedRectangleBorder(
@@ -957,6 +946,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                         "${expiryDateController.text} $expiryTime";
                     addInvoiceController.dataToCreateInvoice.customerName =
                         addInvoiceController.customerInfo.customerName;
+                    addInvoiceController.dataToCreateInvoice.customerEmail =
+                        addInvoiceController.customerInfo.customerEmail;
                     addInvoiceController
                             .dataToCreateInvoice.customerMobileNumbr =
                         addInvoiceController.customerInfo.customerMobileNumbr;

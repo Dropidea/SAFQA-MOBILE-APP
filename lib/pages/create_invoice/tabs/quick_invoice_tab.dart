@@ -7,6 +7,7 @@ import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -30,6 +31,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
   TextEditingController textEditingController2 =
       TextEditingController(text: '00:00');
   LoginController _loginController = Get.put(LoginController());
+  InvoicesController _invoicesController = Get.find();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -43,15 +45,15 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackText("Invoice ID", 14),
+                blackText("invoice_id".tr, 14),
                 const SizedBox(height: 5),
-                greyText("2659986 / 2022000048", 12),
+                greyText("${_invoicesController.invoices.length + 1}", 12),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                blackText("Invoice Date", 14),
+                blackText("invoice_date".tr, 14),
                 const SizedBox(height: 5),
                 greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
               ],
@@ -59,7 +61,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
           ],
         ),
         const SizedBox(height: 30),
-        blackText("Currency", 16),
+        blackText("currency".tr, 16),
         Obx(
           () {
             List countries = _signUpController.globalData['country'];
@@ -89,7 +91,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
           },
         ),
         const SizedBox(height: 20),
-        blackText("Invoice value", 16),
+        blackText("invoice_value".tr, 16),
         SignUpTextField(
           padding: EdgeInsets.all(0),
           hintText: "0 LE",
@@ -99,7 +101,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
           },
         ),
         const SizedBox(height: 20),
-        blackText("Invoice Local Currency Value", 16),
+        blackText("invoice_l_c_value".tr, 16),
         SignUpTextField(
           padding: EdgeInsets.all(0),
           hintText: "0 AED",
@@ -109,7 +111,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
           },
         ),
         const SizedBox(height: 20),
-        blackText("Language of the invoice", 16),
+        blackText("language_of_invoice".tr, 16),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -135,7 +137,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                                 .dataToCreateQuickInvoice.languageId = 1;
                           })),
                 ),
-                greyText("English", 16),
+                greyText("english".tr, 16),
               ],
             ),
             SizedBox(width: 20),
@@ -161,7 +163,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                                 .dataToCreateQuickInvoice.languageId = 2;
                           })),
                 ),
-                greyText("Arabic", 16),
+                greyText("arabic".tr, 16),
               ],
             ),
           ],
@@ -177,7 +179,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              blackText("Customer Info", 16),
+              blackText("customer_info".tr, 16),
               GestureDetector(
                 onTap: () {
                   Get.to(() => CustomerInfoPage(),
@@ -203,7 +205,7 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              blackText("Create Invoice", 16),
+              blackText("create_invoice".tr, 16),
               SizedBox(width: 10),
               GestureDetector(
                 onTap: () async {
@@ -211,6 +213,8 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                       await AuthService().loadToken();
                   addInvoiceController.dataToCreateQuickInvoice.customerName =
                       addInvoiceController.customerInfo.customerName;
+                  addInvoiceController.dataToCreateQuickInvoice.customerSendBy =
+                      addInvoiceController.customerInfo.customerSendBy;
                   addInvoiceController.dataToCreateQuickInvoice.customerSendBy =
                       addInvoiceController.customerInfo.customerSendBy;
 

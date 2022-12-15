@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/home_page.dart';
-import 'package:safqa/pages/log-reg/login.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
 
@@ -20,7 +20,9 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     LoginController loginController = Get.put(LoginController());
     FirstTimeUsingAppController _firstTimeController = Get.find();
+    LocalsController localsController = Get.put(LocalsController());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await localsController.getLocale();
       await Future.delayed(const Duration(seconds: 1));
       await _firstTimeController.setFirstTimeUsing();
       if (await _firstTimeController.checkIfFirstTimeUsingApp()) {
@@ -37,14 +39,11 @@ class SplashPage extends StatelessWidget {
             await AuthService().login(email, password, rem);
             Get.offAll(
               () => HomePage(),
-              duration: Duration(milliseconds: 1200),
-              transition: Transition.zoom,
             );
           } on DioError catch (e) {
             logError(e.message);
             Get.offAll(
-              () => LoginPage(),
-              duration: Duration(milliseconds: 1200),
+              () => WelcomePage(),
             );
           }
         } else {

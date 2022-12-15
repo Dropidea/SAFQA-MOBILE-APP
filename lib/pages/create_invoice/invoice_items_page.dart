@@ -44,7 +44,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          "Invoice Items",
+          "invoice_items".tr,
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w500,
@@ -63,10 +63,10 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  blueText("Invoice Items", 15),
+                  blueText("invoice_items".tr, 15),
                   Divider(thickness: 1.5),
                   const SizedBox(height: 20),
-                  blackText("Product name", 16),
+                  blackText("product_name".tr, 16),
                   SignUpTextField(
                     focusNode: d,
                     padding: EdgeInsets.all(0),
@@ -79,7 +79,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  blackText("Unit Price", 16),
+                  blackText("unit_price".tr, 16),
                   SignUpTextField(
                     padding: EdgeInsets.all(0),
                     hintText: "0 AED",
@@ -93,7 +93,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  blackText("Quantitiy", 16),
+                  blackText("quantity".tr, 16),
                   Row(
                     children: [
                       Container(
@@ -145,8 +145,8 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                           // addInvoiceController.addInvoiceItemAsArrays(item);
                           FocusScope.of(context).unfocus();
 
-                          // MyDialogs.showSavedSuccessfullyDialoge(
-                          //     title: "Added Successfully", btnTXT: "close");
+                          MyDialogs.showSavedSuccessfullyDialoge(
+                              title: "Added Successfully", btnTXT: "close");
                         }
                       },
                       child: Container(
@@ -163,7 +163,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                         padding: EdgeInsets.all(15),
                         child: Center(
                           child: Text(
-                            "Add",
+                            "add".tr,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17.0.sp,
@@ -209,7 +209,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        greyText("Product Name", 11),
+                                        greyText("product_name".tr, 11),
                                         const SizedBox(height: 10),
                                         blackText(item.productName!, 11)
                                       ],
@@ -218,7 +218,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        greyText("Unit Price", 11),
+                                        greyText("unit_price".tr, 11),
                                         SizedBox(height: 10),
                                         blackText("\$${item.unitPrice}", 11)
                                       ],
@@ -227,7 +227,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        greyText("Quantity", 11),
+                                        greyText("quantity".tr, 11),
                                         SizedBox(height: 10),
                                         blackText(
                                             item.quantity!.round().toString(),
@@ -320,7 +320,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    blackText("Total", 18),
+                                    blackText("total".tr, 18),
                                     SizedBox(width: 20),
                                     Container(
                                       padding: EdgeInsets.symmetric(

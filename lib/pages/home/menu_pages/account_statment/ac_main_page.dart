@@ -78,7 +78,7 @@ class AccountStateMainPageState extends State<AccountStateMainPage> {
                     children: [
                       SizedBox(height: 30),
                       SignUpTextField(
-                        hintText: "Search ...",
+                        hintText: "search".tr,
                         padding: EdgeInsets.all(0),
                         prefixIcon: Icon(
                           Icons.search_outlined,

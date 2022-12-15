@@ -65,10 +65,17 @@ class _IntroPageState extends State<IntroPage> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            decoration: const BoxDecoration(
+                                border: Border(
+                              bottom: BorderSide(
+                                width: 2,
+                                color: Color(0xff2F6782),
+                              ),
+                            )),
+                            margin: EdgeInsets.symmetric(horizontal: 20),
                             child: InkWell(
                               onTap: () {
-                                this._pageController.jumpToPage(4);
+                                _pageController.jumpToPage(4);
                                 i = 4;
                                 flag = true;
                                 setState(() {});
@@ -76,9 +83,9 @@ class _IntroPageState extends State<IntroPage> {
                               child: Text(
                                 "skip".tr,
                                 style: TextStyle(
-                                  decoration: TextDecoration.underline,
                                   color: Color(0xff2F6782),
-                                  fontSize: 22.0.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0.sp,
                                 ),
                               ),
                             ),
@@ -98,15 +105,15 @@ class _IntroPageState extends State<IntroPage> {
                     },
                     children: [
                       buildIntroPage(w, h, "assets/images/intro1.png",
-                          "Generate", "Invoices & Payment Links"),
+                          "generate".tr, "generate_content".tr),
                       buildIntroPage(w, h, "assets/images/intro2.png",
-                          "Collect", "Money on the go"),
-                      buildIntroPage(w, h, "assets/images/intro3.png", "Keep",
-                          "Record of your business activites"),
-                      buildIntroPage(w, h, "assets/images/intro4.png", "Sell",
-                          "Online with ease"),
-                      buildIntroPage(w, h, "assets/images/intro5.png", "Ship",
-                          "Products with DHL & Aramex"),
+                          "collect".tr, "collect_content".tr),
+                      buildIntroPage(w, h, "assets/images/intro3.png",
+                          "keep".tr, "keep_content".tr),
+                      buildIntroPage(w, h, "assets/images/intro4.png",
+                          "sell".tr, "sell_content".tr),
+                      buildIntroPage(w, h, "assets/images/intro5.png",
+                          "ship".tr, "ship_content".tr),
                     ],
                   ),
                 ),
@@ -168,39 +175,31 @@ class _IntroPageState extends State<IntroPage> {
                           shape: BoxShape.circle,
                         ),
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(30.0),
-                          onTap: () {
-                            i++;
-                            _pageController.jumpToPage(i);
-                            if (i == 4) {
-                              flag = true;
-                              setState(() {});
-                            }
-                          },
-                          child: FutureBuilder(
-                              future: localsController.getLocale(),
-                              builder: (context, snp) {
-                                if (snp.connectionState ==
-                                    ConnectionState.done) {
-                                  return Transform.scale(
-                                    scaleX: snp.data! ? -1 : 1,
-                                    child: Container(
-                                      width: 15.0.sp,
-                                      height: 15.0.sp,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                            "assets/images/double_forward_icon.png",
-                                          ),
-                                          scale: 2,
-                                        ),
-                                      ),
+                            borderRadius: BorderRadius.circular(30.0),
+                            onTap: () {
+                              i++;
+                              _pageController.jumpToPage(i);
+                              if (i == 4) {
+                                flag = true;
+                                setState(() {});
+                              }
+                            },
+                            child: Transform.scale(
+                              scaleX:
+                                  localsController.currenetLocale == 1 ? -1 : 1,
+                              child: Container(
+                                width: 15.0.sp,
+                                height: 15.0.sp,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      "assets/images/double_forward_icon.png",
                                     ),
-                                  );
-                                } else
-                                  return Container();
-                              }),
-                        ),
+                                    scale: 2,
+                                  ),
+                                ),
+                              ),
+                            )),
                       )
                     ],
                   ),
