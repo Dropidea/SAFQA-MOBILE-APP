@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
-import 'package:safqa/pages/log-reg/forget%20password/reset_password.dart';
+import 'package:safqa/pages/log-reg/login.dart';
 
 class CheckEmailPage extends StatelessWidget {
   const CheckEmailPage({super.key, required this.phoneEmailFlag});
@@ -20,8 +20,7 @@ class CheckEmailPage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Get.to(() => ResetPasswordWithEmailPage(),
-                  transition: Transition.rightToLeft);
+              Get.offAll(() => LoginPage());
             },
             child: Center(
               child: Lottie.asset(
@@ -36,7 +35,9 @@ class CheckEmailPage extends StatelessWidget {
           ),
           Center(
             child: blackText(
-              phoneEmailFlag ? "Check Your phone messages" : "Check Your Email",
+              phoneEmailFlag
+                  ? "check_your_phone_messages".tr
+                  : "check_your_email".tr,
               18,
               fontWeight: FontWeight.bold,
             ),
@@ -45,11 +46,7 @@ class CheckEmailPage extends StatelessWidget {
           Center(
             child: SizedBox(
               width: 0.75 * w,
-              child: greyText(
-                  phoneEmailFlag
-                      ? "Messages will be sent to your phone please check the message"
-                      : "Messages will be sent to your email please check the message",
-                  14,
+              child: greyText(phoneEmailFlag ? "phone_c".tr : "email_c".tr, 14,
                   textAlign: TextAlign.center),
             ),
           ),

@@ -2,19 +2,36 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/controllers/payment_link_controller.dart';
 import 'package:safqa/main.dart';
+import 'package:safqa/models/payment_link.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_payment_link.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:sizer/sizer.dart';
 
 class PaymentLinkDetailsPage extends StatefulWidget {
-  PaymentLinkDetailsPage({super.key});
+  const PaymentLinkDetailsPage({super.key, required this.paymentLink});
 
+  final PaymentLink paymentLink;
   @override
   State<PaymentLinkDetailsPage> createState() => _PaymentLinkDetailsPageState();
 }
 
 class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
-  bool isActive = true;
+  final LocalsController _localsController = Get.find();
+  final PaymentLinkController _paymentLinkController = Get.find();
+  bool isActive = false;
+  bool engFlag = false;
+  @override
+  void initState() {
+    engFlag = _localsController.currenetLocale == 0;
+    isActive = widget.paymentLink.isActive == 1;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,73 +43,91 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Payment Link Details", 17),
+        title: blackText("pl_dateils".tr, 17),
       ),
       body: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: w / 2.5,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xff58D241).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.edit,
-                        color: Color(0xff58D241),
-                        size: 18.0.sp,
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => InvoiceSubCreatePaymentLink(
+                        paymentLinkToEdit: widget.paymentLink,
+                      ));
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xff58D241).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.edit,
+                          color: Color(0xff58D241),
+                          size: 18.0.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Edit",
-                      style: TextStyle(
-                        fontSize: 14.0.sp,
-                        color: Color(0xff58D241),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
+                      SizedBox(width: 10),
+                      Text(
+                        "edit".tr,
+                        style: TextStyle(
+                          fontSize: 14.0.sp,
+                          color: Color(0xff58D241),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                width: w / 2.5,
-                height: 50,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Color(0xffE47E7B).withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Icon(
-                        EvaIcons.trash2,
-                        color: Color(0xffE47E7B),
-                        size: 18.0.sp,
+              GestureDetector(
+                onTap: () {
+                  MyDialogs.showDeleteDialoge(
+                      message: 'Are You Sure?',
+                      onProceed: () async {
+                        Get.back();
+                        await _paymentLinkController
+                            .deletePaymentLink(widget.paymentLink);
+                      });
+                },
+                child: Container(
+                  width: w / 2.5,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE47E7B).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          EvaIcons.trash2,
+                          color: Color(0xffE47E7B),
+                          size: 18.0.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Remove",
-                      style: TextStyle(
-                        fontSize: 14.0.sp,
-                        color: Color(0xffE47E7B),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
+                      SizedBox(width: 10),
+                      Text(
+                        "remove".tr,
+                        style: TextStyle(
+                          fontSize: 14.0.sp,
+                          color: Color(0xffE47E7B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
@@ -113,7 +148,7 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
                           bottom: BorderSide(color: Colors.grey, width: 0.5),
                         ),
                       ),
-                      child: blackText("Payment Link Info", 15),
+                      child: blackText("pl_inf".tr, 15),
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),
@@ -125,21 +160,23 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           invoiceInfoMethod(
-                              title1: "Type",
-                              content1: "Payment Link",
-                              title2: "Date Created",
-                              content2: "30/10/2021"),
+                              title1: "type".tr,
+                              content1: "payment_links".tr,
+                              title2: "date_created".tr,
+                              content2: DateFormat('d/M/y').format(
+                                  DateTime.parse(
+                                      widget.paymentLink.createdAt!))),
                           SizedBox(height: 10),
                           Row(
                             children: [
-                              blackText("Payment Url", 14),
+                              blackText("pl_url".tr, 14),
                               SizedBox(
                                 width: 20,
                               ),
                               Row(
                                 children: [
                                   Text(
-                                    isActive ? "Active" : "Inactive",
+                                    isActive ? "active".tr : "inactive".tr,
                                     style: TextStyle(
                                       color: isActive
                                           ? Color(0xff1BAFB2)
@@ -179,23 +216,24 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
                           ),
                           SizedBox(height: 5),
                           Container(
-                            width: w / 4,
+                            width: w / 3,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 color: Color(0xff00A7B3).withOpacity(0.2)),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.attachment,
+                                  EvaIcons.attach,
                                   color: Color(0xff00A7B3),
                                 ),
                                 SizedBox(
                                   width: 5,
                                 ),
                                 Text(
-                                  "Copy Link",
+                                  "copy_link".tr,
                                   style: TextStyle(
                                     fontSize: 10.0.sp,
                                     color: Color(0xff00A7B3),
@@ -207,30 +245,39 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
                           ),
                           SizedBox(height: 10),
                           invoiceInfoMethod(
-                              title1: "Vendor",
+                              title1: "vendor".tr,
                               content1: "Ahmad khaled",
                               title2: "Views",
                               content2: "10"),
                           invoiceInfoMethod(
-                              title1: "Payment Link Refrence",
+                              title1: "pl_ref".tr,
                               content1: "12345678985",
-                              title2: "Payment Amount",
-                              content2: "220 AED"),
+                              title2: "pl_amount".tr,
+                              content2: widget.paymentLink.paymentAmount ??
+                                  "${widget.paymentLink.minAmount}=>${widget.paymentLink.maxAmount}"),
                           invoiceInfoMethod(
-                              title1: "Payment URL title",
-                              content1: "lorem ipsum",
-                              title2: "Language",
-                              content2: "English"),
+                              title1: "pl_title".tr,
+                              content1: widget.paymentLink.paymentTitle,
+                              title2: "language".tr,
+                              content2: widget.paymentLink.language!.id == 1
+                                  ? "english".tr
+                                  : "arabic".tr),
                           invoiceInfoMethod(
                               title1: "Fixed Price",
-                              content1: "Yes",
+                              content1: widget.paymentLink.paymentAmount != null
+                                  ? "yes".tr
+                                  : "no".tr,
                               title2: "",
                               content2: ""),
-                          invoiceInfoMethod(
-                              title1: "Comments",
-                              content1: "No Comments",
-                              title2: "",
-                              content2: ""),
+                          blackText("comments".tr, 14),
+                          SizedBox(height: 5),
+                          greyText(
+                              widget.paymentLink.comment != null
+                                  ? widget.paymentLink.comment!
+                                  : engFlag
+                                      ? "No Comments"
+                                      : "لا يوجد تعليقات",
+                              14),
                         ],
                       ),
                     ),

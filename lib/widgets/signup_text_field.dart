@@ -18,6 +18,7 @@ class SignUpTextField extends StatelessWidget {
     this.inputFormatters,
     this.padding = const EdgeInsets.only(left: 15, right: 15, top: 5),
     this.suffixIcon,
+    this.textDirection,
     this.suffix,
     this.fillColor,
     this.textInputAction,
@@ -48,6 +49,7 @@ class SignUpTextField extends StatelessWidget {
   bool readOnly = false;
   AutovalidateMode? autovalidateMode;
   EdgeInsetsGeometry? padding = EdgeInsets.only(left: 15, right: 15, top: 5);
+  TextDirection? textDirection;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,6 +59,7 @@ class SignUpTextField extends StatelessWidget {
       child: Padding(
         padding: padding!,
         child: TextFormField(
+          textDirection: textDirection,
           focusNode: focusNode,
           textInputAction: textInputAction ?? TextInputAction.next,
           autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,

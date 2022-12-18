@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/locals_controller.dart';
-import '../../main.dart';
 import 'intro_page.dart';
 
 class SelectLanguagePage extends StatelessWidget {
@@ -80,7 +79,6 @@ class SelectLanguagePage extends StatelessWidget {
                     child: InkWell(
                       onTap: () {
                         localsController.SetArabicLocale();
-                        logError(Localizations.localeOf(context).languageCode);
                         Get.to(() => IntroPage(),
                             transition: Transition.rightToLeft);
                       },

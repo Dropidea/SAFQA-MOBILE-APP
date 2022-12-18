@@ -164,6 +164,8 @@ class _BankInfoPageState extends State<BankInfoPage> {
                   }
                   logSuccess(
                       _customersController.customerToCreate.bank!.toJson());
+                  FocusScope.of(context).unfocus();
+
                   MyDialogs.showSavedSuccessfullyDialoge(
                     title: "Saved Successfully",
                     btnTXT: "close",

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/models/data_to_create_invoice.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/models/invoice.dart';
@@ -40,6 +39,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                 onTap: () {
                   invoiceToEdit =
                       DataToCreateInvoice.fromJson(invoiceModel.toJson());
+
                   addInvoiceController.dataToEditInvoice = invoiceToEdit;
 
                   if (invoiceModel.currency != null) {
@@ -52,7 +52,6 @@ class InvoiceDetailsPage extends StatelessWidget {
                             .dataToEditInvoice!.customerMobileNumbrCode =
                         invoiceModel.mobileCode!.code!.toString();
 
-                  logSuccess(invoiceToEdit!.toJson());
                   Get.to(() => InvoiceSubCreateInvoice());
                 },
                 child: Container(

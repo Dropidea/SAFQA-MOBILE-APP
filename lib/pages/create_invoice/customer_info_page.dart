@@ -119,6 +119,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                 customerEmailControler.text = p0.item!.email!;
                 customerRefrenceControler.text = p0.item!.customerReference!;
               },
+
               controller: customerNameControler,
               suggestions: _customersController.customers
                   .map(
@@ -299,6 +300,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                       sendBy: sendOptionId ?? 1,
                     );
                   }
+                  FocusScope.of(context).unfocus();
                   MyDialogs.showSavedSuccessfullyDialoge(
                     title: "Customer Saved",
                     btnTXT: "Close",

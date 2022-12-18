@@ -160,6 +160,116 @@ class AddInvoiceController extends GetxController {
     }
   }
 
+  Future<bool> editInvoice() async {
+    logWarning(dataToEditInvoice!.toJson());
+
+    Get.dialog(const Center(
+      child: CircularProgressIndicator(),
+    ));
+    final body = d.FormData.fromMap(dataToEditInvoice!.toJson());
+    body.fields.add(MapEntry("_method", "PUT"));
+
+    if (dataToEditInvoice!.attachFile != null) {
+      body.files.add(MapEntry(
+        "attach_file",
+        await d.MultipartFile.fromFile(dataToEditInvoice!.attachFile!.path,
+            filename: dataToEditInvoice!.attachFile!.path.split(" ").last,
+            contentType: MediaType('document', 'pdf')),
+      ));
+    }
+    // logSuccess(body.files.first.value.contentType!);
+
+    try {
+      await sslProblem();
+      var res = await dio.post(EndPoints.editInvoice(dataToEditInvoice!.id!),
+          data: body);
+      dataToEditInvoice = null;
+
+      Get.back();
+      return true;
+    } on DioError catch (e) {
+      Get.back();
+
+      if (e.response!.statusCode == 404) {
+        if (e.response!.statusMessage == "Login Please") {
+          bool res = await Utils.reLoginHelper(e);
+          if (res) {
+            await createInvoice();
+          }
+        } else {
+          logError(e.response!.data);
+          Map<String, dynamic> m = e.response!.data;
+          String errors = "";
+          int c = 0;
+          for (var i in m.values) {
+            for (var j = 0; j < i.length; j++) {
+              if (j == i.length - 1) {
+                errors = errors + i[j];
+              } else {
+                errors = "${errors + i[j]}\n";
+              }
+            }
+
+            c++;
+            if (c != m.values.length) {
+              errors += "\n";
+            }
+          }
+
+          Get.showSnackbar(
+            GetSnackBar(
+              duration: Duration(milliseconds: 2000),
+              backgroundColor: Colors.red,
+              // message: errors,
+              messageText: Text(
+                errors,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                ),
+              ),
+            ),
+          );
+        }
+      } else {
+        logError(e.message);
+      }
+      return false;
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 2000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
+    }
+  }
+
   Future createQuickInvoice() async {
     await sslProblem();
     // dio.options.headers["authorization"] =
@@ -299,7 +409,7 @@ class AddInvoiceController extends GetxController {
     _selectedDiscountTypesDrop.value = x;
   }
 
-  List<String> recurringInterval = ["No Recurring", "Weekly", "Monthly"];
+  List<String> recurringInterval = ["Weekly", "Monthly", "No Recurring"];
   RxString _selectedRecurringInterval = "No Recurring".obs;
   String get selectedRecurringInterval => _selectedRecurringInterval.value;
 

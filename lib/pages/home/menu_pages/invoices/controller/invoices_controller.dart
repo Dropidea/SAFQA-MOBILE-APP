@@ -83,7 +83,6 @@ class InvoicesController extends GetxController {
 
   activeInvoiceFilter() {
     invoiceFilter.filterActive = true;
-    logSuccess(invoiceFilter.toJson());
     List<InvoiceModel> tmp1 = [];
     List<InvoiceModel> tmp2 = [];
     if (invoiceFilter.value != null) {

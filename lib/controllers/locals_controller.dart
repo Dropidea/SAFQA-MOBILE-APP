@@ -8,19 +8,16 @@ class LocalsController extends GetxController {
   Locale _currentLocale = Locale('en', 'US');
   // Locale get currenetLocale => _currentLocale;
   int get currenetLocale => _currentLocale == _engLocal ? 0 : 1;
-  void SetEnglishLocale() {
+  Future<void> SetEnglishLocale() async {
     _currentLocale = _engLocal;
-    Get.updateLocale(_currentLocale);
-    saveLocale(false);
-    update();
+    await Get.updateLocale(_currentLocale);
+    await saveLocale(false);
   }
 
-  void SetArabicLocale() {
+  Future<void> SetArabicLocale() async {
     _currentLocale = _arLocal;
-    Get.updateLocale(_currentLocale);
-    saveLocale(true);
-
-    update();
+    await Get.updateLocale(_currentLocale);
+    await saveLocale(true);
   }
 
   Future saveLocale(bool lang) async {

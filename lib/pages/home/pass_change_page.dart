@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/log-reg/forget%20password/controller/password_controller.dart';
 import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -10,6 +11,7 @@ class PasswordChangePage extends StatelessWidget {
   TextEditingController oldPassController = TextEditingController();
   TextEditingController newPassController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
+  final PasswordController _passwordController = Get.put(PasswordController());
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -19,7 +21,7 @@ class PasswordChangePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Change password", 16),
+        title: blackText("change_password".tr, 16),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
@@ -31,7 +33,7 @@ class PasswordChangePage extends StatelessWidget {
           primary: false,
           padding: EdgeInsets.all(20),
           children: [
-            blackText("Current Password", 15),
+            blackText("current_password".tr, 15),
             SignUpTextField(
               padding: EdgeInsets.all(0),
               controller: oldPassController,
@@ -44,23 +46,15 @@ class PasswordChangePage extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            blackText("New Password", 15),
+            blackText("new_password".tr, 15),
             SignUpTextField(
               padding: EdgeInsets.all(0),
               controller: newPassController,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (s) {
-                if (s!.length < 6) {
-                  return "password should be at least 6";
-                } else if (s == oldPassController.text) {
-                  return "can't be the old password";
-                } else {
-                  return null;
-                }
-              },
+              validator: validatePassword,
             ),
             SizedBox(height: 20),
-            blackText("Confirm Password", 15),
+            blackText("confirm_password".tr, 15),
             SignUpTextField(
               padding: EdgeInsets.all(0),
               controller: confirmPassController,
@@ -78,20 +72,20 @@ class PasswordChangePage extends StatelessWidget {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  // if (formKey.currentState!.validate()) {
-                  MyDialogs.showWarningDialoge(
-                    message: "Are you sure You want to change password?",
-                    yesBTN: "Change",
-                    onProceed: () {
-                      Get.back();
-                      MyDialogs.showSavedSuccessfullyDialoge(
-                        btnTXT: "Close",
-                        title: "Changed Successfully",
-                      );
-                    },
-                    onCancel: () => Get.back(),
-                  );
-                  // }
+                  if (formKey.currentState!.validate()) {
+                    MyDialogs.showWarningDialoge(
+                      message: "Are you sure You want to change password?",
+                      yesBTN: "Change",
+                      onProceed: () async {
+                        Get.back();
+                        await _passwordController.chagerPassWord(
+                            oldPassController.text,
+                            newPassController.text,
+                            confirmPassController.text);
+                      },
+                      onCancel: () => Get.back(),
+                    );
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -106,7 +100,7 @@ class PasswordChangePage extends StatelessWidget {
                   padding: EdgeInsets.all(15),
                   child: Center(
                     child: Text(
-                      "Save",
+                      "save".tr,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 17.0.sp,
@@ -120,5 +114,22 @@ class PasswordChangePage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+String? validatePassword(String? value) {
+  final numreg = RegExp(r'\d');
+  final bigAlphareg = RegExp(r'[A-Z]');
+  final smallAlpgareg = RegExp(r'[a-z]');
+  if (value!.length < 6) {
+    return ("password should be at least 6 characters");
+  } else if (value.length > 20) {
+    return ("password should be no more 20 characters");
+  } else if (!numreg.hasMatch(value)) {
+    return ("password should have at least 1 numbers");
+  } else if (!smallAlpgareg.hasMatch(value)) {
+    return ("password should have at least 1 small letter");
+  } else if (!bigAlphareg.hasMatch(value)) {
+    return ("password should have at least 1 capital letter");
   }
 }

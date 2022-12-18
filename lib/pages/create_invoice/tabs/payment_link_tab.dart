@@ -13,20 +13,20 @@ import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 
 class CreatePaymentLinkTab extends StatefulWidget {
-  const CreatePaymentLinkTab({super.key});
+  const CreatePaymentLinkTab({super.key, this.paymentLinkToEdit});
+  final PaymentLink? paymentLinkToEdit;
 
   @override
   State<CreatePaymentLinkTab> createState() => _CreatePaymentLinkTabState();
 }
 
 class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
-  int invoicesLangValue = 0;
+  int langValue = 1;
   int termsAndConditions = 0;
   int paymentActive = 0;
   int paymentopen = 0;
   bool fixedPriceFlag = true;
   bool termsFlag = false;
-  String filePath = "";
   final formKey = GlobalKey<FormState>();
   final SignUpController _signUpController = Get.find();
   TextEditingController textEditingController1 =
@@ -36,6 +36,20 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
 
   final PaymentLinkController _paymentLinkController = Get.find();
   PaymentLink paymentLinkToCreate = PaymentLink();
+
+  @override
+  void initState() {
+    if (widget.paymentLinkToEdit != null) {
+      termsFlag = widget.paymentLinkToEdit!.termsAndConditions != null;
+      fixedPriceFlag = widget.paymentLinkToEdit!.paymentAmount != null;
+      langValue = widget.paymentLinkToEdit!.language!.id!;
+      termsAndConditions = termsFlag ? 1 : 0;
+      paymentopen = widget.paymentLinkToEdit!.openAmount!;
+      paymentActive = widget.paymentLinkToEdit!.isActive ?? 0;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -54,7 +68,11 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                   children: [
                     blackText("pl_id".tr, 14),
                     const SizedBox(height: 5),
-                    greyText("2659986 / 2022000048", 12),
+                    greyText(
+                        widget.paymentLinkToEdit != null
+                            ? widget.paymentLinkToEdit!.id.toString()
+                            : "2659986 / 2022000048",
+                        12),
                   ],
                 ),
                 Column(
@@ -62,7 +80,12 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                   children: [
                     blackText("pl_date".tr, 14),
                     const SizedBox(height: 5),
-                    greyText(DateFormat('dd-MMM-y').format(DateTime.now()), 12),
+                    greyText(
+                        widget.paymentLinkToEdit != null
+                            ? DateFormat('dd-MMM-y').format(DateTime.parse(
+                                widget.paymentLinkToEdit!.createdAt!))
+                            : DateFormat('dd-MMM-y').format(DateTime.now()),
+                        12),
                   ],
                 )
               ],
@@ -72,8 +95,15 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
             SignUpTextField(
               padding: EdgeInsets.all(0),
               onchanged: (s) {
-                paymentLinkToCreate.paymentTitle = s!;
+                if (widget.paymentLinkToEdit != null) {
+                  widget.paymentLinkToEdit!.paymentTitle = s!;
+                } else {
+                  paymentLinkToCreate.paymentTitle = s!;
+                }
               },
+              initialValue: widget.paymentLinkToEdit != null
+                  ? widget.paymentLinkToEdit!.paymentTitle
+                  : null,
               validator: (s) {
                 if (s!.isEmpty) return "required";
               },
@@ -101,7 +131,11 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                           groupValue: paymentActive,
                           onChanged: (value) => setState(() {
                                 paymentActive = value;
-                                paymentLinkToCreate.isActive = 1;
+                                if (widget.paymentLinkToEdit != null) {
+                                  widget.paymentLinkToEdit!.isActive = 1;
+                                } else {
+                                  paymentLinkToCreate.isActive = 1;
+                                }
                               })),
                     ),
                     greyText("yes".tr, 16),
@@ -126,7 +160,11 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                           groupValue: paymentActive,
                           onChanged: (value) => setState(() {
                                 paymentActive = value;
-                                paymentLinkToCreate.isActive = 0;
+                                if (widget.paymentLinkToEdit != null) {
+                                  widget.paymentLinkToEdit!.isActive = 0;
+                                } else {
+                                  paymentLinkToCreate.isActive = 0;
+                                }
                               })),
                     ),
                     greyText("no".tr, 16),
@@ -157,7 +195,11 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                           groupValue: paymentopen,
                           onChanged: (value) => setState(() {
                                 paymentopen = value;
-                                paymentLinkToCreate.openAmount = 0;
+                                if (widget.paymentLinkToEdit != null) {
+                                  widget.paymentLinkToEdit!.openAmount = 0;
+                                } else {
+                                  paymentLinkToCreate.openAmount = 0;
+                                }
                               })),
                     ),
                     greyText("yes".tr, 16),
@@ -182,7 +224,11 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                           groupValue: paymentopen,
                           onChanged: (value) => setState(() {
                                 paymentopen = value;
-                                paymentLinkToCreate.openAmount = 1;
+                                if (widget.paymentLinkToEdit != null) {
+                                  widget.paymentLinkToEdit!.openAmount = 1;
+                                } else {
+                                  paymentLinkToCreate.openAmount = 1;
+                                }
                               })),
                     ),
                     greyText("no".tr, 16),
@@ -198,15 +244,24 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
               onchanged: (String? v) {
                 if (v == "yes".tr) {
                   fixedPriceFlag = true;
-                  paymentLinkToCreate.minAmount = null;
-                  paymentLinkToCreate.maxAmount = null;
+                  if (widget.paymentLinkToEdit != null) {
+                    widget.paymentLinkToEdit!.minAmount = null;
+                    widget.paymentLinkToEdit!.maxAmount = null;
+                  } else {
+                    paymentLinkToCreate.minAmount = null;
+                    paymentLinkToCreate.maxAmount = null;
+                  }
                 } else {
-                  paymentLinkToCreate.paymentAmount = null;
+                  if (widget.paymentLinkToEdit != null) {
+                    widget.paymentLinkToEdit!.paymentAmount = null;
+                  } else {
+                    paymentLinkToCreate.paymentAmount = null;
+                  }
                   fixedPriceFlag = false;
                 }
                 setState(() {});
               },
-              selectedItem: "yes".tr,
+              selectedItem: fixedPriceFlag ? "yes".tr : "no".tr,
             ),
             const SizedBox(height: 20),
             fixedPriceFlag ? blackText("p_v".tr, 16) : Container(),
@@ -214,11 +269,18 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                 ? SignUpTextField(
                     padding: EdgeInsets.all(0),
                     onchanged: (s) {
-                      paymentLinkToCreate.paymentAmount = s;
+                      if (widget.paymentLinkToEdit != null) {
+                        widget.paymentLinkToEdit!.paymentAmount = s;
+                      } else {
+                        paymentLinkToCreate.paymentAmount = s;
+                      }
                     },
                     validator: (s) {
                       if (s!.isEmpty) return "required";
                     },
+                    initialValue: widget.paymentLinkToEdit != null
+                        ? widget.paymentLinkToEdit!.paymentAmount
+                        : null,
                   )
                 : Container(),
             !fixedPriceFlag
@@ -233,8 +295,15 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                             padding: EdgeInsets.all(0),
                             width: 0.4 * w,
                             onchanged: (s) {
-                              paymentLinkToCreate.minAmount = s;
+                              if (widget.paymentLinkToEdit != null) {
+                                widget.paymentLinkToEdit!.minAmount = s;
+                              } else {
+                                paymentLinkToCreate.minAmount = s;
+                              }
                             },
+                            initialValue: widget.paymentLinkToEdit != null
+                                ? widget.paymentLinkToEdit!.minAmount
+                                : null,
                             validator: (s) {
                               if (s!.isEmpty) return "required";
                             },
@@ -248,8 +317,15 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                           SignUpTextField(
                             padding: EdgeInsets.all(0),
                             width: 0.4 * w,
+                            initialValue: widget.paymentLinkToEdit != null
+                                ? widget.paymentLinkToEdit!.maxAmount
+                                : null,
                             onchanged: (s) {
-                              paymentLinkToCreate.maxAmount = s;
+                              if (widget.paymentLinkToEdit != null) {
+                                widget.paymentLinkToEdit!.maxAmount = s;
+                              } else {
+                                paymentLinkToCreate.maxAmount = s;
+                              }
                             },
                             validator: (s) {
                               if (s!.isEmpty) return "required";
@@ -278,11 +354,18 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
 
                 return CustomDropdown(
                   items: countriesCurrencies,
-                  selectedItem: countriesCurrencies[0],
+                  selectedItem: widget.paymentLinkToEdit != null
+                      ? widget.paymentLinkToEdit!.currency!.currency
+                      : countriesCurrencies[0],
                   width: w,
                   onchanged: (s) {
-                    paymentLinkToCreate.currencyId =
-                        int.parse(ids[countriesCurrencies.indexOf(s!)]);
+                    if (widget.paymentLinkToEdit != null) {
+                      widget.paymentLinkToEdit!.currencyId =
+                          int.parse(ids[countriesCurrencies.indexOf(s!)]);
+                    } else {
+                      paymentLinkToCreate.currencyId =
+                          int.parse(ids[countriesCurrencies.indexOf(s!)]);
+                    }
                   },
                 );
               },
@@ -306,8 +389,16 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
               child: TextField(
                 maxLines: 3,
                 decoration: const InputDecoration(border: InputBorder.none),
+                controller: TextEditingController(
+                    text: widget.paymentLinkToEdit != null
+                        ? widget.paymentLinkToEdit!.comment
+                        : null),
                 onChanged: (value) {
-                  paymentLinkToCreate.comment = value;
+                  if (widget.paymentLinkToEdit != null) {
+                    widget.paymentLinkToEdit!.comment = value;
+                  } else {
+                    paymentLinkToCreate.comment = value;
+                  }
                 },
               ),
             ),
@@ -330,11 +421,15 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                             color: Colors.grey.shade300,
                           ),
                           size: GFSize.SMALL,
-                          value: 0,
-                          groupValue: invoicesLangValue,
+                          value: 1,
+                          groupValue: langValue,
                           onChanged: (value) => setState(() {
-                                invoicesLangValue = value;
-                                paymentLinkToCreate.languageId = 1;
+                                langValue = value;
+                                if (widget.paymentLinkToEdit != null) {
+                                  widget.paymentLinkToEdit!.languageId = 1;
+                                } else {
+                                  paymentLinkToCreate.languageId = 1;
+                                }
                               })),
                     ),
                     greyText("english".tr, 16),
@@ -355,11 +450,15 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                           ),
                           size: GFSize.SMALL,
                           inactiveBorderColor: Colors.transparent,
-                          value: 1,
-                          groupValue: invoicesLangValue,
+                          value: 2,
+                          groupValue: langValue,
                           onChanged: (value) => setState(() {
-                                invoicesLangValue = value;
-                                paymentLinkToCreate.languageId = 2;
+                                langValue = value;
+                                if (widget.paymentLinkToEdit != null) {
+                                  widget.paymentLinkToEdit!.languageId = 2;
+                                } else {
+                                  paymentLinkToCreate.languageId = 2;
+                                }
                               })),
                     ),
                     greyText("arabic".tr, 16),
@@ -391,7 +490,12 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                           onChanged: (value) => setState(() {
                                 termsAndConditions = value;
                                 termsFlag = false;
-                                paymentLinkToCreate.termsAndConditions = null;
+                                if (widget.paymentLinkToEdit != null) {
+                                  widget.paymentLinkToEdit!.termsAndConditions =
+                                      null;
+                                } else {
+                                  paymentLinkToCreate.termsAndConditions = null;
+                                }
                               })),
                     ),
                     greyText("disable".tr, 16),
@@ -439,22 +543,38 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                       maxLines: 3,
                       decoration:
                           const InputDecoration(border: InputBorder.none),
+                      controller: TextEditingController(
+                          text: widget.paymentLinkToEdit != null
+                              ? widget.paymentLinkToEdit!.termsAndConditions
+                              : null),
                       onChanged: (value) {
-                        paymentLinkToCreate.termsAndConditions = value;
+                        if (widget.paymentLinkToEdit != null) {
+                          widget.paymentLinkToEdit!.termsAndConditions = value;
+                        } else {
+                          paymentLinkToCreate.termsAndConditions = value;
+                        }
                       },
                     ),
                   ),
             CircularGoBTN(
-              text: "create_link".tr,
+              text: widget.paymentLinkToEdit != null
+                  ? "edit_payment_link".tr
+                  : "create_link".tr,
               onTap: () async {
-                paymentLinkToCreate.isActive ??= 1;
-                paymentLinkToCreate.openAmount ??= 0;
-                paymentLinkToCreate.currencyId ??= 1;
-                paymentLinkToCreate.languageId ??= 1;
                 if (formKey.currentState!.validate()) {
                   FocusScope.of(context).unfocus();
-                  await _paymentLinkController
-                      .createPaymentLink(paymentLinkToCreate);
+
+                  if (widget.paymentLinkToEdit != null) {
+                    await _paymentLinkController
+                        .editPaymentLink(widget.paymentLinkToEdit!);
+                  } else {
+                    paymentLinkToCreate.isActive ??= 1;
+                    paymentLinkToCreate.openAmount ??= 0;
+                    paymentLinkToCreate.currencyId ??= 1;
+                    paymentLinkToCreate.languageId ??= 1;
+                    await _paymentLinkController
+                        .createPaymentLink(paymentLinkToCreate);
+                  }
                 }
 
                 // if (paymentLinkToCreate.paymentAmount == null &&

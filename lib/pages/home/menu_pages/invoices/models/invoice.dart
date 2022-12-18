@@ -24,7 +24,7 @@ class InvoiceModel {
   int? languageId;
   Currency? currency;
   MobileCode? mobileCode;
-  List<InvoiceItem>? invoiceItem;
+  List<InvoiceModelItem>? invoiceItem;
 
   InvoiceModel(
       {this.id,
@@ -85,9 +85,9 @@ class InvoiceModel {
         ? new MobileCode.fromJson(json['mobile_code'])
         : null;
     if (json['invoice_item'] != null) {
-      invoiceItem = <InvoiceItem>[];
+      invoiceItem = <InvoiceModelItem>[];
       json['invoice_item'].forEach((v) {
-        invoiceItem!.add(new InvoiceItem.fromJson(v));
+        invoiceItem!.add(new InvoiceModelItem.fromJson(v));
       });
     }
   }
@@ -171,7 +171,7 @@ class MobileCode {
   }
 }
 
-class InvoiceItem {
+class InvoiceModelItem {
   int? id;
   String? productName;
   int? productQuantity;
@@ -180,7 +180,7 @@ class InvoiceItem {
   String? createdAt;
   String? updatedAt;
 
-  InvoiceItem(
+  InvoiceModelItem(
       {this.id,
       this.productName,
       this.productQuantity,
@@ -189,7 +189,7 @@ class InvoiceItem {
       this.createdAt,
       this.updatedAt});
 
-  InvoiceItem.fromJson(Map<String, dynamic> json) {
+  InvoiceModelItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     productName = json['product_name'];
     productQuantity = json['product_quantity'];

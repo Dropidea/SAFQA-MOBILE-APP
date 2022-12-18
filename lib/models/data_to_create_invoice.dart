@@ -77,6 +77,7 @@ class DataToCreateInvoice {
     isOpenInvoice = json['is_open_invoice'];
     recurringIntervalId = json['recurring_interval_id'];
     termsAndConditions = json['terms_and_conditions'];
+    attachFile = json['attach_file'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

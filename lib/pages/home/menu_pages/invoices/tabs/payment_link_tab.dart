@@ -203,7 +203,9 @@ class _PaymentLinkCardState extends State<PaymentLinkCard> {
     double h = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
-        Get.to(() => PaymentLinkDetailsPage());
+        Get.to(() => PaymentLinkDetailsPage(
+              paymentLink: widget.link,
+            ));
       },
       child: Container(
         width: w,

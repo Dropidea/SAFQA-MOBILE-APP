@@ -139,6 +139,49 @@ class MyDialogs {
     );
   }
 
+  static void showWarningDialoge2({
+    required void Function()? onProceed,
+    void Function()? onCancel,
+    required String message,
+    required String yesBTN,
+  }) {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image(
+              image: AssetImage("assets/images/warning.png"),
+              width: 70,
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              width: 60.0.w,
+              child: blackText(message, 15, textAlign: TextAlign.center),
+            ),
+            SizedBox(height: 10),
+            GestureDetector(
+              onTap: onProceed,
+              child: Container(
+                width: 35.0.w,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Color(0xffE47E7B),
+                ),
+                child: Center(
+                  child: whiteText(yesBTN, 14),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   static void showSavedSuccessfullyDialoge(
       {required String title, required String btnTXT, void Function()? onTap}) {
     Get.defaultDialog(

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
+import 'package:safqa/controllers/payment_link_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:textfield_datepicker/textfield_datepicker.dart';
@@ -21,15 +23,47 @@ class _PaymentLinkSearchFilterPageState
   int invoiceStatus = 0;
   int paymentAmount = 0;
   int dateCreated = 0;
-  SfRangeValues _values = SfRangeValues(0, 100);
-  double sMin = 0;
-  double sMax = 100;
+  late SfRangeValues _values;
+  late double sMin;
+  late double sMax;
   double sInterval = 20;
   TextEditingController maxController = TextEditingController();
   TextEditingController minController = TextEditingController();
   TextEditingController fixedDateController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
+  final PaymentLinkController _paymentLinkController = Get.find();
+
+  @override
+  void initState() {
+    sMin = _paymentLinkController.minPayLinkValue();
+    sMax = _paymentLinkController.maxPayLinkValue();
+    _values = SfRangeValues(sMin, sMax);
+    if (_paymentLinkController.paymentLinkFilter.payAmount != null ||
+        (_paymentLinkController.paymentLinkFilter.payAmountMax == null &&
+            _paymentLinkController.paymentLinkFilter.payAmountMin == null)) {
+      paymentAmount = 0;
+    } else
+      paymentAmount = 1;
+    if (_paymentLinkController.paymentLinkFilter.createdAt != null ||
+        (_paymentLinkController.paymentLinkFilter.createdAtMax == null &&
+            _paymentLinkController.paymentLinkFilter.createdAtMin == null)) {
+      dateCreated = 0;
+    } else
+      dateCreated = 1;
+    minController.text =
+        _paymentLinkController.paymentLinkFilter.payAmountMin ?? "";
+    maxController.text =
+        _paymentLinkController.paymentLinkFilter.payAmountMax ?? "";
+    startDateController.text =
+        _paymentLinkController.paymentLinkFilter.createdAtMin ?? "";
+    endDateController.text =
+        _paymentLinkController.paymentLinkFilter.createdAtMax ?? "";
+    fixedDateController.text =
+        _paymentLinkController.paymentLinkFilter.createdAt ?? "";
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +92,20 @@ class _PaymentLinkSearchFilterPageState
                     size: 25.0.sp,
                   ),
                 ),
-                Text(
-                  "Clear",
-                  style: TextStyle(
-                    fontSize: 16.0.sp,
-                    color: Color(0xff00A7B3),
-                    decoration: TextDecoration.underline,
-                  ),
+                ClearFilterBTN(
+                  onTap: () {
+                    _paymentLinkController.clearPayLinkFilter();
+                    Get.back();
+                  },
                 )
+                // Text(
+                //   "Clear",
+                //   style: TextStyle(
+                //     fontSize: 16.0.sp,
+                //     color: Color(0xff00A7B3),
+                //     decoration: TextDecoration.underline,
+                //   ),
+                // )
               ],
             ),
             SizedBox(
@@ -85,7 +125,15 @@ class _PaymentLinkSearchFilterPageState
                         paymentAmount,
                         (p0) => setState(
                               () {
+                                FocusScope.of(context).unfocus();
+
                                 paymentAmount = p0;
+                                minController.text = "";
+                                maxController.text = "";
+                                _paymentLinkController
+                                    .paymentLinkFilter.payAmountMin = null;
+                                _paymentLinkController
+                                    .paymentLinkFilter.payAmountMax = null;
                               },
                             )),
                     buildRadioButton(
@@ -94,12 +142,23 @@ class _PaymentLinkSearchFilterPageState
                         paymentAmount,
                         (p0) => setState(
                               () {
+                                FocusScope.of(context).unfocus();
+
                                 paymentAmount = p0;
+                                _paymentLinkController
+                                    .paymentLinkFilter.payAmount = null;
                               },
                             )),
                     SizedBox(height: 10),
                     paymentAmount == 0
-                        ? buildInvoiceValueFixedTextfield()
+                        ? buildInvoiceValueFixedTextfield(
+                            initialValue: _paymentLinkController
+                                .paymentLinkFilter.payAmount,
+                            onChanged: (p0) {
+                              _paymentLinkController
+                                  .paymentLinkFilter.payAmount = p0;
+                            },
+                          )
                         : Column(
                             children: [
                               Row(
@@ -119,16 +178,8 @@ class _PaymentLinkSearchFilterPageState
                                       keyboardType: TextInputType.number,
                                       controller: minController,
                                       onChanged: (value) {
-                                        if (value != "") {
-                                          setState(() {
-                                            if (double.parse(value) > 0 &&
-                                                double.parse(value) < sMax) {
-                                              sMin = double.parse(value);
-                                              _values =
-                                                  SfRangeValues(sMin, sMax);
-                                            }
-                                          });
-                                        }
+                                        _paymentLinkController.paymentLinkFilter
+                                            .payAmountMin = value;
                                       },
                                       decoration: InputDecoration(
                                         hintText: "Min",
@@ -153,17 +204,8 @@ class _PaymentLinkSearchFilterPageState
                                     height: 50,
                                     child: TextFormField(
                                       onChanged: (value) {
-                                        if (value != "") {
-                                          setState(() {
-                                            if (double.parse(value) > 100 &&
-                                                double.parse(value) > sMin) {
-                                              sMax = double.parse(value);
-                                              sInterval = sMax / 5;
-                                              _values =
-                                                  SfRangeValues(sMin, sMax);
-                                            }
-                                          });
-                                        }
+                                        _paymentLinkController.paymentLinkFilter
+                                            .payAmountMax = value;
                                       },
                                       keyboardType: TextInputType.number,
                                       controller: maxController,
@@ -187,7 +229,7 @@ class _PaymentLinkSearchFilterPageState
                                 min: sMin,
                                 max: sMax,
                                 values: _values,
-                                interval: sInterval,
+                                interval: sMax / 5,
                                 activeColor: Color(0xff1BAFB2),
                                 showTicks: true,
                                 showLabels: true,
@@ -197,6 +239,14 @@ class _PaymentLinkSearchFilterPageState
                                 onChanged: (value) {
                                   setState(() {
                                     _values = value;
+                                    minController.text =
+                                        value.start.round().toString();
+                                    maxController.text =
+                                        value.end.round().toString();
+                                    _paymentLinkController.paymentLinkFilter
+                                        .payAmountMin = minController.text;
+                                    _paymentLinkController.paymentLinkFilter
+                                        .payAmountMax = maxController.text;
                                   });
                                 },
                               )
@@ -231,7 +281,15 @@ class _PaymentLinkSearchFilterPageState
                         dateCreated,
                         (p0) => setState(
                               () {
+                                FocusScope.of(context).unfocus();
+
                                 dateCreated = p0;
+                                startDateController.text = "";
+                                endDateController.text = "";
+                                _paymentLinkController
+                                    .paymentLinkFilter.createdAtMin = null;
+                                _paymentLinkController
+                                    .paymentLinkFilter.createdAtMax = null;
                               },
                             )),
                     buildRadioButton(
@@ -240,7 +298,11 @@ class _PaymentLinkSearchFilterPageState
                         dateCreated,
                         (p0) => setState(
                               () {
+                                FocusScope.of(context).unfocus();
                                 dateCreated = p0;
+                                fixedDateController.text = "";
+                                _paymentLinkController
+                                    .paymentLinkFilter.createdAt = null;
                               },
                             )),
                     SizedBox(height: 10),
@@ -249,7 +311,7 @@ class _PaymentLinkSearchFilterPageState
                             width: w,
                             child: TextfieldDatePicker(
                               decoration: InputDecoration(
-                                hintText: 'dd/MM/yyyy',
+                                hintText: 'fixed date',
                                 fillColor: Colors.white,
                                 filled: true,
                                 focusedBorder: OutlineInputBorder(
@@ -287,7 +349,7 @@ class _PaymentLinkSearchFilterPageState
                                 width: 0.4 * w,
                                 child: TextfieldDatePicker(
                                   decoration: InputDecoration(
-                                    hintText: 'dd/MM/yyyy',
+                                    hintText: 'start date',
                                     fillColor: Colors.white,
                                     filled: true,
                                     focusedBorder: OutlineInputBorder(
@@ -324,7 +386,7 @@ class _PaymentLinkSearchFilterPageState
                                 width: 0.4 * w,
                                 child: TextfieldDatePicker(
                                   decoration: InputDecoration(
-                                    hintText: 'dd/MM/yyyy',
+                                    hintText: 'end date',
                                     fillColor: Colors.white,
                                     filled: true,
                                     focusedBorder: OutlineInputBorder(
@@ -378,7 +440,13 @@ class _PaymentLinkSearchFilterPageState
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomerNameTextfield(),
+              expanded: buildCustomerNameTextfield(
+                  onChanged: (p0) {
+                    _paymentLinkController.paymentLinkFilter.paymentLinkRef =
+                        p0;
+                  },
+                  initialValue:
+                      _paymentLinkController.paymentLinkFilter.paymentLinkRef),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
@@ -388,24 +456,50 @@ class _PaymentLinkSearchFilterPageState
                 child: blackText("Payment Link Reference", 15),
               ),
             ),
-            Align(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                width: 0.7 * w,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff1BAFB2)),
-                child: Center(child: whiteText("Apply", 15)),
-              ),
+            ApplyFilterBTN(
+              width: 0.7 * w,
+              onTap: () {
+                _paymentLinkController.paymentLinkFilter.createdAt =
+                    fixedDateController.text == ""
+                        ? null
+                        : fixedDateController.text;
+                _paymentLinkController.paymentLinkFilter.createdAtMax =
+                    endDateController.text == ""
+                        ? null
+                        : endDateController.text;
+                _paymentLinkController.paymentLinkFilter.createdAtMin =
+                    startDateController.text == ""
+                        ? null
+                        : startDateController.text;
+                // logSuccess(gstartDateController.text)
+                //     .isBefore(DateFormat('dd/MM/yyyy')
+                //         .parse(endDateController.text)));
+                // logSuccess(_paymentLinkController.paymentLinkFilter.toJson());
+                _paymentLinkController.activePayLinkFilter();
+                Get.back();
+              },
             )
+            // Align(
+            //   child: Container(
+            //     margin: EdgeInsets.symmetric(vertical: 30),
+            //     width: 0.7 * w,
+            //     padding: EdgeInsets.all(15),
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: Color(0xff1BAFB2)),
+            //     child: Center(child: whiteText("Apply", 15)),
+            //   ),
+            // )
           ],
         ),
       ),
     );
   }
 
-  Container buildInvoiceValueFixedTextfield() {
+  Container buildInvoiceValueFixedTextfield(
+      {TextEditingController? controller,
+      void Function(String)? onChanged,
+      String? initialValue}) {
     return Container(
       height: 50,
       decoration: BoxDecoration(
@@ -415,9 +509,12 @@ class _PaymentLinkSearchFilterPageState
         ),
       ),
       child: TextFormField(
+        onChanged: onChanged,
+        controller: controller,
+        initialValue: initialValue,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          hintText: "Invoice value ...",
+          hintText: "Payment Link value ...",
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
@@ -429,7 +526,10 @@ class _PaymentLinkSearchFilterPageState
     );
   }
 
-  Container buildCustomerNameTextfield() {
+  Container buildCustomerNameTextfield(
+      {TextEditingController? controller,
+      void Function(String)? onChanged,
+      String? initialValue}) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       height: 50,
@@ -440,6 +540,9 @@ class _PaymentLinkSearchFilterPageState
         ),
       ),
       child: TextFormField(
+        initialValue: initialValue,
+        controller: controller,
+        onChanged: onChanged,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           hintText: "Payment Link Reference ...",

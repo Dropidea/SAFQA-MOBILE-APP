@@ -18,6 +18,7 @@ import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/create_invoice/invoice_items_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 import 'package:textfield_datepicker/textfield_datepicker.dart';
@@ -45,9 +46,9 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   TextEditingController commentsController = TextEditingController();
   TextEditingController termsController = TextEditingController();
   TextEditingController startDateController =
-      TextEditingController(text: 'dd/MM/yyyy');
+      TextEditingController(text: 'dd-MM-yyyy');
   TextEditingController endDateController =
-      TextEditingController(text: 'dd/MM/yyyy');
+      TextEditingController(text: 'dd-MM-yyyy');
   TextEditingController expiryTimeController =
       TextEditingController(text: '00:00');
   AddInvoiceController addInvoiceController = Get.find();
@@ -61,18 +62,20 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   void initState() {
     engFlag = _localsController.currenetLocale == 0;
     if (addInvoiceController.dataToEditInvoice != null) {
+      fileName = addInvoiceController.dataToEditInvoice!.attachFile ?? "";
+      logSuccess(addInvoiceController.dataToEditInvoice!.attachFile);
       if (addInvoiceController.dataToEditInvoice!.discountValue != 0) {
         discountAvailableFlag = true;
         startDateController.text =
             addInvoiceController.dataToEditInvoice!.recurringStartDate ??
-                "Start Date";
+                "start_date".tr;
         endDateController.text =
             addInvoiceController.dataToEditInvoice!.recurringEndDate ??
-                "End Date";
+                "end_date".tr;
       }
 
       invoicesLangValue = addInvoiceController.dataToEditInvoice!.languageId!;
-      if (addInvoiceController.dataToEditInvoice!.recurringIntervalId != 0) {
+      if (addInvoiceController.dataToEditInvoice!.recurringIntervalId != 4) {
         recurringIntervalFlag = true;
       }
       if (addInvoiceController.dataToEditInvoice!.attachFile != null) {
@@ -92,16 +95,15 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
         termsConditionsFlag = true;
         termsAndConditions = 2;
       }
-      expiryDateController.text =
-          addInvoiceController.dataToEditInvoice!.expiryDate!.split(" ")[0];
-      expiryTimeController.text = addInvoiceController
-          .dataToEditInvoice!.expiryDate!
-          .split(" ")[1]
-          .substring(
+      addInvoiceController.dataToEditInvoice!.expiryDate =
+          addInvoiceController.dataToEditInvoice!.expiryDate!.substring(
               0,
               addInvoiceController.dataToEditInvoice!.expiryDate!
-                  .split(" ")[1]
                   .lastIndexOf(":"));
+      expiryDateController.text =
+          addInvoiceController.dataToEditInvoice!.expiryDate!.split(" ")[0];
+      expiryTimeController.text =
+          addInvoiceController.dataToEditInvoice!.expiryDate!.split(" ")[1];
     }
     super.initState();
   }
@@ -249,6 +251,12 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               addInvoiceController.selectDiscountDrop(value!);
               if (value == "no".tr) {
                 discountAvailableFlag = false;
+                discountValueController.text = "0";
+                if (addInvoiceController.dataToEditInvoice != null) {
+                  addInvoiceController.dataToEditInvoice!.discountValue = 0;
+                } else {
+                  addInvoiceController.dataToCreateInvoice.discountValue = 0;
+                }
               } else {
                 discountAvailableFlag = true;
               }
@@ -281,7 +289,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       .toList(),
                   value: addInvoiceController.dataToEditInvoice != null
                       ? addInvoiceController.dataToEditInvoice!.discountType ==
-                              0
+                              1
                           ? "fixed".tr
                           : "rate".tr
                       : addInvoiceController.selectedDiscountTypesDrop,
@@ -291,19 +299,19 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       discountTypeFlag = true;
                       if (addInvoiceController.dataToEditInvoice != null) {
                         addInvoiceController.dataToEditInvoice!.discountType =
-                            1;
+                            0;
                       } else {
                         addInvoiceController.dataToCreateInvoice.discountType =
-                            1;
+                            0;
                       }
                     } else {
                       discountTypeFlag = false;
                       if (addInvoiceController.dataToEditInvoice != null) {
                         addInvoiceController.dataToEditInvoice!.discountType =
-                            0;
+                            1;
                       } else {
                         addInvoiceController.dataToCreateInvoice.discountType =
-                            0;
+                            1;
                       }
                     }
                     setState(() {});
@@ -475,12 +483,19 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 .toList(),
             value: addInvoiceController.dataToEditInvoice != null
                 ? addInvoiceController.dataToEditInvoice!.recurringIntervalId ==
-                        0
+                        4
                     ? "No Recurring"
                     : "Monthly"
                 : addInvoiceController.selectedRecurringInterval,
             onChanged: (value) {
               addInvoiceController.selectRecurringInterval(value!);
+              startDateController.text = "start_date".tr;
+              endDateController.text = "end_date".tr;
+              if (addInvoiceController.dataToEditInvoice != null) {
+                addInvoiceController.dataToEditInvoice!.recurringStartDate =
+                    null;
+                addInvoiceController.dataToEditInvoice!.recurringEndDate = null;
+              }
               if (value != "No Recurring") {
                 setState(() {
                   recurringIntervalFlag = true;
@@ -490,10 +505,13 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   recurringIntervalFlag = false;
                 });
               }
-              addInvoiceController.dataToCreateInvoice.recurringIntervalId =
-                  (addInvoiceController.recurringInterval.indexOf(value) + 1);
-              logSuccess(addInvoiceController
-                  .dataToCreateInvoice.recurringIntervalId!);
+              if (addInvoiceController.dataToEditInvoice != null) {
+                addInvoiceController.dataToEditInvoice!.recurringIntervalId =
+                    (addInvoiceController.recurringInterval.indexOf(value) + 2);
+              } else {
+                addInvoiceController.dataToCreateInvoice.recurringIntervalId =
+                    (addInvoiceController.recurringInterval.indexOf(value) + 2);
+              }
             },
           ),
         ),
@@ -610,7 +628,13 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                             invoicesLangValue = value;
                           },
                         );
-                        addInvoiceController.dataToCreateInvoice.languageId = 1;
+                        if (addInvoiceController.dataToEditInvoice != null) {
+                          addInvoiceController.dataToEditInvoice!.languageId =
+                              1;
+                        } else {
+                          addInvoiceController.dataToCreateInvoice.languageId =
+                              1;
+                        }
                       }),
                 ),
                 greyText("english".tr, 16),
@@ -639,7 +663,13 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                             invoicesLangValue = value;
                           },
                         );
-                        addInvoiceController.dataToCreateInvoice.languageId = 2;
+                        if (addInvoiceController.dataToEditInvoice != null) {
+                          addInvoiceController.dataToEditInvoice!.languageId =
+                              2;
+                        } else {
+                          addInvoiceController.dataToCreateInvoice.languageId =
+                              2;
+                        }
                       }),
                 ),
                 greyText("arabic".tr, 16),
@@ -664,8 +694,11 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
             if (result != null) {
               File file = File(result.files.single.path);
               fileName = result.files.single.path.split("/").last;
-
-              addInvoiceController.dataToCreateInvoice.attachFile = file;
+              if (addInvoiceController.dataToEditInvoice != null) {
+                addInvoiceController.dataToEditInvoice!.attachFile = file;
+              } else {
+                addInvoiceController.dataToCreateInvoice.attachFile = file;
+              }
 
               setState(() {});
             } else {
@@ -930,12 +963,42 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                 ),
                 onTap: () async {
                   if (addInvoiceController.dataToEditInvoice != null) {
-                    logSuccess(
-                        addInvoiceController.dataToEditInvoice!.toJson());
-                    addInvoiceController.dataToEditInvoice = null;
-                    Get.back();
-//TODO:Stopped Here
+                    var expiryTime = expiryTimeController.text.split(" ")[0];
+                    if (expiryTime.length == 4) {
+                      expiryTime =
+                          "0" + expiryTimeController.text.split(" ")[0];
+                    }
+                    String expiryDate =
+                        "${expiryDateController.text} $expiryTime";
+                    addInvoiceController.dataToEditInvoice!.expiryDate =
+                        expiryDate;
 
+                    if (startDateController.text != "start_date".tr) {
+                      addInvoiceController.dataToEditInvoice!
+                          .recurringStartDate = startDateController.text;
+                    }
+                    if (endDateController.text != "end_date".tr) {
+                      addInvoiceController.dataToEditInvoice!.recurringEndDate =
+                          endDateController.text;
+                    }
+
+                    // logSuccess(
+                    //     addInvoiceController.dataToEditInvoice!.toJson());
+                    // addInvoiceController.dataToEditInvoice = null;
+                    // Get.back();
+                    bool b = await addInvoiceController.editInvoice();
+                    if (b) {
+                      await _invoicesController.getInvoices();
+                      MyDialogs.showSavedSuccessfullyDialoge(
+                        title: "Edited Successfully",
+                        btnTXT: "close",
+                        onTap: () async {
+                          Get.back();
+                          Get.back();
+                          Get.back();
+                        },
+                      );
+                    }
                   } else {
                     var expiryTime = expiryTimeController.text.split(" ")[0];
                     if (expiryTime.length == 4) {

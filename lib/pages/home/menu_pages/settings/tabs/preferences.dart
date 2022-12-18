@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
@@ -86,11 +87,13 @@ class _PreferencesTabState extends State<PreferencesTab> {
                             size: GFSize.SMALL,
                             value: 0,
                             groupValue: languageVal,
-                            onChanged: (value) => setState(() {
-                                  logSuccess("eng");
-                                  languageVal = value;
-                                  localsController.SetEnglishLocale();
-                                })),
+                            onChanged: (value) async {
+                              setState(() {
+                                languageVal = value;
+                              });
+                              await localsController.SetEnglishLocale();
+                              await Restart.restartApp();
+                            }),
                       ),
                       greyText("English", 16),
                     ],
@@ -114,11 +117,14 @@ class _PreferencesTabState extends State<PreferencesTab> {
                             inactiveBgColor: Color(0xffF8F8F8),
                             value: 1,
                             groupValue: languageVal,
-                            onChanged: (value) => setState(() {
-                                  logSuccess("ar");
-                                  languageVal = value;
-                                  localsController.SetArabicLocale();
-                                })),
+                            onChanged: (value) async {
+                              setState(() async {
+                                logSuccess("ar");
+                                languageVal = value;
+                              });
+                              await localsController.SetArabicLocale();
+                              await Restart.restartApp();
+                            }),
                       ),
                       greyText("العربية", 16),
                     ],

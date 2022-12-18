@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/models/invoice_types.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
@@ -49,6 +50,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
               itemBuilder: (context, index) => InvoiceWidget(
                 inv: invoiceController.invoicesToShow[index],
                 onTap: () {
+                  logSuccess(invoiceController.invoicesToShow[index]);
                   Get.to(
                     () => InvoiceDetailsPage(
                         invoiceModel: invoiceController.invoicesToShow[index]),

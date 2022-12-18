@@ -3,6 +3,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/payment_link_controller.dart';
 import 'package:safqa/controllers/zoom_drawer_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
@@ -35,6 +36,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
   ];
   final AddInvoiceController _addInvoiceController =
       Get.put(AddInvoiceController());
+  final PaymentLinkController _paymentLinkController = Get.find();
   InvoicesController invoiceController = Get.find();
 
   Widget getPage() {
@@ -115,7 +117,9 @@ class _InvoicesPageState extends State<InvoicesPage> {
                             if (selectedTab == 0) {
                               invoiceController.searchForInvoicesWithName(s!);
                             } else if (selectedTab == 1) {
-                            } else {}
+                            } else {
+                              _paymentLinkController.searchForPayLink(s!);
+                            }
                           },
                           hintText: "search".tr,
                           prefixIcon: Icon(
@@ -133,20 +137,37 @@ class _InvoicesPageState extends State<InvoicesPage> {
                                     transition: Transition.downToUp);
                               }
                             },
-                            child: GetBuilder<InvoicesController>(builder: (c) {
-                              return Badge(
-                                badgeColor: Color(0xff1BAFB2),
-                                showBadge: selectedTab == 0
-                                    ? c.invoiceFilter.filterActive
-                                    : false,
-                                position: BadgePosition.topEnd(top: 8, end: 8),
-                                child: Image(
-                                  image: AssetImage("assets/images/filter.png"),
-                                  width: 18,
-                                  height: 18,
-                                ),
-                              );
-                            }),
+                            child: selectedTab == 0
+                                ? GetBuilder<InvoicesController>(builder: (c) {
+                                    return Badge(
+                                      badgeColor: Color(0xff1BAFB2),
+                                      showBadge: c.invoiceFilter.filterActive,
+                                      position:
+                                          BadgePosition.topEnd(top: 8, end: 8),
+                                      child: Image(
+                                        image: AssetImage(
+                                            "assets/images/filter.png"),
+                                        width: 18,
+                                        height: 18,
+                                      ),
+                                    );
+                                  })
+                                : GetBuilder<PaymentLinkController>(
+                                    builder: (c) {
+                                    return Badge(
+                                      badgeColor: Color(0xff1BAFB2),
+                                      showBadge:
+                                          c.paymentLinkFilter.filterActive,
+                                      position:
+                                          BadgePosition.topEnd(top: 8, end: 8),
+                                      child: Image(
+                                        image: AssetImage(
+                                            "assets/images/filter.png"),
+                                        width: 18,
+                                        height: 18,
+                                      ),
+                                    );
+                                  }),
                           ),
                         ),
                         const SizedBox(height: 20),
