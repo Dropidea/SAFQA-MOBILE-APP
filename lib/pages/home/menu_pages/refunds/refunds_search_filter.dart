@@ -3,69 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:intl/intl.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/invoices/controller/invoices_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:sizer/sizer.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:textfield_datepicker/textfield_datepicker.dart';
 
-class InvoiceSearchFilterPage extends StatefulWidget {
-  const InvoiceSearchFilterPage({super.key});
+class RefundsSearchFilter extends StatefulWidget {
+  const RefundsSearchFilter({super.key});
 
   @override
-  State<InvoiceSearchFilterPage> createState() =>
-      _InvoiceSearchFilterPageState();
+  State<RefundsSearchFilter> createState() => RefundsSearchFilterState();
 }
 
-class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
-  int invoiceStatus = 0;
-  int invoiceValue = 0;
+class RefundsSearchFilterState extends State<RefundsSearchFilter> {
+  int refundStatus = 0;
+  int price = 0;
   int dateCreated = 0;
-  late SfRangeValues _values;
-  double sMin = 0;
-  double sMax = 100;
-  double sInterval = 20;
-  TextEditingController maxValueController = TextEditingController();
-  TextEditingController minValueController = TextEditingController();
-  TextEditingController valueController = TextEditingController();
+
   TextEditingController fixedDateController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
-  TextEditingController customerNameController = TextEditingController();
-  final InvoicesController _invoicesController = Get.find();
-
-  @override
-  void initState() {
-    if (_invoicesController.invoiceFilter.value == null) {
-      invoiceValue = 1;
-    } else {
-      invoiceValue = 0;
-    }
-    if (_invoicesController.invoiceFilter.date == null) {
-      dateCreated = 1;
-    } else {
-      dateCreated = 0;
-    }
-    logSuccess(_invoicesController.invoiceFilter.toJson());
-    customerNameController.text =
-        _invoicesController.invoiceFilter.customerName ?? "";
-    startDateController.text =
-        _invoicesController.invoiceFilter.startDate ?? "";
-    endDateController.text = _invoicesController.invoiceFilter.endDate ?? "";
-    fixedDateController.text = _invoicesController.invoiceFilter.date ?? "";
-    minValueController.text =
-        (_invoicesController.invoiceFilter.valueMin ?? "").toString();
-    maxValueController.text =
-        (_invoicesController.invoiceFilter.valueMax ?? "").toString();
-    valueController.text =
-        (_invoicesController.invoiceFilter.value ?? "").toString();
-
-    _values = SfRangeValues(_invoicesController.minInvoiceValue(),
-        _invoicesController.maxInvoiceValue());
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +37,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
       backgroundColor: Color(0xffFBFBFB),
       body: ExpandableNotifier(
         child: ListView(
+          primary: false,
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           children: [
             Row(
@@ -94,12 +52,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                     size: 25.0.sp,
                   ),
                 ),
-                ClearFilterBTN(
-                  onTap: () {
-                    _invoicesController.clearInvoiceFilter();
-                    Get.back();
-                  },
-                )
+                ClearFilterBTN(),
                 // Text(
                 //   "Clear",
                 //   style: TextStyle(
@@ -110,6 +63,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                 // )
               ],
             ),
+
             SizedBox(
               height: 20,
             ),
@@ -123,47 +77,29 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                   children: [
                     buildRadioButton(
                         0,
-                        "all".tr,
-                        invoiceStatus,
+                        "All",
+                        refundStatus,
                         (p0) => setState(
                               () {
-                                invoiceStatus = p0;
+                                refundStatus = p0;
                               },
                             )),
                     buildRadioButton(
                         1,
-                        "paid".tr,
-                        invoiceStatus,
+                        "debit".tr,
+                        refundStatus,
                         (p0) => setState(
                               () {
-                                invoiceStatus = p0;
+                                refundStatus = p0;
                               },
                             )),
                     buildRadioButton(
                         2,
-                        "unpaid".tr,
-                        invoiceStatus,
+                        "credit".tr,
+                        refundStatus,
                         (p0) => setState(
                               () {
-                                invoiceStatus = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        3,
-                        "pending".tr,
-                        invoiceStatus,
-                        (p0) => setState(
-                              () {
-                                invoiceStatus = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        4,
-                        "canceled".tr,
-                        invoiceStatus,
-                        (p0) => setState(
-                              () {
-                                invoiceStatus = p0;
+                                refundStatus = p0;
                               },
                             )),
                   ],
@@ -175,7 +111,8 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("invoice_status".tr, 15),
+                child: blackText("refund_status".tr, 15,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(
@@ -185,130 +122,33 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Column(
-                  children: [
-                    buildRadioButton(
-                        0,
-                        "fixed_val".tr,
-                        invoiceValue,
-                        (p0) => setState(
-                              () {
-                                maxValueController.text = "";
-                                minValueController.text = "";
-                                invoiceValue = p0;
-                              },
-                            )),
-                    buildRadioButton(
-                        1,
-                        "min/max".tr,
-                        invoiceValue,
-                        (p0) => setState(
-                              () {
-                                invoiceValue = p0;
-                                valueController.text = "";
-                              },
-                            )),
-                    SizedBox(height: 10),
-                    invoiceValue == 0
-                        ? buildInvoiceValueFixedTextfield(
-                            controller: valueController,
-                          )
-                        : Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      border: Border.all(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    width: 0.4 * w,
-                                    height: 50,
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      controller: minValueController,
-                                      onChanged: (value) {},
-                                      decoration: InputDecoration(
-                                        hintText: "min".tr,
-                                        fillColor: Colors.white,
-                                        filled: true,
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      border: Border.all(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    width: 0.4 * w,
-                                    height: 50,
-                                    child: TextFormField(
-                                      onChanged: (value) {},
-                                      keyboardType: TextInputType.number,
-                                      controller: maxValueController,
-                                      decoration: InputDecoration(
-                                        hintText: "max".tr,
-                                        fillColor: Colors.white,
-                                        filled: true,
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SfRangeSlider(
-                                // shouldAlwaysShowTooltip: true,
-
-                                min: _invoicesController.minInvoiceValue(),
-                                max: _invoicesController.maxInvoiceValue(),
-                                values: _values,
-                                interval:
-                                    _invoicesController.maxInvoiceValue() / 5,
-                                activeColor: Color(0xff1BAFB2),
-                                showTicks: true,
-                                showLabels: true,
-                                enableTooltip: true,
-                                minorTicksPerInterval: 1,
-                                stepSize: 1,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _values = value;
-                                    maxValueController.text =
-                                        value.end.round().toString();
-                                    minValueController.text = minValueController
-                                        .text = value.start.round().toString();
-                                  });
-                                },
-                              )
-                            ],
-                          )
-                  ],
-                ),
-              ),
+              expanded: buildCustomNameTextfield(),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("invoice_value".tr, 15),
+                child:
+                    blackText("refund_ref".tr, 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            ExpandablePanel(
+              controller: ExpandableController(initialExpanded: true),
+              collapsed: Container(),
+              theme: ExpandableThemeData(hasIcon: false),
+              expanded: buildCustomNameTextfield(),
+              header: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey, width: 0.5),
+                  ),
+                ),
+                child:
+                    blackText("invoice_id".tr, 15, fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(
@@ -328,9 +168,11 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                         dateCreated,
                         (p0) => setState(
                               () {
+                                FocusScope.of(context).unfocus();
+
+                                dateCreated = p0;
                                 startDateController.text = "";
                                 endDateController.text = "";
-                                dateCreated = p0;
                               },
                             )),
                     buildRadioButton(
@@ -339,8 +181,9 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                         dateCreated,
                         (p0) => setState(
                               () {
-                                fixedDateController.text = "";
+                                FocusScope.of(context).unfocus();
                                 dateCreated = p0;
+                                fixedDateController.text = "";
                               },
                             )),
                     SizedBox(height: 10),
@@ -349,7 +192,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                             width: w,
                             child: TextfieldDatePicker(
                               decoration: InputDecoration(
-                                hintText: 'yyyy-MM-dd',
+                                hintText: 'fixed_date'.tr,
                                 fillColor: Colors.white,
                                 filled: true,
                                 focusedBorder: OutlineInputBorder(
@@ -370,7 +213,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                               materialDatePickerFirstDate: DateTime(2000),
                               materialDatePickerLastDate: DateTime(2050),
                               materialDatePickerInitialDate: DateTime.now(),
-                              preferredDateFormat: DateFormat('yyyy-MM-dd'),
+                              preferredDateFormat: DateFormat('dd/MM/yyyy'),
                               cupertinoDatePickerMaximumDate: DateTime(2050),
                               cupertinoDatePickerMinimumDate: DateTime(2000),
                               cupertinoDatePickerBackgroundColor:
@@ -387,7 +230,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                                 width: 0.4 * w,
                                 child: TextfieldDatePicker(
                                   decoration: InputDecoration(
-                                    hintText: 'yyyy-MM-dd',
+                                    hintText: 'start_date'.tr,
                                     fillColor: Colors.white,
                                     filled: true,
                                     focusedBorder: OutlineInputBorder(
@@ -408,7 +251,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                                   materialDatePickerFirstDate: DateTime(2000),
                                   materialDatePickerLastDate: DateTime(2050),
                                   materialDatePickerInitialDate: DateTime.now(),
-                                  preferredDateFormat: DateFormat('yyyy-MM-dd'),
+                                  preferredDateFormat: DateFormat('dd/MM/yyyy'),
                                   cupertinoDatePickerMaximumDate:
                                       DateTime(2050),
                                   cupertinoDatePickerMinimumDate:
@@ -424,7 +267,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                                 width: 0.4 * w,
                                 child: TextfieldDatePicker(
                                   decoration: InputDecoration(
-                                    hintText: 'yyyy-MM-dd',
+                                    hintText: 'end_date'.tr,
                                     fillColor: Colors.white,
                                     filled: true,
                                     focusedBorder: OutlineInputBorder(
@@ -445,7 +288,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                                   materialDatePickerFirstDate: DateTime(2000),
                                   materialDatePickerLastDate: DateTime(2050),
                                   materialDatePickerInitialDate: DateTime.now(),
-                                  preferredDateFormat: DateFormat('yyyy-MM-dd'),
+                                  preferredDateFormat: DateFormat('dd/MM/yyyy'),
                                   cupertinoDatePickerMaximumDate:
                                       DateTime(2050),
                                   cupertinoDatePickerMinimumDate:
@@ -468,64 +311,14 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("date_created".tr, 15),
+                child: blackText("date_created".tr, 15,
+                    fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            ExpandablePanel(
-              controller: ExpandableController(initialExpanded: true),
-              collapsed: Container(),
-              theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomerNameTextfield(
-                  textEditingController: customerNameController),
-              header: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 0.5),
-                  ),
-                ),
-                child: blackText("cus_name".tr, 15),
-              ),
-            ),
+
             ApplyFilterBTN(
-              onTap: () {
-                _invoicesController.invoiceFilter.valueMin =
-                    minValueController.text != ""
-                        ? int.parse(minValueController.text)
-                        : null;
-                _invoicesController.invoiceFilter.valueMax =
-                    maxValueController.text != ""
-                        ? int.parse(maxValueController.text)
-                        : null;
-                _invoicesController.invoiceFilter.value =
-                    valueController.text != ""
-                        ? int.parse(valueController.text)
-                        : null;
-
-                _invoicesController.invoiceFilter.date =
-                    fixedDateController.text == ""
-                        ? null
-                        : fixedDateController.text;
-                _invoicesController.invoiceFilter.startDate =
-                    startDateController.text == ""
-                        ? null
-                        : startDateController.text;
-                _invoicesController.invoiceFilter.endDate =
-                    endDateController.text == ""
-                        ? null
-                        : endDateController.text;
-
-                _invoicesController.invoiceFilter.customerName =
-                    customerNameController.text == ""
-                        ? null
-                        : customerNameController.text;
-                _invoicesController.activeInvoiceFilter();
-
-                Get.back();
-              },
               width: 0.7 * w,
+              onTap: () {},
             ),
             // Align(
             //   child: Container(
@@ -544,8 +337,7 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
     );
   }
 
-  Container buildInvoiceValueFixedTextfield(
-      {String? initialValue, TextEditingController? controller}) {
+  Container buildpriceFixedTextfield() {
     return Container(
       height: 50,
       decoration: BoxDecoration(
@@ -555,38 +347,9 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
         ),
       ),
       child: TextFormField(
-        initialValue: initialValue,
-        keyboardType: TextInputType.number,
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: "invoice_value".tr,
-          fillColor: Colors.white,
-          filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container buildCustomerNameTextfield(
-      {TextEditingController? textEditingController}) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(
-          color: Colors.grey.shade300,
-        ),
-      ),
-      child: TextFormField(
-        controller: textEditingController,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          hintText: "cus_name".tr,
+          hintText: "Invoice value ...",
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
@@ -631,4 +394,29 @@ class _InvoiceSearchFilterPageState extends State<InvoiceSearchFilterPage> {
       ),
     );
   }
+}
+
+Widget buildCustomNameTextfield({String? hint}) {
+  return Container(
+    margin: EdgeInsets.only(top: 20),
+    height: 50,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10.0),
+      border: Border.all(
+        color: Colors.grey.shade300,
+      ),
+    ),
+    child: TextFormField(
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        hintText: hint,
+        fillColor: Colors.white,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    ),
+  );
 }

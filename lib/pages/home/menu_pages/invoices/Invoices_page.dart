@@ -219,7 +219,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                                     color: Color(0xff2F6782),
                                   ),
                                   Text(
-                                    "Create a new one",
+                                    "create_new".tr,
                                     style: TextStyle(
                                       color: Color(0xff2F6782),
                                       fontSize: 13.0.sp,

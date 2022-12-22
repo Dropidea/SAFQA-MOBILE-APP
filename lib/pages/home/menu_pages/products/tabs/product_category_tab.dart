@@ -1,9 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/category_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/category_search_filter.dart';
@@ -11,7 +11,6 @@ import 'package:safqa/pages/home/menu_pages/products/controller/products_control
 import 'package:safqa/pages/home/menu_pages/products/create_category.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
-import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
@@ -79,53 +78,17 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
               const SizedBox(height: 20),
               SizedBox(
                 height: 40,
-                child: Row(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
                   // scrollDirection: Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                   children: [
-                    listBTN(text: "Copy", onTap: () {}, width: w / 4.5),
-                    MyPopUpMenu(
-                      menuList: [
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              Icon(
-                                EvaIcons.file,
-                                color: Colors.grey.shade500,
-                              ),
-                              SizedBox(width: 10),
-                              Text("PDF"),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.print,
-                                color: Colors.grey.shade500,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("Printer"),
-                            ],
-                          ),
-                        ),
-                      ],
-                      widget: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: const Color(0xffF9F9F9),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Center(
-                          child: blueText("print", 12),
-                        ),
-                      ),
-                    ),
+                    listBTN(text: "copy".tr, onTap: () {}, width: w / 4.5),
+                    const SizedBox(width: 5),
+                    listBTN(text: "print/pdf".tr, onTap: () {}),
+                    const SizedBox(width: 5),
                     listBTN(text: "Excel", onTap: () {}, width: w / 4.5),
+                    const SizedBox(width: 5),
                     listBTN(text: "CSV", onTap: () {}, width: w / 4.5),
                   ],
                 ),
@@ -175,7 +138,7 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          "Create a new one",
+                          "create_new".tr,
                           style: TextStyle(
                             color: Color(0xff2F6782),
                             fontSize: 13.0.sp,
@@ -191,7 +154,7 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                 return Expanded(
                     child: _productController.productCategoriesToShow.isEmpty
                         ? Center(
-                            child: greyText("nothing to show !!", 20),
+                            child: greyText("nothing_to_show".tr, 20),
                           )
                         : ListView.separated(
                             primary: false,
@@ -298,6 +261,7 @@ class CategoryCard extends StatefulWidget {
 }
 
 class _CategoryCardState extends State<CategoryCard> {
+  LocalsController localsController = Get.find();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -323,7 +287,7 @@ class _CategoryCardState extends State<CategoryCard> {
                 Row(
                   children: [
                     Text(
-                      widget.isToggled ? "Active" : "Inactive",
+                      widget.isToggled ? "active".tr : "inactive".tr,
                       style: TextStyle(
                         color:
                             widget.isToggled ? Color(0xff1BAFB2) : Colors.grey,

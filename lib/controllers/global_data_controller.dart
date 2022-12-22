@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/bank_model.dart';
+import 'package:safqa/models/contacts.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/address_type.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/city.dart';
@@ -36,6 +37,7 @@ class GlobalDataController extends GetxController {
   List<Area> areas = [];
   List<Area> areastoshow = [];
   List<AddressType> addressTypes = [];
+  ContactUsInfo contactUsInfo = ContactUsInfo();
   ManageUser me = ManageUser();
 
   Future getMe() async {
@@ -53,6 +55,25 @@ class GlobalDataController extends GetxController {
       } else {
         logError("me failed");
       }
+    }
+  }
+
+  Future getContactUsInfo() async {
+    try {
+      await sslProblem();
+      var res1 = await dio.get(EndPoints.getContactUsPhones);
+      var res2 = await dio.get(EndPoints.getContactUsMessage);
+      List<ContactPhones> tmp = [];
+      for (var i in res1.data['data']) {
+        ContactPhones t = ContactPhones.fromJson(i);
+        tmp.add(t);
+      }
+      ContactUsInfo tmp2 = ContactUsInfo.fromJson(res2.data["message"]);
+      tmp2.contactPhones = tmp;
+      contactUsInfo = tmp2;
+      logSuccess("Contact Us info done");
+    } on DioError catch (e) {
+      logError("Contact Us info failed");
     }
   }
 

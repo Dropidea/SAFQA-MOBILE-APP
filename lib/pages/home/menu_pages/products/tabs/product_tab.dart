@@ -1,17 +1,11 @@
-import 'dart:io';
-
 import 'package:badges/badges.dart';
-import 'package:dio/adapter.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/products_create_page.dart';
-import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/product.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -110,7 +104,7 @@ class _ProductsTabState extends State<ProductsTab> {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "Create Product",
+                            "create_product".tr,
                             style: TextStyle(
                               color: Color(0xff428994),
                               fontSize: 13.0.sp,
@@ -123,65 +117,7 @@ class _ProductsTabState extends State<ProductsTab> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () async {
-                    try {
-                      // final body = d.FormData();
-                      Dio dio = Dio();
-                      String token = await AuthService().loadToken();
-                      dio.options.headers["authorization"] = "bearer  $token";
-
-                      // body.fields.add(MapEntry("token", token));
-
-                      dio.options.headers['content-Type'] =
-                          'multipart/form-data';
-                      (dio.httpClientAdapter as DefaultHttpClientAdapter)
-                          .onHttpClientCreate = (HttpClient client) {
-                        client.badCertificateCallback =
-                            (X509Certificate cert, String host, int port) =>
-                                true;
-                        return client;
-                      };
-                      var res = await dio
-                          .get("https://api.safqapay.com/admin/social_media");
-
-                      logSuccess(res.data);
-                    } on DioError catch (e) {
-                      logError(e.response!);
-                      // logError(e.response!.data);
-                      // Map<String, dynamic> m = e.response!.data;
-                      // String errors = "";
-                      // int c = 0;
-                      // for (var i in m.values) {
-                      //   for (var j = 0; j < i.length; j++) {
-                      //     if (j == i.length - 1) {
-                      //       errors = errors + i[j];
-                      //     } else {
-                      //       errors = "${errors + i[j]}\n";
-                      //     }
-                      //   }
-
-                      //   c++;
-                      //   if (c != m.values.length) {
-                      //     errors += "\n";
-                      //   }
-                      // }
-
-                      // Get.showSnackbar(
-                      //   GetSnackBar(
-                      //     duration: Duration(milliseconds: 2000),
-                      //     backgroundColor: Colors.red,
-                      //     // message: errors,
-                      //     messageText: Text(
-                      //       errors,
-                      //       style: TextStyle(
-                      //         color: Colors.white,
-                      //         fontSize: 17,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // );
-                    }
-                  },
+                  onTap: () {},
                   child: Container(
                     width: 0.44 * w,
                     height: 60,
@@ -202,7 +138,7 @@ class _ProductsTabState extends State<ProductsTab> {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          "Import Product",
+                          "import_product".tr,
                           style: TextStyle(
                             color: Color(0xff8B8B8B),
                             fontSize: 13.0.sp,
@@ -221,8 +157,10 @@ class _ProductsTabState extends State<ProductsTab> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
+                  listBTN(text: "select_all".tr, onTap: () {}),
+                  SizedBox(width: 5),
                   listBTN(
-                      text: "Select All",
+                      text: "copy".tr,
                       onTap: () {
                         Get.dialog(
                           AlertDialog(
@@ -275,9 +213,7 @@ class _ProductsTabState extends State<ProductsTab> {
                         );
                       }),
                   SizedBox(width: 5),
-                  listBTN(text: "Copy", onTap: () {}),
-                  SizedBox(width: 5),
-                  listBTN(text: "Print / pdf", onTap: () {}),
+                  listBTN(text: "print/pdf".tr, onTap: () {}),
                   // MyPopUpMenu(
                   //   menuList: [
                   //     PopupMenuItem(

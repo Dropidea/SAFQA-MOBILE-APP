@@ -43,26 +43,28 @@ class _InvoiceTabState extends State<InvoiceTab> {
             //     greyText("09 October 2022", 14)
             //   ],
             // ),
-            ListView.separated(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) => InvoiceWidget(
-                inv: invoiceController.invoicesToShow[index],
-                onTap: () {
-                  logSuccess(invoiceController.invoicesToShow[index]);
-                  Get.to(
-                    () => InvoiceDetailsPage(
-                        invoiceModel: invoiceController.invoicesToShow[index]),
-                    transition: Transition.downToUp,
-                  );
-                },
-                type: InvoiceTypes.paid,
-              ),
-              itemCount: invoiceController.invoicesToShow.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  SizedBox(height: 20),
-            ),
+            GetBuilder<InvoicesController>(builder: (c) {
+              return ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) => InvoiceWidget(
+                  inv: c.invoicesToShow[index],
+                  onTap: () {
+                    logSuccess(c.invoicesToShow[index]);
+                    Get.to(
+                      () => InvoiceDetailsPage(
+                          invoiceModel: c.invoicesToShow[index]),
+                      transition: Transition.downToUp,
+                    );
+                  },
+                  type: InvoiceTypes.paid,
+                ),
+                itemCount: c.invoicesToShow.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    SizedBox(height: 20),
+              );
+            }),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
             //   children: [

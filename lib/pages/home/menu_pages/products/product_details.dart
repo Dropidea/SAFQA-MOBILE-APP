@@ -20,7 +20,7 @@ class ProductDetailsPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Product Details", 17),
+        title: blackText("product_details".tr, 17),
       ),
       body: Column(
         children: [
@@ -54,7 +54,7 @@ class ProductDetailsPage extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        "Edit",
+                        "edit".tr,
                         style: TextStyle(
                           fontSize: 14.0.sp,
                           color: Color(0xff58D241),
@@ -86,7 +86,7 @@ class ProductDetailsPage extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      "Remove",
+                      "remove".tr,
                       style: TextStyle(
                         fontSize: 14.0.sp,
                         color: Color(0xffE47E7B),
@@ -114,7 +114,7 @@ class ProductDetailsPage extends StatelessWidget {
                           bottom: BorderSide(color: Colors.grey, width: 0.5),
                         ),
                       ),
-                      child: blackText("Product Info", 15),
+                      child: blackText("product_info".tr, 15),
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),
@@ -126,14 +126,14 @@ class ProductDetailsPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           invoiceInfoMethod(
-                              title1: "Product Name (En)",
+                              title1: "product_name_en".tr,
                               content1: product.nameEn,
-                              title2: "Product Name (Ar)",
+                              title2: "product_name_ar".tr,
                               content2: product.nameAr),
                           invoiceInfoMethod(
-                              title1: "Category",
+                              title1: "category".tr,
                               content1: product.category!.nameEn,
-                              title2: "Remaining Quantity",
+                              title2: "remaining_quantity".tr,
                               content2: product.quantity.toString()),
                           // invoiceInfoMethod(
                           //     title1: "Product Picture",
@@ -141,34 +141,37 @@ class ProductDetailsPage extends StatelessWidget {
                           //     title2: "",
                           //     content2: ""),
                           invoiceInfoMethod(
-                              title1: "Unit Price",
+                              title1: "unit_price".tr,
                               content1: "\$ ${product.price}",
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
-                              title1: "Is Active?",
-                              content1: product.isActive == 1 ? "Yes" : "No",
-                              title2: "Is Stockable?",
-                              content2:
-                                  product.isStockable == 1 ? "Yes" : "No"),
+                              title1: "is_active".tr,
+                              content1:
+                                  product.isActive == 1 ? "yes".tr : "no".tr,
+                              title2: "is_stockable",
+                              content2: product.isStockable == 1
+                                  ? "yes".tr
+                                  : "no".tr),
                           SizedBox(height: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              blackText("Add this product in the store?", 13),
+                              blackText("add_to_store".tr, 13),
                               SizedBox(height: 5),
-                              greyText("Yes", 13),
+                              greyText("yes".tr, 13),
                             ],
                           ),
                           SizedBox(height: 10),
                           invoiceInfoMethod(
-                              title1: "Is it shippable??",
-                              content1:
-                                  product.isShippingProduct == 1 ? "Yes" : "No",
+                              title1: "is_shippable".tr,
+                              content1: product.isShippingProduct == 1
+                                  ? "yes".tr
+                                  : "no".tr,
                               title2: "",
                               content2: ""),
                           SizedBox(height: 10),
-                          blackText("Product link", 14),
+                          blackText("product_link".tr, 14),
                           Text(
                             "Laborum aliquip ullamco aute nisi Lorem non do sunt et aute non minim.",
                             style: TextStyle(
@@ -183,7 +186,7 @@ class ProductDetailsPage extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                blackText("Discription (EN)", 13),
+                                blackText("description_en".tr, 13),
                                 SizedBox(height: 5),
                                 greyText(product.descriptionEn!, 13),
                               ],
@@ -195,7 +198,7 @@ class ProductDetailsPage extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                blackText("Discription (AR)", 13),
+                                blackText("description_en".tr, 13),
                                 SizedBox(height: 5),
                                 Align(
                                   alignment: Alignment.centerRight,

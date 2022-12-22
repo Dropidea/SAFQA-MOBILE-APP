@@ -97,9 +97,9 @@ class MyMenuItems {
   static const products = mi.MenuItem(
       titleEn: "Products", icon: EvaIcons.shoppingBag, titleAr: "المنتجات");
   static const customers = mi.MenuItem(
-      titleEn: "Customers", icon: EvaIcons.people, titleAr: "الزبائن");
+      titleEn: "Customers", icon: EvaIcons.people, titleAr: "العملاء");
   static const commissions = mi.MenuItem(
-      titleEn: "Commisions", icon: EvaIcons.creditCard, titleAr: "المدفوعات");
+      titleEn: "Commisions", icon: EvaIcons.creditCard, titleAr: "العمولات");
   static const accountStatement = mi.MenuItem(
       titleEn: "Account statement",
       icon: EvaIcons.activity,

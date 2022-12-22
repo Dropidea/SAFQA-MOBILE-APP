@@ -59,6 +59,7 @@ class _MainPageState extends State<MainPage> {
     _globlDataController.getAdressTypes();
     _globlDataController.getRoles();
     _globlDataController.getSendOptions();
+    _globlDataController.getContactUsInfo();
 
     super.initState();
   }
@@ -114,7 +115,9 @@ class _MainPageState extends State<MainPage> {
                                           : "يجب توثيق الهوية أولاً حتى تتمكن من إجراء أي عملية على النظام.",
                                       13),
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
+                                      // await _globlDataController
+                                      //     .getContactUsInfo();
                                       Get.to(() => IdentityConfirmDocsPage(),
                                           transition: Transition.downToUp);
                                     },

@@ -292,7 +292,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                             ),
                                             child: Center(
                                               child: Text(
-                                                "Next",
+                                                "next".tr,
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18.0.sp,

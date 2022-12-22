@@ -281,7 +281,8 @@ class ProductsController extends GetxController {
       return true;
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await createProduct(product);
@@ -491,6 +492,7 @@ class ProductsController extends GetxController {
           EndPoints.baseURL + EndPoints.createProductCategory,
           data: body);
       Get.back();
+      await getProductCategories();
       MyDialogs.showSavedSuccessfullyDialoge(
         title: "Created Successfully",
         btnTXT: "Close",
@@ -687,7 +689,8 @@ class ProductsController extends GetxController {
       getProductsCategoryFlag.value = false;
     } on DioError catch (e) {
       getProductsCategoryFlag.value = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getProductCategories();
@@ -729,6 +732,7 @@ class ProductsController extends GetxController {
       //   ),
       // );
     }
+    update();
   }
 
   Future getProducts() async {

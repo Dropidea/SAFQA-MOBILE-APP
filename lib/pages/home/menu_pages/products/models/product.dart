@@ -6,6 +6,7 @@ class Product {
   String? height;
   String? width;
   String? length;
+  String? currencyId;
   var productImage;
   String? descriptionEn;
   String? descriptionAr;
@@ -20,27 +21,29 @@ class Product {
   int? categoryId;
   ProductCategory? category;
 
-  Product(
-      {this.id,
-      this.nameEn,
-      this.nameAr,
-      this.weight,
-      this.height,
-      this.width,
-      this.length,
-      this.productImage,
-      this.descriptionEn,
-      this.descriptionAr,
-      this.quantity,
-      this.price,
-      this.isStockable,
-      this.disableProductOnSold,
-      this.isActive,
-      this.isShippingProduct,
-      this.managerUserId,
-      this.profileBusinessId,
-      this.categoryId,
-      this.category});
+  Product({
+    this.id,
+    this.nameEn,
+    this.nameAr,
+    this.weight,
+    this.height,
+    this.width,
+    this.length,
+    this.productImage,
+    this.descriptionEn,
+    this.descriptionAr,
+    this.quantity,
+    this.price,
+    this.isStockable,
+    this.disableProductOnSold,
+    this.isActive,
+    this.isShippingProduct,
+    this.managerUserId,
+    this.profileBusinessId,
+    this.categoryId,
+    this.category,
+    this.currencyId,
+  });
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -62,6 +65,7 @@ class Product {
     managerUserId = json['manager_user_id'];
     profileBusinessId = json['profile_business_id'];
     categoryId = json['category_id'];
+    currencyId = json['currency_id'].toString();
     category = json['category'] != null
         ? new ProductCategory.fromJson(json['category'])
         : null;
@@ -88,6 +92,7 @@ class Product {
     data['manager_user_id'] = this.managerUserId;
     data['profile_business_id'] = this.profileBusinessId;
     data['category_id'] = this.categoryId;
+    data['currency_id'] = this.currencyId;
     if (this.category != null) {
       data['category'] = this.category!.toJson();
     }

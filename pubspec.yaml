@@ -43,13 +43,15 @@ dependencies:
   email_validator: ^2.1.17
   intl_phone_field: ^3.1.0
   pin_code_fields: ^7.4.0
-  shared_preferences: ^0.5.12
+  # shared_preferences: ^0.5.12
+  shared_preferences: ^2.0.15
   flutter_zoom_drawer: ^3.0.3
   fl_chart: ^0.55.2
   textfield_datepicker: ^0.1.0
   intl: ^0.17.0
+  path_provider: ^2.0.11
   dotted_border: ^2.0.0+2
-  file_picker: ^2.1.7
+  file_picker: ^5.2.4
   badges: ^2.0.3
   http_parser: ^4.0.2
   syncfusion_flutter_sliders: ^20.3.50
@@ -64,10 +66,13 @@ dependencies:
   flutter_svg: ^1.1.6
   shimmer: ^2.0.0
   searchfield: ^0.7.2
-  path_provider: ^1.6.28
+  # path_provider: ^1.6.28
   flutter_form_builder: ^7.7.0
   flutter_secure_storage: ^4.2.1
   restart_app: ^1.1.0
+  printing: ^5.9.3
+  csv: ^5.0.1
+  excel: ^2.0.1
 
 dev_dependencies:
   flutter_test:

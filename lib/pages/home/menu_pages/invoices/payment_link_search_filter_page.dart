@@ -121,7 +121,7 @@ class _PaymentLinkSearchFilterPageState
                   children: [
                     buildRadioButton(
                         0,
-                        "Fixed Value",
+                        "fixed_val".tr,
                         paymentAmount,
                         (p0) => setState(
                               () {
@@ -138,7 +138,7 @@ class _PaymentLinkSearchFilterPageState
                             )),
                     buildRadioButton(
                         1,
-                        "Min/Max",
+                        "min/max".tr,
                         paymentAmount,
                         (p0) => setState(
                               () {
@@ -182,7 +182,7 @@ class _PaymentLinkSearchFilterPageState
                                             .payAmountMin = value;
                                       },
                                       decoration: InputDecoration(
-                                        hintText: "Min",
+                                        hintText: "min".tr,
                                         fillColor: Colors.white,
                                         filled: true,
                                         border: OutlineInputBorder(
@@ -210,7 +210,7 @@ class _PaymentLinkSearchFilterPageState
                                       keyboardType: TextInputType.number,
                                       controller: maxController,
                                       decoration: InputDecoration(
-                                        hintText: "Max",
+                                        hintText: "max".tr,
                                         fillColor: Colors.white,
                                         filled: true,
                                         border: OutlineInputBorder(
@@ -261,7 +261,7 @@ class _PaymentLinkSearchFilterPageState
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Payment Amount", 15),
+                child: blackText("pl_amount".tr, 15),
               ),
             ),
             SizedBox(
@@ -277,7 +277,7 @@ class _PaymentLinkSearchFilterPageState
                   children: [
                     buildRadioButton(
                         0,
-                        "Fixed Date",
+                        "fixed_date".tr,
                         dateCreated,
                         (p0) => setState(
                               () {
@@ -294,7 +294,7 @@ class _PaymentLinkSearchFilterPageState
                             )),
                     buildRadioButton(
                         1,
-                        "From/To",
+                        "from/to".tr,
                         dateCreated,
                         (p0) => setState(
                               () {
@@ -311,7 +311,7 @@ class _PaymentLinkSearchFilterPageState
                             width: w,
                             child: TextfieldDatePicker(
                               decoration: InputDecoration(
-                                hintText: 'fixed date',
+                                hintText: 'fixed_date'.tr,
                                 fillColor: Colors.white,
                                 filled: true,
                                 focusedBorder: OutlineInputBorder(
@@ -349,7 +349,7 @@ class _PaymentLinkSearchFilterPageState
                                 width: 0.4 * w,
                                 child: TextfieldDatePicker(
                                   decoration: InputDecoration(
-                                    hintText: 'start date',
+                                    hintText: 'start_date'.tr,
                                     fillColor: Colors.white,
                                     filled: true,
                                     focusedBorder: OutlineInputBorder(
@@ -386,7 +386,7 @@ class _PaymentLinkSearchFilterPageState
                                 width: 0.4 * w,
                                 child: TextfieldDatePicker(
                                   decoration: InputDecoration(
-                                    hintText: 'end date',
+                                    hintText: 'end_date'.tr,
                                     fillColor: Colors.white,
                                     filled: true,
                                     focusedBorder: OutlineInputBorder(
@@ -430,7 +430,7 @@ class _PaymentLinkSearchFilterPageState
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Date Created", 15),
+                child: blackText("date_created".tr, 15),
               ),
             ),
             SizedBox(
@@ -453,7 +453,7 @@ class _PaymentLinkSearchFilterPageState
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Payment Link Reference", 15),
+                child: blackText("pl_ref".tr, 15),
               ),
             ),
             ApplyFilterBTN(
@@ -514,7 +514,7 @@ class _PaymentLinkSearchFilterPageState
         initialValue: initialValue,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          hintText: "Payment Link value ...",
+          // hintText: "Payment Link value ...",
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
@@ -545,7 +545,7 @@ class _PaymentLinkSearchFilterPageState
         onChanged: onChanged,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          hintText: "Payment Link Reference ...",
+          hintText: "pl_ref".tr,
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(

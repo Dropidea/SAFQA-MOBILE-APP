@@ -5,7 +5,11 @@ import 'package:expandable/expandable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/models/contacts.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/contact/controller/contact_controller.dart';
+import 'package:safqa/pages/home/menu_pages/contact/model/contact_us_model.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -18,7 +22,21 @@ class ContactPage extends StatefulWidget {
 }
 
 class ContactPageState extends State<ContactPage> {
+  ContactUsMessage _contactUsMessage = ContactUsMessage();
+  final GlobalDataController _globalDataController = Get.find();
+  final ContactUsController _contactUsController =
+      Get.put(ContactUsController());
+  late final ContactUsInfo _contactUsInfo;
   String fileName = "";
+  @override
+  void initState() {
+    _contactUsInfo = _globalDataController.contactUsInfo;
+    _contactUsMessage.email = _globalDataController.me.email;
+    _contactUsMessage.fullName = _globalDataController.me.fullName;
+    _contactUsMessage.mobile = _globalDataController.me.phoneNumberManager;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -56,7 +74,7 @@ class ContactPageState extends State<ContactPage> {
                         Get.back();
                       },
                     ),
-                    whiteText("Contact", 15, fontWeight: FontWeight.w600),
+                    whiteText("contact_us".tr, 15, fontWeight: FontWeight.w600),
                     Opacity(
                       opacity: 0,
                       child: whiteText("text", 16),
@@ -100,24 +118,32 @@ class ContactPageState extends State<ContactPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 20),
-                                blackText("Address:", 15,
+                                blackText("address".tr, 15,
                                     fontWeight: FontWeight.normal),
                                 const SizedBox(height: 5),
                                 greyText(
-                                    "The One Tower, Dubai Internet City Metro,\nSheikh Zayed Road,\nDubai, U.A.E.",
+                                    "${_contactUsInfo.country}, ${_contactUsInfo.city}, ${_contactUsInfo.area}, ${_contactUsInfo.block}, ${_contactUsInfo.avenue}, ${_contactUsInfo.street}",
                                     13),
                                 const SizedBox(height: 20),
-                                blackText("Email:", 15,
+                                blackText("email".tr, 15,
                                     fontWeight: FontWeight.normal),
                                 const SizedBox(height: 5),
-                                greyText("supportuae@safqa.com", 13),
+                                greyText(_contactUsInfo.supportEmail!, 13),
                                 const SizedBox(height: 20),
-                                blackText("Sales Contact Details:", 15,
+                                blackText("sales_contact_details".tr, 15,
                                     fontWeight: FontWeight.normal),
                                 const SizedBox(height: 5),
-                                greyText("+971 54 586 0633 (Support)", 13),
-                                const SizedBox(height: 5),
-                                greyText("+971 54 586 0633 (Support)", 13),
+                                ListView.separated(
+                                  itemCount:
+                                      _contactUsInfo.contactPhones!.length,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) => greyText(
+                                      "${_contactUsInfo.contactPhones![index].number} (${_contactUsInfo.contactPhones![index].type})",
+                                      13),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(height: 5),
+                                ),
                                 const SizedBox(height: 20),
                               ],
                             ),
@@ -131,7 +157,7 @@ class ContactPageState extends State<ContactPage> {
                                       color: Colors.grey, width: 0.5),
                                 ),
                               ),
-                              child: blackText("Leave A Message", 16,
+                              child: blackText("leave_message".tr, 16,
                                   fontWeight: FontWeight.bold),
                             ),
                             controller:
@@ -142,16 +168,18 @@ class ContactPageState extends State<ContactPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 20),
-                                blackText("Support Type", 15,
+                                blackText("support_type".tr, 15,
                                     fontWeight: FontWeight.normal),
                                 CustomDropdown(
                                   width: w,
                                   items: ["item1", "item2"],
-                                  onchanged: (s) {},
-                                  hint: "Choose",
+                                  onchanged: (s) {
+                                    _contactUsMessage.supportTypeId = 1;
+                                  },
+                                  hint: "choose".tr,
                                 ),
                                 const SizedBox(height: 20),
-                                blackText("Attach File", 16),
+                                blackText("attach_file".tr, 16),
                                 GestureDetector(
                                   onTap: () async {
                                     FilePickerResult? result =
@@ -161,11 +189,11 @@ class ContactPageState extends State<ContactPage> {
                                     );
                                     if (result != null) {
                                       File file =
-                                          File(result.files.single.path);
-                                      fileName = result.files.single.path
+                                          File(result.files.single.path!);
+                                      fileName = result.files.single.path!
                                           .split("/")
                                           .last;
-
+                                      _contactUsMessage.imagesFiles = file;
                                       setState(() {});
                                     } else {
                                       // User canceled the picker
@@ -221,7 +249,7 @@ class ContactPageState extends State<ContactPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 20),
-                                blackText("Message", 16),
+                                blackText("message".tr, 16),
                                 Container(
                                   width: w,
                                   margin:
@@ -233,7 +261,9 @@ class ContactPageState extends State<ContactPage> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: TextField(
-                                    onChanged: (value) {},
+                                    onChanged: (value) {
+                                      _contactUsMessage.message = value;
+                                    },
                                     maxLines: 4,
                                     decoration: const InputDecoration(
                                         border: InputBorder.none),
@@ -245,7 +275,10 @@ class ContactPageState extends State<ContactPage> {
                           SizedBox(height: 20),
                           Center(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                _contactUsController
+                                    .storeMessage(_contactUsMessage);
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
@@ -260,7 +293,7 @@ class ContactPageState extends State<ContactPage> {
                                 padding: EdgeInsets.all(15),
                                 child: Center(
                                   child: Text(
-                                    "Submit",
+                                    "submit".tr,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 17.0.sp,

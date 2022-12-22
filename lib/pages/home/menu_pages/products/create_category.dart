@@ -43,8 +43,8 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
           backgroundColor: Colors.white,
           title: blackText(
               widget.productCategory != null
-                  ? "Edit Category"
-                  : "Create Category",
+                  ? "edit_category".tr
+                  : "create_category".tr,
               16),
 
           centerTitle: true,
@@ -56,7 +56,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
             child: ListView(
               primary: false,
               children: [
-                blackText("Category Name (En) ", 16),
+                blackText("category_name_en".tr, 16),
                 SignUpTextField(
                   padding: EdgeInsets.all(0),
                   controller: catNameENController,
@@ -65,7 +65,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                   },
                 ),
                 SizedBox(height: 20),
-                blackText("Category Name (Ar) ", 16),
+                blackText("category_name_ar".tr, 16),
                 SignUpTextField(
                   padding: EdgeInsets.all(0),
                   controller: catNameARController,
@@ -74,7 +74,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                   },
                 ),
                 SizedBox(height: 20),
-                blackText("Is Active?", 16),
+                blackText("is_active".tr, 16),
                 const SizedBox(height: 10),
                 Row(
                   children: [
@@ -98,7 +98,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                                     isActive = value;
                                   })),
                         ),
-                        greyText("Yes", 16),
+                        greyText("yes".tr, 16),
                       ],
                     ),
                     SizedBox(width: 30),
@@ -122,7 +122,7 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                                     isActive = value;
                                   })),
                         ),
-                        greyText("No", 16),
+                        greyText("no".tr, 16),
                       ],
                     ),
                   ],
@@ -135,8 +135,8 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                     children: [
                       blackText(
                           widget.productCategory != null
-                              ? "Edit Category"
-                              : "Create Category",
+                              ? "edit_category".tr
+                              : "create_category".tr,
                           16),
                       SizedBox(width: 10),
                       GestureDetector(

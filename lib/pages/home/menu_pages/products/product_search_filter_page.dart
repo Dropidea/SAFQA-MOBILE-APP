@@ -88,7 +88,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                     children: [
                       buildRadioButton(
                           0,
-                          "All",
+                          "all".tr,
                           productController.productFilter.isActive!,
                           (p0) => setState(
                                 () {
@@ -97,7 +97,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                               )),
                       buildRadioButton(
                           1,
-                          "Active",
+                          "active".tr,
                           productController.productFilter.isActive!,
                           (p0) => setState(
                                 () {
@@ -106,7 +106,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                               )),
                       buildRadioButton(
                           2,
-                          "Inactive",
+                          "inactive".tr,
                           productController.productFilter.isActive!,
                           (p0) => setState(
                                 () {
@@ -122,7 +122,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                       bottom: BorderSide(color: Colors.grey, width: 0.5),
                     ),
                   ),
-                  child: blackText("Is Active", 15),
+                  child: blackText("is_active".tr, 15),
                 ),
               ),
               SizedBox(
@@ -138,7 +138,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                     children: [
                       buildRadioButton(
                           0,
-                          "Fixed Value",
+                          "fixed_val".tr,
                           productController.productFilter.priceType,
                           (p0) => setState(
                                 () {
@@ -148,7 +148,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                               )),
                       buildRadioButton(
                           1,
-                          "Min/Max",
+                          "min/max".tr,
                           productController.productFilter.priceType,
                           (p0) => setState(
                                 () {
@@ -187,7 +187,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                                           }
                                         },
                                         decoration: InputDecoration(
-                                          hintText: "Min",
+                                          hintText: "min".tr,
                                           fillColor: Colors.white,
                                           filled: true,
                                           border: OutlineInputBorder(
@@ -220,7 +220,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                                         keyboardType: TextInputType.number,
                                         controller: maxController,
                                         decoration: InputDecoration(
-                                          hintText: "Max",
+                                          hintText: "max".tr,
                                           fillColor: Colors.white,
                                           filled: true,
                                           border: OutlineInputBorder(
@@ -236,14 +236,16 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                                 SfRangeSlider(
                                   // shouldAlwaysShowTooltip: true,
 
-                                  min: productController.minPriceProduct(),
+                                  min: productController.products.length == 1
+                                      ? 0
+                                      : productController.minPriceProduct(),
                                   max: productController.maxPriceProduct(),
                                   values: _values,
                                   interval:
                                       productController.maxPriceProduct() / 6,
                                   activeColor: Color(0xff1BAFB2),
                                   showTicks: true,
-                                  // showLabels: true,
+                                  showLabels: true,
                                   enableTooltip: true,
                                   // showDividers: true,
                                   // shouldAlwaysShowTooltip: true,
@@ -275,7 +277,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                       bottom: BorderSide(color: Colors.grey, width: 0.5),
                     ),
                   ),
-                  child: blackText("Price", 15),
+                  child: blackText("price".tr, 15),
                 ),
               ),
               SizedBox(
@@ -310,7 +312,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                     value: productController.productFilter.category == null
                         ? null
                         : productController.productFilter.category!.nameEn,
-                    hint: Text("Categories"),
+                    hint: Text("categories".tr),
                     onChanged: (value) {
                       int ind = productController.productCategories
                           .indexWhere((element) => element.nameEn == value);
@@ -326,7 +328,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                       bottom: BorderSide(color: Colors.grey, width: 0.5),
                     ),
                   ),
-                  child: blackText("Product Category", 15),
+                  child: blackText("product_category".tr, 15),
                 ),
               ),
               SizedBox(
@@ -347,7 +349,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
                       bottom: BorderSide(color: Colors.grey, width: 0.5),
                     ),
                   ),
-                  child: blackText("Product Name", 15),
+                  child: blackText("product_name".tr, 15),
                 ),
               ),
               ApplyFilterBTN(
@@ -382,7 +384,7 @@ class _ProductSearchFilterPageState extends State<ProductSearchFilterPage> {
           productController.productFilter.priceMin = null;
         },
         decoration: InputDecoration(
-          hintText: "Fixed Value",
+          hintText: "fixed_val".tr,
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
@@ -440,7 +442,7 @@ class ClearFilterBTN extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Text(
-        "Clear",
+        "clear".tr,
         style: TextStyle(
           fontSize: 16.0.sp,
           color: Color(0xff00A7B3),
@@ -477,7 +479,7 @@ class ApplyFilterBTN extends StatelessWidget {
             color: Color(0xff1BAFB2),
           ),
           child: Center(
-            child: whiteText("Apply", 15),
+            child: whiteText("apply".tr, 15),
           ),
         ),
       ),

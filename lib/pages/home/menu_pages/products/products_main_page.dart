@@ -20,10 +20,10 @@ class ProductsMainPage extends StatefulWidget {
 class _ProductsMainPageState extends State<ProductsMainPage> {
   int selectedTab = 0;
   List<String> tabsNames = [
-    "Products",
-    "My Store",
-    "Products Ordered",
-    "Product Category",
+    "products".tr,
+    "my_store".tr,
+    "products_ordered".tr,
+    "product_category".tr,
   ];
   ProductsController _productsController = Get.put(ProductsController());
   @override

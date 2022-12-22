@@ -692,8 +692,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
               allowedExtensions: ['pdf', 'xlsx'],
             );
             if (result != null) {
-              File file = File(result.files.single.path);
-              fileName = result.files.single.path.split("/").last;
+              File file = File(result.files.single.path!);
+              fileName = result.files.single.path!.split("/").last;
               if (addInvoiceController.dataToEditInvoice != null) {
                 addInvoiceController.dataToEditInvoice!.attachFile = file;
               } else {

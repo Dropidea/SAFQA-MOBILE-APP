@@ -44,4 +44,10 @@ class EndPoints {
   static String deletePayment(int id) => "$_baseURL/payment/delete/$id";
   static String get forgetPassword => "$_baseURL/forget-password";
   static String get changePassword => "$_baseURL/changePassword";
+  static String get storeMessage =>
+      "https://api.safqapay.com/admin/message/store";
+  static String get getContactUsMessage =>
+      "https://api.safqapay.com/api/contacts";
+  static String get getContactUsPhones =>
+      "https://api.safqapay.com/admin/contactphones";
 }

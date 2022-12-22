@@ -39,7 +39,9 @@ class CustomDropdown extends StatelessWidget {
           border: Border.all(color: borderColor ?? Colors.transparent)),
       child: DropdownButtonFormField(
         validator: validator,
-        decoration: InputDecoration(border: border ?? InputBorder.none),
+        decoration: InputDecoration(
+          border: border ?? InputBorder.none,
+        ),
         items: items
             .map(
               (e) => DropdownMenuItem(

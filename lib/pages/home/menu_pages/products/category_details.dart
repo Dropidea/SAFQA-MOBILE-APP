@@ -23,7 +23,7 @@ class CategoryDetailsPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Category Details", 17),
+        title: blackText("category_details".tr, 17),
       ),
       body: Column(
         children: [
@@ -58,7 +58,7 @@ class CategoryDetailsPage extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        "Edit",
+                        "edit".tr,
                         style: TextStyle(
                           fontSize: 12.0.sp,
                           color: Color(0xff58D241),
@@ -77,7 +77,7 @@ class CategoryDetailsPage extends StatelessWidget {
                         productsController
                             .deleteProductCategory(productCategory);
                       },
-                      message: "Atr you sure?");
+                      message: "Are you sure?");
                 },
                 child: Container(
                   width: w / 2.5,
@@ -100,7 +100,7 @@ class CategoryDetailsPage extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        "Remove",
+                        "remove".tr,
                         style: TextStyle(
                           fontSize: 12.0.sp,
                           color: Color(0xffE47E7B),
@@ -123,17 +123,18 @@ class CategoryDetailsPage extends StatelessWidget {
                 primary: false,
                 children: [
                   SizedBox(height: 20),
-                  blackText("Category Name (En)", 15),
+                  blackText("category_name_en".tr, 15),
                   SizedBox(height: 5),
                   greyText(productCategory.nameEn!, 15),
                   SizedBox(height: 20),
-                  blackText("Category Name (Ar)", 15),
+                  blackText("category_name_ar".tr, 15),
                   SizedBox(height: 5),
                   greyText(productCategory.nameAr!, 15),
                   SizedBox(height: 20),
                   blackText("Is Active", 15),
                   SizedBox(height: 5),
-                  greyText(productCategory.isActive == 1 ? "Yes" : "No", 15),
+                  greyText(
+                      productCategory.isActive == 1 ? "yes".tr : "no".tr, 15),
                   SizedBox(height: 20),
                 ],
               ),

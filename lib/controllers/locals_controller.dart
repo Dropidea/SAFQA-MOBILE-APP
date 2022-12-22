@@ -28,7 +28,7 @@ class LocalsController extends GetxController {
   Future getLocale() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool("lang") != null) {
-      _currentLocale = prefs.getBool("lang") ? _arLocal : _engLocal;
+      _currentLocale = prefs.getBool("lang")! ? _arLocal : _engLocal;
     } else {
       return _engLocal;
     }

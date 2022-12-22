@@ -9,6 +9,7 @@ import 'package:getwidget/components/radio/gf_radio.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
@@ -37,6 +38,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   TextEditingController unitPriceController = TextEditingController();
   TextEditingController discriptionENController = TextEditingController();
   TextEditingController discriptionARController = TextEditingController();
+  LocalsController localsController = Get.put(LocalsController());
   String selectedCategoryId = "-1";
   String selectedCategory = "";
   String selectedCurrencyId = "1";
@@ -44,13 +46,16 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   String? height = "";
   String? weight = "";
   String? length = "";
+  bool engFlag = false;
   @override
   void initState() {
     super.initState();
     // logSuccess(widget.product!.toJson());
+    engFlag = localsController.currenetLocale == 0;
     if (widget.product != null) {
       productNameENController.text = widget.product!.nameEn!;
       productNameARController.text = widget.product!.nameAr!;
+      selectedCategoryId = widget.product!.currencyId!;
       if (widget.product!.productImage != null) {
         fileName = widget.product!.productImage.toString().substring(
             widget.product!.productImage.toString().lastIndexOf("/") + 1);
@@ -97,7 +102,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
           elevation: 0,
           backgroundColor: Colors.white,
           title: blackText(
-              widget.product == null ? "Create Product" : "Edit Product", 16),
+              widget.product == null ? "create_product".tr : "edit_product".tr,
+              16),
 
           centerTitle: true,
         ),
@@ -132,12 +138,11 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   //   ],
                   // ),
                   // const SizedBox(height: 20),
-                  blackText("Product Name (En)", 15),
+                  blackText("product_name_en".tr, 15),
                   SignUpTextField(
                     focusNode: d,
                     padding: EdgeInsets.all(0),
                     fillColor: Color(0xffF8F8F8),
-                    hintText: "Name ...",
                     controller: productNameENController,
                     validator: (s) {
                       if (s!.isEmpty) return "Can't be empty";
@@ -145,12 +150,11 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  blackText("Product Name (ar)", 15),
+                  blackText("product_name_ar".tr, 15),
                   SignUpTextField(
                     focusNode: d2,
                     padding: EdgeInsets.all(0),
                     fillColor: Color(0xffF8F8F8),
-                    hintText: "Name ...",
                     controller: productNameARController,
                     validator: (s) {
                       if (s!.isEmpty) return "Can't be empty";
@@ -164,7 +168,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          blackText("Remaining Quantity", 14),
+                          blackText("remaining_quantity".tr, 14),
                           SizedBox(
                             width: 0.4 * w,
                             child: SignUpTextField(
@@ -186,7 +190,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                         children: [
                           Row(
                             children: [
-                              blackText("Product Picture", 14),
+                              blackText("product_picture".tr, 14),
                               fileName != ""
                                   ? GestureDetector(
                                       onTap: () {
@@ -194,7 +198,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                         fileName = "";
                                         setState(() {});
                                       },
-                                      child: greyText("clear", 12))
+                                      child: greyText("clear".tr, 12))
                                   : Container(),
                             ],
                           ),
@@ -205,9 +209,9 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                 type: FileType.image,
                               );
                               if (result != null) {
-                                file = File(result.files.single.path);
+                                file = File(result.files.single.path!);
                                 fileName =
-                                    result.files.single.path.split("/").last;
+                                    result.files.single.path!.split("/").last;
 
                                 setState(() {});
                               } else {
@@ -245,7 +249,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    fileName == "" ? "Choose" : fileName,
+                                    fileName == "" ? "choose".tr : fileName,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       color: Color(0xff00A7B3),
@@ -267,9 +271,9 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          blackText("Unit Price", 14),
+                          blackText("unit_price".tr, 14),
                           SizedBox(
-                            width: 0.4 * w,
+                            width: 0.3 * w,
                             child: SignUpTextField(
                               controller: unitPriceController,
                               keyBoardType: TextInputType.number,
@@ -287,7 +291,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          blackText("Currency", 14),
+                          blackText("currency".tr, 14),
                           Obx(
                             () {
                               List countries =
@@ -311,7 +315,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                 items: countriesCurrencies,
                                 selectedItem:
                                     addInvoiceController.selectedCurrencyDrop,
-                                width: 0.45 * w,
+                                width: 0.55 * w,
                                 onchanged: (s) {
                                   addInvoiceController.selectCurrencyDrop(s);
                                   selectedCurrencyId =
@@ -325,40 +329,43 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  blackText("Product Category", 16),
-                  DropdownButtonFormField<String>(
-                    validator: (value) {
-                      if (value == null) return "Category is required";
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      fillColor: Color(0xffF8F8F8),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide.none,
+                  blackText("product_category".tr, 16),
+                  GetBuilder<ProductsController>(builder: (c) {
+                    return DropdownButtonFormField<String>(
+                      validator: (value) {
+                        if (value == null) return "Category is required";
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        fillColor: Color(0xffF8F8F8),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
-                    ),
-                    items: _productsController.productCategories
-                        .map((e) => DropdownMenuItem<String>(
-                              child: Text(e.nameEn!),
-                              value: e.nameEn,
-                            ))
-                        .toSet()
-                        .toList(),
-                    value: selectedCategory == "" ? null : selectedCategory,
-                    hint: Text("Categories"),
-                    onChanged: (value) {
-                      selectedCategory = value!;
-                      int catind = (_productsController.productCategories
-                          .indexWhere(
-                              (element) => element.nameEn == selectedCategory));
-                      selectedCategoryId = _productsController
-                          .productCategories[catind].id
-                          .toString();
-                      logError(selectedCategoryId);
-                    },
-                  ),
+                      items: c.productCategories
+                          .map((e) => DropdownMenuItem<String>(
+                                value: engFlag ? e.nameEn : e.nameAr,
+                                child: Text(engFlag ? e.nameEn! : e.nameAr!),
+                              ))
+                          .toSet()
+                          .toList(),
+                      value: selectedCategory == "" ? null : selectedCategory,
+                      hint: Text("categories".tr),
+                      onChanged: (value) {
+                        selectedCategory = value!;
+                        int catind = (_productsController.productCategories
+                            .indexWhere((element) =>
+                                element.nameEn == selectedCategory ||
+                                element.nameAr == selectedCategory));
+                        selectedCategoryId = _productsController
+                            .productCategories[catind].id
+                            .toString();
+                        logError(selectedCategoryId);
+                      },
+                    );
+                  }),
                   SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -367,7 +374,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                       heigt: 50,
                       color: Color(0xff00A7B3),
                       borderRadius: 10,
-                      text: "Create Product Category",
+                      text: "create_product_category".tr,
                       textSize: 13,
                       textColor: Colors.white,
                       func: () {
@@ -376,7 +383,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  blackText("Discription (EN)", 16),
+                  blackText("description_en".tr, 16),
                   Container(
                     width: w,
                     margin: const EdgeInsets.symmetric(vertical: 5),
@@ -401,7 +408,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  blackText("Discription (AR)", 16),
+                  blackText("description_ar".tr, 16),
                   Container(
                     width: w,
                     margin: const EdgeInsets.symmetric(vertical: 5),
@@ -427,7 +434,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  blackText("Is Active?", 16),
+                  blackText("is_active".tr, 16),
                   const SizedBox(height: 10),
                   Row(
                     children: [
@@ -450,7 +457,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         isActiveVal = value;
                                       }))),
-                          greyText("Yes", 16),
+                          greyText("yes".tr, 16),
                         ],
                       ),
                       SizedBox(width: 30),
@@ -473,13 +480,13 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         isActiveVal = value;
                                       }))),
-                          greyText("No", 16),
+                          greyText("no".tr, 16),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  blackText("Is Stockable?", 16),
+                  blackText("is_stockable".tr, 16),
                   const SizedBox(height: 10),
                   Row(
                     children: [
@@ -502,7 +509,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         isStockableVal = value;
                                       }))),
-                          greyText("Yes", 16),
+                          greyText("yes".tr, 16),
                         ],
                       ),
                       SizedBox(width: 30),
@@ -525,13 +532,13 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         isStockableVal = value;
                                       }))),
-                          greyText("No", 16),
+                          greyText("no".tr, 16),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  blackText("Will you add this product to the store?", 16),
+                  blackText("add_to_store".tr, 16),
                   const SizedBox(height: 10),
                   Row(
                     children: [
@@ -554,7 +561,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         addToStoreVal = value;
                                       }))),
-                          greyText("Yes", 16),
+                          greyText("yes".tr, 16),
                         ],
                       ),
                       SizedBox(width: 30),
@@ -577,13 +584,13 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         addToStoreVal = value;
                                       }))),
-                          greyText("No", 16),
+                          greyText("no".tr, 16),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  blackText("Is Shippable?", 16),
+                  blackText("is_shippable".tr, 16),
                   const SizedBox(height: 10),
                   Row(
                     children: [
@@ -606,7 +613,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         isShippableVal = value;
                                       }))),
-                          greyText("Yes", 16),
+                          greyText("yes".tr, 16),
                         ],
                       ),
                       SizedBox(width: 30),
@@ -629,7 +636,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                   onChanged: (value) => setState(() {
                                         isShippableVal = value;
                                       }))),
-                          greyText("No", 16),
+                          greyText("no".tr, 16),
                         ],
                       ),
                     ],
@@ -646,7 +653,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                     if (s!.isEmpty) return "Required";
                                     return null;
                                   },
-                                  hintText: "width",
+                                  hintText: "width".tr,
                                   padding: EdgeInsets.all(0),
                                   width: w / 2 - 30,
                                   initialValue: width,
@@ -659,7 +666,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                     if (s!.isEmpty) return "Required";
                                     return null;
                                   },
-                                  hintText: "length",
+                                  hintText: "length".tr,
                                   padding: EdgeInsets.all(0),
                                   width: w / 2 - 30,
                                   initialValue: length,
@@ -678,7 +685,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                     if (s!.isEmpty) return "Required";
                                     return null;
                                   },
-                                  hintText: "height",
+                                  hintText: "height".tr,
                                   padding: EdgeInsets.all(0),
                                   width: w / 2 - 30,
                                   initialValue: height,
@@ -691,7 +698,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                     if (s!.isEmpty) return "Required";
                                     return null;
                                   },
-                                  hintText: "weight",
+                                  hintText: "weight".tr,
                                   padding: EdgeInsets.all(0),
                                   width: w / 2 - 30,
                                   initialValue: weight,
@@ -707,8 +714,8 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                   SizedBox(height: 20),
                   CircularGoBTN(
                     text: widget.product == null
-                        ? "Create Product"
-                        : "Edit Product",
+                        ? "create_product".tr
+                        : "edit_product".tr,
                     onTap: () async {
                       if (widget.product == null) {
                         if (formKey.currentState!.validate()) {
@@ -722,6 +729,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             categoryId: int.parse(selectedCategoryId),
                             descriptionAr: discriptionARController.text,
                             descriptionEn: discriptionENController.text,
+                            currencyId: selectedCurrencyId,
                             isActive: isActiveVal,
                             isStockable: isStockableVal,
                             isShippingProduct: isShippableVal,
@@ -761,6 +769,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             categoryId: int.parse(selectedCategoryId),
                             descriptionAr: discriptionARController.text,
                             descriptionEn: discriptionENController.text,
+                            currencyId: selectedCategoryId,
                             isActive: isActiveVal,
                             isStockable: isStockableVal,
                             isShippingProduct: isShippableVal,

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/models/data_to_create_invoice.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/models/invoice.dart';
@@ -17,6 +18,7 @@ class InvoiceDetailsPage extends StatelessWidget {
   DataToCreateInvoice? invoiceToEdit;
   GlobalDataController globalDataController = Get.find();
   AddInvoiceController addInvoiceController = Get.find();
+  final LocalsController _localsController = Get.put(LocalsController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class InvoiceDetailsPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Invoice Details", 17),
+        title: blackText("invoice_details".tr, 17),
       ),
       body: Column(
         children: [
@@ -75,7 +77,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        "Edit",
+                        "edit".tr,
                         style: TextStyle(
                           fontSize: 14.0.sp,
                           color: Color(0xff58D241),
@@ -107,7 +109,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      "Remove",
+                      "remove".tr,
                       style: TextStyle(
                         fontSize: 14.0.sp,
                         color: Color(0xffE47E7B),
@@ -135,7 +137,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                           bottom: BorderSide(color: Colors.grey, width: 0.5),
                         ),
                       ),
-                      child: blackText("Customer Info", 15),
+                      child: blackText("customer_info".tr, 15),
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),
@@ -152,7 +154,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  blackText("Invoice ID", 14),
+                                  blackText("invoice_id".tr, 14),
                                   const SizedBox(height: 5),
                                   greyText(invoiceModel.id.toString(), 12),
                                 ],
@@ -160,7 +162,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  blackText("Invoice Date", 14),
+                                  blackText("invoice_date".tr, 14),
                                   const SizedBox(height: 5),
                                   greyText(
                                       DateFormat('dd-MMM-y')
@@ -171,24 +173,33 @@ class InvoiceDetailsPage extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 15),
-                          blackText("Customer Name", 14),
+                          blackText("cus_name".tr, 14),
                           greyText(invoiceModel.customerName!, 14),
                           SizedBox(height: 15),
-                          blackText("Customer Email", 14),
+                          blackText("cus_email".tr, 14),
                           greyText(
-                              invoiceModel.customerEmail ?? "No Email", 14),
+                              _localsController.currenetLocale == 0
+                                  ? invoiceModel.customerEmail ?? "No Email"
+                                  : invoiceModel.customerEmail ??
+                                      "لا يوجد إيميل",
+                              14),
                           SizedBox(height: 15),
-                          blackText("Customer Phone Number", 14),
+                          blackText("cus_phone_num".tr, 14),
                           greyText(
                               invoiceModel.customerMobile == null
-                                  ? "No Mobile Number"
+                                  ? _localsController.currenetLocale == 0
+                                      ? "No Mobile Number"
+                                      : "لا يوجد رقم هاتف"
                                   : "${invoiceModel.mobileCode != null ? invoiceModel.mobileCode!.code : ''} ${invoiceModel.customerMobile!}",
                               14),
                           SizedBox(height: 15),
-                          blackText("Customer Refrence", 14),
+                          blackText("customer_refrence".tr, 14),
                           greyText(
-                              invoiceModel.customerReference ??
-                                  "No Customer Refrence",
+                              _localsController.currenetLocale == 0
+                                  ? invoiceModel.customerReference ??
+                                      "No Customer Refrence"
+                                  : invoiceModel.customerReference ??
+                                      "لا يوجد مرجع للزبون",
                               14),
                           SizedBox(height: 15),
                           Row(
@@ -197,7 +208,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  blackText("Comunication method", 14),
+                                  blackText("comunication_method".tr, 14),
                                   greyText(
                                       globalDataController.getSendOption(
                                           invoiceModel.sendInvoiceOptionId!),
@@ -207,7 +218,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  blackText("Send SMS counter", 14),
+                                  blackText("send_sms_counter".tr, 14),
                                   greyText("1", 14),
                                 ],
                               )
@@ -225,7 +236,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                           bottom: BorderSide(color: Colors.grey, width: 0.5),
                         ),
                       ),
-                      child: blackText("Invoice Info", 15),
+                      child: blackText("invoice_info".tr, 15),
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),
@@ -237,37 +248,39 @@ class InvoiceDetailsPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           invoiceInfoMethod(
-                              title1: "Type",
-                              content1: "Invoice",
-                              title2: "Views",
+                              title1: "type".tr,
+                              content1: _localsController.currenetLocale == 0
+                                  ? "Invoice"
+                                  : "فاتورة",
+                              title2: "views".tr,
                               content2: "2"),
                           invoiceInfoMethod(
-                              title1: "Vendor",
+                              title1: "vendor".tr,
                               content1: "Ahmad khaled",
-                              title2: "Status",
+                              title2: "status".tr,
                               content2: "Paid"),
                           invoiceInfoMethod(
-                              title1: "Invoice Id",
+                              title1: "invoice_id".tr,
                               content1: "1234678765434567",
-                              title2: "Payment method",
+                              title2: "pay_method".tr,
                               content2: "Visa/MasterCard"),
                           invoiceInfoMethod(
-                              title1: "Currency",
+                              title1: "currency".tr,
                               content1:
                                   "${invoiceModel.currency!.currency!} (${invoiceModel.currency!.shortCurrency!})",
-                              title2: "Date Created",
+                              title2: "date_created".tr,
                               content2: DateFormat('dd/M/y').format(
                                 DateTime.now().subtract(
                                   Duration(days: 10),
                                 ),
                               )),
                           invoiceInfoMethod(
-                            title1: "Last sent date",
+                            title1: "l_s_date".tr,
                             content1: DateFormat('dd/M/y')
                                 .format(DateTime.now().subtract(
                               Duration(days: 10),
                             )),
-                            title2: "Expiry Date",
+                            title2: "expiry_date".tr,
                             content2: DateFormat('dd/M/y').format(
                                     DateTime.parse(invoiceModel.expiryDate!)) +
                                 " " +
@@ -275,12 +288,12 @@ class InvoiceDetailsPage extends StatelessWidget {
                                     DateTime.parse(invoiceModel.expiryDate!)),
                           ),
                           invoiceInfoMethod(
-                              title1: "Remind After",
+                              title1: "remind_after".tr,
                               content1: "${invoiceModel.remindAfter!} Days",
                               title2: "",
                               content2: ""),
                           SizedBox(height: 10),
-                          blackText("Invoice Url", 14),
+                          blackText("invoice_url", 14),
                           Text(
                             "Laborum aliquip ullamco aute nisi Lorem non do sunt et aute non minim.",
                             style: TextStyle(
@@ -291,34 +304,38 @@ class InvoiceDetailsPage extends StatelessWidget {
                           ),
                           SizedBox(height: 10),
                           invoiceInfoMethod(
-                              title1: "Invoice Display Value",
+                              title1: "invoice_value".tr,
                               content1:
                                   "${invoiceModel.invoiceValue!} ${invoiceModel.currency!.shortCurrency!}",
-                              title2: "Discount available",
+                              title2: "discount_available".tr,
                               content2: invoiceModel.discountType == null
-                                  ? "No"
-                                  : "Yes"),
+                                  ? "no".tr
+                                  : "yes".tr),
                           invoiceInfoMethod(
-                              title1: "Attach file",
+                              title1: "attach_file".tr,
                               content1:
                                   invoiceModel.attachFile ?? "No File Attached",
-                              title2: "Recurring Interval",
+                              title2: "recurring_interval".tr,
                               content2: invoiceModel.recurringIntervalId == null
                                   ? "No Recurring"
                                   : invoiceModel.recurringIntervalId
                                       .toString()),
                           invoiceInfoMethod(
-                              title1: "Comments",
-                              content1:
-                                  invoiceModel.comments ?? "No Comments found",
+                              title1: "comments".tr,
+                              content1: _localsController.currenetLocale == 0
+                                  ? invoiceModel.comments ?? "No Comments found"
+                                  : invoiceModel.comments ?? "لا يوجد تعليقات",
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
-                              title1: "Language of the invoice:",
+                              title1: "language_of_invoice".tr,
                               content1: invoiceModel.languageId!.toString(),
-                              title2: "Terms & conditions",
-                              content2: invoiceModel.termsAndConditions ??
-                                  "No Terms & Conditions"),
+                              title2: "terms_conditions".tr,
+                              content2: _localsController.currenetLocale == 0
+                                  ? invoiceModel.termsAndConditions ??
+                                      "No Terms & Conditions"
+                                  : invoiceModel.termsAndConditions ??
+                                      "لا يوجد بنود وظروف"),
                         ],
                       ),
                     ),
@@ -336,7 +353,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                     BorderSide(color: Colors.grey, width: 0.5),
                               ),
                             ),
-                            child: blackText("Invoice Items", 15),
+                            child: blackText("invoice_items".tr, 15),
                           ),
                           controller:
                               ExpandableController(initialExpanded: true),
@@ -360,7 +377,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          blackText("Product Name", 13),
+                                          blackText("product_name".tr, 13),
                                           SizedBox(height: 10),
                                           greyText(
                                               invoiceModel.invoiceItem![index]
@@ -372,7 +389,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          blackText("Quantity", 13),
+                                          blackText("quantity".tr, 13),
                                           SizedBox(height: 10),
                                           greyText(
                                               invoiceModel.invoiceItem![index]
@@ -385,7 +402,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          blackText("Unit Price", 13),
+                                          blackText("unit_price".tr, 13),
                                           SizedBox(height: 10),
                                           greyText(
                                               "${invoiceModel.invoiceItem![index].productPrice!} ${invoiceModel.currency!.shortCurrency!}",
@@ -406,7 +423,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                             vertical: 10, horizontal: 20),
                                         child: Center(
                                           child: whiteText(
-                                              "Total: ${invoiceModel.invoiceItem![index].productPrice! * invoiceModel.invoiceItem![index].productQuantity!} ${invoiceModel.currency!.shortCurrency!} ",
+                                              "${"total".tr}: ${invoiceModel.invoiceItem![index].productPrice! * invoiceModel.invoiceItem![index].productQuantity!} ${invoiceModel.currency!.shortCurrency!} ",
                                               14),
                                         ),
                                       )
@@ -466,7 +483,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                           bottom: BorderSide(color: Colors.grey, width: 0.5),
                         ),
                       ),
-                      child: blackText("Invoice Info", 15),
+                      child: blackText("Invoice Transaction Info", 15),
                     ),
                     controller: ExpandableController(initialExpanded: true),
                     collapsed: Container(),

@@ -168,8 +168,8 @@ class AddInvoiceController extends GetxController {
     ));
     final body = d.FormData.fromMap(dataToEditInvoice!.toJson());
     body.fields.add(MapEntry("_method", "PUT"));
-
-    if (dataToEditInvoice!.attachFile != null) {
+    if (dataToEditInvoice!.attachFile != null &&
+        dataToEditInvoice!.attachFile.runtimeType != String) {
       body.files.add(MapEntry(
         "attach_file",
         await d.MultipartFile.fromFile(dataToEditInvoice!.attachFile!.path,

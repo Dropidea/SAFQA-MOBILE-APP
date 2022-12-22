@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:sizer/sizer.dart';
@@ -21,7 +23,7 @@ class ProductWidget extends StatefulWidget {
 
 class _ProductWidgetState extends State<ProductWidget> {
   bool checked = false;
-
+  LocalsController _localsController = Get.put(LocalsController());
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -83,11 +85,12 @@ class _ProductWidgetState extends State<ProductWidget> {
                             ? widget.product.nameEn!
                             : widget.product.nameEn!.substring(0, 15) + "...",
                         15),
-                    greyText("Remaining : ${widget.product.quantity!}", 14),
+                    greyText(
+                        "${"remaining".tr} : ${widget.product.quantity!}", 14),
                     !widget.orderedFlag
                         ? widget.product.isActive == 1
-                            ? greenText("Active", 14)
-                            : redText("Inactive", 14)
+                            ? greenText("active".tr, 14)
+                            : redText("inactive".tr, 14)
                         : widget.product.isActive == 1
                             ? greenText(widget.orderedState!, 14,
                                 underline: true)

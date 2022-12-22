@@ -224,8 +224,8 @@ class _IdentityDocWidgetState extends State<IdentityDocWidget> {
                 type: FileType.any,
               );
               if (result != null) {
-                File file = File(result.files.single.path);
-                fileName = result.files.single.path.split("/").last;
+                File file = File(result.files.single.path!);
+                fileName = result.files.single.path!.split("/").last;
                 if (widget.onTap != null) {
                   widget.onTap!();
                 }

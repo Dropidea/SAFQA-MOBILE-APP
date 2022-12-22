@@ -5,7 +5,6 @@ import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
 import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
@@ -290,7 +289,6 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                     _addInvoiceController.dataToEditInvoice!.customerRefrence =
                         customerRefrenceControler.text;
                   } else {
-                    logError("msg");
                     _addInvoiceController.saveCustomerInfo(
                       customerRef: customerRefrenceControler.text,
                       email: customerEmailControler.text,

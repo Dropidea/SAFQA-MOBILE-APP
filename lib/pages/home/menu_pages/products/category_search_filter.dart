@@ -50,14 +50,6 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     Get.back();
                   },
                 )
-                // Text(
-                //   "Clear",
-                //   style: TextStyle(
-                //     fontSize: 16.0.sp,
-                //     color: Color(0xff00A7B3),
-                //     decoration: TextDecoration.underline,
-                //   ),
-                // )
               ],
             ),
             SizedBox(
@@ -73,7 +65,7 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                   children: [
                     buildRadioButton(
                         0,
-                        "All",
+                        "all".tr,
                         _productsController.productCategoryFilter.isActive!,
                         (p0) => setState(() {
                               _productsController
@@ -81,7 +73,7 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                             })),
                     buildRadioButton(
                         1,
-                        "Active",
+                        "active".tr,
                         _productsController.productCategoryFilter.isActive!,
                         (p0) => setState(() {
                               _productsController
@@ -89,7 +81,7 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                             })),
                     buildRadioButton(
                         2,
-                        "Inactive",
+                        "inactive".tr,
                         _productsController.productCategoryFilter.isActive!,
                         (p0) => setState(() {
                               _productsController
@@ -104,7 +96,7 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Is Active", 15),
+                child: blackText("is_active".tr, 15),
               ),
             ),
             SizedBox(
@@ -115,7 +107,7 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
               expanded: buildCustomNameTextfield(
-                hint: "Category Name (En / Ar)",
+                hint: "category_name_en_ar".tr,
                 onChanged: (p0) {
                   _productsController.productCategoryFilter.name = p0;
                 },
@@ -128,7 +120,7 @@ class _CategoryFilterPage extends State<CategoryFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Category Name", 15),
+                child: blackText("category_name".tr, 15),
               ),
             ),
             SizedBox(

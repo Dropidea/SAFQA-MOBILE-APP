@@ -158,7 +158,9 @@ class SignUpPage extends StatelessWidget {
                                     image: AssetImage("assets/images/uae.png"),
                                   ),
                                   Text(
-                                    "UAE",
+                                    localsController.currenetLocale == 0
+                                        ? "UAE"
+                                        : "الإمارات العربية المتحدة ",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.grey.shade500,
@@ -195,7 +197,9 @@ class SignUpPage extends StatelessWidget {
                                         AssetImage("assets/images/Kuwait.png"),
                                   ),
                                   Text(
-                                    "Kuwait",
+                                    localsController.currenetLocale == 0
+                                        ? "Kuwait"
+                                        : "الكويت",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.grey.shade500,
@@ -349,8 +353,8 @@ class SignUpPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 localsController.currenetLocale == 0
-                    ? "Select Your Country"
-                    : "أختر بلدتك",
+                    ? "Select Your Business Type"
+                    : "اختر نوع العمل",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 18.0.sp,

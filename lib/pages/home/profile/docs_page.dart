@@ -64,8 +64,8 @@ class _DocWidgetState extends State<DocWidget> {
                 type: FileType.any,
               );
               if (result != null) {
-                File file = File(result.files.single.path);
-                fileName = result.files.single.path.split("/").last;
+                File file = File(result.files.single.path!);
+                fileName = result.files.single.path!.split("/").last;
 
                 setState(() {});
               } else {

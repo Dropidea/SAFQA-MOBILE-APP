@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -17,7 +18,7 @@ class MyStoreTab extends StatelessWidget {
         SizedBox(height: 60),
         SignUpTextField(
           padding: EdgeInsets.all(0),
-          hintText: "search",
+          hintText: "search".tr,
           prefixIcon: Icon(
             Icons.search_outlined,
             color: Colors.grey,
