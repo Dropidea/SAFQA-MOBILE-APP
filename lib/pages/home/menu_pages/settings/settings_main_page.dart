@@ -18,10 +18,10 @@ class SettingsPage extends StatefulWidget {
 class SsettingsPageState extends State<SettingsPage> {
   int selectedTab = 0;
   List<String> tabsNames = [
-    "Manage Users",
-    "Integration",
-    "Adresses",
-    "Preferences",
+    "manage_users".tr,
+    "integration".tr,
+    "addresses".tr,
+    "preferences".tr,
   ];
 
   Widget getPage() {

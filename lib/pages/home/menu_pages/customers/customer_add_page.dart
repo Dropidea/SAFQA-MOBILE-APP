@@ -68,7 +68,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          widget.customer != null ? "Edit Customer" : "Add Customer",
+          widget.customer != null ? "edit_customer".tr : "create_customer".tr,
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -85,7 +85,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           child: ListView(
             primary: false,
             children: [
-              blackText("Full Name", 16),
+              blackText("full_name".tr, 16),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
                 controller: fullNameController,
@@ -95,7 +95,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 },
               ),
               const SizedBox(height: 10),
-              blackText("Mobile number", 16),
+              blackText("mobile_number".tr, 16),
               Obx(() {
                 List countries = _signUpController.globalData['country'];
                 List<String> ids = countries
@@ -176,7 +176,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               //   controller: customerPhoneNumberController,
               // ),
               const SizedBox(height: 10),
-              blackText("Email", 16),
+              blackText("email".tr, 16),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
                 controller: emailController,
@@ -192,9 +192,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  blackText("Customer Reference", 16),
+                  blackText("customer_refrence".tr, 16),
                   SizedBox(width: 10),
-                  greyText("(optional)", 13)
+                  greyText("(${"optional".tr})", 13)
                 ],
               ),
               SignUpTextField(
@@ -215,9 +215,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   children: [
                     Row(
                       children: [
-                        blackText("Bank Info", 16),
+                        blackText("bank_info".tr, 16),
                         SizedBox(width: 10),
-                        greyText("(Optional)", 14)
+                        greyText("(${"optional".tr})", 14)
                       ],
                     ),
                     GestureDetector(
@@ -247,8 +247,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               ),
               SizedBox(height: 30),
               CircularGoBTN(
-                text:
-                    widget.customer != null ? "Edit Customer" : "Add Customer",
+                text: widget.customer != null
+                    ? "edit_customer".tr
+                    : "create_customer".tr,
                 onTap: () async {
                   if (formKey.currentState!.validate()) {
                     if (widget.customer == null) {

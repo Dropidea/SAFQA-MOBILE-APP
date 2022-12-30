@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import "package:flutter/material.dart";
+import "package:get/get.dart";
 import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
@@ -15,7 +16,7 @@ class DocsPage extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: MyAppBar(title: "Documents"),
+      appBar: MyAppBar(title: "docs".tr),
       body: ListView(
         padding: EdgeInsets.all(20),
         primary: false,
@@ -97,12 +98,12 @@ class _DocWidgetState extends State<DocWidget> {
                   children: [
                     greyText(
                       widget.type == DocTypes.other
-                          ? "Other"
+                          ? "other".tr
                           : widget.type == DocTypes.civilId
-                              ? "Civil Id"
+                              ? "cv_id".tr
                               : widget.type == DocTypes.civilIdBack
-                                  ? "Civil Id Back"
-                                  : "Bank Account Letter",
+                                  ? "cv_id_back".tr
+                                  : "bank_account_letter".tr,
                       16,
                       fontWeight: FontWeight.w500,
                     ),

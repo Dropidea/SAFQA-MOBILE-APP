@@ -2,9 +2,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/profile/controller/profile_controller.dart';
+import 'package:safqa/pages/home/profile/models/social_media_link.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/gradient_icon.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -17,20 +20,29 @@ class SocialMediaPage extends StatefulWidget {
 }
 
 class _SocialMediaPageState extends State<SocialMediaPage> {
-  String? selectedItem = null;
+  int? selectedItemId;
+  String? selectedItem;
   TextEditingController socialMediaURLController = TextEditingController();
   ProfileController _profileController = Get.find();
+  final LocalsController _localsController = Get.put(LocalsController());
+  bool engflag = true;
+  @override
+  void initState() {
+    engflag = _localsController.currenetLocale == 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: const MyAppBar(title: "Social Media"),
+      appBar: MyAppBar(title: "social_media".tr),
       body: ListView(
         padding: const EdgeInsets.all(20),
         primary: false,
         children: [
-          blackText("Social Media Url", 14),
+          blackText("social_media_url".tr, 14),
           Container(
             width: w,
             height: 50,
@@ -47,7 +59,7 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                   .map(
                     (e) => DropdownMenuItem(
                       onTap: () {
-                        socialMediaURLController.text = "www.$e.com/";
+                        socialMediaURLController.text = "https://www.$e.com/";
                       },
                       value: e,
                       child: DropdownMenuItem(
@@ -87,38 +99,63 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                   )
                   .toList(),
               value: selectedItem,
-              hint: greyText("Choose", 15),
+              hint: greyText("choose".tr, 15),
               onChanged: (value) {
                 setState(() {
                   selectedItem = value;
+                  switch (value) {
+                    case "Facebook":
+                      selectedItemId = 1;
+                      break;
+                    case "Instagram":
+                      selectedItemId = 2;
+                      break;
+                    case "Twitter":
+                      selectedItemId = 3;
+                      break;
+                    case "Whatsapp":
+                      selectedItemId = 4;
+                      break;
+                    default:
+                  }
                 });
               },
             ),
           ),
           const SizedBox(height: 20),
-          blackText("Social Media Url", 14),
-          SignUpTextField(
-            padding: const EdgeInsets.all(0),
-            controller: socialMediaURLController,
+          blackText("social_media_url".tr, 14),
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: SignUpTextField(
+              padding: const EdgeInsets.all(0),
+              controller: socialMediaURLController,
+            ),
           ),
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.centerLeft,
             child: MyButton(
-              func: () {
+              func: () async {
                 FocusScope.of(context).unfocus();
-
-                SocialMediaItem item = SocialMediaItem(
-                    name: selectedItem, link: socialMediaURLController.text);
-                _profileController.addSocialMediaItem(item);
-                socialMediaURLController.text = "";
-                setState(() {});
+                if (selectedItemId != null) {
+                  SocialMediaLink item = SocialMediaLink(
+                    socialId: selectedItemId,
+                    url: socialMediaURLController.text,
+                  );
+                  bool v = await _profileController.addSocialMediaItem(item);
+                  if (v) {
+                    socialMediaURLController.text = "";
+                    selectedItemId = null;
+                    selectedItem = null;
+                    setState(() {});
+                  }
+                }
               },
               heigt: 60,
               width: w / 2.5,
               color: Color(0xff2F6782),
               borderRadius: 10,
-              text: "Create New",
+              text: "c_n".tr,
               textSize: 13,
               textColor: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -134,7 +171,7 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
               shrinkWrap: true,
               primary: false,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: c.socialMediaItems.length,
+              itemCount: c.socialMediaLinks.length,
               itemBuilder: (context, index) => Container(
                 width: w,
                 margin: EdgeInsets.symmetric(vertical: 10),
@@ -144,47 +181,38 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        greyText(c.socialMediaItems[index].name!, 15,
+                        greyText(
+                            engflag
+                                ? c.socialMediaLinks[index].socialMedia!.nameAr!
+                                : c.socialMediaLinks[index].socialMedia!
+                                    .nameAr!,
+                            15,
                             fontWeight: FontWeight.bold),
                         Row(
                           children: [
-                            Container(
-                                padding: EdgeInsets.all(7),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Color(0xffEBF8E8)),
-                                child: Icon(
-                                  EvaIcons.edit,
-                                  color: Color(0xff58D241),
-                                )),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                  padding: EdgeInsets.all(7),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xffEBF8E8)),
+                                  child: Icon(
+                                    EvaIcons.edit,
+                                    color: Color(0xff58D241),
+                                  )),
+                            ),
                             SizedBox(width: 5),
                             GestureDetector(
                               onTap: () {
-                                Get.dialog(AlertDialog(
-                                  title: Text(
-                                    "Delete Social Media",
-                                    style: TextStyle(
-                                        color: Colors.red.shade700,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 22),
-                                  ),
-                                  content: Text("Are You Sure?"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text("YES"),
-                                      onPressed: () {
-                                        c.deleteSocialMediaItem(index);
-                                        Get.back();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text("NO"),
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                    ),
-                                  ],
-                                ));
+                                MyDialogs.showDeleteDialoge(
+                                  onProceed: () async {
+                                    await c.deleteSocialMediaItem(
+                                        c.socialMediaLinks[index].id!);
+                                    Get.back();
+                                  },
+                                  message: "Are You Sure?",
+                                );
                               },
                               child: Container(
                                   padding: EdgeInsets.all(7),
@@ -203,7 +231,7 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                     ),
                     SizedBox(height: 5),
                     greyText(
-                      c.socialMediaItems[index].link!,
+                      c.socialMediaLinks[index].url!,
                       15,
                     ),
                   ],

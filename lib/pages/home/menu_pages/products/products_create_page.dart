@@ -64,11 +64,14 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
       }
       remainingQuantitiyController.text = widget.product!.quantity!.toString();
       unitPriceController.text = widget.product!.price!.toString();
-      selectedCategory = widget.product!.category!.nameEn!;
+      selectedCategory = engFlag
+          ? widget.product!.category!.nameEn!
+          : widget.product!.category!.nameAr!;
       selectedCategoryId = widget.product!.categoryId!.toString();
       discriptionARController.text = widget.product!.descriptionAr!;
       discriptionENController.text = widget.product!.descriptionEn!;
       isActiveVal = widget.product!.isActive!;
+      addToStoreVal = widget.product!.inStore!;
       isStockableVal = widget.product!.isStockable!;
       isShippableVal = widget.product!.isShippingProduct!;
       width = widget.product!.width;
@@ -737,6 +740,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                             height: isShippableVal == 1 ? height : null,
                             length: isShippableVal == 1 ? length : null,
                             weight: isShippableVal == 1 ? weight : null,
+                            inStore: addToStoreVal,
                           );
                           FocusScope.of(context).unfocus();
 
@@ -759,25 +763,25 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                       } else {
                         if (formKey.currentState!.validate()) {
                           Product product = Product(
-                            id: widget.product!.id,
-                            nameEn: productNameENController.text,
-                            nameAr: productNameARController.text,
-                            quantity:
-                                int.parse(remainingQuantitiyController.text),
-                            productImage: file,
-                            price: int.parse(unitPriceController.text),
-                            categoryId: int.parse(selectedCategoryId),
-                            descriptionAr: discriptionARController.text,
-                            descriptionEn: discriptionENController.text,
-                            currencyId: selectedCategoryId,
-                            isActive: isActiveVal,
-                            isStockable: isStockableVal,
-                            isShippingProduct: isShippableVal,
-                            width: isShippableVal == 1 ? width : null,
-                            height: isShippableVal == 1 ? height : null,
-                            length: isShippableVal == 1 ? length : null,
-                            weight: isShippableVal == 1 ? weight : null,
-                          );
+                              id: widget.product!.id,
+                              nameEn: productNameENController.text,
+                              nameAr: productNameARController.text,
+                              quantity:
+                                  int.parse(remainingQuantitiyController.text),
+                              productImage: file,
+                              price: int.parse(unitPriceController.text),
+                              categoryId: int.parse(selectedCategoryId),
+                              descriptionAr: discriptionARController.text,
+                              descriptionEn: discriptionENController.text,
+                              currencyId: selectedCategoryId,
+                              isActive: isActiveVal,
+                              isStockable: isStockableVal,
+                              isShippingProduct: isShippableVal,
+                              width: isShippableVal == 1 ? width : null,
+                              height: isShippableVal == 1 ? height : null,
+                              length: isShippableVal == 1 ? length : null,
+                              weight: isShippableVal == 1 ? weight : null,
+                              inStore: addToStoreVal);
                           FocusScope.of(context).unfocus();
 
                           bool? c =

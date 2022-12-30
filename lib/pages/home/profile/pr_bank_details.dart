@@ -11,40 +11,40 @@ class ProfileBankDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(title: "Bank Details"),
+      appBar: MyAppBar(title: "bank_details".tr),
       body: ListView(
         primary: false,
         padding: const EdgeInsets.all(20),
         children: [
-          blackText("Bank Name", 14),
+          blackText("bank_name".tr, 14),
           SignUpTextField(
             padding: const EdgeInsets.all(0),
             readOnly: true,
-            initialValue: "Abu Dhabi Islamic Bank(ADIB)",
+            initialValue: profileController.profileBusines!.bankName,
           ),
           const SizedBox(height: 20),
-          blackText("Bank Account Holder Name", 14),
+          blackText("bank_account_holder_name".tr, 14),
           SignUpTextField(
             padding: const EdgeInsets.all(0),
             readOnly: true,
-            initialValue: "lafi s h m almutairi",
+            initialValue: profileController.profileBusines!.bankAccountName,
           ),
           const SizedBox(height: 20),
-          blackText("Bank Account", 14),
+          blackText("bank_account".tr, 14),
           SignUpTextField(
             padding: const EdgeInsets.all(0),
             readOnly: true,
-            initialValue: "28633471",
+            initialValue: profileController.profileBusines!.accountNumber,
           ),
           const SizedBox(height: 20),
-          blackText("IBAN", 14),
+          blackText("iban".tr, 14),
           SignUpTextField(
             padding: const EdgeInsets.all(0),
             readOnly: true,
-            initialValue: "AE140600000000024855441",
+            initialValue: profileController.profileBusines!.iban,
           ),
           const SizedBox(height: 20),
-          blackText("Available payment methods", 14),
+          blackText("available_payment_methods".tr, 14),
           SignUpTextField(
             padding: const EdgeInsets.all(0),
             readOnly: true,

@@ -19,6 +19,8 @@ class Product {
   int? managerUserId;
   int? profileBusinessId;
   int? categoryId;
+  int? inStore;
+
   ProductCategory? category;
 
   Product({
@@ -43,11 +45,13 @@ class Product {
     this.categoryId,
     this.category,
     this.currencyId,
+    this.inStore,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nameEn = json['name_en'];
+    inStore = json['in_store'];
     nameAr = json['name_ar'];
     weight = json['weight'];
     height = json['height'];
@@ -73,28 +77,29 @@ class Product {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name_en'] = this.nameEn;
-    data['name_ar'] = this.nameAr;
-    data['weight'] = this.weight;
-    data['height'] = this.height;
-    data['width'] = this.width;
-    data['length'] = this.length;
-    data['product_image'] = this.productImage;
-    data['description_en'] = this.descriptionEn;
-    data['description_ar'] = this.descriptionAr;
-    data['quantity'] = this.quantity;
-    data['price'] = this.price;
-    data['is_stockable'] = this.isStockable;
-    data['disable_product_on_sold'] = this.disableProductOnSold;
-    data['is_active'] = this.isActive;
-    data['is_shipping_product'] = this.isShippingProduct;
-    data['manager_user_id'] = this.managerUserId;
-    data['profile_business_id'] = this.profileBusinessId;
-    data['category_id'] = this.categoryId;
-    data['currency_id'] = this.currencyId;
-    if (this.category != null) {
-      data['category'] = this.category!.toJson();
+    data['id'] = id;
+    data['name_en'] = nameEn;
+    data['in_store'] = inStore;
+    data['name_ar'] = nameAr;
+    data['weight'] = weight;
+    data['height'] = height;
+    data['width'] = width;
+    data['length'] = length;
+    data['product_image'] = productImage;
+    data['description_en'] = descriptionEn;
+    data['description_ar'] = descriptionAr;
+    data['quantity'] = quantity;
+    data['price'] = price;
+    data['is_stockable'] = isStockable;
+    data['disable_product_on_sold'] = disableProductOnSold;
+    data['is_active'] = isActive;
+    data['is_shipping_product'] = isShippingProduct;
+    data['manager_user_id'] = managerUserId;
+    data['profile_business_id'] = profileBusinessId;
+    data['category_id'] = categoryId;
+    data['currency_id'] = currencyId;
+    if (category != null) {
+      data['category'] = category!.toJson();
     }
     return data;
   }

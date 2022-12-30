@@ -1,5 +1,4 @@
 import 'package:badges/badges.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
@@ -8,7 +7,6 @@ import 'package:safqa/pages/home/menu_pages/customers/customer_add_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_details.dart';
 import 'package:safqa/pages/home/menu_pages/customers/customer_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
-import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -59,7 +57,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                         Get.back();
                       },
                     ),
-                    whiteText("Customers", 17, fontWeight: FontWeight.w600),
+                    whiteText("customers".tr, 17, fontWeight: FontWeight.w600),
                     Opacity(
                       opacity: 0,
                       child: whiteText("text", 16),
@@ -139,7 +137,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                                   ),
                                   // SizedBox(width: 5),
                                   Text(
-                                    "Create Customer",
+                                    "create_customer".tr,
                                     style: TextStyle(
                                       color: Color(0xff2F6782),
                                       fontSize: 12.0.sp,
@@ -174,7 +172,7 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                                   ),
                                   // SizedBox(width: 5),
                                   Text(
-                                    "Import Customer",
+                                    "import_customer".tr,
                                     style: TextStyle(
                                       color: Color(0xff8B8B8B),
                                       fontSize: 12.0.sp,
@@ -190,56 +188,21 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                       const SizedBox(height: 20),
                       SizedBox(
                         height: 40,
-                        child: Row(
-                          // scrollDirection: Axis.horizontal,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
                           children: [
-                            listBTN(text: "Copy", onTap: () {}, width: w / 4.5),
-                            // listBTN(text: "Print", onTap: () {},width: w / 4.5),
-                            MyPopUpMenu(
-                              menuList: [
-                                PopupMenuItem(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        EvaIcons.file,
-                                        color: Colors.grey.shade500,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text("PDF"),
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.print,
-                                        color: Colors.grey.shade500,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text("Printer"),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              widget: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 5),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xffF9F9F9),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: Center(
-                                  child: blueText("print", 12),
-                                ),
-                              ),
+                            listBTN(
+                                text: "copy".tr, onTap: () {}, width: w / 4.5),
+                            SizedBox(width: 5),
+                            listBTN(
+                              text: "print/pdf".tr,
+                              onTap: () {},
                             ),
-
+                            SizedBox(width: 5),
                             listBTN(
                                 text: "Excel", onTap: () {}, width: w / 4.5),
+                            SizedBox(width: 5),
                             listBTN(text: "CSV", onTap: () {}, width: w / 4.5),
                           ],
                         ),
@@ -253,9 +216,10 @@ class CustomersMainPageState extends State<CustomersMainPage> {
                                 )
                               : c.customersToShow.length == 0
                                   ? Center(
-                                      child: greyText("nothing to show !!", 20),
+                                      child: greyText("nothing_to_show".tr, 20),
                                     )
                                   : ListView.separated(
+                                      physics: BouncingScrollPhysics(),
                                       primary: false,
                                       itemBuilder: (context, index) => ListTile(
                                           onTap: () {

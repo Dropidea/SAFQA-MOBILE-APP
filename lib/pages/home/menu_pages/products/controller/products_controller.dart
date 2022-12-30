@@ -27,6 +27,11 @@ class ProductsController extends GetxController {
   List<Product> products = [];
   List<Product> productsToShow = [];
   List<Product> filteredProducts = [];
+  /////////////////////////////////////////////
+  List<Product> productsStore = [];
+  List<Product> productsStoreToShow = [];
+  List<Product> filteredProductsStore = [];
+
   double minPriceProduct() {
     double min = 10000000;
 
@@ -53,6 +58,16 @@ class ProductsController extends GetxController {
   );
 
   ProductFilter productFilter = ProductFilter(
+    filterActive: false,
+    category: null,
+    isActive: 0,
+    name: "",
+    priceMin: null,
+    priceMax: null,
+    priceType: 0,
+    price: null,
+  );
+  ProductFilter productStoreFilter = ProductFilter(
     filterActive: false,
     category: null,
     isActive: 0,
@@ -125,6 +140,69 @@ class ProductsController extends GetxController {
     update();
   }
 
+  activeProductStoreFilter() {
+    productStoreFilter.filterActive = true;
+    List<Product> tmp1 = [];
+    switch (productStoreFilter.isActive) {
+      case 0:
+        tmp1.addAll(productsStore);
+        break;
+      case 1:
+        for (var i in productsStore) {
+          if (i.isActive == 1) tmp1.add(i);
+          logSuccess("active product added");
+        }
+        break;
+      default:
+        for (var i in productsStore) {
+          logSuccess("inactive product added");
+          if (i.isActive != 1) tmp1.add(i);
+        }
+    }
+    List<Product> tmp2 = [];
+
+    if (productStoreFilter.category != null) {
+      for (var i in tmp1) {
+        if (i.category!.nameEn == productStoreFilter.category!.nameEn)
+          tmp2.add(i);
+      }
+    } else {
+      tmp2.addAll(tmp1);
+    }
+    tmp1 = [];
+
+    if (productStoreFilter.price != null) {
+      for (var i in tmp2) {
+        if (i.price == productStoreFilter.price) tmp1.add(i);
+      }
+    } else if (productStoreFilter.priceMin != null &&
+        productStoreFilter.priceMax != null) {
+      for (var i in tmp2) {
+        if (i.price! <= productStoreFilter.priceMax! &&
+            i.price! >= productStoreFilter.priceMin!) tmp1.add(i);
+      }
+    } else {
+      tmp1.addAll(tmp2);
+    }
+    tmp2 = [];
+
+    if (productStoreFilter.name != "") {
+      for (var i in tmp1) {
+        if (i.nameEn!.contains(productStoreFilter.name!) ||
+            i.nameAr!.contains(productStoreFilter.name!)) {
+          tmp2.add(i);
+        }
+      }
+    } else {
+      tmp2.addAll(tmp1);
+    }
+    tmp1 = [];
+
+    filteredProductsStore = tmp2;
+    productsStoreToShow = filteredProductsStore;
+    update();
+  }
+
   activeProductCategoryFilter() {
     productCategoryFilter.filterActive = true;
     List<ProductCategory> tmp1 = [];
@@ -178,6 +256,22 @@ class ProductsController extends GetxController {
     update();
   }
 
+  clearProductStoreFilter() {
+    productStoreFilter = ProductFilter(
+      filterActive: false,
+      category: null,
+      isActive: 0,
+      name: "",
+      price: null,
+      priceMin: null,
+      priceMax: null,
+      priceType: 0,
+    );
+    filteredProductsStore = productsStore;
+    productsStoreToShow = productsStore;
+    update();
+  }
+
   clearProductCategoryFilter() {
     productCategoryFilter = ProductCategoryFilter(
       filterActive: false,
@@ -206,6 +300,26 @@ class ProductsController extends GetxController {
         productsToShow = tmp;
       }
     }
+  }
+
+  void searchForProductsStoreWithName(String name) {
+    if (name == "") {
+      productsStoreToShow = filteredProductsStore;
+    } else {
+      List<Product> tmp = [];
+      for (var i in filteredProductsStore) {
+        if (i.nameEn!.contains(name) || i.nameAr!.contains(name)
+            // ||
+            // i.category!.nameAr!.contains(name) ||
+            // i.category!.nameEn!.contains(name)
+
+            ) {
+          tmp.add(i);
+        }
+        productsStoreToShow = tmp;
+      }
+    }
+    update();
   }
 
   void searchForProductsCategoryWithName(String name) {
@@ -357,6 +471,87 @@ class ProductsController extends GetxController {
         onTap: () {
           Get.back();
           Get.back();
+          Get.back();
+        },
+      );
+      await getProducts();
+      clearProductFilter();
+      return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editProduct(product);
+        }
+      } else {
+        logError(e.message);
+      }
+      // logError(e.response!.data);
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 3000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
+    }
+  }
+
+  Future<bool?> removeFromStore(Product product) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      final body = d.FormData.fromMap(product.toJson());
+      logSuccess(product.toJson());
+      body.fields.add(MapEntry("_method", "PUT"));
+      if (product.productImage != null) {
+        body.files.add(MapEntry(
+          "product_image",
+          await d.MultipartFile.fromFile(
+            product.productImage!.path,
+            filename: product.productImage!.path.split(" ").last,
+            contentType: MediaType('image', '*'),
+          ),
+        ));
+      }
+
+      await sslProblem();
+      var res = await dio.post(
+          EndPoints.baseURL + EndPoints.updateProduct + product.id.toString(),
+          data: body);
+      logSuccess(res.data);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Deleted Successfully",
+        btnTXT: "Close",
+        onTap: () {
           Get.back();
         },
       );
@@ -737,6 +932,9 @@ class ProductsController extends GetxController {
 
   Future getProducts() async {
     getProductsFlag.value = true;
+    productsStore = [];
+    productsStoreToShow = [];
+    filteredProductsStore = [];
     try {
       // body.fields.add(MapEntry("token", token));
 
@@ -748,9 +946,15 @@ class ProductsController extends GetxController {
       var decodedData = res.data["data"];
       for (var element in decodedData) {
         Product tmp = Product.fromJson(element);
+        if (tmp.inStore == 1) {
+          productsStore.add(tmp);
+          ;
+        }
         tmpList.add(tmp);
       }
 
+      filteredProductsStore = productsStore;
+      productsStoreToShow = productsStore;
       products = tmpList;
       productsToShow = products;
       filteredProducts = products;

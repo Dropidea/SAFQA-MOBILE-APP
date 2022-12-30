@@ -57,7 +57,7 @@ class ManageUserDetailsPage extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: MyAppBar(title: "Address Details"),
+      appBar: MyAppBar(title: "user_details".tr),
       body: Column(
         children: [
           GestureDetector(
@@ -87,7 +87,7 @@ class ManageUserDetailsPage extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    "Edit",
+                    "edit".tr,
                     style: TextStyle(
                       fontSize: 14.0.sp,
                       color: Color(0xff58D241),
@@ -108,36 +108,35 @@ class ManageUserDetailsPage extends StatelessWidget {
                 primary: false,
                 children: [
                   invoiceInfoMethod(
-                    title1: "Full Name",
+                    title1: "full_name".tr,
                     content1: manageUser.fullName,
-                    title2: "Is User Enabled?",
-                    content2: manageUser.isEnable == 1 ? "Yes" : "No",
+                    title2: "is_user_enabled".tr,
+                    content2: manageUser.isEnable == 1 ? "yes".tr : "no".tr,
                   ),
                   invoiceInfoMethod(
-                    title1: "Country",
+                    title1: "country".tr,
                     content1: manageUser.nationality!.nameEn,
                     title2: "",
                     content2: "",
                   ),
                   invoiceInfoMethod(
-                    title1: "Phone Number",
+                    title1: "mobile_number".tr,
                     content1:
                         "${globalDataController.getCountryCode(manageUser.phoneNumberCodeManagerId)} ${manageUser.phoneNumberManager!}",
                     title2: "",
                     content2: "",
                   ),
                   invoiceInfoMethod(
-                    title1: "Email",
+                    title1: "email".tr,
                     content1: manageUser.email,
                     title2: "",
                     content2: "",
                   ),
                   SizedBox(height: 20),
-                  blackText("United Arab Emirates - Roles", 14,
-                      fontWeight: FontWeight.bold),
+                  blackText("uae_roles".tr, 14, fontWeight: FontWeight.bold),
                   blackText(manageUser.userRole!.nameEn!, 13),
                   SizedBox(height: 20),
-                  blackText("United Arab Emirates - Notification Settings", 14,
+                  blackText("uae_notification_settings".tr, 14,
                       fontWeight: FontWeight.bold),
                   blackText(
                       _getNotificationString()

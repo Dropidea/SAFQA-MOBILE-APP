@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/contact/model/contact_us_model.dart';
+import 'package:safqa/pages/home/menu_pages/contact/model/support_type.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/dialoges.dart';
 
 class ContactUsController extends GetxController {
@@ -60,5 +62,34 @@ class ContactUsController extends GetxController {
 
       logError(e.response!.data);
     }
+  }
+
+  List<SupportType> supportType = [];
+
+  bool supportTypesFlag = false;
+  Future getSupportTypes() async {
+    supportType = [];
+    try {
+      supportTypesFlag = true;
+      await sslProblem();
+
+      var res = await dio.get(EndPoints.getSupportTypes);
+      for (var i in res.data["data"]) {
+        supportType.add(SupportType.fromJson(i));
+      }
+      supportTypesFlag = false;
+      logSuccess("Support Types get done");
+    } on DioError catch (e) {
+      supportTypesFlag = false;
+      if (e.response!.statusCode == 404) {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getSupportTypes();
+        }
+      } else {
+        logError("Support Types failed");
+      }
+    }
+    update();
   }
 }

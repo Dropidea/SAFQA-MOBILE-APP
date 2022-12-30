@@ -60,6 +60,8 @@ class _MainPageState extends State<MainPage> {
     _globlDataController.getRoles();
     _globlDataController.getSendOptions();
     _globlDataController.getContactUsInfo();
+    _globlDataController.getLanguages();
+    _globlDataController.getRecurringInterval();
 
     super.initState();
   }

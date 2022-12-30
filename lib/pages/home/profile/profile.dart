@@ -1,6 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/profile/business_datails_page.dart';
 import 'package:safqa/pages/home/profile/controller/profile_controller.dart';
@@ -9,9 +10,23 @@ import 'package:safqa/pages/home/profile/pr_bank_details.dart';
 import 'package:safqa/pages/home/profile/social_media_page.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   ProfileController _profileController = Get.put(ProfileController());
+  GlobalDataController _globalDataController = Get.find();
+  @override
+  void initState() {
+    _profileController.getProfileBusiness();
+    _profileController.getSocialMediaLinks();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +36,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        title: blackText("Profile", 16),
+        title: blackText("profile".tr, 16),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
@@ -126,33 +141,33 @@ class ProfilePage extends StatelessWidget {
           ),
           SizedBox(height: 20),
           Align(
-            child: blackText("Username user", 15),
+            child: blackText(_globalDataController.me.fullName!, 15),
           ),
           SizedBox(height: 40),
           profileOption(
             w,
-            title: 'Business Details',
+            title: 'business_details'.tr,
             icon: EvaIcons.briefcase,
             onTap: () => Get.to(() => BusinessDetailsPage(),
                 transition: Transition.rightToLeft),
           ),
           profileOption(
             w,
-            title: 'Bank Details',
+            title: 'bank_details'.tr,
             icon: EvaIcons.creditCard,
             onTap: () => Get.to(() => ProfileBankDetailsPage(),
                 transition: Transition.rightToLeft),
           ),
           profileOption(
             w,
-            title: 'Social Media',
+            title: 'social_media'.tr,
             icon: EvaIcons.globe,
             onTap: () => Get.to(() => SocialMediaPage(),
                 transition: Transition.rightToLeft),
           ),
           profileOption(
             w,
-            title: 'Documents',
+            title: 'docs'.tr,
             icon: EvaIcons.fileAdd,
             onTap: () =>
                 Get.to(() => DocsPage(), transition: Transition.rightToLeft),
@@ -185,7 +200,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 10),
-              prblackText(title, 16, fontWeight: FontWeight.w600),
+              prblackText(title, 14.5, fontWeight: FontWeight.w600),
             ],
           ),
           GestureDetector(

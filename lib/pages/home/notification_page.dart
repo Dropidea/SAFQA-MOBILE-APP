@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:sizer/sizer.dart';
 
 class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key});
+  NotificationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class NotificationPage extends StatelessWidget {
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: blackText("Notifications", 16),
+        title: blackText("notifications".tr, 16),
         iconTheme: IconThemeData(
           color: Colors.black,
         ),

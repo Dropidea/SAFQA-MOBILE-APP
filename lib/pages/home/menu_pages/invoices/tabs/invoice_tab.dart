@@ -34,77 +34,32 @@ class _InvoiceTabState extends State<InvoiceTab> {
           child: CircularProgressIndicator(),
         );
       } else {
-        return ListView(
-          children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     blackText("Today", 16),
-            //     greyText("09 October 2022", 14)
-            //   ],
-            // ),
-            GetBuilder<InvoicesController>(builder: (c) {
-              return ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => InvoiceWidget(
-                  inv: c.invoicesToShow[index],
-                  onTap: () {
-                    logSuccess(c.invoicesToShow[index]);
-                    Get.to(
-                      () => InvoiceDetailsPage(
-                          invoiceModel: c.invoicesToShow[index]),
-                      transition: Transition.downToUp,
-                    );
-                  },
-                  type: InvoiceTypes.paid,
-                ),
-                itemCount: c.invoicesToShow.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    SizedBox(height: 20),
-              );
-            }),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     blackText("Yesterday", 16),
-            //     greyText("08 October 2022", 14)
-            //   ],
-            // ),
-            // ListView.separated(
-            //   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            //   shrinkWrap: true,
-            //   physics: NeverScrollableScrollPhysics(),
-            //   itemBuilder: (context, index) => InvoiceWidget(
-            //     inv: invoiceController.invoices[index],
-            //     type: InvoiceTypes.pending,
-            //   ),
-            //   itemCount: invoiceController.invoices.length,
-            //   separatorBuilder: (BuildContext context, int index) =>
-            //       SizedBox(height: 20),
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     blackText("Last week", 16),
-            //     greyText("01 October 2022", 14)
-            //   ],
-            // ),
-            // ListView.separated(
-            //   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            //   shrinkWrap: true,
-            //   physics: NeverScrollableScrollPhysics(),
-            //   itemBuilder: (context, index) => InvoiceWidget(
-            //     inv: invoiceController.invoices[index],
-            //     type: InvoiceTypes.pending,
-            //   ),
-            //   itemCount: invoiceController.invoices.length,
-            //   separatorBuilder: (BuildContext context, int index) =>
-            //       SizedBox(height: 20),
-            // )
-          ],
-        );
+        return GetBuilder<InvoicesController>(builder: (c) {
+          return c.invoicesToShow.isEmpty
+              ? Center(
+                  child: greyText("nothing_to_show".tr, 20),
+                )
+              : ListView.separated(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => InvoiceWidget(
+                    inv: c.invoicesToShow[index],
+                    onTap: () {
+                      logSuccess(c.invoicesToShow[index]);
+                      Get.to(
+                        () => InvoiceDetailsPage(
+                            invoiceModel: c.invoicesToShow[index]),
+                        transition: Transition.downToUp,
+                      );
+                    },
+                    type: InvoiceTypes.paid,
+                  ),
+                  itemCount: c.invoicesToShow.length,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      SizedBox(height: 20),
+                );
+        });
       }
     });
   }

@@ -158,6 +158,7 @@ class AddInvoiceController extends GetxController {
       //   ),
       // );
     }
+    update();
   }
 
   Future<bool> editInvoice() async {

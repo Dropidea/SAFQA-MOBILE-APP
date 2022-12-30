@@ -13,6 +13,7 @@ class ProductWidget extends StatefulWidget {
       this.orderedFlag = false,
       this.orderedState,
       required this.product});
+
   final Product product;
   bool orderedFlag;
   String? orderedState;
@@ -80,11 +81,19 @@ class _ProductWidgetState extends State<ProductWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    blackText(
-                        widget.product.nameEn!.length < 15
-                            ? widget.product.nameEn!
-                            : widget.product.nameEn!.substring(0, 15) + "...",
-                        15),
+                    _localsController.currenetLocale == 0
+                        ? blackText(
+                            widget.product.nameEn!.length < 15
+                                ? widget.product.nameEn!
+                                : widget.product.nameEn!.substring(0, 15) +
+                                    "...",
+                            15)
+                        : blackText(
+                            widget.product.nameAr!.length < 15
+                                ? widget.product.nameAr!
+                                : widget.product.nameAr!.substring(0, 15) +
+                                    "...",
+                            15),
                     greyText(
                         "${"remaining".tr} : ${widget.product.quantity!}", 14),
                     !widget.orderedFlag

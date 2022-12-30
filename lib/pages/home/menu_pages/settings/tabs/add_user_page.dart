@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/controllers/manage_users_controller.dart';
@@ -23,6 +24,7 @@ class AddUserPage extends StatefulWidget {
 class _AddUserPageState extends State<AddUserPage> {
   int isUserEnabled = 0;
   int userRole = -1;
+  LocalsController _localsController = Get.put(LocalsController());
   List<String> superMasterOptions = [
     "Create Invoice",
     'Create Batch Invoice',
@@ -96,15 +98,15 @@ class _AddUserPageState extends State<AddUserPage> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar:
-          MyAppBar(title: widget.userToEdit != null ? "Edit User" : "Add User"),
+      appBar: MyAppBar(
+          title: widget.userToEdit != null ? "edit_user".tr : "add_user".tr),
       body: Form(
         key: formKey,
         child: ListView(
           primary: false,
           padding: EdgeInsets.all(20),
           children: [
-            blackText("Full Name", 15),
+            blackText("full_name".tr, 15),
             SignUpTextField(
               padding: const EdgeInsets.all(0),
               initialValue: widget.userToEdit != null
@@ -119,7 +121,7 @@ class _AddUserPageState extends State<AddUserPage> {
               },
             ),
             const SizedBox(height: 20),
-            blackText("Phone Number", 15),
+            blackText("mobile_number".tr, 15),
             GetBuilder<SignUpController>(builder: (c) {
               List countries = c.globalData['country'];
               List<String> ids = countries
@@ -179,7 +181,6 @@ class _AddUserPageState extends State<AddUserPage> {
                   if (s!.isEmpty) return "required";
                   return null;
                 },
-                hintText: 'Manager Mobile Number',
               );
             }),
 
@@ -200,7 +201,7 @@ class _AddUserPageState extends State<AddUserPage> {
             // ),
 
             const SizedBox(height: 20),
-            blackText("Email", 15),
+            blackText("email".tr, 15),
             SignUpTextField(
               padding: const EdgeInsets.all(0),
               initialValue:
@@ -287,7 +288,7 @@ class _AddUserPageState extends State<AddUserPage> {
                   )
                 : Container(),
             const SizedBox(height: 20),
-            blackText("United Arab Emirates - Roles", 15),
+            blackText("uae_roles".tr, 15),
 
             ListView.separated(
                 shrinkWrap: true,
@@ -351,8 +352,16 @@ class _AddUserPageState extends State<AddUserPage> {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: selectedValues.isEmpty
-                            ? greyText("Choose roles", 14)
-                            : blackText("Edit selected roles", 14),
+                            ? greyText(
+                                _localsController.currenetLocale == 0
+                                    ? "Choose roles"
+                                    : "إختر الأدوار",
+                                14)
+                            : blackText(
+                                _localsController.currenetLocale == 0
+                                    ? "Edit selected roles"
+                                    : "عدل الأدوار المختارة",
+                                14),
                       );
                     },
                     options: normalUserOptions,
@@ -373,14 +382,22 @@ class _AddUserPageState extends State<AddUserPage> {
                   )
                 : Container(),
             SizedBox(height: 20),
-            blackText("United Arab Emirates - Notification Settings", 14),
+            blackText("uae_notification_settings".tr, 14),
             MyMultiDropdown(
               childBuilder: (selectedValues) {
                 return Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: selectedValues.isEmpty
-                      ? greyText("Choose Notification Settings", 14)
-                      : blackText("Edit Selected Notification Settings", 14),
+                      ? greyText(
+                          _localsController.currenetLocale == 0
+                              ? "Choose Notification Settings"
+                              : "إختر إعدادات الإشعارات",
+                          14)
+                      : blackText(
+                          _localsController.currenetLocale == 0
+                              ? "Edit Selected Notification Settings"
+                              : "عدل إعدادات الإشعارات المختارة",
+                          14),
                 );
               },
               width: w,
@@ -403,7 +420,7 @@ class _AddUserPageState extends State<AddUserPage> {
             ),
             SizedBox(height: 40),
             CircularGoBTN(
-              text: "Add User",
+              text: widget.userToEdit != null ? "edit_user".tr : "add_user".tr,
               onTap: () async {
                 FocusScope.of(context).unfocus();
                 // logWarning(widget.userToEdit!.toJson());

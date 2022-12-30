@@ -30,6 +30,7 @@ class ContactPageState extends State<ContactPage> {
   String fileName = "";
   @override
   void initState() {
+    _contactUsController.getSupportTypes();
     _contactUsInfo = _globalDataController.contactUsInfo;
     _contactUsMessage.email = _globalDataController.me.email;
     _contactUsMessage.fullName = _globalDataController.me.fullName;
@@ -94,217 +95,248 @@ class ContactPageState extends State<ContactPage> {
                       ),
                     ),
                     child: ExpandableNotifier(
-                      child: ListView(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                        primary: false,
-                        children: [
-                          ExpandablePanel(
-                            header: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                      color: Colors.grey, width: 0.5),
-                                ),
-                              ),
-                              child: blackText("Contact", 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            controller:
-                                ExpandableController(initialExpanded: true),
-                            collapsed: Container(),
-                            theme: ExpandableThemeData(hasIcon: false),
-                            expanded: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 20),
-                                blackText("address".tr, 15,
-                                    fontWeight: FontWeight.normal),
-                                const SizedBox(height: 5),
-                                greyText(
-                                    "${_contactUsInfo.country}, ${_contactUsInfo.city}, ${_contactUsInfo.area}, ${_contactUsInfo.block}, ${_contactUsInfo.avenue}, ${_contactUsInfo.street}",
-                                    13),
-                                const SizedBox(height: 20),
-                                blackText("email".tr, 15,
-                                    fontWeight: FontWeight.normal),
-                                const SizedBox(height: 5),
-                                greyText(_contactUsInfo.supportEmail!, 13),
-                                const SizedBox(height: 20),
-                                blackText("sales_contact_details".tr, 15,
-                                    fontWeight: FontWeight.normal),
-                                const SizedBox(height: 5),
-                                ListView.separated(
-                                  itemCount:
-                                      _contactUsInfo.contactPhones!.length,
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) => greyText(
-                                      "${_contactUsInfo.contactPhones![index].number} (${_contactUsInfo.contactPhones![index].type})",
-                                      13),
-                                  separatorBuilder: (context, index) =>
-                                      const SizedBox(height: 5),
-                                ),
-                                const SizedBox(height: 20),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          ExpandablePanel(
-                            header: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                      color: Colors.grey, width: 0.5),
-                                ),
-                              ),
-                              child: blackText("leave_message".tr, 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            controller:
-                                ExpandableController(initialExpanded: true),
-                            collapsed: Container(),
-                            theme: ExpandableThemeData(hasIcon: false),
-                            expanded: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 20),
-                                blackText("support_type".tr, 15,
-                                    fontWeight: FontWeight.normal),
-                                CustomDropdown(
-                                  width: w,
-                                  items: ["item1", "item2"],
-                                  onchanged: (s) {
-                                    _contactUsMessage.supportTypeId = 1;
-                                  },
-                                  hint: "choose".tr,
-                                ),
-                                const SizedBox(height: 20),
-                                blackText("attach_file".tr, 16),
-                                GestureDetector(
-                                  onTap: () async {
-                                    FilePickerResult? result =
-                                        await FilePicker.platform.pickFiles(
-                                      type: FileType.custom,
-                                      allowedExtensions: ['pdf', 'xlsx'],
-                                    );
-                                    if (result != null) {
-                                      File file =
-                                          File(result.files.single.path!);
-                                      fileName = result.files.single.path!
-                                          .split("/")
-                                          .last;
-                                      _contactUsMessage.imagesFiles = file;
-                                      setState(() {});
-                                    } else {
-                                      // User canceled the picker
-                                    }
-                                  },
-                                  child: DottedBorder(
-                                    padding: EdgeInsets.all(0),
-                                    customPath: (size) {
-                                      return Path()
-                                        ..moveTo(10, 0)
-                                        ..lineTo(size.width - 10, 0)
-                                        ..arcToPoint(Offset(size.width, 10),
-                                            radius: Radius.circular(10))
-                                        ..lineTo(size.width, size.height - 10)
-                                        ..arcToPoint(
-                                            Offset(
-                                                size.width - 10, size.height),
-                                            radius: Radius.circular(10))
-                                        ..lineTo(10, size.height)
-                                        ..arcToPoint(
-                                            Offset(0, size.height - 10),
-                                            radius: Radius.circular(10))
-                                        ..lineTo(0, 10)
-                                        ..arcToPoint(Offset(10, 0),
-                                            radius: Radius.circular(10));
-                                    },
-                                    color: Color(0xff2F6782).withOpacity(0.4),
-                                    strokeWidth: 1,
-                                    dashPattern: [10, 5],
-                                    child: Container(
-                                      width: w,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Color(0xff2F6782).withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(10),
+                      child: GetBuilder<ContactUsController>(builder: (c) {
+                        return c.supportTypesFlag
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : ListView(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 20),
+                                primary: false,
+                                children: [
+                                  ExpandablePanel(
+                                    header: Container(
+                                      decoration: const BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.grey, width: 0.5),
+                                        ),
                                       ),
-                                      child: Center(
-                                          child: fileName == ""
-                                              ? Icon(
-                                                  Icons.add_rounded,
-                                                  color: Color(0xff00A7B3),
-                                                  size: 22.0.sp,
-                                                )
-                                              : Text(
-                                                  fileName,
-                                                  style: TextStyle(
-                                                    color: Color(0xff00A7B3),
-                                                    fontSize: 15.0.sp,
-                                                  ),
-                                                )),
+                                      child: blackText("Contact", 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    controller: ExpandableController(
+                                        initialExpanded: true),
+                                    collapsed: Container(),
+                                    theme: ExpandableThemeData(hasIcon: false),
+                                    expanded: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 20),
+                                        blackText("address".tr, 15,
+                                            fontWeight: FontWeight.normal),
+                                        const SizedBox(height: 5),
+                                        greyText(
+                                            "${_contactUsInfo.country}, ${_contactUsInfo.city}, ${_contactUsInfo.area}, ${_contactUsInfo.block}, ${_contactUsInfo.avenue}, ${_contactUsInfo.street}",
+                                            13),
+                                        const SizedBox(height: 20),
+                                        blackText("email".tr, 15,
+                                            fontWeight: FontWeight.normal),
+                                        const SizedBox(height: 5),
+                                        greyText(
+                                            _contactUsInfo.supportEmail!, 13),
+                                        const SizedBox(height: 20),
+                                        blackText(
+                                            "sales_contact_details".tr, 15,
+                                            fontWeight: FontWeight.normal),
+                                        const SizedBox(height: 5),
+                                        ListView.separated(
+                                          itemCount: _contactUsInfo
+                                              .contactPhones!.length,
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) => greyText(
+                                              "${_contactUsInfo.contactPhones![index].number} (${_contactUsInfo.contactPhones![index].type})",
+                                              13),
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(height: 5),
+                                        ),
+                                        const SizedBox(height: 20),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: 20),
-                                blackText("message".tr, 16),
-                                Container(
-                                  width: w,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15, top: 5),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffF8F8F8),
-                                    borderRadius: BorderRadius.circular(10.0),
+                                  SizedBox(height: 10),
+                                  ExpandablePanel(
+                                    header: Container(
+                                      decoration: const BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.grey, width: 0.5),
+                                        ),
+                                      ),
+                                      child: blackText("leave_message".tr, 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    controller: ExpandableController(
+                                        initialExpanded: true),
+                                    collapsed: Container(),
+                                    theme: ExpandableThemeData(hasIcon: false),
+                                    expanded: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 20),
+                                        blackText("support_type".tr, 15,
+                                            fontWeight: FontWeight.normal),
+                                        CustomDropdown(
+                                          width: w,
+                                          items: c.supportType
+                                              .map((e) => e.name!)
+                                              .toList(),
+                                          onchanged: (s) {
+                                            _contactUsMessage.supportTypeId = c
+                                                .supportType
+                                                .indexWhere((element) =>
+                                                    element.name == s);
+                                          },
+                                          hint: "choose".tr,
+                                        ),
+                                        const SizedBox(height: 20),
+                                        blackText("attach_file".tr, 16),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            FilePickerResult? result =
+                                                await FilePicker.platform
+                                                    .pickFiles(
+                                              type: FileType.custom,
+                                              allowedExtensions: [
+                                                'pdf',
+                                                'xlsx'
+                                              ],
+                                            );
+                                            if (result != null) {
+                                              File file = File(
+                                                  result.files.single.path!);
+                                              fileName = result
+                                                  .files.single.path!
+                                                  .split("/")
+                                                  .last;
+                                              _contactUsMessage.imagesFiles =
+                                                  file;
+                                              setState(() {});
+                                            } else {
+                                              // User canceled the picker
+                                            }
+                                          },
+                                          child: DottedBorder(
+                                            padding: EdgeInsets.all(0),
+                                            customPath: (size) {
+                                              return Path()
+                                                ..moveTo(10, 0)
+                                                ..lineTo(size.width - 10, 0)
+                                                ..arcToPoint(
+                                                    Offset(size.width, 10),
+                                                    radius: Radius.circular(10))
+                                                ..lineTo(size.width,
+                                                    size.height - 10)
+                                                ..arcToPoint(
+                                                    Offset(size.width - 10,
+                                                        size.height),
+                                                    radius: Radius.circular(10))
+                                                ..lineTo(10, size.height)
+                                                ..arcToPoint(
+                                                    Offset(0, size.height - 10),
+                                                    radius: Radius.circular(10))
+                                                ..lineTo(0, 10)
+                                                ..arcToPoint(Offset(10, 0),
+                                                    radius:
+                                                        Radius.circular(10));
+                                            },
+                                            color: Color(0xff2F6782)
+                                                .withOpacity(0.4),
+                                            strokeWidth: 1,
+                                            dashPattern: [10, 5],
+                                            child: Container(
+                                              width: w,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xff2F6782)
+                                                    .withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Center(
+                                                  child: fileName == ""
+                                                      ? Icon(
+                                                          Icons.add_rounded,
+                                                          color:
+                                                              Color(0xff00A7B3),
+                                                          size: 22.0.sp,
+                                                        )
+                                                      : Text(
+                                                          fileName,
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xff00A7B3),
+                                                            fontSize: 15.0.sp,
+                                                          ),
+                                                        )),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        blackText("message".tr, 16),
+                                        Container(
+                                          width: w,
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          padding: const EdgeInsets.only(
+                                              left: 15, right: 15, top: 5),
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffF8F8F8),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          child: TextField(
+                                            onChanged: (value) {
+                                              _contactUsMessage.message = value;
+                                            },
+                                            maxLines: 4,
+                                            decoration: const InputDecoration(
+                                                border: InputBorder.none),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      _contactUsMessage.message = value;
-                                    },
-                                    maxLines: 4,
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none),
+                                  SizedBox(height: 20),
+                                  Center(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _contactUsController
+                                            .storeMessage(_contactUsMessage);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: Color(0xff2F6782),
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/btn_wallpaper.png"),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        width: 0.7 * w,
+                                        padding: EdgeInsets.all(15),
+                                        child: Center(
+                                          child: Text(
+                                            "submit".tr,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17.0.sp,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Center(
-                            child: GestureDetector(
-                              onTap: () {
-                                _contactUsController
-                                    .storeMessage(_contactUsMessage);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Color(0xff2F6782),
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/btn_wallpaper.png"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                width: 0.7 * w,
-                                padding: EdgeInsets.all(15),
-                                child: Center(
-                                  child: Text(
-                                    "submit".tr,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 17.0.sp,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                                ],
+                              );
+                      }),
                     )),
               )
             ],

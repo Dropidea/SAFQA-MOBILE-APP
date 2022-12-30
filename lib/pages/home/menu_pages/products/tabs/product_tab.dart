@@ -268,7 +268,7 @@ class _ProductsTabState extends State<ProductsTab> {
               return Expanded(
                   child: _productsController.productsToShow.isEmpty
                       ? Center(
-                          child: greyText("nothing to show !!", 20),
+                          child: greyText("nothing_to_show".tr, 20),
                         )
                       : ListView.builder(
                           primary: false,

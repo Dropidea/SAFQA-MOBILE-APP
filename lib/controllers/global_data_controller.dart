@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/bank_model.dart';
 import 'package:safqa/models/contacts.dart';
+import 'package:safqa/models/payment_link.dart';
+import 'package:safqa/models/recurring_interval.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/address_type.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/city.dart';
@@ -34,6 +36,7 @@ class GlobalDataController extends GetxController {
   List<SendOption> sendOptions = [];
   List<UserRole> roles = [];
   List<City> cities = [];
+  List<Language> languages = [];
   List<Area> areas = [];
   List<Area> areastoshow = [];
   List<AddressType> addressTypes = [];
@@ -68,12 +71,48 @@ class GlobalDataController extends GetxController {
         ContactPhones t = ContactPhones.fromJson(i);
         tmp.add(t);
       }
-      ContactUsInfo tmp2 = ContactUsInfo.fromJson(res2.data["message"]);
+      ContactUsInfo tmp2 = ContactUsInfo.fromJson(res2.data["data"]);
       tmp2.contactPhones = tmp;
       contactUsInfo = tmp2;
       logSuccess("Contact Us info done");
     } on DioError catch (e) {
       logError("Contact Us info failed");
+    }
+  }
+
+  Future getLanguages() async {
+    try {
+      await sslProblem();
+      var res1 = await dio.get(EndPoints.getLanguages);
+
+      List<Language> tmp = [];
+      for (var i in res1.data['data']) {
+        Language t = Language.fromJson(i);
+        tmp.add(t);
+      }
+      languages = tmp;
+      logSuccess("Languages done");
+    } on DioError catch (e) {
+      logError("Languages failed");
+    }
+  }
+
+  List<RecurringInterval> recurringIntervals = [];
+  Future getRecurringInterval() async {
+    recurringIntervals = [];
+    try {
+      await sslProblem();
+      var res1 = await dio.get(EndPoints.getRecurringInerval);
+
+      List<RecurringInterval> tmp = [];
+      for (var i in res1.data['data']) {
+        RecurringInterval t = RecurringInterval.fromJson(i);
+        tmp.add(t);
+      }
+      recurringIntervals = tmp;
+      logSuccess("Recurring Interval done");
+    } on DioError catch (e) {
+      logError("Recurring Interval failed");
     }
   }
 

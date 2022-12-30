@@ -55,7 +55,7 @@ class _BankInfoPageState extends State<BankInfoPage> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          "Bank Info",
+          "bank_info".tr,
           style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -71,7 +71,7 @@ class _BankInfoPageState extends State<BankInfoPage> {
           primary: false,
           children: [
             const SizedBox(height: 20),
-            blackText("Bank Name", 16),
+            blackText("bank_name".tr, 16),
             SearchField<Bank>(
               itemHeight: 40,
               initialValue: widget.customer != null &&
@@ -128,14 +128,14 @@ class _BankInfoPageState extends State<BankInfoPage> {
                   .toList(),
             ),
             const SizedBox(height: 20),
-            blackText("Bank Account", 16),
+            blackText("bank_account".tr, 16),
             SignUpTextField(
                 padding: EdgeInsets.all(0),
                 keyBoardType: TextInputType.number,
                 onchanged: (s) => bankAccountControler = s!,
                 initialValue: bankAccountControler),
             const SizedBox(height: 20),
-            blackText("Iban", 16),
+            blackText("iban".tr, 16),
             SignUpTextField(
               padding: EdgeInsets.all(0),
               textInputAction: TextInputAction.done,
@@ -188,7 +188,7 @@ class _BankInfoPageState extends State<BankInfoPage> {
                   padding: EdgeInsets.all(15),
                   child: Center(
                     child: Text(
-                      "Save",
+                      "save".tr,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 17.0.sp,

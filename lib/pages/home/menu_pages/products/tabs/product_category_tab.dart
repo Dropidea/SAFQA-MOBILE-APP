@@ -1,9 +1,22 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
+import 'package:csv/csv.dart';
+// import 'package:dartarabic/dartarabic.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:printing/printing.dart';
 import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/category_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/category_search_filter.dart';
@@ -11,6 +24,7 @@ import 'package:safqa/pages/home/menu_pages/products/controller/products_control
 import 'package:safqa/pages/home/menu_pages/products/create_category.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
@@ -85,11 +99,33 @@ class _ProductsCategoryTabState extends State<ProductsCategoryTab> {
                   children: [
                     listBTN(text: "copy".tr, onTap: () {}, width: w / 4.5),
                     const SizedBox(width: 5),
-                    listBTN(text: "print/pdf".tr, onTap: () {}),
+                    listBTN(
+                        text: "print/pdf".tr,
+                        onTap: () async {
+                          await saveProductCategoryPDF(
+                            _productController.productCategoriesToShow,
+                            context,
+                            w,
+                          );
+                        }),
                     const SizedBox(width: 5),
-                    listBTN(text: "Excel", onTap: () {}, width: w / 4.5),
+                    listBTN(
+                        text: "Excel",
+                        onTap: () async {
+                          await saveProductCategoryExcel(
+                              _productController.productCategoriesToShow,
+                              context);
+                        },
+                        width: w / 4.5),
                     const SizedBox(width: 5),
-                    listBTN(text: "CSV", onTap: () {}, width: w / 4.5),
+                    listBTN(
+                        text: "CSV",
+                        onTap: () async {
+                          await saveProductCategoryCSV(
+                              _productController.productCategoriesToShow,
+                              context);
+                        },
+                        width: w / 4.5),
                   ],
                 ),
               ),
@@ -322,4 +358,228 @@ class _CategoryCardState extends State<CategoryCard> {
       ),
     );
   }
+}
+
+saveProductCategoryExcel(List<ProductCategory> ll, BuildContext context) async {
+  var excel = Excel.createExcel();
+
+  var sheet = excel["Sheet1"];
+  excel.rename("Sheet 1", "Product Categorirs");
+  CellStyle cellStyle = CellStyle(
+    bold: true,
+    italic: true,
+    textWrapping: TextWrapping.WrapText,
+    fontFamily: getFontFamily(FontFamily.Comic_Sans_MS),
+    rotation: 0,
+  );
+  sheet.appendRow(
+    ["Name En", "Name Ar", "Active", "Created At", "Updated At"],
+  );
+  var cell1 = sheet.cell(CellIndex.indexByString("A1"));
+  var cell2 = sheet.cell(CellIndex.indexByString("B1"));
+  var cell3 = sheet.cell(CellIndex.indexByString("C1"));
+  var cell4 = sheet.cell(CellIndex.indexByString("C1"));
+  var cell5 = sheet.cell(CellIndex.indexByString("C1"));
+  cell1.cellStyle = cellStyle;
+  cell2.cellStyle = cellStyle;
+  cell3.cellStyle = cellStyle;
+  cell4.cellStyle = cellStyle;
+  cell5.cellStyle = cellStyle;
+  for (var i in ll) {
+    sheet.appendRow([
+      i.nameEn,
+      i.nameAr,
+      i.isActive == 1 ? "active".tr : "inactive".tr,
+      i.createdAt,
+      i.updatedAt,
+    ]);
+  }
+
+  Directory? dir = await getExternalStorageDirectory();
+  late PermissionStatus status;
+  late PermissionStatus status2;
+  try {
+    status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    status2 = await Permission.manageExternalStorage.status;
+    if (!status2.isGranted) {
+      await Permission.manageExternalStorage.request();
+    }
+  } catch (e) {
+    logError(e);
+  }
+  if (status.isGranted || status2.isGranted) {
+    String tmp = dir!.parent.parent.parent.parent.path +
+        "/Safqa/Product Categories/Excel";
+    Directory newDir = await Directory(tmp).create(recursive: true);
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String outputFile = newDir.path + "/${formatter.format(now)}.xlsx";
+    if (await File(outputFile).exists()) {
+      await File(outputFile).delete();
+    }
+    //stopwatch.reset();
+    List<int>? fileBytes = excel.save();
+    if (fileBytes != null) {
+      File(outputFile)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(fileBytes);
+    }
+    Utils.showSnackBar(
+        context, "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد Safqa!!");
+  }
+}
+
+saveProductCategoryCSV(List<ProductCategory> ll, BuildContext context) async {
+  List<List<dynamic>> rows = [];
+  List<dynamic> row = [];
+  row.add("Name En");
+  row.add("Name Ar");
+  row.add("Is Active");
+  row.add("Created At");
+  row.add("Updated At");
+  rows.add(row);
+  for (var i in ll) {
+    List<dynamic> row = [];
+    row.add(i.nameEn);
+    row.add(i.nameAr);
+    row.add(i.isActive);
+    row.add(i.createdAt);
+    row.add(i.updatedAt);
+    rows.add(row);
+  }
+
+  String csv = const ListToCsvConverter().convert(rows);
+
+  Directory? dir = await getExternalStorageDirectory();
+  late PermissionStatus status;
+  late PermissionStatus status2;
+  try {
+    status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    status2 = await Permission.manageExternalStorage.status;
+    if (!status2.isGranted) {
+      await Permission.manageExternalStorage.request();
+    }
+  } catch (e) {
+    logError(e);
+  }
+  if (status.isGranted || status2.isGranted) {
+    String tmp =
+        dir!.parent.parent.parent.parent.path + "/Safqa/Product Categories/CSV";
+    Directory newDir = await Directory(tmp).create(recursive: true);
+    var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String outputFile = newDir.path + "/${formatter.format(now)}.csv";
+    if (await File(outputFile).exists()) {
+      await File(outputFile).delete();
+    }
+    File f = File(outputFile);
+    await f.writeAsString(csv);
+  }
+  Utils.showSnackBar(
+      context, "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد Safqa!!");
+}
+
+saveProductCategoryPDF(
+    List<ProductCategory> ll, BuildContext context, double w) async {
+  final doc = pw.Document();
+  doc.addPage(pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      theme: pw.ThemeData.withFont(
+        base: pw.Font.ttf(
+          await rootBundle.load('assets/fonts/Tajawal-Regular.ttf'),
+        ),
+        bold: pw.Font.ttf(
+          await rootBundle.load('assets/fonts/Tajawal-Bold.ttf'),
+        ),
+      ),
+      build: (pw.Context context) {
+        return pw.ListView.separated(
+          itemCount: ll.length,
+          itemBuilder: (context, index) {
+            return CategoryForPrint(
+              isToggled: ll[index].isActive == 1,
+              width: w,
+              nameAr: ll[index].nameAr,
+              nameEn: ll[index].nameEn,
+            );
+          },
+          separatorBuilder: (pw.Context context, int index) {
+            return pw.SizedBox(height: 10);
+          },
+        ); // Center
+      }));
+
+  await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => doc.save());
+}
+
+CategoryForPrint({
+  double? width,
+  double? height,
+  String? nameEn,
+  String? nameAr,
+  required bool isToggled,
+}) {
+  return pw.Center(
+    child: pw.Container(
+      // margin: EdgeInsets.symmetric(horizontal: 10),
+      padding: pw.EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+      width: width,
+      height: height,
+      decoration: pw.BoxDecoration(
+        color: PdfColor.fromHex("F8F8F8FF"),
+        borderRadius: pw.BorderRadius.circular(10),
+      ),
+      child: pw.Column(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            children: [
+              pw.Text(
+                nameEn ?? "",
+                style: pw.TextStyle(
+                  color: PdfColor.fromHex("000000"),
+                  fontSize: 15,
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Row(
+                children: [
+                  pw.Text(
+                    (isToggled ? "active".tr : "inactive".tr),
+                    textDirection: pw.TextDirection.rtl,
+                    style: pw.TextStyle(
+                      color: isToggled
+                          ? PdfColor.fromHex("1BAFB2FF")
+                          : PdfColor.fromHex("808080"),
+                      fontSize: 13.0.sp,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                  pw.SizedBox(width: 10),
+                ],
+              ),
+            ],
+          ),
+          pw.SizedBox(height: 20),
+          pw.Text(
+            (nameAr ?? ""),
+            style: pw.TextStyle(
+              color: PdfColor.fromHex("888888"),
+              fontSize: 15,
+            ),
+            textDirection: pw.TextDirection.rtl,
+          )
+        ],
+      ),
+    ),
+  );
 }

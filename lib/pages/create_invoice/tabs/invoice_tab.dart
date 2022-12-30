@@ -35,7 +35,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   int invoicesLangValue = 1;
   int termsAndConditions = 1;
   String fileName = "";
-  bool recurringIntervalFlag = false;
+  bool recurringIntervalFlag = true;
   bool discountAvailableFlag = false;
   bool discountTypeFlag = true;
   bool termsConditionsFlag = false;
@@ -462,59 +462,90 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
         const SizedBox(height: 20),
         blackText("recurring_interval".tr, 16),
         Container(
-          width: w,
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
-          decoration: BoxDecoration(
-            color: Color(0xffF8F8F8),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: DropdownButtonFormField(
-            decoration: const InputDecoration(border: InputBorder.none),
-            items: addInvoiceController.recurringInterval
-                .map(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(
-                      e,
-                    ),
-                  ),
-                )
-                .toList(),
-            value: addInvoiceController.dataToEditInvoice != null
-                ? addInvoiceController.dataToEditInvoice!.recurringIntervalId ==
-                        4
-                    ? "No Recurring"
-                    : "Monthly"
-                : addInvoiceController.selectedRecurringInterval,
-            onChanged: (value) {
-              addInvoiceController.selectRecurringInterval(value!);
-              startDateController.text = "start_date".tr;
-              endDateController.text = "end_date".tr;
-              if (addInvoiceController.dataToEditInvoice != null) {
-                addInvoiceController.dataToEditInvoice!.recurringStartDate =
-                    null;
-                addInvoiceController.dataToEditInvoice!.recurringEndDate = null;
-              }
-              if (value != "No Recurring") {
-                setState(() {
-                  recurringIntervalFlag = true;
-                });
-              } else {
-                setState(() {
-                  recurringIntervalFlag = false;
-                });
-              }
-              if (addInvoiceController.dataToEditInvoice != null) {
-                addInvoiceController.dataToEditInvoice!.recurringIntervalId =
-                    (addInvoiceController.recurringInterval.indexOf(value) + 2);
-              } else {
-                addInvoiceController.dataToCreateInvoice.recurringIntervalId =
-                    (addInvoiceController.recurringInterval.indexOf(value) + 2);
-              }
-            },
-          ),
-        ),
+            width: w,
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+            decoration: BoxDecoration(
+              color: Color(0xffF8F8F8),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: CustomDropdown(
+              width: w,
+              items: globalDataController.recurringIntervals
+                  .map((e) => engFlag ? e.nameEn! : e.nameAr!)
+                  .toList(),
+              onchanged: (value) {
+                {
+                  startDateController.text = "start_date".tr;
+                  endDateController.text = "end_date".tr;
+                  if (addInvoiceController.dataToEditInvoice != null) {
+                    addInvoiceController.dataToEditInvoice!.recurringStartDate =
+                        null;
+                    addInvoiceController.dataToEditInvoice!.recurringEndDate =
+                        null;
+                  }
+                  if (value != "No Recurring") {
+                    setState(() {
+                      recurringIntervalFlag = true;
+                    });
+                  } else {
+                    setState(() {
+                      recurringIntervalFlag = false;
+                    });
+                  }
+                  if (addInvoiceController.dataToEditInvoice != null) {
+                    addInvoiceController
+                            .dataToEditInvoice!.recurringIntervalId =
+                        globalDataController.recurringIntervals
+                            .firstWhere((element) =>
+                                element.nameEn == value ||
+                                element.nameAr == value)
+                            .id;
+                  } else {
+                    addInvoiceController
+                            .dataToCreateInvoice.recurringIntervalId =
+                        globalDataController.recurringIntervals
+                            .firstWhere((element) =>
+                                element.nameEn == value ||
+                                element.nameAr == value)
+                            .id;
+                  }
+                }
+              },
+              selectedItem: addInvoiceController.dataToEditInvoice != null
+                  ? engFlag
+                      ? globalDataController.recurringIntervals
+                          .firstWhere((element) =>
+                              element.id ==
+                              addInvoiceController
+                                  .dataToEditInvoice!.recurringIntervalId)
+                          .nameEn
+                      : globalDataController.recurringIntervals
+                          .firstWhere((element) =>
+                              element.id ==
+                              addInvoiceController
+                                  .dataToEditInvoice!.recurringIntervalId)
+                          .nameAr
+                  : engFlag
+                      ? globalDataController.recurringIntervals[0].nameEn!
+                      : globalDataController.recurringIntervals[0].nameAr!,
+            )
+
+            //  DropdownButtonFormField(
+            //   decoration: const InputDecoration(border: InputBorder.none),
+            //   items: addInvoiceController.recurringInterval
+            //       .map(
+            //         (e) => DropdownMenuItem(
+            //           value: e,
+            //           child: Text(
+            //             e,
+            //           ),
+            //         ),
+            //       )
+            //       .toList(),
+            //   value:
+            //   onChanged: (value)    ),
+            ),
         SizedBox(
           width: w,
           child: Text(

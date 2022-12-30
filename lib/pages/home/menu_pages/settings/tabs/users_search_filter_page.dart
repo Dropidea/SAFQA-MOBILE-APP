@@ -85,7 +85,8 @@ class _CustomertSearchFilterPageState extends State<MUsersSearchFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Username", 15, fontWeight: FontWeight.bold),
+                child:
+                    blackText("username".tr, 15, fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(height: 30),
@@ -124,8 +125,8 @@ class _CustomertSearchFilterPageState extends State<MUsersSearchFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child:
-                    blackText("Phone Number", 15, fontWeight: FontWeight.bold),
+                child: blackText("mobile_number".tr, 15,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(height: 30),
@@ -164,7 +165,7 @@ class _CustomertSearchFilterPageState extends State<MUsersSearchFilterPage> {
                             ? manageUserController
                                 .manageUserFilter.country!.nameEn
                             : null,
-                    hint: "Choose",
+                    hint: "choose".tr,
                   );
                 }),
               ),
@@ -174,7 +175,7 @@ class _CustomertSearchFilterPageState extends State<MUsersSearchFilterPage> {
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("Country", 15, fontWeight: FontWeight.bold),
+                child: blackText("country".tr, 15, fontWeight: FontWeight.bold),
               ),
             ),
 
