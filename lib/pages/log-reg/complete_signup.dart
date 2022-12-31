@@ -748,6 +748,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
 
                             _signUpController.dataToRegister['bank_name'] =
                                 value;
+                            _signUpController.dataToRegister['bank_id'] =
+                                ids[banksNames.indexOf(value)];
                           },
                           validator: (s) {
                             if (_signUpController.errors == null)

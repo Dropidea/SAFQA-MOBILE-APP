@@ -129,12 +129,12 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                         color: Colors.grey.shade300,
                       ),
                       size: GFSize.SMALL,
-                      value: 0,
+                      value: 1,
                       groupValue: invoicesLangValue,
                       onChanged: (value) => setState(() {
                             invoicesLangValue = value;
                             addInvoiceController
-                                .dataToCreateQuickInvoice.languageId = 1;
+                                .dataToCreateQuickInvoice.languageId = value;
                           })),
                 ),
                 greyText("english".tr, 16),
@@ -155,12 +155,12 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                       ),
                       size: GFSize.SMALL,
                       inactiveBorderColor: Colors.transparent,
-                      value: 1,
+                      value: 2,
                       groupValue: invoicesLangValue,
                       onChanged: (value) => setState(() {
                             invoicesLangValue = value;
                             addInvoiceController
-                                .dataToCreateQuickInvoice.languageId = 2;
+                                .dataToCreateQuickInvoice.languageId = value;
                           })),
                 ),
                 greyText("arabic".tr, 16),
@@ -217,7 +217,8 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                       addInvoiceController.customerInfo.customerSendBy;
                   addInvoiceController.dataToCreateQuickInvoice.customerSendBy =
                       addInvoiceController.customerInfo.customerSendBy;
-
+                  addInvoiceController.dataToCreateQuickInvoice.languageId =
+                      invoicesLangValue;
                   await addInvoiceController.createQuickInvoice();
                 },
                 child: Container(

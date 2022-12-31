@@ -1,4 +1,3 @@
-import 'package:safqa/main.dart';
 import 'package:safqa/models/invoice_item.dart';
 
 class DataToCreateInvoice {
@@ -104,7 +103,6 @@ class DataToCreateInvoice {
     data["terms_and_conditions"] = termsAndConditions;
     data["currency_id"] = currencyId;
     for (var i = 0; i < invoiceItems.length; i++) {
-      logSuccess(invoiceItems[i].toJson());
       data["prductItems[$i]"] = invoiceItems[i].toJson();
     }
     return data;

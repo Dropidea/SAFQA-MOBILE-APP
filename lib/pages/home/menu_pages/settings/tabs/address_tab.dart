@@ -1,5 +1,4 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,8 +7,6 @@ import 'package:safqa/pages/home/menu_pages/settings/controllers/addresses_contr
 import 'package:safqa/pages/home/menu_pages/settings/models/address.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/add_address_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/address_details.dart';
-import 'package:safqa/widgets/my_button.dart';
-import 'package:safqa/widgets/popup_menu.dart';
 import 'package:sizer/sizer.dart';
 
 class AdressesTab extends StatefulWidget {
@@ -74,7 +71,7 @@ class _AdressesTabState extends State<AdressesTab> {
                     color: Color(0xff2F6782),
                   ),
                   Text(
-                    "Create a new one",
+                    "create_new".tr,
                     style: TextStyle(
                       color: Color(0xff2F6782),
                       fontSize: 13.0.sp,
@@ -91,105 +88,14 @@ class _AdressesTabState extends State<AdressesTab> {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              listBTN(
-                  text: "Select All",
-                  onTap: () {
-                    Get.dialog(
-                      AlertDialog(
-                        actionsPadding: EdgeInsets.only(bottom: 30),
-                        titlePadding: EdgeInsets.all(0),
-                        actionsAlignment: MainAxisAlignment.center,
-                        actions: [
-                          MyButton(
-                            width: 0.3 * w,
-                            heigt: 35.0.sp,
-                            color: Color(0xffF3F3F3),
-                            borderRadius: 10,
-                            textColor: Color(0xff2D5571),
-                            text: "Open",
-                            textSize: 15.0,
-                            func: () {},
-                          ),
-                          MyButton(
-                            width: 0.3 * w,
-                            heigt: 35.0.sp,
-                            color: Color(0xff2D5571),
-                            borderRadius: 10,
-                            text: "Copy Link",
-                            textColor: Colors.white,
-                            textSize: 13.0,
-                            func: () {},
-                          )
-                        ],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(32.0),
-                          ),
-                        ),
-                        title: _dialogeTitle(),
-                        content: Container(
-                          width: w,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: Color(0xffBBBBBB))),
-                          child: TextFormField(
-                            initialValue: "www.google.com",
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide: BorderSide.none),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-              SizedBox(width: 5),
-              listBTN(text: "Copy", onTap: () {}),
+              listBTN(text: "copy".tr, onTap: () {}),
               SizedBox(width: 5),
               // listBTN(text: "Print", onTap: () {}),
-              MyPopUpMenu(
-                menuList: [
-                  PopupMenuItem(
-                    child: Row(
-                      children: [
-                        Icon(
-                          EvaIcons.file,
-                          color: Colors.grey.shade500,
-                        ),
-                        SizedBox(width: 10),
-                        Text("PDF"),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.print,
-                          color: Colors.grey.shade500,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text("Printer"),
-                      ],
-                    ),
-                  ),
-                ],
-                widget: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: const Color(0xffF9F9F9),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: blueText("print", 12),
-                  ),
-                ),
+              listBTN(
+                text: "print/pdf".tr,
+                onTap: () {},
               ),
               SizedBox(width: 5),
-
               listBTN(text: "Excel", onTap: () {}),
               SizedBox(width: 5),
               listBTN(text: "CSV", onTap: () {}),
@@ -207,7 +113,7 @@ class _AdressesTabState extends State<AdressesTab> {
             } else {
               return c.addresses.isEmpty
                   ? Center(
-                      child: greyText("nothing to show !!", 20),
+                      child: greyText("nothing_to_show".tr, 20),
                     )
                   : ListView.separated(
                       itemBuilder: (context, index) {

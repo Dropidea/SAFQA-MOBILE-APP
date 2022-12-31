@@ -61,6 +61,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   @override
   void initState() {
     engFlag = _localsController.currenetLocale == 0;
+    addInvoiceController.dataToCreateInvoice.recurringIntervalId =
+        globalDataController.recurringIntervals[0].id;
     if (addInvoiceController.dataToEditInvoice != null) {
       fileName = addInvoiceController.dataToEditInvoice!.attachFile ?? "";
       logSuccess(addInvoiceController.dataToEditInvoice!.attachFile);
@@ -368,7 +370,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       materialDatePickerFirstDate: DateTime(2000),
                       materialDatePickerLastDate: DateTime(2050),
                       materialDatePickerInitialDate: DateTime.now(),
-                      preferredDateFormat: DateFormat('y-M-d'),
+                      preferredDateFormat: DateFormat('y-MM-dd'),
                       cupertinoDatePickerMaximumDate: DateTime(2050),
                       cupertinoDatePickerMinimumDate: DateTime(2000),
                       cupertinoDatePickerBackgroundColor:
@@ -582,7 +584,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                             materialDatePickerFirstDate: DateTime(2000),
                             materialDatePickerLastDate: DateTime(2050),
                             materialDatePickerInitialDate: DateTime.now(),
-                            preferredDateFormat: DateFormat('y-M-d'),
+                            preferredDateFormat: DateFormat('y-MM-dd'),
                             cupertinoDatePickerMaximumDate: DateTime(2050),
                             cupertinoDatePickerMinimumDate: DateTime(2000),
                             cupertinoDatePickerBackgroundColor:
@@ -616,7 +618,7 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                             materialDatePickerFirstDate: DateTime(2000),
                             materialDatePickerLastDate: DateTime(2050),
                             materialDatePickerInitialDate: DateTime.now(),
-                            preferredDateFormat: DateFormat('y-M-d'),
+                            preferredDateFormat: DateFormat('y-MM-dd'),
                             cupertinoDatePickerMaximumDate: DateTime(2050),
                             cupertinoDatePickerMinimumDate: DateTime(2000),
                             cupertinoDatePickerBackgroundColor:

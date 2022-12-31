@@ -27,6 +27,7 @@ class SignUpController extends GetxController {
     "work_email": "",
     "bank_account_ame": "",
     "bank_name": "",
+    "bank_id": "",
     "account_number": "",
     "iban": "",
     "email": "",
@@ -81,7 +82,6 @@ class SignUpController extends GetxController {
   }
 
   Future<Map<String, dynamic>> register(obj) async {
-    logError("message");
     Get.locale!.toString() == "ar_SYR"
         ? obj['language_id'] = 1
         : obj['language_id'] = 2;

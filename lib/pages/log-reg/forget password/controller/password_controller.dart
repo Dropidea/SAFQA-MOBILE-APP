@@ -55,6 +55,8 @@ class PasswordController extends GetxController {
       data.fields.add(MapEntry("old_password", old));
       data.fields.add(MapEntry("new_password", neww));
       data.fields.add(MapEntry("new_password_confirmation", confirm));
+      await AuthService().saveCredentials(await AuthService().loadEmail(), neww,
+          await AuthService().loadRememberMe() ? "1" : "0");
       var res = await dio.post(EndPoints.changePassword, data: data);
       logSuccess(res.data);
       Get.back();

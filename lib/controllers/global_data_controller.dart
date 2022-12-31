@@ -50,7 +50,8 @@ class GlobalDataController extends GetxController {
       me = ManageUser.fromJson(res.data);
       logSuccess("me get done");
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getMe();
@@ -126,7 +127,8 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("roles get done");
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getRoles();
@@ -148,7 +150,8 @@ class GlobalDataController extends GetxController {
       logSuccess(sendOptions);
       logSuccess("Send Options get done");
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getSendOptions();
@@ -169,7 +172,8 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("AddressTypes get done");
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getAdressTypes();
@@ -190,7 +194,8 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("countries get done");
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getCountries();
@@ -211,7 +216,8 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("Cities get done");
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getCities();
@@ -232,7 +238,8 @@ class GlobalDataController extends GetxController {
       }
       logSuccess("Areas get done");
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getAreas();

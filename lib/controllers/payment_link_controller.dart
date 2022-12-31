@@ -169,7 +169,8 @@ class PaymentLinkController extends GetxController {
       update();
     } on DioError catch (e) {
       getPaymentLinksFlag = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getPaymentLinks();
@@ -204,6 +205,7 @@ class PaymentLinkController extends GetxController {
     } on DioError catch (e) {
       Get.back();
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
@@ -273,6 +275,7 @@ class PaymentLinkController extends GetxController {
     } on DioError catch (e) {
       Get.back();
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
@@ -343,6 +346,7 @@ class PaymentLinkController extends GetxController {
     } on DioError catch (e) {
       Get.back();
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {

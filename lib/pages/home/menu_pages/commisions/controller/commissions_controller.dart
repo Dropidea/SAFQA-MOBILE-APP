@@ -48,6 +48,7 @@ class CommissionsController extends GetxController {
       logError("Commission Form get failed");
       getCommissionFormsFlag = false;
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
@@ -84,6 +85,7 @@ class CommissionsController extends GetxController {
       logError("Payment Methods get failed");
       getPaymentMethodsFlag = false;
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {

@@ -165,7 +165,8 @@ class InvoicesController extends GetxController {
       update();
     } on DioError catch (e) {
       getInvoicesFlag.value = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getInvoices();

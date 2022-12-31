@@ -44,7 +44,8 @@ class AddressesController extends GetxController {
       getAddressFlag = false;
     } on DioError catch (e) {
       getAddressFlag = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getAddresses();
@@ -81,7 +82,8 @@ class AddressesController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await createAddress(address);
@@ -150,7 +152,8 @@ class AddressesController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await editAddress(address);
@@ -219,7 +222,8 @@ class AddressesController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await deleteAddress(address);

@@ -81,7 +81,8 @@ class ContactUsController extends GetxController {
       logSuccess("Support Types get done");
     } on DioError catch (e) {
       supportTypesFlag = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getSupportTypes();

@@ -39,6 +39,7 @@ class ProfileController extends GetxController {
       logSuccess("Profile Business get done");
     } on DioError catch (e) {
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
@@ -62,6 +63,7 @@ class ProfileController extends GetxController {
       logSuccess("Social media get done");
     } on DioError catch (e) {
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
@@ -99,6 +101,7 @@ class ProfileController extends GetxController {
       logError(e.message);
 
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {

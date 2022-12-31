@@ -237,7 +237,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
             SignUpTextField(
               padding: EdgeInsets.all(0),
               controller: customerEmailControler,
-              keyBoardType: TextInputType.number,
+              keyBoardType: TextInputType.emailAddress,
             ),
             // IntlPhoneField(
             //   flagsButtonPadding: EdgeInsets.symmetric(horizontal: 20),

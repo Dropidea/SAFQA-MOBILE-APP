@@ -122,7 +122,6 @@ class AuthService {
       await _globalDataController.getMe();
       return jsonRes['access_token'];
     } on DioError catch (e) {
-      logError(e.response!.data['error']);
       logError(e.response!.statusCode!);
       Get.showSnackbar(GetSnackBar(
         duration: Duration(milliseconds: 2000),

@@ -129,7 +129,8 @@ class CustomersController extends GetxController {
       // return globalData;
     } on DioError catch (e) {
       getCustomerFlag = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getMyCustomers();
@@ -173,7 +174,8 @@ class CustomersController extends GetxController {
       customerToCreate = Customer(bank: Bank());
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await createCustomer();
@@ -239,7 +241,8 @@ class CustomersController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await deleteCustomer(customerId);
@@ -320,7 +323,8 @@ class CustomersController extends GetxController {
       customerToCreate = Customer(bank: Bank());
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await editCustomer();

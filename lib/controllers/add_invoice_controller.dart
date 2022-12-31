@@ -39,6 +39,7 @@ class AddInvoiceController extends GetxController {
 
   void removeInvoiceItem(int index) {
     invoiceItems.removeAt(index);
+    dataToCreateInvoice.invoiceItems.removeAt(index);
     update();
   }
 
@@ -81,7 +82,8 @@ class AddInvoiceController extends GetxController {
     } on DioError catch (e) {
       Get.back();
 
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         if (e.response!.statusMessage == "Login Please") {
           bool res = await Utils.reLoginHelper(e);
           if (res) {
@@ -191,7 +193,8 @@ class AddInvoiceController extends GetxController {
     } on DioError catch (e) {
       Get.back();
 
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         if (e.response!.statusMessage == "Login Please") {
           bool res = await Utils.reLoginHelper(e);
           if (res) {
@@ -295,7 +298,8 @@ class AddInvoiceController extends GetxController {
         },
       );
     } on DioError catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await createQuickInvoice();

@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         locale: lang! ? Locale('ar', 'SYR') : Locale('en', 'US'),
         translations: LocaleString(),
-        title: 'Flutter Demo',
+        title: 'Safqa',
         theme: Themes().lightTheme,
         home: SplashPage(),
       ),

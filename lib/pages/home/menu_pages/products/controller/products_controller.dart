@@ -396,6 +396,7 @@ class ProductsController extends GetxController {
     } on DioError catch (e) {
       Get.back();
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
@@ -479,7 +480,8 @@ class ProductsController extends GetxController {
       return true;
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await editProduct(product);
@@ -560,7 +562,8 @@ class ProductsController extends GetxController {
       return true;
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await editProduct(product);
@@ -628,7 +631,8 @@ class ProductsController extends GetxController {
       return true;
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await editProductCategory(category);
@@ -699,7 +703,8 @@ class ProductsController extends GetxController {
       clearProductCategoryFilter();
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await createProductCategory(category);
@@ -766,7 +771,8 @@ class ProductsController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await deleteProductCategory(category);
@@ -885,6 +891,7 @@ class ProductsController extends GetxController {
     } on DioError catch (e) {
       getProductsCategoryFlag.value = false;
       if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
@@ -961,7 +968,8 @@ class ProductsController extends GetxController {
       getProductsFlag.value = false;
     } on DioError catch (e) {
       getProductsFlag.value = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getProducts();

@@ -142,7 +142,8 @@ class ManageUserController extends GetxController {
       logSuccess(res.data);
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await createManageUser(user);
@@ -211,7 +212,8 @@ class ManageUserController extends GetxController {
       logSuccess(res.data);
     } on DioError catch (e) {
       Get.back();
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await editManageUser(user);
@@ -271,7 +273,8 @@ class ManageUserController extends GetxController {
       getManageUserFlag = false;
     } on DioError catch (e) {
       getManageUserFlag = false;
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await getManageUsers();
