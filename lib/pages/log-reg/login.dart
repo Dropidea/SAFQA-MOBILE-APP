@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/pages/home/home_page.dart';
 import 'package:safqa/pages/log-reg/forget%20password/forget_passwrod_page.dart';
 import 'package:safqa/themes/themes.dart';
 import 'package:safqa/widgets/wallpapered_BTN.dart';
@@ -250,18 +251,18 @@ class _LoginPageState extends State<LoginPage> {
                                 text: "login".tr,
                                 fontSize: 18.0.sp,
                                 onTap: () async {
-                                  // Get.to(() => HomePage());
+                                  Get.to(() => HomePage());
 
                                   FocusManager.instance.primaryFocus?.unfocus();
 
-                                  final isValid =
-                                      formKey.currentState!.validate();
-                                  if (!isValid) return;
+                                  // final isValid =
+                                  //     formKey.currentState!.validate();
+                                  // if (!isValid) return;
 
-                                  await _loginController.login(
-                                      _emailController.text,
-                                      _passwordController.text,
-                                      _rememberMeFlag);
+                                  // await _loginController.login(
+                                  //     _emailController.text,
+                                  //     _passwordController.text,
+                                  //     _rememberMeFlag);
                                 },
                               ),
                               // Container(
