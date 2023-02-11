@@ -1,3 +1,5 @@
+import 'package:safqa/models/bank_model.dart';
+
 class Customer {
   int? id;
   String? fullName;
@@ -66,82 +68,51 @@ class Customer {
   }
 }
 
-class Country {
-  int? id;
-  String? nameEn;
-  String? nameAr;
-  String? code;
-  String? nationality;
-  String? flag;
-  String? currency;
-  String? shortCurrency;
-  int? defaultC;
+// class Country {
+//   int? id;
+//   String? nameEn;
+//   String? nameAr;
+//   String? code;
+//   String? nationality;
+//   String? flag;
+//   String? currency;
+//   String? shortCurrency;
+//   int? defaultC;
 
-  Country(
-      {this.id,
-      this.nameEn,
-      this.nameAr,
-      this.code,
-      this.nationality,
-      this.flag,
-      this.currency,
-      this.shortCurrency,
-      this.defaultC});
+//   Country(
+//       {this.id,
+//       this.nameEn,
+//       this.nameAr,
+//       this.code,
+//       this.nationality,
+//       this.flag,
+//       this.currency,
+//       this.shortCurrency,
+//       this.defaultC});
 
-  Country.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    nameEn = json['name_en'];
-    nameAr = json['name_ar'];
-    code = json['code'];
-    nationality = json['nationality'];
-    flag = json['flag'];
-    currency = json['currency'];
-    shortCurrency = json['short_currency'];
-    defaultC = json['default'];
-  }
+//   Country.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     nameEn = json['name_en'];
+//     nameAr = json['name_ar'];
+//     code = json['code'];
+//     nationality = json['nationality'];
+//     flag = json['flag'];
+//     currency = json['currency'];
+//     shortCurrency = json['short_currency'];
+//     defaultC = json['default'];
+//   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name_en'] = this.nameEn;
-    data['name_ar'] = this.nameAr;
-    data['code'] = this.code;
-    data['nationality'] = this.nationality;
-    data['flag'] = this.flag;
-    data['currency'] = this.currency;
-    data['short_currency'] = this.shortCurrency;
-    data['default'] = this.defaultC;
-    return data;
-  }
-}
-
-class Bank {
-  int? id;
-  String? name;
-  int? isActive;
-  int? countryId;
-
-  Bank({
-    this.id,
-    this.name,
-    this.isActive,
-    this.countryId,
-  });
-
-  Bank.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    isActive = json['is_active'];
-    countryId = json['country_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['is_active'] = this.isActive;
-    data['country_id'] = this.countryId;
-
-    return data;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['id'] = this.id;
+//     data['name_en'] = this.nameEn;
+//     data['name_ar'] = this.nameAr;
+//     data['code'] = this.code;
+//     data['nationality'] = this.nationality;
+//     data['flag'] = this.flag;
+//     data['currency'] = this.currency;
+//     data['short_currency'] = this.shortCurrency;
+//     data['default'] = this.defaultC;
+//     return data;
+//   }
+// }

@@ -4,7 +4,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';
+import 'package:safqa/models/bank_model.dart';
 
 import '../main.dart';
 import '../services/auth_service.dart';

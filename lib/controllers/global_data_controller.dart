@@ -2,20 +2,23 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as d;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/bank_model.dart';
 import 'package:safqa/models/contacts.dart';
 import 'package:safqa/models/payment_link.dart';
 import 'package:safqa/models/recurring_interval.dart';
-import 'package:safqa/pages/home/menu_pages/settings/models/address_type.dart';
-import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/Address_type.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/Area.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/city.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/manage_user.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/send_options.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
 import 'package:safqa/utils.dart';
+import 'package:safqa/widgets/dialoges.dart';
 
 class GlobalDataController extends GetxController {
   Dio dio = Dio();
@@ -47,6 +50,7 @@ class GlobalDataController extends GetxController {
     try {
       await sslProblem();
       var res = await dio.get(EndPoints.baseURL + EndPoints.meEndPoint);
+
       me = ManageUser.fromJson(res.data);
       logSuccess("me get done");
     } on DioError catch (e) {
@@ -162,16 +166,24 @@ class GlobalDataController extends GetxController {
     }
   }
 
+  bool getAdressTypesFlag = false;
   Future getAdressTypes() async {
     try {
+      getAdressTypesFlag = true;
       await sslProblem();
       var res = await dio.get(EndPoints.getAdressTypes);
+      List<AddressType> tmp = [];
       for (var i in res.data['data']) {
-        AddressType tmp = AddressType.fromJson(i);
-        addressTypes.add(tmp);
+        AddressType t = AddressType.fromJson(i);
+        tmp.add(t);
       }
+      addressTypes = tmp;
+      getAdressTypesFlag = false;
+      update();
       logSuccess("AddressTypes get done");
     } on DioError catch (e) {
+      getAdressTypesFlag = false;
+      update();
       if (e.response!.statusCode == 404 &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
@@ -184,16 +196,25 @@ class GlobalDataController extends GetxController {
     }
   }
 
+  bool getCountriesFlag = false;
   Future getCountries() async {
     try {
+      getCountriesFlag = true;
       await sslProblem();
       var res = await dio.get(EndPoints.getCountries);
+      List<Country> tmp = [];
       for (var i in res.data['data']) {
-        Country tmp = Country.fromJson(i);
-        countries.add(tmp);
+        Country t = Country.fromJson(i);
+        tmp.add(t);
       }
+      countries = tmp;
       logSuccess("countries get done");
+      getCountriesFlag = false;
+      update();
     } on DioError catch (e) {
+      getCountriesFlag = false;
+      update();
+      logError(e.response!.data);
       if (e.response!.statusCode == 404 &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
@@ -206,16 +227,83 @@ class GlobalDataController extends GetxController {
     }
   }
 
-  Future getCities() async {
+  Future deleteCountry(Country country) async {
     try {
       await sslProblem();
-      var res = await dio.get(EndPoints.getCities);
-      for (var i in res.data['data']) {
-        City tmp = City.fromJson(i);
-        cities.add(tmp);
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
+      final body = d.FormData.fromMap(country.toJson());
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res =
+          await dio.post(EndPoints.deleteCountry(country.id!), data: body);
+      logSuccess(res.data);
+      countries.removeWhere((element) => element == country);
+      update();
+
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Country deleted Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
+
+      Map<String, dynamic> m = e.response!.data;
+      String errors = "";
+      int c = 0;
+      for (var i in m.values) {
+        for (var j = 0; j < i.length; j++) {
+          if (j == i.length - 1) {
+            errors = errors + i[j];
+          } else {
+            errors = "${errors + i[j]}\n";
+          }
+        }
+
+        c++;
+        if (c != m.values.length) {
+          errors += "\n";
+        }
       }
+      Get.showSnackbar(
+        GetSnackBar(
+          duration: Duration(milliseconds: 3000),
+          backgroundColor: Colors.red,
+          // message: errors,
+          messageText: Text(
+            errors,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  bool getCitiesFlag = false;
+  Future getCities() async {
+    try {
+      getCitiesFlag = true;
+      await sslProblem();
+      var res = await dio.get(EndPoints.getCities);
+      getCitiesFlag = false;
+      List<City> tmp = [];
+      for (var i in res.data['data']) {
+        City t = City.fromJson(i);
+        tmp.add(t);
+      }
+      cities = tmp;
+      update();
       logSuccess("Cities get done");
     } on DioError catch (e) {
+      getCitiesFlag = false;
+      update();
       if (e.response!.statusCode == 404 &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
@@ -228,16 +316,24 @@ class GlobalDataController extends GetxController {
     }
   }
 
+  bool getAreaFlag = false;
   Future getAreas() async {
     try {
+      getAreaFlag = true;
       await sslProblem();
       var res = await dio.get(EndPoints.getAreas);
+      List<Area> tmp = [];
       for (var i in res.data['data']) {
-        Area tmp = Area.fromJson(i);
-        areas.add(tmp);
+        Area t = Area.fromJson(i);
+        tmp.add(t);
       }
+      areas = tmp;
       logSuccess("Areas get done");
+      getAreaFlag = false;
+      update();
     } on DioError catch (e) {
+      getAreaFlag = false;
+      update();
       if (e.response!.statusCode == 404 &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);

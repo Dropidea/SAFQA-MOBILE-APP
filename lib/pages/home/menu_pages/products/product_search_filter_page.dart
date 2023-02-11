@@ -488,7 +488,10 @@ class ApplyFilterBTN extends StatelessWidget {
 }
 
 Widget buildCustomNameTextfield(
-    {String? hint, void Function(String)? onChanged, String? initialValue}) {
+    {String? hint,
+    void Function(String)? onChanged,
+    String? initialValue,
+    TextInputType? keyboardType}) {
   return Container(
     margin: EdgeInsets.only(top: 20),
     height: 50,
@@ -501,7 +504,7 @@ Widget buildCustomNameTextfield(
     child: TextFormField(
       initialValue: initialValue,
       onChanged: onChanged,
-      keyboardType: TextInputType.number,
+      keyboardType: keyboardType ?? TextInputType.number,
       decoration: InputDecoration(
         hintText: hint,
         fillColor: Colors.white,

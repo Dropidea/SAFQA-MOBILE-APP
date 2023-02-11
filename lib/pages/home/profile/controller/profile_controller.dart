@@ -83,9 +83,7 @@ class ProfileController extends GetxController {
       ));
       final body = d.FormData.fromMap(profileBusines.toJson());
       body.fields.add(MapEntry("_method", "PUT"));
-
-      var res = await dio
-          .post(EndPoints.editProfileBusiness(profileBusines.id!), data: body);
+      var res = await dio.post(EndPoints.editProfileBusiness, data: body);
 
       await getProfileBusiness();
       Get.back();

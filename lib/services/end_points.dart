@@ -1,5 +1,6 @@
 class EndPoints {
   static const String _baseURL = "https://api.safqapay.com/api";
+  static const String _baseURLAdmin = "https://api.safqapay.com/admin";
   // static const String _baseURL = "xx.yy.zz";
   static String get baseURL => _baseURL;
 
@@ -15,14 +16,26 @@ class EndPoints {
   static String get createProduct => "/product/store";
   static String get updateProduct => "/product/update/";
   static String get getProducts => "/products";
+  static String get getAbouts => "$_baseURL/abouts";
+  static String get createAbout => "$_baseURLAdmin/about/store";
+  static String editAbout(int id) => "$_baseURLAdmin/about/update/$id";
+  static String deleteAbout(int id) => "$_baseURLAdmin/about/delete/$id";
   static String get getRecurringInerval => "$_baseURL/recurring_interval";
   static String get createProductCategory => "/product/category/store";
   static String get getProductCategories => "/product/categories";
   static String get getSocialMediaProfile => "$_baseURL/social_media_profile";
+  static String get getSocialMedia => "$_baseURL/social_media";
   static String get createSocialMediaProfile =>
       "$_baseURL/social_media_profile/store";
+  static String get createSocialMedia => "$_baseURLAdmin/social_media/store";
+  static String editSocialMedia(int id) =>
+      "$_baseURLAdmin/social_media/update/$id";
+  static String deleteSocialMedia(int id) =>
+      "$_baseURLAdmin/social_media/delete/$id";
   static String deleteSocialMediaProfile(int id) =>
       "$_baseURL/social_media_profile/delete/$id";
+  static String deleteRecurringInterval(int id) =>
+      "$_baseURLAdmin/recurring_interval/delete/$id";
   static String get deleteProductCategory =>
       "$_baseURL/product/category/delete/";
   static String get editProductCategory => "$_baseURL/product/category/update/";
@@ -30,15 +43,21 @@ class EndPoints {
   static String get createCustomer => "$_baseURL/customer/store";
   static String get deleteCustomer => "$_baseURL/customer/delete/";
   static String get updateCustomer => "$_baseURL/customer/update/";
-  static String get getBanks => "https://api.safqapay.com/api/banks";
-  static String get getCountries => "https://api.safqapay.com/api/countries";
-  static String get getCities => "https://api.safqapay.com/api/cities";
-  static String get getAreas => "https://api.safqapay.com/api/areas";
-  static String get getAdressTypes =>
-      "https://api.safqapay.com/api/address_type";
+  static String get getBanks => "$_baseURL/banks";
+  static String get getCountries => "$_baseURL/countries";
+  static String deleteCountry(int id) => "$_baseURLAdmin/country/delete/$id";
+  static String get getCities => "$_baseURL/cities";
+  static String get getProfiles => "$_baseURLAdmin/admin_profiles";
+  static String get getAreas => "$_baseURL/areas";
+  static String get getAdressTypes => "$_baseURL/address_type";
   static String get getRoles => "$_baseURL/roles";
   static String get getSendOptions => "$_baseURL/send_invoice_options";
   static String get getSupportTypes => "$_baseURL/support_types";
+  static String get createSupportTypes => "$_baseURLAdmin/support_type/store";
+  static String editSupportType(int id) =>
+      "$_baseURLAdmin/support_type/update/$id";
+  static String deleteSupportType(int id) =>
+      "$_baseURLAdmin/support_type/delete/$id";
   static String get getManageUsers => "$_baseURL/manage_users";
   static String get getLanguages => "$_baseURL/languages";
   static String get createManageUser => "$_baseURL/manage_user/store";
@@ -54,10 +73,27 @@ class EndPoints {
   static String get changePassword => "$_baseURL/changePassword";
   static String get getCommissionForms => "$_baseURL/commission_forms";
   static String get getPaymentMethods => "$_baseURL/payment_methods";
+  static String get createPaymentMethod =>
+      "$_baseURLAdmin/paymnet_method/store";
+  static String get createRecurringInterval =>
+      "$_baseURLAdmin/recurring_interval/store";
+  static String editRecurringInterval(int id) =>
+      "$_baseURLAdmin/recurring_interval/update/$id";
   static String get storeMessage => "$_baseURL/message/store";
   static String get getContactUsMessage => "$_baseURL/contacts";
+  static String get editContactInfo => "$_baseURLAdmin/contact/update";
   static String get getContactUsPhones => "$_baseURL/contactphones";
+  static String get createContactUsPhone =>
+      "$_baseURLAdmin/contactphones/store";
+  static String editContactUsPhone(int id) =>
+      "$_baseURLAdmin/contactphones/update/$id";
   static String get getProfileBusiness => "$_baseURL/profile_business";
-  static String editProfileBusiness(int id) =>
-      "$_baseURL/profile_business/update/$id";
+  static String get getBusinessTypes => "$_baseURL/businessTypes";
+  static String get getBusinessCategories => "$_baseURL/business_categories";
+  static String get createBusinessCategories =>
+      "$_baseURLAdmin/business_category/store";
+  static String get editProfileBusiness => "$_baseURL/profile_business/update";
+  static String get createBank => "$_baseURLAdmin/bank/store";
+  static String get createLanguage => "$_baseURLAdmin/language/store";
+  static String editBank(int id) => "$_baseURLAdmin/bank/update/$id";
 }

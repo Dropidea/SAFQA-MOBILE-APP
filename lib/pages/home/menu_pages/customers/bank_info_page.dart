@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/signup_controller.dart';
 import 'package:safqa/main.dart';
+import 'package:safqa/models/bank_model.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/customers/controller/customers_controller.dart';
 import 'package:safqa/pages/home/menu_pages/customers/models/customer_model.dart';

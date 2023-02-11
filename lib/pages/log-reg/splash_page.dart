@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/controller/admin_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/main.dart';
@@ -14,13 +15,14 @@ import 'select_language_page.dart';
 import 'welcome_page.dart';
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({super.key});
+  SplashPage({super.key});
 
+  LoginController loginController = Get.put(LoginController());
+  FirstTimeUsingAppController _firstTimeController = Get.find();
+  LocalsController localsController = Get.put(LocalsController());
+  AdminController _adminController = Get.put(AdminController());
   @override
   Widget build(BuildContext context) {
-    LoginController loginController = Get.put(LoginController());
-    FirstTimeUsingAppController _firstTimeController = Get.find();
-    LocalsController localsController = Get.put(LocalsController());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await localsController.getLocale();
       await Future.delayed(const Duration(seconds: 1));

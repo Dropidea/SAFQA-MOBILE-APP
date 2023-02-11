@@ -354,8 +354,8 @@ class ManageUser {
         ? new UserRole.fromJson(json['user_role'])
         : null;
 
-    profileBusines = json['profileBusines'] != null
-        ? new ProfileBusines.fromJson(json['profileBusines'][0])
+    profileBusines = json['profile_busines'] != null
+        ? new ProfileBusines.fromJson(json['profile_busines'][0])
         : null;
   }
 

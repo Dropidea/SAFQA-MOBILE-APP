@@ -1,5 +1,5 @@
-import 'package:safqa/pages/home/menu_pages/settings/models/address_type.dart';
-import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/Address_type.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/Area.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/city.dart';
 
 class Address {

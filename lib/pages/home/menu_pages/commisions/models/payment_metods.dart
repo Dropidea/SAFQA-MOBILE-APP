@@ -2,10 +2,10 @@ class PaymentMethod {
   int? id;
   String? nameEn;
   String? nameAr;
-  String? logo;
+  var logo;
   int? isActive;
-  String? commissionBank;
-  String? commissionSafqa;
+  int? commissionBank;
+  int? commissionSafqa;
   String? createdAt;
   String? updatedAt;
 
@@ -37,7 +37,7 @@ class PaymentMethod {
     data['id'] = this.id;
     data['name_en'] = this.nameEn;
     data['name_ar'] = this.nameAr;
-    data['logo'] = this.logo;
+    // data['logo'] = this.logo;
     data['is_active'] = this.isActive;
     data['commission_bank'] = this.commissionBank;
     data['commission_safqa'] = this.commissionSafqa;

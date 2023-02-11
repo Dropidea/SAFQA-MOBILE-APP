@@ -1,6 +1,8 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/controller/admin_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:sizer/sizer.dart';
@@ -9,6 +11,7 @@ import '../../controllers/zoom_drawer_controller.dart';
 import '../../models/menu_item.dart' as mi;
 
 class MenuPage extends StatelessWidget {
+  AdminController _adminController = Get.find();
   MenuPage(
       {super.key, required this.onSelectedItem, required this.currentItem});
 
@@ -54,9 +57,11 @@ class MenuPage extends StatelessWidget {
               child: Align(
                 child: ListView(
                   primary: false,
-                  children: [
-                    ...MyMenuItems.all.map(buildMenuItem).toList(),
-                  ],
+                  children: !_adminController.isAdmin
+                      ? [
+                          ...MyMenuItems.all.map(buildMenuItem).toList(),
+                        ]
+                      : [...MyAdminMenuItems.all.map(buildMenuItem).toList()],
                 ),
               ),
             ),
@@ -88,6 +93,67 @@ class MenuPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class MyAdminMenuItems {
+  // static const dashboard = mi.MenuItem("Dashboard", Icons.abc);
+  static const banks = mi.MenuItem(
+      titleEn: "Banks",
+      icon: FontAwesomeIcons.buildingColumns,
+      titleAr: "البنوك");
+  static const profiles = mi.MenuItem(
+      titleEn: "Profiles", icon: EvaIcons.people, titleAr: "الملفات الشخصية");
+  static const addresses = mi.MenuItem(
+      titleEn: "Addresses", icon: Icons.location_pin, titleAr: "العناوين");
+  static const languages = mi.MenuItem(
+      titleEn: "Languages", icon: FontAwesomeIcons.language, titleAr: "اللغات");
+  static const businessCategories = mi.MenuItem(
+      titleEn: "Business Categories",
+      icon: FontAwesomeIcons.businessTime,
+      titleAr: "فئات الأعمال");
+  static const businessTypes = mi.MenuItem(
+      titleEn: "Business Types",
+      icon: FontAwesomeIcons.typo3,
+      titleAr: "أنواع الأعمال");
+  static const paymentMethods = mi.MenuItem(
+      titleEn: "Payent Methods",
+      icon: FontAwesomeIcons.creditCard,
+      titleAr: "طرق الدفع");
+  static const recurringInterval = mi.MenuItem(
+      titleEn: "Recurring Interval",
+      icon: FontAwesomeIcons.repeat,
+      titleAr: "الفاصل الزمني المتكرر");
+  static const socialMedia = mi.MenuItem(
+      titleEn: "Social Media",
+      icon: EvaIcons.globe,
+      titleAr: "وسائل التواصل الإجتماعي");
+  static const about =
+      mi.MenuItem(titleEn: "About", icon: EvaIcons.info, titleAr: "عن صفقة");
+  static const contact = mi.MenuItem(
+      titleEn: "Contact", icon: EvaIcons.phoneCall, titleAr: "اتصال");
+
+  static const logOut = mi.MenuItem(
+      titleEn: "Log out", icon: EvaIcons.logOut, titleAr: "تسجيل الخروج");
+  static const multiFactorAuthentication = mi.MenuItem(
+      titleEn: "Multi-factor authentication",
+      icon: EvaIcons.lock,
+      titleAr: "مصادقة متعددة المراحل");
+  static const all = <mi.MenuItem>[
+    // dashboard,
+    profiles,
+    addresses,
+    languages,
+    banks,
+    businessCategories,
+    businessTypes,
+    paymentMethods,
+    recurringInterval,
+    socialMedia,
+    about,
+    contact,
+    multiFactorAuthentication,
+    logOut,
+  ];
 }
 
 class MyMenuItems {

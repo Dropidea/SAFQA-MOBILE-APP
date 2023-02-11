@@ -136,6 +136,7 @@ class AuthService {
 
   Future register(data) async {
     try {
+      logInfo(data.toString());
       sslProblem();
       final body = d.FormData.fromMap(data);
       var res = await _dio.post(EndPoints.baseURL + EndPoints.registerEndPoint,
@@ -144,7 +145,7 @@ class AuthService {
       logSuccess("register success");
       return null;
     } on DioError catch (e) {
-      logWarning(e.response!.data);
+      logError(e.response!.data);
 
       Map<String, dynamic> obj = e.response!.data;
 

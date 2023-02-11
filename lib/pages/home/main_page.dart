@@ -49,19 +49,19 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     engFlag = _localsController.currenetLocale == 0;
 
-    _customersController.getMyCustomers();
-    _signUpController.getGlobalData();
-    _signUpController.getBanks();
-    _invoicesController.getInvoices();
+    // _customersController.getMyCustomers();
+    // _signUpController.getGlobalData();
+    // _signUpController.getBanks();
+    // _invoicesController.getInvoices();
     _globlDataController.getCountries();
     _globlDataController.getCities();
     _globlDataController.getAreas();
     _globlDataController.getAdressTypes();
-    _globlDataController.getRoles();
-    _globlDataController.getSendOptions();
-    _globlDataController.getContactUsInfo();
-    _globlDataController.getLanguages();
-    _globlDataController.getRecurringInterval();
+    // _globlDataController.getRoles();
+    // _globlDataController.getSendOptions();
+    // _globlDataController.getContactUsInfo();
+    // _globlDataController.getLanguages();
+    // _globlDataController.getRecurringInterval();
 
     super.initState();
   }
