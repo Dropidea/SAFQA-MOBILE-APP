@@ -48,7 +48,7 @@ class Product {
     this.inStore,
   });
 
-  Product.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json, String picUrl) {
     id = json['id'];
     nameEn = json['name_en'];
     inStore = json['in_store'];
@@ -57,7 +57,7 @@ class Product {
     height = json['height'];
     width = json['width'];
     length = json['length'];
-    productImage = json['product_image'];
+    productImage = picUrl + "/" + json['product_image'];
     descriptionEn = json['description_en'];
     descriptionAr = json['description_ar'];
     quantity = json['quantity'];

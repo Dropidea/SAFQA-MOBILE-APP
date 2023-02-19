@@ -171,7 +171,7 @@ class ContactController extends GetxController {
       await getContactPhones();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Recurring Interval Created Successfully",
+        title: "Contact Phone Created Successfully",
         btnTXT: "close",
         onTap: () async {
           Get.back();
@@ -229,7 +229,7 @@ class ContactController extends GetxController {
       await getSupportTypes();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Recurring Interval Created Successfully",
+        title: "Contact Phone Created Successfully",
         btnTXT: "close",
         onTap: () async {
           Get.back();
@@ -288,7 +288,7 @@ class ContactController extends GetxController {
       await getContactPhones();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Recurring Interval edited Successfully",
+        title: "Contact Phone edited Successfully",
         btnTXT: "close",
         onTap: () async {
           Get.back();

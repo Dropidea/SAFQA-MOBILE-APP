@@ -66,7 +66,7 @@ class BusinessCategTypesageState extends State<PaymentMethodsMainPage> {
                         Get.back();
                       },
                     ),
-                    whiteText("Business Categories", 17,
+                    whiteText("pay_methods".tr, 17,
                         fontWeight: FontWeight.w600),
                     Opacity(
                       opacity: 0,

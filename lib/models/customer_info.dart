@@ -3,6 +3,7 @@ class CustomerInfo {
   int? customerSendBy = 1;
   String? customerMobileNumbr;
   String? customerMobileNumbrCodeID;
+  String? customerMobileNumbrCode;
   String? customerRefrence;
   String? customerEmail;
 
@@ -10,6 +11,7 @@ class CustomerInfo {
       {this.customerName,
       this.customerMobileNumbr,
       this.customerMobileNumbrCodeID,
+      this.customerMobileNumbrCode,
       this.customerRefrence,
       this.customerSendBy,
       this.customerEmail});
@@ -24,6 +26,7 @@ class CustomerInfo {
     data["send_invoice_option_id"] = customerSendBy;
     data["customer_mobile"] = customerMobileNumbr;
     data["customer_mobile_code_id"] = customerMobileNumbrCodeID;
+    data["customer_mobile_code"] = customerMobileNumbrCodeID;
     data["customer_reference"] = customerRefrence;
     data["customer_email"] = customerEmail;
 

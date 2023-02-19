@@ -2,6 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/pages/banks/controller/bank_controller.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
@@ -34,6 +35,7 @@ class _MainPageState extends State<MainPage> {
   AddInvoiceController addInvoiceController = Get.put(AddInvoiceController());
 
   SignUpController _signUpController = Get.put(SignUpController());
+  BankController _bankController = Get.put(BankController());
 
   ChartsController _chartsController = Get.put(ChartsController());
   CustomersController _customersController = Get.put(CustomersController());
@@ -48,20 +50,21 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     engFlag = _localsController.currenetLocale == 0;
-
-    // _customersController.getMyCustomers();
-    // _signUpController.getGlobalData();
-    // _signUpController.getBanks();
-    // _invoicesController.getInvoices();
+    if (_globlDataController.me.isSuperAdmin == null) {
+      _customersController.getMyCustomers();
+    }
+    _signUpController.getGlobalData();
+    _invoicesController.getInvoices();
+    _bankController.getAllBanks();
     _globlDataController.getCountries();
     _globlDataController.getCities();
     _globlDataController.getAreas();
     _globlDataController.getAdressTypes();
-    // _globlDataController.getRoles();
-    // _globlDataController.getSendOptions();
-    // _globlDataController.getContactUsInfo();
-    // _globlDataController.getLanguages();
-    // _globlDataController.getRecurringInterval();
+    _globlDataController.getRoles();
+    _globlDataController.getSendOptions();
+    _globlDataController.getContactUsInfo();
+    _globlDataController.getLanguages();
+    _globlDataController.getRecurringInterval();
 
     super.initState();
   }
@@ -81,7 +84,9 @@ class _MainPageState extends State<MainPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: topSection(
-                      name: _globlDataController.me.fullName ?? "no name"),
+                      name: _globlDataController.me.fullName ??
+                          _globlDataController.me.name ??
+                          "no name"),
                 ),
                 Expanded(
                     child: Align(
@@ -832,57 +837,62 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
             const SizedBox(width: 10),
-            MyPopUpMenu(
-              menuList: [
-                PopupMenuItem(
-                    onTap: () {
-                      Future(() => Get.to(() => ProfilePage(),
-                          transition: Transition.rightToLeft));
-                    },
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Icon(
-                            EvaIcons.personOutline,
-                            size: 20,
-                            color: Color.fromARGB(255, 118, 118, 118),
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        greyText(engFlag ? "Profile" : "الملف الشخصي", 12,
-                            fontWeight: FontWeight.bold),
-                      ],
-                    )),
-                PopupMenuItem(
-                    onTap: () {
-                      Future(() => Get.to(() => PasswordChangePage(),
-                          transition: Transition.rightToLeft));
-                    },
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Icon(
-                            EvaIcons.lockOutline,
-                            size: 20,
-                            color: Color.fromARGB(255, 118, 118, 118),
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        greyText(
-                            engFlag ? "Change Password" : "تغيير كلمة السر", 12,
-                            fontWeight: FontWeight.bold),
-                      ],
-                    )),
-              ],
-              widget: Image(
-                image: AssetImage("assets/images/t.png"),
-                width: 30.0.sp,
-                height: 30.0.sp,
-                fit: BoxFit.cover,
-              ),
-            )
+            _globlDataController.me.isSuperAdmin != null
+                ? Container()
+                : MyPopUpMenu(
+                    menuList: [
+                      PopupMenuItem(
+                          onTap: () {
+                            Future(() => Get.to(() => ProfilePage(),
+                                transition: Transition.rightToLeft));
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Icon(
+                                  EvaIcons.personOutline,
+                                  size: 20,
+                                  color: Color.fromARGB(255, 118, 118, 118),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              greyText(engFlag ? "Profile" : "الملف الشخصي", 12,
+                                  fontWeight: FontWeight.bold),
+                            ],
+                          )),
+                      PopupMenuItem(
+                          onTap: () {
+                            Future(() => Get.to(() => PasswordChangePage(),
+                                transition: Transition.rightToLeft));
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Icon(
+                                  EvaIcons.lockOutline,
+                                  size: 20,
+                                  color: Color.fromARGB(255, 118, 118, 118),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              greyText(
+                                  engFlag
+                                      ? "Change Password"
+                                      : "تغيير كلمة السر",
+                                  12,
+                                  fontWeight: FontWeight.bold),
+                            ],
+                          )),
+                    ],
+                    widget: Image(
+                      image: AssetImage("assets/images/t.png"),
+                      width: 30.0.sp,
+                      height: 30.0.sp,
+                      fit: BoxFit.cover,
+                    ),
+                  )
           ],
         ),
       ],

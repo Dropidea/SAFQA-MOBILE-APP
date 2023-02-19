@@ -21,7 +21,7 @@ class BusinessType {
     data['id'] = this.id;
     data['name_en'] = this.nameEn;
     data['name_ar'] = this.nameAr;
-    data['business_logo'] = this.businessLogo;
+    // data['business_logo'] = this.businessLogo;
     data['default'] = this.cdefault;
     return data;
   }

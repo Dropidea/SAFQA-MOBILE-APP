@@ -42,7 +42,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
               : ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  // physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => InvoiceWidget(
                     inv: c.invoicesToShow[index],
                     onTap: () {
@@ -53,7 +53,9 @@ class _InvoiceTabState extends State<InvoiceTab> {
                         transition: Transition.downToUp,
                       );
                     },
-                    type: InvoiceTypes.paid,
+                    type: c.invoicesToShow[index].status == "pending"
+                        ? InvoiceTypes.pending
+                        : InvoiceTypes.canceled,
                   ),
                   itemCount: c.invoicesToShow.length,
                   separatorBuilder: (BuildContext context, int index) =>
@@ -66,7 +68,7 @@ class _InvoiceTabState extends State<InvoiceTab> {
 }
 
 class InvoiceWidget extends StatelessWidget {
-  final InvoiceModel inv;
+  final Invoice inv;
   final InvoiceTypes type;
   final void Function()? onTap;
   InvoiceWidget({

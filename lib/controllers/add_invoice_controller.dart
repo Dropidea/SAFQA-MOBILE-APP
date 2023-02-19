@@ -21,7 +21,7 @@ class AddInvoiceController extends GetxController {
   DataToCreateInvoice? dataToEditInvoice;
   DataToCreateQuickInvoice dataToCreateQuickInvoice =
       DataToCreateQuickInvoice();
-  CustomerInfo customerInfo = CustomerInfo();
+  CustomerInfo? customerInfo;
   final Dio dio = Dio();
 
   sslProblem() async {
@@ -44,11 +44,6 @@ class AddInvoiceController extends GetxController {
   }
 
   Future createInvoice() async {
-    // logError(dataToCreateInvoice.discountType!);
-    logWarning(dataToCreateInvoice.toJson());
-
-    // dio.options.headers["authorization"] =
-    //     "Bearer ${dataToCreateInvoice.token}";
     Get.dialog(const Center(
       child: CircularProgressIndicator(),
     ));
@@ -68,7 +63,7 @@ class AddInvoiceController extends GetxController {
       await sslProblem();
       var res = await dio.post(EndPoints.baseURL + EndPoints.createInvoice,
           data: body);
-      customerInfo = CustomerInfo();
+      customerInfo = null;
       invoiceItems = [];
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
@@ -89,42 +84,41 @@ class AddInvoiceController extends GetxController {
           if (res) {
             await createInvoice();
           }
-        } else {
-          Map<String, dynamic> m = e.response!.data;
-          String errors = "";
-          int c = 0;
-          for (var i in m.values) {
-            for (var j = 0; j < i.length; j++) {
-              if (j == i.length - 1) {
-                errors = errors + i[j];
-              } else {
-                errors = "${errors + i[j]}\n";
-              }
-            }
-
-            c++;
-            if (c != m.values.length) {
-              errors += "\n";
-            }
-          }
-
-          Get.showSnackbar(
-            GetSnackBar(
-              duration: Duration(milliseconds: 2000),
-              backgroundColor: Colors.red,
-              // message: errors,
-              messageText: Text(
-                errors,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                ),
-              ),
-            ),
-          );
         }
       } else {
-        logError(e.message);
+        // logError(e.response!.data);
+        // Map<String, dynamic> m = e.response!.data;
+        // String errors = "";
+        // int c = 0;
+        // for (var i in m.values) {
+        //   for (var j = 0; j < i.length; j++) {
+        //     if (j == i.length - 1) {
+        //       errors = errors + i[j];
+        //     } else {
+        //       errors = "${errors + i[j]}\n";
+        //     }
+        //   }
+
+        //   c++;
+        //   if (c != m.values.length) {
+        //     errors += "\n";
+        //   }
+        // }
+
+        // Get.showSnackbar(
+        //   GetSnackBar(
+        //     duration: Duration(milliseconds: 2000),
+        //     backgroundColor: Colors.red,
+        //     // message: errors,
+        //     messageText: Text(
+        //       errors,
+        //       style: TextStyle(
+        //         color: Colors.white,
+        //         fontSize: 17,
+        //       ),
+        //     ),
+        //   ),
+        // );
       }
 
       // Map<String, dynamic> m = e.response!.data;
@@ -287,7 +281,7 @@ class AddInvoiceController extends GetxController {
     try {
       var res = await dio.post(EndPoints.baseURL + EndPoints.createQuickInvoice,
           data: body);
-      customerInfo = CustomerInfo();
+      customerInfo = null;
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
         title: "Created successfully",
@@ -485,15 +479,25 @@ class AddInvoiceController extends GetxController {
       required String email,
       required String phoneNum,
       required String phoneNumCodeId,
+      required String customerMobileNumbrCode,
       String? customerRef}) {
-    customerInfo.customerName = name;
-    customerInfo.customerEmail = email;
-    customerInfo.customerMobileNumbr = phoneNum;
-    customerInfo.customerMobileNumbrCodeID = phoneNumCodeId;
-    customerInfo.customerSendBy = sendBy;
-    customerInfo.customerRefrence = customerRef;
-    // customerInfo.customerRefrence = customerRef;
+    customerInfo = CustomerInfo(
+      customerName: name,
+      customerEmail: email,
+      customerMobileNumbr: phoneNum,
+      customerMobileNumbrCodeID: phoneNumCodeId,
+      customerSendBy: sendBy,
+      customerRefrence: customerRef,
+      customerMobileNumbrCode: customerMobileNumbrCode,
+    );
+    // customerInfo!.customerName = name;
+    // customerInfo!.customerEmail = email;
+    // customerInfo!.customerMobileNumbr = phoneNum;
+    // customerInfo!.customerMobileNumbrCodeID = phoneNumCodeId;
+    // customerInfo!.customerSendBy = sendBy;
+    // customerInfo!.customerRefrence = customerRef;
+    // // customerInfo.customerRefrence = customerRef;
 
-    logError(customerInfo.toJson());
+    logError(customerInfo!.toJson());
   }
 }

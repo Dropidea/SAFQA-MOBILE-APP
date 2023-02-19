@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:safqa/admin/pages/business%20Categories/controller/business_categories_controller.dart';
 import 'package:safqa/admin/pages/business%20Categories/model/business_category.dart';
 import 'package:safqa/controllers/locals_controller.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -40,7 +39,11 @@ class CreateBusinessCategoryPageState
           iconTheme: IconThemeData(color: Colors.black),
           elevation: 0,
           backgroundColor: Colors.white,
-          title: blackText("create_lang".tr, 16),
+          title: blackText(
+              widget.businessCategoryToEdit != null
+                  ? "edit_business_category".tr
+                  : "create_business_category".tr,
+              16),
 
           centerTitle: true,
         ),
@@ -102,10 +105,10 @@ class CreateBusinessCategoryPageState
                         onTap: () async {
                           FocusScope.of(context).unfocus();
                           if (formKey.currentState!.validate()) {
-                            logSuccess(businessCategoryToCreate.toJson());
                             if (widget.businessCategoryToEdit != null) {
-                              // await _langController
-                              //     .editlang(widget.businessCategoryToEdit!);
+                              await _businessCategoryController
+                                  .editBusinessCategory(
+                                      widget.businessCategoryToEdit!);
                             } else {
                               await _businessCategoryController
                                   .createBusinessCategory(

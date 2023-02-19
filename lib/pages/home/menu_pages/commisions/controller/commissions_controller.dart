@@ -56,7 +56,7 @@ class CommissionsController extends GetxController {
         }
       } else {
         getCommissionFormsFlag = false;
-        logError("msg");
+        logError("Commission Form error");
         logError(e.message);
       }
     }
@@ -93,7 +93,7 @@ class CommissionsController extends GetxController {
         }
       } else {
         getPaymentMethodsFlag = false;
-        logError("msg");
+        logError("Payment Methods error");
         logError(e.message);
       }
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/controllers/addresses_controller.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/address.dart';
@@ -27,6 +28,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
 
   @override
   void initState() {
+    logSuccess(globalDataController.cities
+        .where((element) =>
+            element.country!.id ==
+            globalDataController.me.profileBusines!.countryId)
+        .map((e) => e.nameEn!)
+        .toList());
     if (widget.addressToEdit != null) {
       globalDataController.getCityAreas(widget.addressToEdit!.city!.id!);
       widget.addressToEdit!.cityId = widget.addressToEdit!.city!.id!.toString();
@@ -92,12 +99,12 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 },
               ),
               SizedBox(height: 20),
-              blackText("City", 15),
+              blackText("city".tr, 15),
               CustomDropdownV2(
                 width: w,
                 items: globalDataController.cities
                     .where((element) =>
-                        element.countryId ==
+                        element.country!.id ==
                         globalDataController.me.profileBusines!.countryId)
                     .map((e) => e.nameEn!)
                     .toList(),

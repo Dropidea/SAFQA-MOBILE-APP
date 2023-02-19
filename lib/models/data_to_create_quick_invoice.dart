@@ -4,6 +4,7 @@ class DataToCreateQuickInvoice {
   String? customerEmail;
   String? customerMobileNumbr;
   String? customerMobileNumbrCode;
+  String? customerMobileNumbrCodeid;
   String? customerRefrence;
   int? customerSendBy = 1;
   String? currencyId = "1";
@@ -23,6 +24,7 @@ class DataToCreateQuickInvoice {
     this.customerMobileNumbr,
     this.customerEmail,
     this.customerMobileNumbrCode,
+    this.customerMobileNumbrCodeid,
     this.customerRefrence,
   });
 
@@ -37,11 +39,12 @@ class DataToCreateQuickInvoice {
     data["send_invoice_option_id"] = customerSendBy;
     data["customer_mobile"] = customerMobileNumbr;
     data["customer_mobile_code"] = customerMobileNumbrCode;
+    data["customer_mobile_code_id"] = customerMobileNumbrCodeid;
     data["customer_reference"] = customerRefrence;
     data["send_invoice_option_id"] = customerSendBy;
     data["currency_id"] = currencyId;
     data["language_id"] = languageId;
-    data["invoice_value"] = invoiceValue;
+    data["invoice_display_value"] = invoiceValue;
     data["local_currency"] = loacalCurrency;
 
     return data;

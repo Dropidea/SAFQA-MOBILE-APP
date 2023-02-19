@@ -64,42 +64,41 @@ class BusinessCategoryController extends GetxController {
     update();
   }
 
-  //  Future deleteBusinessCategory(BusinessCategory BusinessCategory) async {
-  //   try {
-  //     await sslProblem();
-  //     Get.dialog(const Center(
-  //       child: CircularProgressIndicator(),
-  //     ));
+  Future deleteBusinessCategory(BusinessCategory business) async {
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
 
-  //     final body = d.FormData();
-  //     body.fields.add(MapEntry("_method", "DELETE"));
-  //     var res = await dio.post(EndPoints.
-  //         data: body);
-  //     logSuccess(res.data);
-  //     await getAllBusinessCategorys();
-  //     Get.back();
-  //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "BusinessCategory Deleted Successfully",
-  //       btnTXT: "close",
-  //       onTap: () async {
-  //         Get.back();
-  //         Get.back();
-  //       },
-  //     );
-  //   } on DioError catch (e) {
-  //     Get.back();
-  //     if (e.response!.statusCode == 404 &&
-  //         e.response!.data["message"] == "Please Login") {
-  //       bool res = await Utils.reLoginHelper(e);
-  //       if (res) {
-  //         await deleteCustomer(customerId);
-  //       }
-  //     } else {
-  //       logError(e.message);
-  //     }
-
-  //   }
-  // }
+      final body = d.FormData();
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res = await dio.post(EndPoints.deleteBusinessCategories(business.id!),
+          data: body);
+      logSuccess(res.data);
+      businessCategories.removeWhere((element) => element == business);
+      update();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "BusinessCategory Deleted Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteBusinessCategory(business);
+        }
+      } else {
+        logError(e.message);
+      }
+    }
+  }
 
   Future createBusinessCategory(BusinessCategory business) async {
     try {
@@ -165,13 +164,15 @@ class BusinessCategoryController extends GetxController {
         child: CircularProgressIndicator(),
       ));
       final body = d.FormData.fromMap(business.toJson());
-      var res = await dio.post(EndPoints.createBusinessCategories, data: body);
+      body.fields.add(MapEntry("_method", "PUT"));
+      var res = await dio.post(EndPoints.editBusinessCategories(business.id!),
+          data: body);
       logSuccess(res.data);
       update();
       await getAllBusinessCategorys();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "BusinessCategory Created Successfully",
+        title: "BusinessCategory Edited Successfully",
         btnTXT: "close",
         onTap: () async {
           Get.back();

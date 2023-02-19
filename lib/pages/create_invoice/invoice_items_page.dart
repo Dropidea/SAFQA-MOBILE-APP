@@ -121,15 +121,15 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                       onTap: () {
                         InvoiceItem item = InvoiceItem(
                           productName: t1.text,
-                          unitPrice: t2.text,
-                          quantity: quantity,
+                          productPrice: int.tryParse(t2.text),
+                          productQuantity: quantity,
                         );
                         if (formKey.currentState!.validate()) {
-                          // logSuccess(t2.text)
+                          // logSuccess(int.tryParse(t2.text))
                           InvoiceItem item = InvoiceItem(
                             productName: t1.text,
-                            unitPrice: t2.text,
-                            quantity: quantity,
+                            productPrice: int.tryParse(t2.text),
+                            productQuantity: quantity,
                           );
                           t1.text = "";
                           t2.text = "";
@@ -220,7 +220,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                       children: [
                                         greyText("unit_price".tr, 11),
                                         SizedBox(height: 10),
-                                        blackText("\$${item.unitPrice}", 11)
+                                        blackText("\$${item.productPrice}", 11)
                                       ],
                                     ),
                                     Column(
@@ -230,7 +230,9 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                         greyText("quantity".tr, 11),
                                         SizedBox(height: 10),
                                         blackText(
-                                            item.quantity!.round().toString(),
+                                            item.productQuantity!
+                                                .round()
+                                                .toString(),
                                             11)
                                       ],
                                     ),
@@ -279,8 +281,10 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                               GestureDetector(
                                                 onTap: () {
                                                   t1.text = item.productName!;
-                                                  t2.text = item.unitPrice!;
-                                                  quantity = item.quantity!;
+                                                  t2.text = item.productPrice!
+                                                      .toString();
+                                                  quantity =
+                                                      item.productQuantity!;
                                                   if (addInvoiceController
                                                           .dataToEditInvoice !=
                                                       null) {

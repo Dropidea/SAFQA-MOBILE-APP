@@ -1,9 +1,11 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/admin/pages/business%20types/controller/business_types_controller.dart';
 import 'package:safqa/admin/pages/business%20types/models/business_type.dart';
 import 'package:safqa/controllers/locals_controller.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -22,9 +24,13 @@ class CreateBusinessTypePageState extends State<CreateBusinessTypePage> {
   TextEditingController logoController = TextEditingController();
   int isActive = 0;
   final formKey = GlobalKey<FormState>();
+  var logo;
+  String fileName = "";
   @override
   void initState() {
-    if (widget.businessTypeToEdit != null) {}
+    if (widget.businessTypeToEdit != null) {
+      logoController.text = widget.businessTypeToEdit!.businessLogo!;
+    }
     super.initState();
   }
 
@@ -95,11 +101,11 @@ class CreateBusinessTypePageState extends State<CreateBusinessTypePage> {
                       readOnly: true,
                       controller: logoController,
                       onchanged: (s) {
-                        if (widget.businessTypeToEdit != null) {
-                          widget.businessTypeToEdit!.nameAr = s;
-                        } else {
-                          businessTypeToCreate.nameAr = s;
-                        }
+                        // if (widget.businessTypeToEdit != null) {
+                        //   widget.businessTypeToEdit!.businessLogo = s;
+                        // } else {
+                        //   businessTypeToCreate.businessLogo = s;
+                        // }
                       },
                       hintText: "No File Chosen",
                       validator: (s) {
@@ -108,7 +114,20 @@ class CreateBusinessTypePageState extends State<CreateBusinessTypePage> {
                     ),
                     SizedBox(width: 10),
                     GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles();
+                          if (result != null) {
+                            File file = File(result.files.single.path!);
+                            fileName =
+                                result.files.single.path!.split("/").last;
+                            logo = file;
+                            logoController.text = fileName;
+                            setState(() {});
+                          } else {
+                            // User canceled the picker
+                          }
+                        },
                         child: Container(
                           width: 80,
                           height: 50,
@@ -136,15 +155,14 @@ class CreateBusinessTypePageState extends State<CreateBusinessTypePage> {
                       GestureDetector(
                         onTap: () async {
                           FocusScope.of(context).unfocus();
+
                           if (formKey.currentState!.validate()) {
-                            logSuccess(businessTypeToCreate.toJson());
                             if (widget.businessTypeToEdit != null) {
-                              // await _langController
-                              //     .editlang(widget.businessTypeToEdit!);
+                              await _businessTypesController.editBusinessType(
+                                  widget.businessTypeToEdit!, logo);
                             } else {
-                              // await _businessTypeController
-                              //     .createBusinessType(
-                              //         businessTypeToCreate);
+                              await _businessTypesController.createBusinessType(
+                                  businessTypeToCreate, logo);
                             }
                           }
                         },

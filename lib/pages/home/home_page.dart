@@ -13,6 +13,7 @@ import 'package:safqa/admin/pages/payment%20methods/payment_methods_page.dart';
 import 'package:safqa/admin/pages/profiles/profiles_page.dart';
 import 'package:safqa/admin/pages/recurring%20interval/recurring_intervals_page.dart';
 import 'package:safqa/admin/pages/social%20media/social_media_page.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/account_statment/ac_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/commisions/commisions_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/contact/contact_page.dart';
@@ -53,6 +54,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Color(0xff285B74),
       body: GetBuilder<MyZoomDrawerController>(
         builder: (c) {
+          logWarning(_adminController.isAdmin);
           return ZoomDrawer(
             angle: 0,
             borderRadius: 30,

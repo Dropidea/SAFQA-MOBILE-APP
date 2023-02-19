@@ -56,8 +56,18 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
       sendOptionId = _addInvoiceController.dataToEditInvoice!.customerSendBy;
       customerMobileCode =
           _addInvoiceController.dataToEditInvoice!.customerMobileNumbrCode;
-    } else {
-      customerMobileCode = _globalDataController.countries[0].code!;
+    } else if (_addInvoiceController.customerInfo != null) {
+      customerEmailControler.text =
+          _addInvoiceController.customerInfo!.customerEmail ?? "";
+      customerNameControler.text =
+          _addInvoiceController.customerInfo!.customerName ?? "";
+      customerPhoneNumberControler.text =
+          _addInvoiceController.customerInfo!.customerMobileNumbr ?? "";
+      customerRefrenceControler.text =
+          _addInvoiceController.customerInfo!.customerRefrence ?? "";
+      sendOptionId = _addInvoiceController.customerInfo!.customerSendBy;
+      customerMobileCode =
+          _addInvoiceController.customerInfo!.customerMobileNumbrCode;
     }
     super.initState();
   }
@@ -145,9 +155,8 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                           element.id ==
                           _addInvoiceController
                               .dataToEditInvoice!.customerSendBy!)]
-                  : _globalDataController.sendOptions
-                      .map((e) => engFlag ? e.nameEn! : e.nameAr!)
-                      .toList()[0],
+                  : null,
+              hint: "choose".tr,
               width: 2,
               onchanged: (s) {
                 if (_addInvoiceController.dataToEditInvoice != null) {
@@ -176,62 +185,87 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
             ),
             const SizedBox(height: 20),
             blackText("customer_phone_number".tr, 16),
-            Obx(() {
-              List countries = _signUpController.globalData['country'];
-              List<String> ids = countries
-                  .map<String>(
-                    (e) => e['id'].toString(),
-                  )
-                  .toSet()
-                  .toList();
-              List<String> countriesCodes = countries
-                  .map<String>(
-                    (e) => e['code'].toString(),
-                  )
-                  .toSet()
-                  .toList();
-              if (_addInvoiceController.dataToEditInvoice != null) {
-                if (_addInvoiceController
-                        .dataToEditInvoice!.customerMobileNumbrCode !=
-                    null) {
-                  _signUpController.selectPhoneNumberManagerCodeDrop(
-                      _addInvoiceController
-                          .dataToEditInvoice!.customerMobileNumbrCode!);
-                } else {
-                  _signUpController
-                      .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
-                }
-              } else {
-                _signUpController
-                    .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
-              }
-              return SignUpTextField(
+            GetBuilder<GlobalDataController>(
+              builder: (c) => SignUpTextField(
+                hintText: 'Manager Mobile Number',
                 controller: customerPhoneNumberControler,
                 padding: EdgeInsets.all(0),
                 keyBoardType: TextInputType.number,
-                prefixIcon: SizedBox(
-                  width: 60,
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(border: InputBorder.none),
-                    isExpanded: true,
-                    items: countriesCodes
-                        .map((e) => DropdownMenuItem<String>(
-                              child: Center(child: Text(e)),
-                              value: e,
-                            ))
-                        .toList(),
-                    value: _signUpController.selectedPhoneNumberManagerCodeDrop,
-                    onChanged: (value) {
-                      customerMobileCodeID =
-                          ids[countriesCodes.indexOf(value!)];
-                      customerMobileCode =
-                          countriesCodes[countriesCodes.indexOf(value)];
-                    },
-                  ),
+                prefixIcon: CustomDropdown(
+                  hint: "choose".tr,
+                  selectedItem: customerMobileCode,
+                  width: 100,
+                  items: c.countries.map((e) => e.code!).toList(),
+                  onchanged: (String? s) {
+                    customerMobileCodeID = c.countries
+                        .firstWhere((element) => element.code == s)
+                        .id!
+                        .toString();
+                    customerMobileCode = c.countries
+                        .firstWhere((element) => element.code == s)
+                        .code!
+                        .toString();
+                  },
                 ),
                 // hintText: 'Manager Mobile Number',
-              );
-            }),
+              ),
+            ),
+            // Obx(() {
+            //   List countries = _signUpController.globalData['country'];
+            //   List<String> ids = countries
+            //       .map<String>(
+            //         (e) => e['id'].toString(),
+            //       )
+            //       .toSet()
+            //       .toList();
+            //   List<String> countriesCodes = countries
+            //       .map<String>(
+            //         (e) => e['code'].toString(),
+            //       )
+            //       .toSet()
+            //       .toList();
+            //   if (_addInvoiceController.dataToEditInvoice != null) {
+            //     if (_addInvoiceController
+            //             .dataToEditInvoice!.customerMobileNumbrCode !=
+            //         null) {
+            //       _signUpController.selectPhoneNumberManagerCodeDrop(
+            //           _addInvoiceController
+            //               .dataToEditInvoice!.customerMobileNumbrCode!);
+            //     } else {
+            //       _signUpController
+            //           .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
+            //     }
+            //   } else {
+            //     _signUpController
+            //         .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
+            //   }
+            //   return SignUpTextField(
+            //     controller: customerPhoneNumberControler,
+            //     padding: EdgeInsets.all(0),
+            //     keyBoardType: TextInputType.number,
+            //     prefixIcon: SizedBox(
+            //       width: 60,
+            //       child: DropdownButtonFormField<String>(
+            //         decoration: const InputDecoration(border: InputBorder.none),
+            //         isExpanded: true,
+            //         items: countriesCodes
+            //             .map((e) => DropdownMenuItem<String>(
+            //                   child: Center(child: Text(e)),
+            //                   value: e,
+            //                 ))
+            //             .toList(),
+            //         value: _signUpController.selectedPhoneNumberManagerCodeDrop,
+            //         onChanged: (value) {
+            //           customerMobileCodeID =
+            //               ids[countriesCodes.indexOf(value!)];
+            //           customerMobileCode =
+            //               countriesCodes[countriesCodes.indexOf(value)];
+            //         },
+            //       ),
+            //     ),
+            //     // hintText: 'Manager Mobile Number',
+            //   );
+            // }),
             const SizedBox(height: 20),
             blackText("customer_email".tr, 16),
             SignUpTextField(
@@ -294,7 +328,8 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                       email: customerEmailControler.text,
                       name: customerNameControler.text,
                       phoneNum: customerPhoneNumberControler.text,
-                      phoneNumCodeId: customerMobileCode!,
+                      phoneNumCodeId: customerMobileCodeID,
+                      customerMobileNumbrCode: customerMobileCode!,
                       sendBy: sendOptionId ?? 1,
                     );
                   }
@@ -396,12 +431,16 @@ Text whiteText(String text, double size,
 }
 
 Text greyText(String text, double size,
-    {bool underline = false, FontWeight? fontWeight, TextAlign? textAlign}) {
+    {bool underline = false,
+    FontWeight? fontWeight,
+    TextAlign? textAlign,
+    TextOverflow? overflow}) {
   return Text(
     text,
     softWrap: true,
     textAlign: textAlign,
     style: TextStyle(
+        overflow: overflow,
         decoration: underline ? TextDecoration.underline : null,
         decorationThickness: 4,
         color: const Color(0xff8B8B8B),

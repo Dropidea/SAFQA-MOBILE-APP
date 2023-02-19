@@ -50,27 +50,27 @@ class MyStoreTab extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            height: 40,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                MyStoreBTN(text: "All", onTap: () {}, selected: true),
-                SizedBox(width: 5),
-                MyStoreBTN(text: "Electronic Devices", onTap: () {}),
-                SizedBox(width: 5),
-                MyStoreBTN(text: "lorem ipsum", onTap: () {}),
-                SizedBox(width: 5),
-                MyStoreBTN(text: "lorem ipsum", onTap: () {}),
-                SizedBox(width: 5),
-                MyStoreBTN(text: "lorem ipsum", onTap: () {}),
-                SizedBox(width: 5),
-                MyStoreBTN(text: "lorem ipsum", onTap: () {}),
-                SizedBox(width: 5),
-              ],
-            ),
-          ),
-          SizedBox(height: 20),
+          // SizedBox(
+          //   height: 40,
+          //   child: ListView(
+          //     scrollDirection: Axis.horizontal,
+          //     children: [
+          //       MyStoreBTN(text: "All", onTap: () {}, selected: true),
+          //       SizedBox(width: 5),
+          //       MyStoreBTN(text: "Electronic Devices", onTap: () {}),
+          //       SizedBox(width: 5),
+          //       MyStoreBTN(text: "lorem ipsum", onTap: () {}),
+          //       SizedBox(width: 5),
+          //       MyStoreBTN(text: "lorem ipsum", onTap: () {}),
+          //       SizedBox(width: 5),
+          //       MyStoreBTN(text: "lorem ipsum", onTap: () {}),
+          //       SizedBox(width: 5),
+          //       MyStoreBTN(text: "lorem ipsum", onTap: () {}),
+          //       SizedBox(width: 5),
+          //     ],
+          //   ),
+          // ),
+          // SizedBox(height: 20),
           Expanded(
               child: c.productsStoreToShow.isEmpty
                   ? Center(

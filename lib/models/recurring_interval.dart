@@ -21,8 +21,7 @@ class RecurringInterval {
     data['id'] = this.id;
     data['name_en'] = this.nameEn;
     data['name_ar'] = this.nameAr;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+
     return data;
   }
 }

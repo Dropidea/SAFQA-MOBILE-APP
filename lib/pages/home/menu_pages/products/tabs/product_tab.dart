@@ -1,12 +1,13 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
+import 'package:safqa/pages/home/menu_pages/products/create_product_link_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_details.dart';
 import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/products_create_page.dart';
-import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/product.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -20,6 +21,7 @@ class ProductsTab extends StatefulWidget {
 
 class _ProductsTabState extends State<ProductsTab> {
   ProductsController _productsController = Get.find();
+  bool selectAllFlag = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -157,60 +159,82 @@ class _ProductsTabState extends State<ProductsTab> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  listBTN(text: "select_all".tr, onTap: () {}),
+                  selectAllFlag
+                      ? listBTN(
+                          text: "un_select_all".tr,
+                          onTap: () {
+                            setState(() {
+                              selectAllFlag = false;
+                              _productsController.productsToCreateLinks = [];
+                            });
+                          })
+                      : listBTN(
+                          text: "select_all".tr,
+                          onTap: () {
+                            setState(() {
+                              selectAllFlag = true;
+                              for (var i
+                                  in _productsController.productsToShow) {
+                                if (i.isActive == 1)
+                                  _productsController.addProductLink(i);
+                              }
+                            });
+                          }),
                   SizedBox(width: 5),
                   listBTN(
-                      text: "copy".tr,
+                      text: "create_link".tr,
                       onTap: () {
-                        Get.dialog(
-                          AlertDialog(
-                            actionsPadding: EdgeInsets.only(bottom: 30),
-                            titlePadding: EdgeInsets.all(0),
-                            actionsAlignment: MainAxisAlignment.center,
-                            actions: [
-                              MyButton(
-                                width: 0.3 * w,
-                                heigt: 35.0.sp,
-                                color: Color(0xffF3F3F3),
-                                borderRadius: 10,
-                                textColor: Color(0xff2D5571),
-                                text: "Open",
-                                textSize: 15.0,
-                                func: () {},
-                              ),
-                              MyButton(
-                                width: 0.3 * w,
-                                heigt: 35.0.sp,
-                                color: Color(0xff2D5571),
-                                borderRadius: 10,
-                                text: "Copy Link",
-                                textColor: Colors.white,
-                                textSize: 13.0,
-                                func: () {},
-                              )
-                            ],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(32.0),
-                              ),
-                            ),
-                            title: _dialogeTitle(),
-                            content: Container(
-                              width: w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(color: Color(0xffBBBBBB))),
-                              child: TextFormField(
-                                initialValue: "www.google.com",
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide.none),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
+                        // Get.dialog(
+                        //   AlertDialog(
+                        //     actionsPadding: EdgeInsets.only(bottom: 30),
+                        //     titlePadding: EdgeInsets.all(0),
+                        //     actionsAlignment: MainAxisAlignment.center,
+                        //     actions: [
+                        //       MyButton(
+                        //         width: 0.3 * w,
+                        //         heigt: 35.0.sp,
+                        //         color: Color(0xffF3F3F3),
+                        //         borderRadius: 10,
+                        //         textColor: Color(0xff2D5571),
+                        //         text: "Open",
+                        //         textSize: 15.0,
+                        //         func: () {},
+                        //       ),
+                        //       MyButton(
+                        //         width: 0.3 * w,
+                        //         heigt: 35.0.sp,
+                        //         color: Color(0xff2D5571),
+                        //         borderRadius: 10,
+                        //         text: "Copy Link",
+                        //         textColor: Colors.white,
+                        //         textSize: 13.0,
+                        //         func: () {},
+                        //       )
+                        //     ],
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(32.0),
+                        //       ),
+                        //     ),
+                        //     title: _dialogeTitle(),
+                        //     content: Container(
+                        //       width: w,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(10.0),
+                        //           border: Border.all(color: Color(0xffBBBBBB))),
+                        //       child: TextFormField(
+                        //         initialValue: "www.google.com",
+                        //         decoration: InputDecoration(
+                        //           border: OutlineInputBorder(
+                        //               borderRadius: BorderRadius.circular(10.0),
+                        //               borderSide: BorderSide.none),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // );
+                        if (!_productsController.productsToCreateLinks.isEmpty)
+                          Get.to(() => CreateProductLink());
                       }),
                   SizedBox(width: 5),
                   listBTN(text: "print/pdf".tr, onTap: () {}),
@@ -277,7 +301,11 @@ class _ProductsTabState extends State<ProductsTab> {
                             return ProductWidget(
                               product:
                                   _productsController.productsToShow[index],
+                              checkedFlag: selectAllFlag,
                               onTap: () {
+                                logSuccess(_productsController
+                                    .productsToShow[index]
+                                    .toJson());
                                 Get.to(() => ProductDetailsPage(
                                       product: _productsController
                                           .productsToShow[index],

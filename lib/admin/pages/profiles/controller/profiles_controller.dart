@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:safqa/admin/pages/profiles/models/profile_model.dart';
 import 'package:safqa/admin/pages/profiles/models/profiles_filter.dart';
 import 'package:safqa/main.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/manage_user.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
 import 'package:safqa/utils.dart';
@@ -29,6 +30,50 @@ class ProfilesController extends GetxController {
   List<Profile> profiles = [];
   List<Profile> profilesToShow = [];
   List<Profile> filteredProfiles = [];
+
+  List<ManageUser> manageUsers = [];
+
+  bool getManageUserFlag = false;
+
+  Future getManageUsersAdmin(int id) async {
+    getManageUserFlag = true;
+
+    try {
+      await sslProblem();
+      dio.options.headers['profile'] = '$id';
+
+      var res = await dio.get(EndPoints.getManageUsers);
+
+      List<ManageUser> tmp = [];
+      for (var i in res.data["data"]) {
+        ManageUser t = ManageUser.fromJson(i);
+        tmp.add(t);
+      }
+      manageUsers = tmp;
+
+      getManageUserFlag = false;
+      update();
+    } on DioError catch (e) {
+      getManageUserFlag = false;
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getManageUsersAdmin(id);
+        }
+      } else {
+        logError(e.message);
+        logError(e.response!.data);
+      }
+      // logError(e.response!.data["message"]);
+
+    } catch (e) {
+      getManageUserFlag = false;
+      update();
+
+      logError(e.toString());
+    }
+  }
 
   void searchForProfilesWithName(String name) {
     if (name == "") {

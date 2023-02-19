@@ -6,10 +6,12 @@ import 'package:dio/dio.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/category_filter.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product_filter.dart';
+import 'package:safqa/pages/home/menu_pages/products/models/product_link.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
 import 'package:safqa/utils.dart';
@@ -17,7 +19,7 @@ import 'package:safqa/widgets/dialoges.dart';
 
 class ProductsController extends GetxController {
   final Dio dio = Dio();
-
+  GlobalDataController _globalDataController = Get.find();
 // -------------Product Category ----------------------
   List<ProductCategory> productCategories = [];
   List<ProductCategory> productCategoriesToShow = [];
@@ -31,6 +33,18 @@ class ProductsController extends GetxController {
   List<Product> productsStore = [];
   List<Product> productsStoreToShow = [];
   List<Product> filteredProductsStore = [];
+  ////////////////////////////////////////////////
+  List<Product> productsToCreateLinks = [];
+  List<ProductLink> productLinks = [];
+  void addProductLink(Product product) {
+    if (!productsToCreateLinks.contains(product))
+      productsToCreateLinks.add(product);
+  }
+
+  void removeProductLink(Product product) {
+    if (productsToCreateLinks.contains(product))
+      productsToCreateLinks.remove(product);
+  }
 
   double minPriceProduct() {
     double min = 10000000;
@@ -366,6 +380,7 @@ class ProductsController extends GetxController {
       final body = d.FormData.fromMap(product.toJson());
 
       // body.fields.add(MapEntry("token", token));
+
       if (product.productImage != null) {
         body.files.add(MapEntry(
           "product_image",
@@ -449,6 +464,7 @@ class ProductsController extends GetxController {
       final body = d.FormData.fromMap(product.toJson());
       logSuccess(product.toJson());
       body.fields.add(MapEntry("_method", "PUT"));
+      logSuccess(product.productImage.runtimeType);
       if (product.productImage != null) {
         body.files.add(MapEntry(
           "product_image",
@@ -531,9 +547,9 @@ class ProductsController extends GetxController {
     ));
     try {
       final body = d.FormData.fromMap(product.toJson());
-      logSuccess(product.toJson());
       body.fields.add(MapEntry("_method", "PUT"));
-      if (product.productImage != null) {
+
+      if (product.productImage != null && product.productImage! is! String) {
         body.files.add(MapEntry(
           "product_image",
           await d.MultipartFile.fromFile(
@@ -569,7 +585,7 @@ class ProductsController extends GetxController {
           await editProduct(product);
         }
       } else {
-        logError(e.message);
+        logError(e.response!.data);
       }
       // logError(e.response!.data);
       // Map<String, dynamic> m = e.response!.data;
@@ -708,6 +724,142 @@ class ProductsController extends GetxController {
         bool res = await Utils.reLoginHelper(e);
         if (res) {
           await createProductCategory(category);
+        }
+      } else {
+        logError(e.response!);
+      }
+      // logError(e.response!.data);
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 2000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
+    }
+  }
+
+  Future createProductLink(ProductLink link) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(link.toJson());
+
+      var res = await dio.post(EndPoints.createProductLink, data: body);
+      logSuccess(res.data);
+      Get.back();
+      await getProductLinks();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Created Successfully",
+        btnTXT: "Close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      productsToCreateLinks = [];
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createProductLink(link);
+        }
+      } else {
+        logError(e.response!);
+      }
+      // logError(e.response!.data);
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 2000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
+    }
+  }
+
+  Future editProductLink(ProductLink link) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(link.toJson());
+      body.fields.add(MapEntry("_method", "PUT"));
+      var res = await dio.post(EndPoints.editProductLink(link.id!), data: body);
+      logSuccess(res.data);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Edited Successfully",
+        btnTXT: "Close",
+        onTap: () async {
+          Get.back();
+          Get.back();
+          await getProductLinks();
+        },
+      );
+      productsToCreateLinks = [];
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editProductLink(link);
         }
       } else {
         logError(e.response!);
@@ -937,6 +1089,155 @@ class ProductsController extends GetxController {
     update();
   }
 
+  bool getProductsLinksFlag = false;
+  Future getProductLinks() async {
+    getProductsLinksFlag = true;
+    update();
+    try {
+      // final body = d.FormData();
+      // String token = await AuthService().loadToken();
+      // dio.options.headers["authorization"] = "bearer  $token";
+
+      // body.fields.add(MapEntry("token", token));
+
+      await sslProblem();
+      var res = await dio.get(EndPoints.getProductLinks);
+      List<ProductLink> tmp = [];
+      for (var element in res.data['data']) {
+        tmp.add(ProductLink.fromJson(element));
+      }
+      productLinks = tmp;
+      logSuccess("product Links done");
+
+      getProductsLinksFlag = false;
+      update();
+    } on DioError catch (e) {
+      getProductsLinksFlag = false;
+      update();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getProductLinks();
+        }
+      } else {
+        logError(e.response!);
+      }
+      // logError(e.response!.data);
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 2000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
+    }
+    update();
+  }
+
+  ProductLink? productLinkToEdit;
+
+  Future getProductLink(int id) async {
+    getProductsLinksFlag = true;
+    try {
+      // final body = d.FormData();
+      // String token = await AuthService().loadToken();
+      // dio.options.headers["authorization"] = "bearer  $token";
+
+      // body.fields.add(MapEntry("token", token));
+
+      await sslProblem();
+      var res = await dio.get(EndPoints.getProductLink(id));
+      var ttt = res.data["data"];
+      productLinkToEdit = ProductLink.fromJson(ttt);
+      List<Product> tmp = [];
+      for (var i in ttt["products"]) {
+        tmp.add(Product.fromJson(i,
+            "https://api.safqapay.com/image/product/${_globalDataController.me.id}"));
+      }
+      productsToCreateLinks = tmp;
+      logSuccess("product Link done");
+
+      getProductsLinksFlag = false;
+      update();
+      return true;
+    } on DioError catch (e) {
+      getProductsLinksFlag = false;
+      update();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await getProductLink(id);
+        }
+      } else {
+        logError(e.response!);
+      }
+      logError(e.response!.data);
+      return false;
+      // Map<String, dynamic> m = e.response!.data;
+      // String errors = "";
+      // int c = 0;
+      // for (var i in m.values) {
+      //   for (var j = 0; j < i.length; j++) {
+      //     if (j == i.length - 1) {
+      //       errors = errors + i[j];
+      //     } else {
+      //       errors = "${errors + i[j]}\n";
+      //     }
+      //   }
+
+      //   c++;
+      //   if (c != m.values.length) {
+      //     errors += "\n";
+      //   }
+      // }
+
+      // Get.showSnackbar(
+      //   GetSnackBar(
+      //     duration: Duration(milliseconds: 2000),
+      //     backgroundColor: Colors.red,
+      //     // message: errors,
+      //     messageText: Text(
+      //       errors,
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontSize: 17,
+      //       ),
+      //     ),
+      //   ),
+      // );
+    }
+    update();
+  }
+
   Future getProducts() async {
     getProductsFlag.value = true;
     productsStore = [];
@@ -952,7 +1253,7 @@ class ProductsController extends GetxController {
       List<Product> tmpList = [];
       var decodedData = res.data["data"];
       for (var element in decodedData) {
-        Product tmp = Product.fromJson(element);
+        Product tmp = Product.fromJson(element, res.data["urlImage"]);
         if (tmp.inStore == 1) {
           productsStore.add(tmp);
           ;

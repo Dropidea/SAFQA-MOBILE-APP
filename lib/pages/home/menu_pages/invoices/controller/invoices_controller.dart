@@ -4,8 +4,6 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:safqa/main.dart';
-import 'package:safqa/models/invoice.dart';
-import 'package:safqa/models/invoice_types.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/models/invoice.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/models/invoice_filter.dart';
 import 'package:safqa/services/auth_service.dart';
@@ -13,9 +11,9 @@ import 'package:safqa/services/end_points.dart';
 import 'package:safqa/utils.dart';
 
 class InvoicesController extends GetxController {
-  List<InvoiceModel> invoices = [];
-  List<InvoiceModel> invoicesToShow = [];
-  List<InvoiceModel> filteredInvoices = [];
+  List<Invoice> invoices = [];
+  List<Invoice> invoicesToShow = [];
+  List<Invoice> filteredInvoices = [];
   Dio dio = Dio();
   sslProblem() async {
     dio.options.headers['content-Type'] = 'multipart/form-data';
@@ -83,8 +81,8 @@ class InvoicesController extends GetxController {
 
   activeInvoiceFilter() {
     invoiceFilter.filterActive = true;
-    List<InvoiceModel> tmp1 = [];
-    List<InvoiceModel> tmp2 = [];
+    List<Invoice> tmp1 = [];
+    List<Invoice> tmp2 = [];
     if (invoiceFilter.value != null) {
       for (var i in invoices) {
         if (i.invoiceValue == invoiceFilter.value) {
@@ -126,7 +124,7 @@ class InvoicesController extends GetxController {
     if (name == "") {
       invoicesToShow = filteredInvoices;
     } else {
-      List<InvoiceModel> tmp = [];
+      List<Invoice> tmp = [];
       for (var i in filteredInvoices) {
         if (i.id.toString().contains(name)
             // ||
@@ -151,10 +149,10 @@ class InvoicesController extends GetxController {
       var res = await dio.get(
         EndPoints.getInvoices,
       );
-      List<InvoiceModel> tmpList = [];
+      List<Invoice> tmpList = [];
       var decodedData = res.data["data"];
       for (var element in decodedData) {
-        InvoiceModel tmp = InvoiceModel.fromJson(element);
+        Invoice tmp = Invoice.fromJson(element);
         tmpList.add(tmp);
       }
       logSuccess("invoicesDone");
@@ -179,38 +177,38 @@ class InvoicesController extends GetxController {
     }
   }
 
-  List<Invoice> invoicest = [
-    Invoice(
-      customerName: "Ahmad2",
-      date: "09 oct 2022",
-      price: "\$ 500.0",
-      time: "06:06 PM",
-      type: InvoiceTypes.paid,
-      id: "#2246721531",
-    ),
-    Invoice(
-      customerName: "Ahmad",
-      date: "09 oct 2022",
-      price: "\$ 500.0",
-      time: "06:06 PM",
-      type: InvoiceTypes.unPaid,
-      id: "#2246721531",
-    ),
-    Invoice(
-      customerName: "Ahmad",
-      date: "09 oct 2022",
-      price: "\$ 500.0",
-      time: "06:06 PM",
-      type: InvoiceTypes.canceled,
-      id: "#2246721531",
-    ),
-    Invoice(
-      customerName: "Ahmad",
-      date: "09 oct 2022",
-      price: "\$ 500.0",
-      time: "06:06 PM",
-      type: InvoiceTypes.pending,
-      id: "#2246721531",
-    ),
-  ];
+//   List<Invoice> invoicest = [
+//     Invoice(
+//       customerName: "Ahmad2",
+//       date: "09 oct 2022",
+//       price: "\$ 500.0",
+//       time: "06:06 PM",
+//       type: InvoiceTypes.paid,
+//       id: "#2246721531",
+//     ),
+//     Invoice(
+//       customerName: "Ahmad",
+//       date: "09 oct 2022",
+//       price: "\$ 500.0",
+//       time: "06:06 PM",
+//       type: InvoiceTypes.unPaid,
+//       id: "#2246721531",
+//     ),
+//     Invoice(
+//       customerName: "Ahmad",
+//       date: "09 oct 2022",
+//       price: "\$ 500.0",
+//       time: "06:06 PM",
+//       type: InvoiceTypes.canceled,
+//       id: "#2246721531",
+//     ),
+//     Invoice(
+//       customerName: "Ahmad",
+//       date: "09 oct 2022",
+//       price: "\$ 500.0",
+//       time: "06:06 PM",
+//       type: InvoiceTypes.pending,
+//       id: "#2246721531",
+//     ),
+//   ];
 }

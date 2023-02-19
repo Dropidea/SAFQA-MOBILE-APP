@@ -371,8 +371,8 @@ class OrderDetailsPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             InvoiceItem item = InvoiceItem(
                               productName: "name",
-                              quantity: 10,
-                              unitPrice: "100",
+                              productQuantity: 10,
+                              productPrice: 100,
                             );
 
                             return Container(
@@ -412,7 +412,8 @@ class OrderDetailsPage extends StatelessWidget {
                                           children: [
                                             greyText("Unit Price", 11),
                                             SizedBox(height: 10),
-                                            blackText("\$${item.unitPrice}", 11)
+                                            blackText(
+                                                "\$${item.productPrice}", 11)
                                           ],
                                         ),
                                         Column(
@@ -422,7 +423,7 @@ class OrderDetailsPage extends StatelessWidget {
                                             greyText("Quantity", 11),
                                             SizedBox(height: 10),
                                             blackText(
-                                                item.quantity!
+                                                item.productQuantity!
                                                     .round()
                                                     .toString(),
                                                 11)

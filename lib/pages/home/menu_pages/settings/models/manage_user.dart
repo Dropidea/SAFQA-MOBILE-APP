@@ -6,6 +6,7 @@ class ManageUser {
   String? phoneNumberManager;
   String? email;
   String? fullName;
+  String? name;
   int? nationalityId;
   int isEnable = 0;
   String? avatar;
@@ -16,6 +17,7 @@ class ManageUser {
   int? deposits;
   int? paymentLinks;
   int? profile;
+  int? isSuperAdmin;
   int? users;
   int? refund;
   int? showAllInvoices;
@@ -43,16 +45,18 @@ class ManageUser {
   String? updatedAt;
   Nationality? nationality;
   UserRole? userRole;
-  ProfileBusines? profileBusines;
+  ProfileBusiness? profileBusines;
 
   ManageUser({
     this.id,
+    this.isSuperAdmin,
     this.roleId,
     this.profileBusinessId,
     this.phoneNumberCodeManagerId = 1,
     this.phoneNumberManager,
     this.email,
     this.fullName,
+    this.name,
     this.nationalityId,
     this.isEnable = 0,
     this.avatar,
@@ -308,6 +312,7 @@ class ManageUser {
     phoneNumberManager = json['phone_number_manager'];
     email = json['email'];
     fullName = json['full_name'];
+    name = json['name'];
     nationalityId = json['nationality_id'];
     isEnable = json['is_enable'];
     avatar = json['avatar'];
@@ -318,6 +323,7 @@ class ManageUser {
     deposits = json['deposits'];
     paymentLinks = json['payment_links'];
     profile = json['profile'];
+    isSuperAdmin = json['is_super_admin'];
     users = json['users'];
     refund = json['refund'];
     showAllInvoices = json['show_all_invoices'];
@@ -354,8 +360,8 @@ class ManageUser {
         ? new UserRole.fromJson(json['user_role'])
         : null;
 
-    profileBusines = json['profile_busines'] != null
-        ? new ProfileBusines.fromJson(json['profile_busines'][0])
+    profileBusines = json['profile_business'] != null
+        ? new ProfileBusiness.fromJson(json['profile_business'])
         : null;
   }
 
@@ -368,6 +374,7 @@ class ManageUser {
     data['phone_number_manager'] = phoneNumberManager;
     data['email'] = email;
     data['full_name'] = fullName;
+    data['name'] = name;
     data['nationality_id'] = nationalityId;
     data['is_enable'] = isEnable;
     data['avatar'] = avatar;
@@ -378,6 +385,7 @@ class ManageUser {
     data['deposits'] = deposits;
     data['payment_links'] = paymentLinks;
     data['profile'] = profile;
+    data['is_super_admin'] = isSuperAdmin;
     data['users'] = users;
     data['refund'] = refund;
     data['show_all_invoices'] = showAllInvoices;
@@ -414,7 +422,7 @@ class ManageUser {
       data['user_role'] = userRole!.toJson();
     }
     if (profileBusines != null) {
-      data['profileBusines'][0] = profileBusines!.toJson();
+      data['profile_business'] = profileBusines!.toJson();
     }
     return data;
   }
@@ -495,7 +503,7 @@ class UserRole {
   }
 }
 
-class ProfileBusines {
+class ProfileBusiness {
   int? id;
   int? countryId;
   int? phoneNumberCodeId;
@@ -531,7 +539,7 @@ class ProfileBusines {
   int? showAllCurrencies;
   int? enableCardView;
 
-  ProfileBusines({
+  ProfileBusiness({
     this.id,
     this.countryId,
     this.phoneNumberCodeId,
@@ -568,7 +576,7 @@ class ProfileBusines {
     this.enableCardView,
   });
 
-  ProfileBusines.fromJson(Map<String, dynamic> json) {
+  ProfileBusiness.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     countryId = json['country_id'];
     phoneNumberCodeId = json['phone_number_code_id'];

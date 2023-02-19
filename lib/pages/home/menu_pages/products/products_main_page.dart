@@ -4,6 +4,7 @@ import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/my_store.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_category_tab.dart';
+import 'package:safqa/pages/home/menu_pages/products/tabs/product_links.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_ordered_tab.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
 import 'package:safqa/widgets/popup_menu.dart';
@@ -22,6 +23,7 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
   List<String> tabsNames = [
     "products".tr,
     "my_store".tr,
+    "product_links".tr,
     "products_ordered".tr,
     "product_category".tr,
   ];
@@ -40,6 +42,8 @@ class _ProductsMainPageState extends State<ProductsMainPage> {
       case 1:
         return MyStoreTab();
       case 2:
+        return ProductLinksPage();
+      case 3:
         return ProductsOrderedTab();
       default:
         return ProductsCategoryTab();

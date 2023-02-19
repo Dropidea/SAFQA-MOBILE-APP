@@ -6,9 +6,10 @@ class DataToCreateInvoice {
   String? customerEmail;
   String? customerMobileNumbr;
   String? customerMobileNumbrCode;
+  String? customerMobileNumbrCodeid;
   String? customerRefrence;
   int? customerSendBy = 1;
-  String? currencyId = "1";
+  late String currencyId;
   int? discountType;
   int? discountValue;
   String? expiryDate;
@@ -29,9 +30,10 @@ class DataToCreateInvoice {
     this.customerMobileNumbr,
     this.customerEmail,
     this.customerMobileNumbrCode,
+    this.customerMobileNumbrCodeid,
     this.customerRefrence,
     this.customerSendBy,
-    this.currencyId,
+    this.currencyId = "1",
     this.discountType,
     this.discountValue,
     this.expiryDate,
@@ -52,14 +54,15 @@ class DataToCreateInvoice {
     customerSendBy = json['send_invoice_option_id'];
     customerMobileNumbr = json['customer_mobile'];
     customerMobileNumbrCode = json['customer_mobile_code'];
+    customerMobileNumbrCodeid = json['customer_mobile_code_id'];
     customerRefrence = json['customer_reference'];
     if (json["invoice_item"] != null) {
       for (var i in json["invoice_item"]) {
         invoiceItems.add(
           InvoiceItem(
             productName: i['product_name'],
-            quantity: i['product_quantity'],
-            unitPrice: i['product_price'].toString(),
+            productQuantity: i['product_quantity'],
+            productPrice: i['product_price'],
           ),
         );
       }
@@ -86,6 +89,7 @@ class DataToCreateInvoice {
     data["send_invoice_option_id"] = customerSendBy;
     data["customer_mobile"] = customerMobileNumbr;
     data["customer_mobile_code"] = customerMobileNumbrCode;
+    data["customer_mobile_code_id"] = customerMobileNumbrCodeid;
     data["customer_reference"] = customerRefrence;
     data["currency_id"] = currencyId;
     data["discount_type"] = discountType;

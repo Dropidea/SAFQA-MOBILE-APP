@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/admin/pages/banks/controller/bank_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/bank_model.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
@@ -26,7 +26,8 @@ class _BankInfoPageState extends State<BankInfoPage> {
 
   String ibanControler = "";
 
-  final SignUpController _signUpController = Get.find();
+  // final SignUpController _signUpController = Get.find();
+  final BankController _bankController = Get.find();
 
   final CustomersController _customersController = Get.find();
 
@@ -117,7 +118,7 @@ class _BankInfoPageState extends State<BankInfoPage> {
                 bankId = p0.item!.id!;
               },
               controller: bankNameControler,
-              suggestions: _signUpController.banks
+              suggestions: _bankController.banks
                   .map(
                     (e) => SearchFieldListItem<Bank>(e.name!,
                         item: e,

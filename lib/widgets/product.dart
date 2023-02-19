@@ -3,28 +3,34 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
 import 'package:safqa/pages/home/menu_pages/products/models/product.dart';
 import 'package:sizer/sizer.dart';
 
 class ProductWidget extends StatefulWidget {
-  ProductWidget(
-      {super.key,
-      this.onTap,
-      this.orderedFlag = false,
-      this.orderedState,
-      required this.product});
+  ProductWidget({
+    super.key,
+    this.onTap,
+    this.orderedFlag = false,
+    this.checkedFlag = false,
+    this.orderedState,
+    required this.product,
+    this.onCheckChanged,
+  });
 
   final Product product;
   bool orderedFlag;
+  bool checkedFlag;
   String? orderedState;
   final void Function()? onTap;
+  final void Function(bool)? onCheckChanged;
   @override
   State<ProductWidget> createState() => _ProductWidgetState();
 }
 
 class _ProductWidgetState extends State<ProductWidget> {
-  bool checked = false;
   LocalsController _localsController = Get.put(LocalsController());
+  ProductsController _productsController = Get.put(ProductsController());
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -112,17 +118,31 @@ class _ProductWidgetState extends State<ProductWidget> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     !widget.orderedFlag
-                        ? GFCheckbox(
-                            size: 24,
-                            activeBorderColor: Colors.transparent,
-                            inactiveBorderColor: Colors.grey,
-                            activeBgColor: Color(0xff00A7B3),
-                            onChanged: (value) {
-                              setState(() {
-                                checked = value;
-                              });
-                            },
-                            value: checked)
+                        ? widget.product.isActive == 1
+                            ? GFCheckbox(
+                                size: 24,
+                                activeBorderColor: Colors.transparent,
+                                inactiveBorderColor: Colors.grey,
+                                activeBgColor: Color(0xff00A7B3),
+                                onChanged: (value) {
+                                  setState(() {
+                                    widget.checkedFlag = value;
+                                    if (widget.onCheckChanged != null) {
+                                      widget.onCheckChanged!(value);
+                                    } else {
+                                      if (value) {
+                                        _productsController
+                                            .addProductLink(widget.product);
+                                      } else {
+                                        _productsController
+                                            .removeProductLink(widget.product);
+                                      }
+                                    }
+                                  });
+                                },
+                                value: widget.checkedFlag,
+                              )
+                            : Container()
                         : Container(),
                     Text(
                       "\$ ${widget.product.price! < 10000 ? widget.product.price : widget.product.price.toString().substring(0, 3) + ".."}",

@@ -7,10 +7,13 @@ import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/manage_user.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/add_user_page.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
+import 'package:safqa/utils.dart';
 import 'package:sizer/sizer.dart';
 
 class ManageUserDetailsPage extends StatelessWidget {
-  ManageUserDetailsPage({super.key, required this.manageUser});
+  ManageUserDetailsPage(
+      {super.key, required this.manageUser, required this.activeToEdit});
+  final bool activeToEdit;
   GlobalDataController globalDataController = Get.find();
   final ManageUser manageUser;
   String _getNotificationString() {
@@ -62,9 +65,12 @@ class ManageUserDetailsPage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Get.to(() => AddUserPage(
-                    userToEdit: manageUser,
-                  ));
+              if (activeToEdit) {
+                Get.to(() => AddUserPage(
+                      userToEdit: manageUser,
+                    ));
+              } else
+                Utils.showSnackBar(context, "You Can't Edit!!");
             },
             child: Container(
               width: w - 50,

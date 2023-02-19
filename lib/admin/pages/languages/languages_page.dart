@@ -6,6 +6,7 @@ import 'package:safqa/admin/pages/languages/controller/language_controller.dart'
 import 'package:safqa/admin/pages/languages/create_lang_page.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -201,7 +202,15 @@ class LanguagesMainPageState extends State<LanguagesMainPage> {
                                           child: MyPopUpMenu(
                                             menuList: [
                                               PopupMenuItem(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Future(
+                                                    () => Get.to(() =>
+                                                        CreateLanguagePage(
+                                                          languageToEdit: c
+                                                              .Languages[index],
+                                                        )),
+                                                  );
+                                                },
                                                 child: Row(
                                                   children: [
                                                     Padding(
@@ -223,7 +232,19 @@ class LanguagesMainPageState extends State<LanguagesMainPage> {
                                                 ),
                                               ),
                                               PopupMenuItem(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Future(() => MyDialogs
+                                                      .showDeleteDialoge(
+                                                          onProceed: () async {
+                                                            Get.back();
+                                                            await c
+                                                                .deleteLanguage(
+                                                                    c.Languages[
+                                                                        index]);
+                                                          },
+                                                          message:
+                                                              "Are You Sure"));
+                                                },
                                                 child: Row(
                                                   children: [
                                                     Padding(

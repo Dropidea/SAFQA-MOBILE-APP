@@ -6,6 +6,7 @@ import 'package:dio/dio.dart' as d;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/pages/banks/models/bank_flter.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/bank_model.dart';
 import 'package:safqa/services/auth_service.dart';
@@ -32,6 +33,78 @@ class BankController extends GetxController {
   List<Bank> banks = [];
   List<Bank> banksToShow = [];
   List<Bank> filteredBanks = [];
+
+  void searchForBanksWithName(String name) {
+    if (name == "") {
+      banksToShow = filteredBanks;
+    } else {
+      List<Bank> tmp = [];
+      for (var i in filteredBanks) {
+        if (i.name!.contains(name) ||
+            i.country!.nameAr!.contains(name) ||
+            i.country!.nameEn!.contains(name)) {
+          tmp.add(i);
+        }
+        banksToShow = tmp;
+      }
+    }
+    update();
+  }
+
+  BanksFilter bankFilter = BanksFilter(
+      filterActive: false, bankName: null, countryName: null, isActive: 0);
+
+  activeBanksFilter() {
+    bankFilter.filterActive = true;
+    List<Bank> tmp1 = [];
+    List<Bank> tmp2 = [];
+    if (bankFilter.bankName != null) {
+      for (var i in banks) {
+        if (i.name!.contains(bankFilter.bankName!)) {
+          tmp1.add(i);
+        }
+      }
+    } else {
+      tmp1.addAll(banks);
+    }
+
+    if (bankFilter.countryName != null) {
+      for (var i in tmp1) {
+        if (i.country!.nameAr!.contains(bankFilter.countryName!) ||
+            i.country!.nameEn!.contains(bankFilter.countryName!)) {
+          tmp2.add(i);
+        }
+      }
+    } else {
+      tmp2.addAll(tmp1);
+    }
+    tmp1 = [];
+    if (bankFilter.isActive != 0) {
+      for (var i in tmp2) {
+        if (bankFilter.isActive == 1 && i.isActive == 1) {
+          tmp1.add(i);
+        } else if (bankFilter.isActive == 2 && i.isActive == 0) {
+          tmp1.add(i);
+        }
+      }
+    } else {
+      tmp1.addAll(tmp2);
+    }
+    tmp2 = [];
+
+    filteredBanks = tmp1;
+    banksToShow = filteredBanks;
+    update();
+  }
+
+  clearBankFilter() {
+    bankFilter = BanksFilter(
+        filterActive: false, bankName: null, countryName: null, isActive: 0);
+    filteredBanks = banks;
+    banksToShow = banks;
+    update();
+  }
+
   bool getBanksFlag = false;
   Future getAllBanks() async {
     try {
@@ -63,43 +136,6 @@ class BankController extends GetxController {
     }
     update();
   }
-
-  //  Future deleteBank(Bank bank) async {
-  //   try {
-  //     await sslProblem();
-  //     Get.dialog(const Center(
-  //       child: CircularProgressIndicator(),
-  //     ));
-
-  //     final body = d.FormData();
-  //     body.fields.add(MapEntry("_method", "DELETE"));
-  //     var res = await dio.post(EndPoints.
-  //         data: body);
-  //     logSuccess(res.data);
-  //     await getAllBanks();
-  //     Get.back();
-  //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "Bank Deleted Successfully",
-  //       btnTXT: "close",
-  //       onTap: () async {
-  //         Get.back();
-  //         Get.back();
-  //       },
-  //     );
-  //   } on DioError catch (e) {
-  //     Get.back();
-  //     if (e.response!.statusCode == 404 &&
-  //         e.response!.data["message"] == "Please Login") {
-  //       bool res = await Utils.reLoginHelper(e);
-  //       if (res) {
-  //         await deleteCustomer(customerId);
-  //       }
-  //     } else {
-  //       logError(e.message);
-  //     }
-
-  //   }
-  // }
 
   Future createBank(Bank bank) async {
     try {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/Address_type.dart';
@@ -17,6 +18,7 @@ class CreateAddressTypePageState extends State<CreateAddressTypePage> {
   LocalsController _localsController = Get.put(LocalsController());
 
   AddressType addressTypeToCreate = AddressType();
+  GlobalDataController _globalDataController = Get.find();
 
   int isActive = 0;
   final formKey = GlobalKey<FormState>();
@@ -100,11 +102,11 @@ class CreateAddressTypePageState extends State<CreateAddressTypePage> {
                           FocusScope.of(context).unfocus();
                           if (formKey.currentState!.validate()) {
                             if (widget.addressTypeToEdit != null) {
-                              // await _contactController
-                              //     .editAddressType(widget.addressTypeToEdit!);
+                              await _globalDataController
+                                  .editAddressType(widget.addressTypeToEdit!);
                             } else {
-                              // await _contactController
-                              //     .createAddressType(addressTypeToCreate);
+                              await _globalDataController
+                                  .createAddressType(addressTypeToCreate);
                             }
                           }
                         },

@@ -211,14 +211,33 @@ class _CreateQuickInvoiceTabState extends State<CreateQuickInvoiceTab> {
                 onTap: () async {
                   addInvoiceController.dataToCreateQuickInvoice.token =
                       await AuthService().loadToken();
-                  addInvoiceController.dataToCreateQuickInvoice.customerName =
-                      addInvoiceController.customerInfo.customerName;
-                  addInvoiceController.dataToCreateQuickInvoice.customerSendBy =
-                      addInvoiceController.customerInfo.customerSendBy;
-                  addInvoiceController.dataToCreateQuickInvoice.customerSendBy =
-                      addInvoiceController.customerInfo.customerSendBy;
+                  if (addInvoiceController.customerInfo != null) {
+                    addInvoiceController.dataToCreateQuickInvoice.customerName =
+                        addInvoiceController.customerInfo!.customerName;
+                    addInvoiceController
+                            .dataToCreateQuickInvoice.customerEmail =
+                        addInvoiceController.customerInfo!.customerEmail;
+                    addInvoiceController
+                            .dataToCreateQuickInvoice.customerRefrence =
+                        addInvoiceController.customerInfo!.customerRefrence;
+                    addInvoiceController
+                            .dataToCreateQuickInvoice.customerSendBy =
+                        addInvoiceController.customerInfo!.customerSendBy;
+                    addInvoiceController
+                            .dataToCreateQuickInvoice.customerMobileNumbrCode =
+                        addInvoiceController
+                            .customerInfo!.customerMobileNumbrCode;
+                    addInvoiceController
+                            .dataToCreateQuickInvoice.customerMobileNumbr =
+                        addInvoiceController.customerInfo!.customerMobileNumbr;
+                    addInvoiceController.dataToCreateQuickInvoice
+                            .customerMobileNumbrCodeid =
+                        addInvoiceController
+                            .customerInfo!.customerMobileNumbrCodeID;
+                  }
                   addInvoiceController.dataToCreateQuickInvoice.languageId =
                       invoicesLangValue;
+
                   await addInvoiceController.createQuickInvoice();
                 },
                 child: Container(

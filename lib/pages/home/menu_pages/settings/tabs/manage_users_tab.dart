@@ -143,6 +143,7 @@ class _ManageUsersTabState extends State<ManageUsersTab> {
                   itemBuilder: (context, index) => GestureDetector(
                         onTap: () => Get.to(() => ManageUserDetailsPage(
                               manageUser: c.manageUsersToShow[index],
+                              activeToEdit: true,
                             )),
                         child: Row(
                           children: [

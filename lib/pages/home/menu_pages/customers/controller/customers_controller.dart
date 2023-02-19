@@ -136,7 +136,7 @@ class CustomersController extends GetxController {
           await getMyCustomers();
         }
       } else {
-        logError("msg");
+        logError("customers error");
         logError(e.message);
       }
     }

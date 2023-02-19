@@ -14,7 +14,6 @@ import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/cre
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_payment_link.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_quick_invoice.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/payment_link_tab.dart';
-import 'package:safqa/pages/home/menu_pages/invoices/tabs/quick_invoice_tab.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -31,7 +30,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
   int selectedTab = 0;
   List<String> tabsNames = [
     "invoices".tr,
-    "quick_invoices".tr,
+    // "quick_invoices".tr,
     "payment_links".tr
   ];
   final AddInvoiceController _addInvoiceController =
@@ -43,8 +42,8 @@ class _InvoicesPageState extends State<InvoicesPage> {
     switch (selectedTab) {
       case 0:
         return InvoiceTab();
-      case 1:
-        return QuickInvoiceTab();
+      // case 1:
+      //   return QuickInvoiceTab();
       default:
         return PaymentLinkTab();
     }
@@ -263,6 +262,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                             },
                             child: Container(
                               height: 50,
+                              width: w / 2.5,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   gradient: index == selectedTab

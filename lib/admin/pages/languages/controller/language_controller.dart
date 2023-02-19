@@ -63,42 +63,41 @@ class LanguageController extends GetxController {
     update();
   }
 
-  //  Future deleteLanguage(Language Language) async {
-  //   try {
-  //     await sslProblem();
-  //     Get.dialog(const Center(
-  //       child: CircularProgressIndicator(),
-  //     ));
+  Future deleteLanguage(Language language) async {
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
 
-  //     final body = d.FormData();
-  //     body.fields.add(MapEntry("_method", "DELETE"));
-  //     var res = await dio.post(EndPoints.
-  //         data: body);
-  //     logSuccess(res.data);
-  //     await getAllLanguages();
-  //     Get.back();
-  //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "Language Deleted Successfully",
-  //       btnTXT: "close",
-  //       onTap: () async {
-  //         Get.back();
-  //         Get.back();
-  //       },
-  //     );
-  //   } on DioError catch (e) {
-  //     Get.back();
-  //     if (e.response!.statusCode == 404 &&
-  //         e.response!.data["message"] == "Please Login") {
-  //       bool res = await Utils.reLoginHelper(e);
-  //       if (res) {
-  //         await deleteCustomer(customerId);
-  //       }
-  //     } else {
-  //       logError(e.message);
-  //     }
-
-  //   }
-  // }
+      final body = d.FormData();
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res =
+          await dio.post(EndPoints.deleteLanguage(language.id!), data: body);
+      logSuccess(res.data);
+      Languages.removeWhere((element) => element == language);
+      update();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Language Deleted Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteLanguage(language);
+        }
+      } else {
+        logError(e.response!.data);
+      }
+    }
+  }
 
   Future createLanguage(Language language) async {
     try {
@@ -129,103 +128,43 @@ class LanguageController extends GetxController {
           await createLanguage(language);
         }
       } else {
-        Map<String, dynamic> m = e.response!.data;
-        String errors = "";
-        int c = 0;
-        for (var i in m.values) {
-          for (var j = 0; j < i.length; j++) {
-            if (j == i.length - 1) {
-              errors = errors + i[j];
-            } else {
-              errors = "${errors + i[j]}\n";
-            }
-          }
-
-          c++;
-          if (c != m.values.length) {
-            errors += "\n";
-          }
-        }
-        Get.showSnackbar(
-          GetSnackBar(
-            duration: Duration(milliseconds: 3000),
-            backgroundColor: Colors.red,
-            // message: errors,
-            messageText: Text(
-              errors,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-              ),
-            ),
-          ),
-        );
+        logError(e.response!.data);
       }
     }
   }
 
-  // Future editLanguage(Language Language) async {
-  //   try {
-  //     await sslProblem();
-  //     logSuccess(Language.toJson());
-  //     Get.dialog(const Center(
-  //       child: CircularProgressIndicator(),
-  //     ));
-  //     final body = d.FormData.fromMap(Language.toJson());
-  //     body.fields.add(MapEntry("_method", "PUT"));
-  //     var res = await dio.post(EndPoints.editLanguage(Language.id!), data: body);
-  //     logSuccess(res.data);
-  //     await getAllLanguages();
-  //     Get.back();
-  //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "Language Edited Successfully",
-  //       btnTXT: "close",
-  //       onTap: () async {
-  //         Get.back();
-  //         Get.back();
-  //       },
-  //     );
-  //   } on DioError catch (e) {
-  //     Get.back();
-  //     if (e.response!.statusCode == 404 &&
-  //         e.response!.data["message"] == "Please Login") {
-  //       bool res = await Utils.reLoginHelper(e);
-  //       if (res) {
-  //         await createLanguage(Language);
-  //       }
-  //     } else {
-  //       Map<String, dynamic> m = e.response!.data;
-  //       String errors = "";
-  //       int c = 0;
-  //       for (var i in m.values) {
-  //         for (var j = 0; j < i.length; j++) {
-  //           if (j == i.length - 1) {
-  //             errors = errors + i[j];
-  //           } else {
-  //             errors = "${errors + i[j]}\n";
-  //           }
-  //         }
-
-  //         c++;
-  //         if (c != m.values.length) {
-  //           errors += "\n";
-  //         }
-  //       }
-  //       Get.showSnackbar(
-  //         GetSnackBar(
-  //           duration: Duration(milliseconds: 3000),
-  //           backgroundColor: Colors.red,
-  //           // message: errors,
-  //           messageText: Text(
-  //             errors,
-  //             style: TextStyle(
-  //               color: Colors.white,
-  //               fontSize: 17,
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
+  Future editLanguage(Language language) async {
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
+      final body = d.FormData.fromMap(language.toJson());
+      body.fields.add(MapEntry("_method", "PUT"));
+      var res =
+          await dio.post(EndPoints.editLanguage(language.id!), data: body);
+      logSuccess(res.data);
+      await getAllLanguages();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Language Edited Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createLanguage(language);
+        }
+      } else {
+        logError(e.response!.data);
+      }
+    }
+  }
 }

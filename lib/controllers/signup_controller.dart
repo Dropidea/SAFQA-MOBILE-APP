@@ -107,7 +107,7 @@ class SignUpController extends GetxController {
       logSuccess("global data success");
       return globalData;
     } on DioError catch (e) {
-      logError("msg");
+      logError("global data error");
       logError(e.message);
     }
   }
@@ -159,8 +159,7 @@ class SignUpController extends GetxController {
       logSuccess(countries.length);
       return globalData;
     } on DioError catch (e) {
-      logError("msg");
-      logError(e.message);
+      logError("countries error");
     }
   }
 }

@@ -1,11 +1,12 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/admin/pages/business%20types/controller/business_types_controller.dart';
 import 'package:safqa/admin/pages/business%20types/create_business_tyoe_page.dart';
+import 'package:safqa/admin/pages/recurring%20interval/recurring_intervals_page.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -113,57 +114,11 @@ class BusinessCategTypesageState extends State<BusinessTypesMainPage> {
                       //   ),
                       // ),
                       // SizedBox(height: 20),
-                      GestureDetector(
+                      AddNewButton(
+                        height: 50,
                         onTap: () {
                           Get.to(() => CreateBusinessTypePage());
                         },
-                        child: DottedBorder(
-                          padding: EdgeInsets.all(0),
-                          customPath: (size) {
-                            return Path()
-                              ..moveTo(10, 0)
-                              ..lineTo(size.width - 10, 0)
-                              ..arcToPoint(Offset(size.width, 10),
-                                  radius: Radius.circular(10))
-                              ..lineTo(size.width, size.height - 10)
-                              ..arcToPoint(Offset(size.width - 10, size.height),
-                                  radius: Radius.circular(10))
-                              ..lineTo(10, size.height)
-                              ..arcToPoint(Offset(0, size.height - 10),
-                                  radius: Radius.circular(10))
-                              ..lineTo(0, 10)
-                              ..arcToPoint(Offset(10, 0),
-                                  radius: Radius.circular(10));
-                          },
-                          color: Color(0xff2F6782).withOpacity(0.4),
-                          strokeWidth: 1,
-                          dashPattern: [10, 5],
-                          child: Container(
-                            width: w,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Color(0xff2F6782).withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add_rounded,
-                                  color: Color(0xff2F6782),
-                                ),
-                                Text(
-                                  "create_new".tr,
-                                  style: TextStyle(
-                                    color: Color(0xff2F6782),
-                                    fontSize: 13.0.sp,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
                       ),
                       const SizedBox(height: 20),
                       Expanded(child:
@@ -219,7 +174,17 @@ class BusinessCategTypesageState extends State<BusinessTypesMainPage> {
                                           child: MyPopUpMenu(
                                             menuList: [
                                               PopupMenuItem(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Future(
+                                                    () => Get.to(
+                                                      CreateBusinessTypePage(
+                                                        businessTypeToEdit:
+                                                            c.businessTypes[
+                                                                index],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
                                                 child: Row(
                                                   children: [
                                                     Padding(
@@ -241,7 +206,21 @@ class BusinessCategTypesageState extends State<BusinessTypesMainPage> {
                                                 ),
                                               ),
                                               PopupMenuItem(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Future(
+                                                    () => MyDialogs
+                                                        .showDeleteDialoge(
+                                                            onProceed:
+                                                                () async {
+                                                              Get.back();
+                                                              await c.deleteBusinessType(
+                                                                  c.businessTypes[
+                                                                      index]);
+                                                            },
+                                                            message:
+                                                                "Are You Sure"),
+                                                  );
+                                                },
                                                 child: Row(
                                                   children: [
                                                     Padding(

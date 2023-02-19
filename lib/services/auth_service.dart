@@ -119,7 +119,6 @@ class AuthService {
         await saveCredentials(email, password, rememberMe ? "1" : "0");
       }
       await saveToken(jsonRes['access_token']);
-      await _globalDataController.getMe();
       return jsonRes['access_token'];
     } on DioError catch (e) {
       logError(e.response!.statusCode!);
@@ -149,13 +148,13 @@ class AuthService {
 
       Map<String, dynamic> obj = e.response!.data;
 
-      // Get.showSnackbar(GetSnackBar(
-      //   duration: Duration(milliseconds: 2000),
-      //   backgroundColor: Colors.red,
-      //   message: e.response!.data.toString() +
-      //       " " +
-      //       e.response!.statusCode!.toString(),
-      // ));
+      Get.showSnackbar(GetSnackBar(
+        duration: Duration(milliseconds: 2000),
+        backgroundColor: Colors.red,
+        message: e.response!.data.toString() +
+            " " +
+            e.response!.statusCode!.toString(),
+      ));
       return obj;
       // return e.response!.data;
     }

@@ -66,7 +66,7 @@ class BanksMainPageState extends State<BanksMainPage> {
                         Get.back();
                       },
                     ),
-                    whiteText("Banks", 17, fontWeight: FontWeight.w600),
+                    whiteText("banks".tr, 17, fontWeight: FontWeight.w600),
                     Opacity(
                       opacity: 0,
                       child: whiteText("text", 16),
@@ -91,6 +91,9 @@ class BanksMainPageState extends State<BanksMainPage> {
                       SignUpTextField(
                         hintText: "search".tr,
                         padding: EdgeInsets.all(0),
+                        onchanged: (s) {
+                          _bankController.searchForBanksWithName(s!);
+                        },
                         prefixIcon: Icon(
                           Icons.search_outlined,
                           color: Colors.grey,
@@ -101,16 +104,18 @@ class BanksMainPageState extends State<BanksMainPage> {
                             Get.to(() => BanksSearchFilterPage(),
                                 transition: Transition.downToUp);
                           },
-                          child: Badge(
-                            badgeColor: Color(0xff1BAFB2),
-                            showBadge: true,
-                            position: BadgePosition.topEnd(top: 8, end: 8),
-                            child: Image(
-                              image: AssetImage("assets/images/filter.png"),
-                              width: 18,
-                              height: 18,
-                            ),
-                          ),
+                          child: GetBuilder<BankController>(builder: (c) {
+                            return Badge(
+                              badgeColor: Color(0xff1BAFB2),
+                              showBadge: c.bankFilter.filterActive,
+                              position: BadgePosition.topEnd(top: 8, end: 8),
+                              child: Image(
+                                image: AssetImage("assets/images/filter.png"),
+                                width: 18,
+                                height: 18,
+                              ),
+                            );
+                          }),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -188,17 +193,18 @@ class BanksMainPageState extends State<BanksMainPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            blackText(c.banks[index].name!, 15),
+                                            blackText(
+                                                c.banksToShow[index].name!, 15),
                                             greyText(
                                                 _localsController
                                                             .currenetLocale ==
                                                         0
-                                                    ? c.banks[index].country!
-                                                        .nameEn!
-                                                    : c.banks[index].country!
-                                                        .nameAr!,
+                                                    ? c.banksToShow[index]
+                                                        .country!.nameEn!
+                                                    : c.banksToShow[index]
+                                                        .country!.nameAr!,
                                                 15),
-                                            c.banks[index].isActive == 0
+                                            c.banksToShow[index].isActive == 0
                                                 ? redText("inactive".tr, 15,
                                                     fontWeight: FontWeight.bold)
                                                 : greenText("active".tr, 15,
@@ -275,7 +281,7 @@ class BanksMainPageState extends State<BanksMainPage> {
                                 ),
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: 20),
-                                itemCount: c.banks.length,
+                                itemCount: c.banksToShow.length,
                               );
                       }))
                     ],

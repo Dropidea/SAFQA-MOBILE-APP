@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 
-class SignUpTextField extends StatelessWidget {
+class SignUpTextField extends StatefulWidget {
   SignUpTextField({
     super.key,
     this.hintText,
@@ -50,39 +50,46 @@ class SignUpTextField extends StatelessWidget {
   AutovalidateMode? autovalidateMode;
   EdgeInsetsGeometry? padding = EdgeInsets.only(left: 15, right: 15, top: 5);
   TextDirection? textDirection;
+
+  @override
+  State<SignUpTextField> createState() => _SignUpTextFieldState();
+}
+
+class _SignUpTextFieldState extends State<SignUpTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
+      width: widget.width,
+      height: widget.height,
       margin: EdgeInsets.symmetric(vertical: 2),
       child: Padding(
-        padding: padding!,
+        padding: widget.padding!,
         child: TextFormField(
-          textDirection: textDirection,
-          focusNode: focusNode,
-          textInputAction: textInputAction ?? TextInputAction.next,
-          autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
-          keyboardType: keyBoardType,
+          textDirection: widget.textDirection,
+          focusNode: widget.focusNode,
+          textInputAction: widget.textInputAction ?? TextInputAction.next,
+          autovalidateMode:
+              widget.autovalidateMode ?? AutovalidateMode.disabled,
+          keyboardType: widget.keyBoardType,
           decoration: InputDecoration(
-              fillColor: fillColor ?? Color(0xffF8F8F8),
+              fillColor: widget.fillColor ?? Color(0xffF8F8F8),
               filled: true,
               border: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(10.0),
                   borderSide: BorderSide.none),
-              hintText: hintText,
-              prefixIcon: prefixIcon,
-              prefix: prefix,
-              suffix: suffix,
-              suffixIcon: suffixIcon),
-          validator: validator,
-          inputFormatters: inputFormatters,
-          obscureText: obsecureText,
-          initialValue: initialValue,
-          style: style ?? blackText("text", 12.5).style,
-          onChanged: onchanged,
-          readOnly: readOnly,
-          controller: controller,
+              hintText: widget.hintText,
+              prefixIcon: widget.prefixIcon,
+              prefix: widget.prefix,
+              suffix: widget.suffix,
+              suffixIcon: widget.suffixIcon),
+          validator: widget.validator,
+          inputFormatters: widget.inputFormatters,
+          obscureText: widget.obsecureText,
+          initialValue: widget.initialValue,
+          style: widget.style ?? blackText("text", 12.5).style,
+          onChanged: widget.onchanged,
+          readOnly: widget.readOnly,
+          controller: widget.controller,
         ),
       ),
     );

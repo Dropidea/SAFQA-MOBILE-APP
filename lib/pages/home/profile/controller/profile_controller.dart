@@ -29,13 +29,13 @@ class ProfileController extends GetxController {
     };
   }
 
-  ProfileBusines? profileBusines;
+  ProfileBusiness? profileBusines;
   List<SocialMediaLink> socialMediaLinks = [];
   Future getProfileBusiness() async {
     try {
       await sslProblem();
       var res = await dio.get(EndPoints.getProfileBusiness);
-      profileBusines = ProfileBusines.fromJson(res.data["data"]);
+      profileBusines = ProfileBusiness.fromJson(res.data["data"]);
       logSuccess("Profile Business get done");
     } on DioError catch (e) {
       if (e.response!.statusCode == 404 &&
@@ -75,7 +75,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future editProfileBusiness(ProfileBusines profileBusines) async {
+  Future editProfileBusiness(ProfileBusiness profileBusines) async {
     try {
       await sslProblem();
       Get.dialog(const Center(

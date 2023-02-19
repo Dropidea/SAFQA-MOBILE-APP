@@ -6,6 +6,7 @@ import 'package:safqa/admin/pages/business%20Categories/controller/business_cate
 import 'package:safqa/admin/pages/business%20Categories/create_business_category_page.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -180,7 +181,16 @@ class BusinessCategoriesMainPageState
                                           child: MyPopUpMenu(
                                             menuList: [
                                               PopupMenuItem(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Future(
+                                                    () => Get.to(() =>
+                                                        CreateBusinessCategoryPage(
+                                                          businessCategoryToEdit:
+                                                              c.businessCategories[
+                                                                  index],
+                                                        )),
+                                                  );
+                                                },
                                                 child: Row(
                                                   children: [
                                                     Padding(
@@ -202,7 +212,19 @@ class BusinessCategoriesMainPageState
                                                 ),
                                               ),
                                               PopupMenuItem(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Future(() => MyDialogs
+                                                      .showDeleteDialoge(
+                                                          onProceed: () async {
+                                                            Get.back();
+                                                            await _businessCategoryController
+                                                                .deleteBusinessCategory(
+                                                                    c.businessCategories[
+                                                                        index]);
+                                                          },
+                                                          message:
+                                                              "Are You Sure"));
+                                                },
                                                 child: Row(
                                                   children: [
                                                     Padding(

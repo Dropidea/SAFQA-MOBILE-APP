@@ -171,7 +171,7 @@ class Country {
     data['code'] = this.code;
     data['nationality_en'] = this.nationalityEn;
     data['nationality_ar'] = this.nationalityAr;
-    data['flag'] = this.flag;
+    // data['flag'] = this.flag;
     data['currency'] = this.currency;
     data['short_currency'] = this.shortCurrency;
     data['country_active'] = this.countryActive;

@@ -47,96 +47,107 @@ class CreateCityState extends State<CreateCityPage> {
           padding: const EdgeInsets.all(20),
           child: Form(
             key: formKey,
-            child: ListView(
-              primary: false,
-              children: [
-                blackText("name_en".tr, 16),
-                SignUpTextField(
-                  padding: EdgeInsets.all(0),
-                  onchanged: (s) {
-                    if (widget.cityToEdit != null) {
-                      widget.cityToEdit!.nameEn = s;
-                    } else {
-                      cityToCreate.nameEn = s;
-                    }
-                  },
-                  initialValue: widget.cityToEdit != null
-                      ? widget.cityToEdit!.nameEn
-                      : null,
-                  validator: (s) {
-                    if (s!.isEmpty) return "Can't be empty";
-                  },
-                ),
-                SizedBox(height: 20),
-                blackText("name_ar".tr, 16),
-                SignUpTextField(
-                  padding: EdgeInsets.all(0),
-                  onchanged: (s) {
-                    if (widget.cityToEdit != null) {
-                      widget.cityToEdit!.nameAr = s;
-                    } else {
-                      cityToCreate.nameAr = s;
-                    }
-                  },
-                  initialValue: widget.cityToEdit != null
-                      ? widget.cityToEdit!.nameAr
-                      : null,
-                  validator: (s) {
-                    if (s!.isEmpty) return "Can't be empty";
-                  },
-                ),
-                SizedBox(height: 20),
-                blackText("country".tr, 16),
-                CustomDropdownV2(
-                    width: w,
-                    items: _globalDataController.countries
-                        .map((e) => _localsController.currenetLocale == 0
-                            ? e.nameEn!
-                            : e.nameAr!)
-                        .toSet()
-                        .toList(),
-                    hint: "choose".tr,
-                    onchanged: (s) {}),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      blackText(
-                          widget.cityToEdit != null ? "edit".tr : "create".tr,
-                          16),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: () async {
-                          FocusScope.of(context).unfocus();
-                          if (formKey.currentState!.validate()) {
-                            if (widget.cityToEdit != null) {
-                              // await _globalDataController
-                              //     .editContactPhone(widget.cityToEdit!);
-                            } else {
-                              // await _globalDataController
-                              //     .createContactPhone(cityToCreate);
-                            }
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          padding: EdgeInsets.all(20),
-                          child: Icon(
-                            Icons.arrow_forward,
-                            color: Colors.white,
-                            size: 22.0.sp,
-                          ),
-                        ),
-                      )
-                    ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  blackText("name_en".tr, 16),
+                  SignUpTextField(
+                    padding: EdgeInsets.all(0),
+                    onchanged: (s) {
+                      if (widget.cityToEdit != null) {
+                        widget.cityToEdit!.nameEn = s;
+                      } else {
+                        cityToCreate.nameEn = s;
+                      }
+                    },
+                    initialValue: widget.cityToEdit != null
+                        ? widget.cityToEdit!.nameEn
+                        : null,
+                    validator: (s) {
+                      if (s!.isEmpty) return "Can't be empty";
+                    },
                   ),
-                )
-              ],
+                  SizedBox(height: 20),
+                  blackText("name_ar".tr, 16),
+                  SignUpTextField(
+                    padding: EdgeInsets.all(0),
+                    onchanged: (s) {
+                      if (widget.cityToEdit != null) {
+                        widget.cityToEdit!.nameAr = s;
+                      } else {
+                        cityToCreate.nameAr = s;
+                      }
+                    },
+                    initialValue: widget.cityToEdit != null
+                        ? widget.cityToEdit!.nameAr
+                        : null,
+                    validator: (s) {
+                      if (s!.isEmpty) return "Can't be empty";
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  blackText("country".tr, 16),
+                  CustomDropdownV2(
+                      width: w,
+                      items: _globalDataController.countries
+                          .map((e) => _localsController.currenetLocale == 0
+                              ? e.nameEn!
+                              : e.nameAr!)
+                          .toSet()
+                          .toList(),
+                      hint: "choose".tr,
+                      onchanged: (s) {
+                        if (widget.cityToEdit != null) {
+                        } else {
+                          cityToCreate.countryId = _globalDataController
+                              .countries
+                              .firstWhere((element) =>
+                                  element.nameAr == s || element.nameEn == s)
+                              .id;
+                        }
+                      }),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        blackText(
+                            widget.cityToEdit != null ? "edit".tr : "create".tr,
+                            16),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () async {
+                            FocusScope.of(context).unfocus();
+                            if (formKey.currentState!.validate()) {
+                              if (widget.cityToEdit != null) {
+                                // await _globalDataController
+                                //     .editContactPhone(widget.cityToEdit!);
+                              } else {
+                                await _globalDataController
+                                    .createCity(cityToCreate);
+                              }
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            padding: EdgeInsets.all(20),
+                            child: Icon(
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                              size: 22.0.sp,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ));

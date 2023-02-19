@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/admin/pages/languages/controller/language_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
-import 'package:safqa/main.dart';
 import 'package:safqa/models/payment_link.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
@@ -118,10 +117,9 @@ class _CreateLanguagePageState extends State<CreateLanguagePage> {
                         onTap: () async {
                           FocusScope.of(context).unfocus();
                           if (formKey.currentState!.validate()) {
-                            logSuccess(languageToCreate.toJson());
                             if (widget.languageToEdit != null) {
-                              // await _langController
-                              //     .editlang(widget.languageToEdit!);
+                              await _languageController
+                                  .editLanguage(widget.languageToEdit!);
                             } else {
                               await _languageController
                                   .createLanguage(languageToCreate);

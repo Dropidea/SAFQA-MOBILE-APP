@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/popup_menu.dart';
-import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
@@ -90,32 +88,32 @@ class SocialMediaageState extends State<SocialMediaMainPage> {
                   child: Column(
                     children: [
                       SizedBox(height: 30),
-                      SignUpTextField(
-                        hintText: "search".tr,
-                        padding: EdgeInsets.all(0),
-                        prefixIcon: Icon(
-                          Icons.search_outlined,
-                          color: Colors.grey,
-                        ),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).unfocus();
-                            // Get.to(() => BanksSearchFilterPage(),
-                            //     transition: Transition.downToUp);
-                          },
-                          child: Badge(
-                            badgeColor: Color(0xff1BAFB2),
-                            showBadge: true,
-                            position: BadgePosition.topEnd(top: 8, end: 8),
-                            child: Image(
-                              image: AssetImage("assets/images/filter.png"),
-                              width: 18,
-                              height: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
+                      // SignUpTextField(
+                      //   hintText: "search".tr,
+                      //   padding: EdgeInsets.all(0),
+                      //   prefixIcon: Icon(
+                      //     Icons.search_outlined,
+                      //     color: Colors.grey,
+                      //   ),
+                      //   suffixIcon: GestureDetector(
+                      //     onTap: () {
+                      //       FocusScope.of(context).unfocus();
+                      //       // Get.to(() => BanksSearchFilterPage(),
+                      //       //     transition: Transition.downToUp);
+                      //     },
+                      //     child: Badge(
+                      //       badgeColor: Color(0xff1BAFB2),
+                      //       showBadge: true,
+                      //       position: BadgePosition.topEnd(top: 8, end: 8),
+                      //       child: Image(
+                      //         image: AssetImage("assets/images/filter.png"),
+                      //         width: 18,
+                      //         height: 18,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(height: 20),
                       GestureDetector(
                         onTap: () {
                           Get.to(() => CreateSocialMediaPage());

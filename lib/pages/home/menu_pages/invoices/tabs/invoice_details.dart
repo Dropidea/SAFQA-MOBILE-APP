@@ -14,7 +14,7 @@ import 'package:sizer/sizer.dart';
 
 class InvoiceDetailsPage extends StatelessWidget {
   InvoiceDetailsPage({super.key, required this.invoiceModel});
-  final InvoiceModel invoiceModel;
+  final Invoice invoiceModel;
   DataToCreateInvoice? invoiceToEdit;
   GlobalDataController globalDataController = Get.find();
   AddInvoiceController addInvoiceController = Get.find();
@@ -289,7 +289,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                           ),
                           invoiceInfoMethod(
                               title1: "remind_after".tr,
-                              content1: "${invoiceModel.remindAfter!} Days",
+                              content1: "${invoiceModel.remindAfter} Days",
                               title2: "",
                               content2: ""),
                           SizedBox(height: 10),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:safqa/admin/controller/admin_controller.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/controllers/login_controller.dart';
 import 'package:safqa/main.dart';
@@ -21,6 +22,7 @@ class SplashPage extends StatelessWidget {
   FirstTimeUsingAppController _firstTimeController = Get.find();
   LocalsController localsController = Get.put(LocalsController());
   AdminController _adminController = Get.put(AdminController());
+  GlobalDataController _globalDataController = Get.put(GlobalDataController());
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -39,6 +41,13 @@ class SplashPage extends StatelessWidget {
         if (email != "" && password != "") {
           try {
             await AuthService().login(email, password, rem);
+            await _globalDataController.getMe();
+
+            if (_globalDataController.me.isSuperAdmin != null)
+              _adminController.setIsAdmin(true);
+            else
+              _adminController.setIsAdmin(false);
+
             Get.offAll(
               () => HomePage(),
             );

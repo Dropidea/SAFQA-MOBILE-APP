@@ -2,10 +2,9 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:safqa/controllers/signup_controller.dart';
+import 'package:safqa/admin/pages/banks/controller/bank_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:sizer/sizer.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:safqa/pages/home/menu_pages/products/product_search_filter_page.dart';
 
 class BanksSearchFilterPage extends StatefulWidget {
   const BanksSearchFilterPage({super.key});
@@ -17,19 +16,7 @@ class BanksSearchFilterPage extends StatefulWidget {
 
 class AccountStatmenttSearchFilterPageState
     extends State<BanksSearchFilterPage> {
-  SignUpController _signUpController = Get.find();
-  int entryMethod = 0;
-  int price = 0;
-  int dateCreated = 0;
-  SfRangeValues _values = SfRangeValues(0, 100);
-  double sMin = 0;
-  double sMax = 100;
-  double sInterval = 20;
-  TextEditingController maxController = TextEditingController();
-  TextEditingController minController = TextEditingController();
-  TextEditingController fixedDateController = TextEditingController();
-  TextEditingController startDateController = TextEditingController();
-  TextEditingController endDateController = TextEditingController();
+  BankController _bankController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -48,25 +35,14 @@ class AccountStatmenttSearchFilterPageState
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  onPressed: () {
+                ClearFilterBTN(
+                  onTap: () {
+                    _bankController.clearBankFilter();
                     Get.back();
                   },
-                  icon: Icon(
-                    Icons.close,
-                    size: 25.0.sp,
-                  ),
                 ),
-                Text(
-                  "Clear",
-                  style: TextStyle(
-                    fontSize: 16.0.sp,
-                    color: Color(0xff00A7B3),
-                    decoration: TextDecoration.underline,
-                  ),
-                )
               ],
             ),
             SizedBox(
@@ -76,29 +52,47 @@ class AccountStatmenttSearchFilterPageState
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomNameTextfield(),
-              header: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 0.5),
-                  ),
+              expanded: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Column(
+                  children: [
+                    buildRadioButton(
+                        0,
+                        "all".tr,
+                        _bankController.bankFilter.isActive!,
+                        (p0) => setState(
+                              () {
+                                _bankController.bankFilter.isActive = p0;
+                              },
+                            )),
+                    buildRadioButton(
+                        1,
+                        "active".tr,
+                        _bankController.bankFilter.isActive!,
+                        (p0) => setState(
+                              () {
+                                _bankController.bankFilter.isActive = p0;
+                              },
+                            )),
+                    buildRadioButton(
+                        2,
+                        "inactive".tr,
+                        _bankController.bankFilter.isActive!,
+                        (p0) => setState(
+                              () {
+                                _bankController.bankFilter.isActive = p0;
+                              },
+                            )),
+                  ],
                 ),
-                child: blackText("Bank Name", 15, fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 20),
-            ExpandablePanel(
-              controller: ExpandableController(initialExpanded: true),
-              collapsed: Container(),
-              theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomNameTextfield(),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Colors.grey, width: 0.5),
                   ),
                 ),
-                child: blackText("IBAN", 15, fontWeight: FontWeight.bold),
+                child: blackText("is_active".tr, 15),
               ),
             ),
             SizedBox(
@@ -108,7 +102,12 @@ class AccountStatmenttSearchFilterPageState
               controller: ExpandableController(initialExpanded: true),
               collapsed: Container(),
               theme: ExpandableThemeData(hasIcon: false),
-              expanded: buildCustomNameTextfield(),
+              expanded: buildCustomNameTextfield(
+                initialValue: _bankController.bankFilter.bankName,
+                onChanged: (p0) {
+                  _bankController.bankFilter.bankName = p0;
+                },
+              ),
               header: Container(
                 decoration: BoxDecoration(
                   border: Border(
@@ -116,20 +115,37 @@ class AccountStatmenttSearchFilterPageState
                   ),
                 ),
                 child:
-                    blackText("Bank Account", 15, fontWeight: FontWeight.bold),
+                    blackText("bank_name".tr, 15, fontWeight: FontWeight.bold),
               ),
             ),
-            Align(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                width: 0.7 * w,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff1BAFB2)),
-                child: Center(child: whiteText("Apply", 15)),
+            SizedBox(height: 20),
+            ExpandablePanel(
+              controller: ExpandableController(initialExpanded: true),
+              collapsed: Container(),
+              theme: ExpandableThemeData(hasIcon: false),
+              expanded: buildCustomNameTextfield(
+                initialValue: _bankController.bankFilter.countryName,
+                onChanged: (p0) {
+                  _bankController.bankFilter.countryName = p0;
+                },
               ),
-            )
+              header: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey, width: 0.5),
+                  ),
+                ),
+                child: blackText("country_name".tr, 15,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            ApplyFilterBTN(
+              width: 0.7 * w,
+              onTap: () {
+                _bankController.activeBanksFilter();
+                Get.back();
+              },
+            ),
           ],
         ),
       ),
@@ -193,29 +209,4 @@ class AccountStatmenttSearchFilterPageState
       ),
     );
   }
-}
-
-Widget buildCustomNameTextfield({String? hint}) {
-  return Container(
-    margin: EdgeInsets.only(top: 20),
-    height: 50,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10.0),
-      border: Border.all(
-        color: Colors.grey.shade300,
-      ),
-    ),
-    child: TextFormField(
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-        hintText: hint,
-        fillColor: Colors.white,
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
-        ),
-      ),
-    ),
-  );
 }

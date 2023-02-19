@@ -25,11 +25,11 @@ class _BusinessDetailsPageState extends State<BusinessDetailsPage> {
   ProfileController _profileController = Get.find();
   LocalsController _localsController = Get.put(LocalsController());
   bool readOnly = true;
-  late ProfileBusines _profileBusines;
+  late ProfileBusiness _profileBusines;
   @override
   void initState() {
     _profileBusines =
-        ProfileBusines.fromJson(_profileController.profileBusines!.toJson());
+        ProfileBusiness.fromJson(_profileController.profileBusines!.toJson());
     super.initState();
   }
 

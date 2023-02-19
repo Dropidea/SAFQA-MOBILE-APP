@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as d;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/bank_model.dart';
 import 'package:safqa/models/contacts.dart';
@@ -50,8 +51,9 @@ class GlobalDataController extends GetxController {
     try {
       await sslProblem();
       var res = await dio.get(EndPoints.baseURL + EndPoints.meEndPoint);
-
       me = ManageUser.fromJson(res.data);
+      update();
+
       logSuccess("me get done");
     } on DioError catch (e) {
       if (e.response!.statusCode == 404 &&
@@ -166,6 +168,112 @@ class GlobalDataController extends GetxController {
     }
   }
 
+  Future createAddressType(AddressType addressType) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(addressType.toJson());
+
+      var res = await dio.post(EndPoints.createAddressType, data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Created Successfully",
+        btnTXT: "Close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getAdressTypes();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createAddressType(addressType);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  Future editAddressType(AddressType addressType) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(addressType.toJson());
+
+      body.fields.add(MapEntry("_method", "PUT"));
+
+      var res = await dio.post(EndPoints.editAddressType(addressType.id!),
+          data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Edited Successfully",
+        btnTXT: "Close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getAdressTypes();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createAddressType(addressType);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  Future deleteAddressType(AddressType addressType) async {
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
+      final body = d.FormData.fromMap(addressType.toJson());
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res = await dio.post(EndPoints.deleteAddressType(addressType.id!),
+          data: body);
+      logSuccess(res.data);
+      addressTypes.removeWhere((element) => element == addressType);
+      update();
+
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "AddressType deleted Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
+    }
+  }
+
   bool getAdressTypesFlag = false;
   Future getAdressTypes() async {
     try {
@@ -196,6 +304,103 @@ class GlobalDataController extends GetxController {
     }
   }
 
+  Future createCountry(Country country, var logo) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(country.toJson());
+
+      body.files.add(MapEntry(
+        "flag",
+        await d.MultipartFile.fromFile(
+          logo.path,
+          filename: logo.path.split(" ").last,
+          contentType: MediaType('image', '*'),
+        ),
+      ));
+      logSuccess(body.files);
+      var res = await dio.post(EndPoints.createCountry, data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Created Successfully",
+        btnTXT: "Close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getCountries();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createCountry(country, logo);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  Future editCountry(Country country, var logo) async {
+    logSuccess(country.toJson());
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(country.toJson());
+      if (logo != null) {
+        body.files.add(MapEntry(
+          "flag",
+          await d.MultipartFile.fromFile(
+            logo.path,
+            filename: logo.path.split(" ").last,
+            contentType: MediaType('image', '*'),
+          ),
+        ));
+      }
+      body.fields.add(MapEntry("_method", "PUT"));
+
+      var res = await dio.post(EndPoints.editCountry(country.id!), data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Edited Successfully",
+        btnTXT: "Close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getCountries();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createCountry(country, logo);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
   bool getCountriesFlag = false;
   Future getCountries() async {
     try {
@@ -215,6 +420,7 @@ class GlobalDataController extends GetxController {
       getCountriesFlag = false;
       update();
       logError(e.response!.data);
+      logError("countries error");
       if (e.response!.statusCode == 404 &&
           e.response!.data["message"] == "Please Login") {
         bool res = await Utils.reLoginHelper(e);
@@ -251,47 +457,122 @@ class GlobalDataController extends GetxController {
       );
     } on DioError catch (e) {
       Get.back();
-
-      Map<String, dynamic> m = e.response!.data;
-      String errors = "";
-      int c = 0;
-      for (var i in m.values) {
-        for (var j = 0; j < i.length; j++) {
-          if (j == i.length - 1) {
-            errors = errors + i[j];
-          } else {
-            errors = "${errors + i[j]}\n";
-          }
-        }
-
-        c++;
-        if (c != m.values.length) {
-          errors += "\n";
-        }
-      }
-      Get.showSnackbar(
-        GetSnackBar(
-          duration: Duration(milliseconds: 3000),
-          backgroundColor: Colors.red,
-          // message: errors,
-          messageText: Text(
-            errors,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-            ),
-          ),
-        ),
-      );
     }
   }
 
+  Future createCity(City city) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(city.toJson());
+
+      var res = await dio.post(EndPoints.createCity, data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "Created Successfully",
+        btnTXT: "Close",
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getCities();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createCity(city);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  // Future editAddressType(AddressType addressType) async {
+  //   Get.dialog(Center(
+  //     child: CircularProgressIndicator(),
+  //   ));
+  //   try {
+  //     await sslProblem();
+  //     final body = d.FormData.fromMap(addressType.toJson());
+
+  //     body.fields.add(MapEntry("_method", "PUT"));
+
+  //     var res = await dio.post(EndPoints.editAddressType(addressType.id!),
+  //         data: body);
+  //     Get.back();
+  //     MyDialogs.showSavedSuccessfullyDialoge(
+  //       title: "Edited Successfully",
+  //       btnTXT: "Close",
+  //       onTap: () {
+  //         Get.back();
+  //         Get.back();
+  //       },
+  //     );
+  //     await getAdressTypes();
+
+  //     //   return true;
+  //   } on DioError catch (e) {
+  //     Get.back();
+  //     if (e.response!.statusCode == 404 &&
+  //         e.response!.data["message"] == "Please Login" &&
+  //         e.response!.data["message"] == "Please Login") {
+  //       bool res = await Utils.reLoginHelper(e);
+  //       if (res) {
+  //         await createAddressType(addressType);
+  //       }
+  //     } else {
+  //       logError(e.response!);
+  //       // logError(e.response!.data);
+
+  //     }
+  //   }
+  // }
+
+  // Future deleteAddressType(AddressType addressType) async {
+  //   try {
+  //     await sslProblem();
+  //     Get.dialog(const Center(
+  //       child: CircularProgressIndicator(),
+  //     ));
+  //     final body = d.FormData.fromMap(addressType.toJson());
+  //     body.fields.add(MapEntry("_method", "DELETE"));
+  //     var res = await dio.post(EndPoints.deleteAddressType(addressType.id!),
+  //         data: body);
+  //     logSuccess(res.data);
+  //     addressTypes.removeWhere((element) => element == addressType);
+  //     update();
+
+  //     Get.back();
+  //     MyDialogs.showSavedSuccessfullyDialoge(
+  //       title: "AddressType deleted Successfully",
+  //       btnTXT: "close",
+  //       onTap: () async {
+  //         Get.back();
+  //       },
+  //     );
+  //   } on DioError catch (e) {
+  //     Get.back();
+  //   }
+  // }
   bool getCitiesFlag = false;
   Future getCities() async {
     try {
       getCitiesFlag = true;
       await sslProblem();
-      var res = await dio.get(EndPoints.getCities);
+      var res = await dio.get(me.isSuperAdmin != null
+          ? EndPoints.getAdminCities
+          : EndPoints.getCities);
       getCitiesFlag = false;
       List<City> tmp = [];
       for (var i in res.data['data']) {

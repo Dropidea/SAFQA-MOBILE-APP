@@ -6,6 +6,7 @@ import 'package:safqa/admin/pages/addresses/tabs/address%20types/create_address_
 import 'package:safqa/admin/pages/recurring%20interval/recurring_intervals_page.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/widgets/dialoges.dart';
 
 class AddressTypesTab extends StatefulWidget {
   const AddressTypesTab({super.key});
@@ -96,13 +97,13 @@ class _AddressTypesTabState extends State<AddressTypesTab> {
                             SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                // MyDialogs.showDeleteDialoge(
-                                //     onProceed: () async {
-                                //       Get.back();
-                                //       await c.deleteSupportType(
-                                //           c.addressTypes[index]);
-                                //     },
-                                //     message: "Are You Sure");
+                                MyDialogs.showDeleteDialoge(
+                                    onProceed: () async {
+                                      Get.back();
+                                      await c.deleteAddressType(
+                                          c.addressTypes[index]);
+                                    },
+                                    message: "Are You Sure");
                               },
                               child: Container(
                                 width: 40,

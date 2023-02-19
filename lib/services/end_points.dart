@@ -46,7 +46,11 @@ class EndPoints {
   static String get getBanks => "$_baseURL/banks";
   static String get getCountries => "$_baseURL/countries";
   static String deleteCountry(int id) => "$_baseURLAdmin/country/delete/$id";
+  static String deleteLanguage(int id) => "$_baseURLAdmin/language/delete/$id";
+  static String deleteAddressType(int id) =>
+      "$_baseURLAdmin/address_type/delete/$id";
   static String get getCities => "$_baseURL/cities";
+  static String get getAdminCities => "$_baseURLAdmin/cities";
   static String get getProfiles => "$_baseURLAdmin/admin_profiles";
   static String get getAreas => "$_baseURL/areas";
   static String get getAdressTypes => "$_baseURL/address_type";
@@ -92,8 +96,30 @@ class EndPoints {
   static String get getBusinessCategories => "$_baseURL/business_categories";
   static String get createBusinessCategories =>
       "$_baseURLAdmin/business_category/store";
+  static String editBusinessCategories(int id) =>
+      "$_baseURLAdmin/business_category/update/$id";
+  static String deleteBusinessCategories(int id) =>
+      "$_baseURLAdmin/business_category/delete/$id";
   static String get editProfileBusiness => "$_baseURL/profile_business/update";
   static String get createBank => "$_baseURLAdmin/bank/store";
+  static String get createCountry => "$_baseURLAdmin/country/store";
+  static String editCountry(int id) => "$_baseURLAdmin/country/update/$id";
+  static String editAddressType(int id) =>
+      "$_baseURLAdmin/address_type/update/$id";
   static String get createLanguage => "$_baseURLAdmin/language/store";
+  static String get createCity => "$_baseURLAdmin/city/store";
+  static String get createAddressType => "$_baseURLAdmin/address_type/store";
+  static String get createBusinessType => "$_baseURLAdmin/businessType/store";
+  static String get createProductLink => "$_baseURL/product_link/store";
+  static String editProductLink(int id) => "$_baseURL/product_link/update/$id";
+  static String get getProductLinks => "$_baseURL/product_links";
+  static String getProductLink(int id) => "$_baseURL/product_link/show/$id";
+  static String get postDocs => "$_baseURL/documents/store";
+  static String get getDocs => "$_baseURL/documents";
   static String editBank(int id) => "$_baseURLAdmin/bank/update/$id";
+  static String editBusinessType(int id) =>
+      "$_baseURLAdmin/businessType/update/$id";
+  static String deleteBusinessType(int id) =>
+      "$_baseURLAdmin/businessType/delete/$id";
+  static String editLanguage(int id) => "$_baseURLAdmin/language/update/$id";
 }

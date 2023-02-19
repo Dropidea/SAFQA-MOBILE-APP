@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as d;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:safqa/admin/pages/business%20types/models/business_type.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/services/auth_service.dart';
 import 'package:safqa/services/end_points.dart';
 import 'package:safqa/utils.dart';
+import 'package:safqa/widgets/dialoges.dart';
 
 class BusinessTypesController extends GetxController {
   final Dio dio = Dio();
@@ -60,99 +64,116 @@ class BusinessTypesController extends GetxController {
     update();
   }
 
-  //  Future deleteBusinessType(BusinessType BusinessType) async {
-  //   try {
-  //     await sslProblem();
-  //     Get.dialog(const Center(
-  //       child: CircularProgressIndicator(),
-  //     ));
+  Future deleteBusinessType(BusinessType business) async {
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
 
-  //     final body = d.FormData();
-  //     body.fields.add(MapEntry("_method", "DELETE"));
-  //     var res = await dio.post(EndPoints.
-  //         data: body);
-  //     logSuccess(res.data);
-  //     await getAllBusinessTypes();
-  //     Get.back();
-  //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "BusinessType Deleted Successfully",
-  //       btnTXT: "close",
-  //       onTap: () async {
-  //         Get.back();
-  //         Get.back();
-  //       },
-  //     );
-  //   } on DioError catch (e) {
-  //     Get.back();
-  //     if (e.response!.statusCode == 404 &&
-  //         e.response!.data["message"] == "Please Login") {
-  //       bool res = await Utils.reLoginHelper(e);
-  //       if (res) {
-  //         await deleteCustomer(customerId);
-  //       }
-  //     } else {
-  //       logError(e.message);
-  //     }
+      final body = d.FormData();
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res = await dio.post(EndPoints.deleteBusinessType(business.id!),
+          data: body);
+      logSuccess(res.data);
+      businessTypes.removeWhere((element) => element == business);
+      update();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "BusinessType Deleted Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteBusinessType(business);
+        }
+      } else {
+        logError(e.message);
+      }
+    }
+  }
 
-  //   }
-  // }
+  Future createBusinessType(BusinessType business, var logo) async {
+    try {
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
+      final body = d.FormData.fromMap(business.toJson());
+      body.files.add(MapEntry(
+        "business_logo",
+        await d.MultipartFile.fromFile(
+          logo.path,
+          filename: logo.path.split(" ").last,
+          contentType: MediaType('image', '*'),
+        ),
+      ));
+      var res = await dio.post(EndPoints.createBusinessType, data: body);
+      logSuccess(res.data);
+      update();
+      await getAllBusinessTypes();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "BusinessType Created Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
 
-  // Future createBusinessType(BusinessType business) async {
-  //   try {
-  //     await sslProblem();
-  //     Get.dialog(const Center(
-  //       child: CircularProgressIndicator(),
-  //     ));
-  //     final body = d.FormData.fromMap(business.toJson());
-  //     var res = await dio.post(EndPoints.createBusinessTypes, data: body);
-  //     logSuccess(res.data);
-  //     update();
-  //     await getAllBusinessTypes();
-  //     Get.back();
-  //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "BusinessType Created Successfully",
-  //       btnTXT: "close",
-  //       onTap: () async {
-  //         Get.back();
-  //         Get.back();
-  //       },
-  //     );
-  //   } on DioError catch (e) {
-  //     Get.back();
+      logError(e.response!.data);
+    }
+  }
 
-  //     Map<String, dynamic> m = e.response!.data;
-  //     String errors = "";
-  //     int c = 0;
-  //     for (var i in m.values) {
-  //       for (var j = 0; j < i.length; j++) {
-  //         if (j == i.length - 1) {
-  //           errors = errors + i[j];
-  //         } else {
-  //           errors = "${errors + i[j]}\n";
-  //         }
-  //       }
+  Future editBusinessType(BusinessType business, var logo) async {
+    try {
+      logSuccess(business.toJson());
+      await sslProblem();
+      Get.dialog(const Center(
+        child: CircularProgressIndicator(),
+      ));
+      final body = d.FormData.fromMap(business.toJson());
+      if (logo != null) {
+        body.files.add(MapEntry(
+          "business_logo",
+          await d.MultipartFile.fromFile(
+            logo.path,
+            filename: logo.path.split(" ").last,
+            contentType: MediaType('image', '*'),
+          ),
+        ));
+      }
+      body.fields.add(MapEntry("_method", "PUT"));
+      var res =
+          await dio.post(EndPoints.editBusinessType(business.id!), data: body);
+      logSuccess(res.data);
+      update();
+      await getAllBusinessTypes();
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "BusinessType Edited Successfully",
+        btnTXT: "close",
+        onTap: () async {
+          Get.back();
+          Get.back();
+        },
+      );
+    } on DioError catch (e) {
+      Get.back();
 
-  //       c++;
-  //       if (c != m.values.length) {
-  //         errors += "\n";
-  //       }
-  //     }
-  //     Get.showSnackbar(
-  //       GetSnackBar(
-  //         duration: Duration(milliseconds: 3000),
-  //         backgroundColor: Colors.red,
-  //         // message: errors,
-  //         messageText: Text(
-  //           errors,
-  //           style: TextStyle(
-  //             color: Colors.white,
-  //             fontSize: 17,
-  //           ),
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
+      logError(e.response!.data);
+    }
+  }
 
   // Future editBusinessType(BusinessType business) async {
   //   try {

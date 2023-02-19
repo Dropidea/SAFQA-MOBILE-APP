@@ -2,8 +2,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:safqa/admin/pages/banks/controller/bank_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/main.dart';
+import 'package:safqa/models/bank_model.dart';
 import 'package:safqa/pages/log-reg/signup_done.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/my_stepper.dart';
@@ -22,6 +24,8 @@ class CompleteSignUpPage extends StatefulWidget {
 
 class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   SignUpController _signUpController = Get.find();
+  BankController _bankController = Get.put(BankController());
+
   PageController _pageController = PageController();
   LocalsController _localsController = Get.find();
   TextEditingController pw = TextEditingController();
@@ -59,6 +63,12 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
 
   cancel() {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
+  }
+
+  @override
+  void initState() {
+    _bankController.getAllBanks();
+    super.initState();
   }
 
   @override
@@ -712,18 +722,13 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                     margin: EdgeInsets.symmetric(vertical: 5),
                     child: Padding(
                       padding: EdgeInsets.only(left: 15, right: 15, top: 5),
-                      child: Obx(() {
-                        List banks = _signUpController.globalData['banks'];
-                        List<String> ids = banks
-                            .map<String>(
-                              (e) => e['id'].toString(),
-                            )
+                      child: GetBuilder<BankController>(builder: (c) {
+                        List<Bank> banks = c.banks
+                            .where((element) =>
+                                element.countryId ==
+                                _signUpController.dataToRegister["country_id"])
                             .toList();
-                        List<String> banksNames = banks
-                            .map<String>(
-                              (e) => e['name'].toString(),
-                            )
-                            .toList();
+
                         return DropdownButtonFormField<String>(
                           decoration: InputDecoration(
                             fillColor: Color(0xffF8F8F8),
@@ -732,10 +737,10 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                 borderRadius: new BorderRadius.circular(10.0),
                                 borderSide: BorderSide.none),
                           ),
-                          items: banksNames
+                          items: banks
                               .map((e) => DropdownMenuItem<String>(
-                                    child: Text(e),
-                                    value: e,
+                                    child: Text(e.name!),
+                                    value: e.name,
                                   ))
                               .toList(),
                           value: _signUpController.selectedBankDrop == ""
@@ -748,8 +753,9 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
 
                             _signUpController.dataToRegister['bank_name'] =
                                 value;
-                            _signUpController.dataToRegister['bank_id'] =
-                                ids[banksNames.indexOf(value)];
+                            _signUpController.dataToRegister['bank_id'] = banks
+                                .firstWhere((element) => element.name == value)
+                                .id!;
                           },
                           validator: (s) {
                             if (_signUpController.errors == null)
