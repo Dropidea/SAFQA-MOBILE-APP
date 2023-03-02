@@ -167,7 +167,7 @@ class AuthService {
           Get.offAll(() => const LoginPage());
           Get.back();
         },
-        message: "Are you sure?",
-        yesBTN: "logout");
+        message: "are_you_sure".tr,
+        yesBTN: "logout".tr);
   }
 }

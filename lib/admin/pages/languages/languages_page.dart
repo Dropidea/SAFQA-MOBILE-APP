@@ -243,7 +243,8 @@ class LanguagesMainPageState extends State<LanguagesMainPage> {
                                                                         index]);
                                                           },
                                                           message:
-                                                              "Are You Sure"));
+                                                              "are_you_sure"
+                                                                  .tr));
                                                 },
                                                 child: Row(
                                                   children: [

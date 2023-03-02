@@ -2,7 +2,9 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/controller/admin_controller.dart';
 import 'package:safqa/admin/pages/banks/controller/bank_controller.dart';
+import 'package:safqa/admin/pages/languages/controller/language_controller.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
@@ -40,8 +42,10 @@ class _MainPageState extends State<MainPage> {
   ChartsController _chartsController = Get.put(ChartsController());
   CustomersController _customersController = Get.put(CustomersController());
   InvoicesController _invoicesController = Get.put(InvoicesController());
+  LanguageController _languageController = Get.put(LanguageController());
   GlobalDataController _globlDataController = Get.find();
   LocalsController _localsController = Get.find();
+  AdminController _adminController = Get.find();
   final PaymentLinkController _paymentLinkController =
       Get.put(PaymentLinkController());
   double _x = 0;
@@ -61,6 +65,7 @@ class _MainPageState extends State<MainPage> {
     _globlDataController.getAreas();
     _globlDataController.getAdressTypes();
     _globlDataController.getRoles();
+    _languageController.getAllLanguages();
     _globlDataController.getSendOptions();
     _globlDataController.getContactUsInfo();
     _globlDataController.getLanguages();
@@ -95,54 +100,61 @@ class _MainPageState extends State<MainPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     children: [
                       const SizedBox(height: 10),
-                      Container(
-                        // width: w,
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Color(0xffE47E7B).withOpacity(0.07),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              EvaIcons.alertCircle,
-                              color: Color(0xffE47E7B),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Column(
+                      _globlDataController.me.approvalStatus != 1
+                          ? Container(
+                              // width: w,
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Color(0xffE47E7B).withOpacity(0.07),
+                              ),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  blackText(
-                                      engFlag
-                                          ? "The identity must be documented first in order to be able to perform any operation on the system."
-                                          : "يجب توثيق الهوية أولاً حتى تتمكن من إجراء أي عملية على النظام.",
-                                      13),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      // await _globlDataController
-                                      //     .getContactUsInfo();
-                                      Get.to(() => IdentityConfirmDocsPage(),
-                                          transition: Transition.downToUp);
-                                    },
-                                    child: blueText(
-                                        engFlag
-                                            ? "Confirm Your Identity now"
-                                            : "قم بتأكيد هويتك الآن",
-                                        13,
-                                        fontWeight: FontWeight.bold,
-                                        underline: true),
+                                  Icon(
+                                    EvaIcons.alertCircle,
+                                    color: Color(0xffE47E7B),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        blackText(
+                                            engFlag
+                                                ? "The identity must be documented first in order to be able to perform any operation on the system."
+                                                : "يجب توثيق الهوية أولاً حتى تتمكن من إجراء أي عملية على النظام.",
+                                            13),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            // await _globlDataController
+                                            //     .getContactUsInfo();
+                                            Get.to(
+                                                () => IdentityConfirmDocsPage(),
+                                                transition:
+                                                    Transition.downToUp);
+                                          },
+                                          child: blueText(
+                                              engFlag
+                                                  ? "Confirm Your Identity now"
+                                                  : "قم بتأكيد هويتك الآن",
+                                              13,
+                                              fontWeight: FontWeight.bold,
+                                              underline: true),
+                                        )
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),
                             )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
+                          : Container(),
+                      _globlDataController.me.approvalStatus != 1
+                          ? const SizedBox(height: 10)
+                          : Container(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -837,8 +849,62 @@ class _MainPageState extends State<MainPage> {
               ),
             ),
             const SizedBox(width: 10),
-            _globlDataController.me.isSuperAdmin != null
-                ? Container()
+            _adminController.isAdmin
+                ? MyPopUpMenu(
+                    menuList: [
+                      // PopupMenuItem(
+                      //     onTap: () {
+                      //       Future(() => Get.to(() => ProfilePage(),
+                      //           transition: Transition.rightToLeft));
+                      //     },
+                      //     child: Row(
+                      //       children: [
+                      //         Padding(
+                      //           padding: const EdgeInsets.only(bottom: 5),
+                      //           child: Icon(
+                      //             EvaIcons.personOutline,
+                      //             size: 20,
+                      //             color: Color.fromARGB(255, 118, 118, 118),
+                      //           ),
+                      //         ),
+                      //         SizedBox(width: 5),
+                      //         greyText(engFlag ? "Profile" : "الملف الشخصي", 12,
+                      //             fontWeight: FontWeight.bold),
+                      //       ],
+                      //     )),
+
+                      PopupMenuItem(
+                          onTap: () {
+                            Future(() => Get.to(() => PasswordChangePage(),
+                                transition: Transition.rightToLeft));
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Icon(
+                                  EvaIcons.lockOutline,
+                                  size: 20,
+                                  color: Color.fromARGB(255, 118, 118, 118),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              greyText(
+                                  engFlag
+                                      ? "Change Password"
+                                      : "تغيير كلمة السر",
+                                  12,
+                                  fontWeight: FontWeight.bold),
+                            ],
+                          )),
+                    ],
+                    widget: Image(
+                      image: AssetImage("assets/images/t.png"),
+                      width: 30.0.sp,
+                      height: 30.0.sp,
+                      fit: BoxFit.cover,
+                    ),
+                  )
                 : MyPopUpMenu(
                     menuList: [
                       PopupMenuItem(

@@ -40,7 +40,7 @@ class BusinessTypesController extends GetxController {
       var res = await dio.get(EndPoints.getBusinessTypes);
       List<BusinessType> tmp = [];
       for (var i in res.data['data']) {
-        BusinessType c = BusinessType.fromJson(i);
+        BusinessType c = BusinessType.fromJson(i, res.data["imageUrl"]);
         tmp.add(c);
       }
       businessTypes = tmp;
@@ -80,8 +80,8 @@ class BusinessTypesController extends GetxController {
       update();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "BusinessType Deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -121,8 +121,8 @@ class BusinessTypesController extends GetxController {
       await getAllBusinessTypes();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "BusinessType Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -161,8 +161,8 @@ class BusinessTypesController extends GetxController {
       await getAllBusinessTypes();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "BusinessType Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -189,7 +189,7 @@ class BusinessTypesController extends GetxController {
   //     Get.back();
   //     MyDialogs.showSavedSuccessfullyDialoge(
   //       title: "BusinessType Created Successfully",
-  //       btnTXT: "close",
+  //       btnTXT: "close".tr,
   //       onTap: () async {
   //         Get.back();
   //         Get.back();
@@ -247,7 +247,7 @@ class BusinessTypesController extends GetxController {
   //     Get.back();
   //     MyDialogs.showSavedSuccessfullyDialoge(
   //       title: "BusinessType Edited Successfully",
-  //       btnTXT: "close",
+  //       btnTXT: "close".tr,
   //       onTap: () async {
   //         Get.back();
   //         Get.back();

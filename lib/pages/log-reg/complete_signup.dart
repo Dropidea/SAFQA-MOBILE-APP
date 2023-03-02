@@ -1,8 +1,11 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:safqa/admin/pages/banks/controller/bank_controller.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/models/bank_model.dart';
@@ -24,6 +27,7 @@ class CompleteSignUpPage extends StatefulWidget {
 
 class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   SignUpController _signUpController = Get.find();
+  GlobalDataController _globalDataController = Get.find();
   BankController _bankController = Get.put(BankController());
 
   PageController _pageController = PageController();
@@ -33,6 +37,8 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
   final formKey = GlobalKey<FormState>();
 
   bool _agreeFlag = false;
+  String mobileCode = "";
+  TextEditingController phoneController = TextEditingController();
   final defaultPinTheme = PinTheme(
     fieldWidth: 18,
     fieldHeight: 18,
@@ -40,6 +46,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
     fieldOuterPadding: EdgeInsets.symmetric(horizontal: 1),
     activeColor: Color(0xffBBBBBB),
     disabledColor: Color(0xffBBBBBB),
+    shape: PinCodeFieldShape.box,
     errorBorderColor: Colors.red,
     inactiveColor: Color(0xffBBBBBB),
     selectedColor: Color(0xffBBBBBB),
@@ -143,120 +150,136 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                                 children: <Widget>[
                                   _currentStep == 3
                                       ? GestureDetector(
-                                          onTap: () {
-                                            Get.dialog(
-                                              AlertDialog(
-                                                titlePadding: EdgeInsets.all(0),
-                                                actionsAlignment:
-                                                    MainAxisAlignment.center,
-                                                actions: [
-                                                  MyButton(
-                                                      width: 0.5 * w,
-                                                      heigt: 35.0.sp,
-                                                      color: Color(0xff2D5571),
-                                                      borderRadius: 20,
-                                                      text: "Send",
-                                                      func: () async {
-                                                        logSuccess(
-                                                            _signUpController
-                                                                .dataToRegister);
-                                                        formKey.currentState!
-                                                            .validate();
-                                                        var res = await _signUpController
-                                                            .register(
-                                                                _signUpController
-                                                                    .dataToRegister);
-
-                                                        if (res == null)
-                                                          Get.to(() =>
-                                                              SignUpDonePage());
-                                                        else {
-                                                          if (res.containsKey(
-                                                                  "email") ||
-                                                              res.containsKey(
-                                                                  "phone_number_manager") ||
-                                                              res.containsKey(
-                                                                  "full_name") ||
-                                                              res.containsKey(
-                                                                  "password") ||
-                                                              res.containsKey(
-                                                                  "password_confirmation"))
-                                                            _currentStep = 2;
-                                                          else if (res.containsKey(
-                                                                  "phone_number") ||
-                                                              res.containsKey(
-                                                                  "company_name") ||
-                                                              res.containsKey(
-                                                                  "name_en") ||
-                                                              res.containsKey(
-                                                                  "name_ar") ||
-                                                              res.containsKey(
-                                                                  "category_id") ||
-                                                              res.containsKey(
-                                                                  "work_email"))
-                                                            _currentStep = 0;
-                                                          else
-                                                            _currentStep = 1;
-                                                          setState(() {});
-                                                          formKey.currentState!
-                                                              .validate();
-                                                        }
-                                                      },
-                                                      textSize: 15.0.sp)
-                                                ],
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(32.0),
-                                                  ),
-                                                ),
-                                                title: _dialogeTitle(),
-                                                content: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.all(5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                            Radius.circular(15),
-                                                          ),
-                                                          border: Border.all(
-                                                            color: Color(
-                                                                0xffBBBBBB),
-                                                          )),
-                                                      height: 50,
-                                                      width: 0.35 * w,
-                                                      child: PinCodeTextField(
-                                                          validator: (s) {
-                                                            if (s!.length < 6)
-                                                              return null;
-                                                            return s == '222222'
-                                                                ? null
-                                                                : 'Pin is incorrect';
-                                                          },
-                                                          pinTheme:
-                                                              defaultPinTheme,
-                                                          appContext: context,
-                                                          length: 6,
-                                                          onChanged: (val) {}),
+                                          onTap: () async {
+                                            await FirebaseAuth.instance
+                                                .verifyPhoneNumber(
+                                              phoneNumber: '+963967542311',
+                                              verificationCompleted:
+                                                  (PhoneAuthCredential
+                                                      credential) {},
+                                              verificationFailed:
+                                                  (FirebaseAuthException e) {},
+                                              codeSent: (String verificationId,
+                                                  int? resendToken) {
+                                                Get.dialog(
+                                                  AlertDialog(
+                                                    titlePadding:
+                                                        EdgeInsets.all(0),
+                                                    actionsAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    actions: [
+                                                      MyButton(
+                                                        width: 0.5 * w,
+                                                        heigt: 35.0.sp,
+                                                        color:
+                                                            Color(0xff2D5571),
+                                                        textColor: Colors.white,
+                                                        borderRadius: 20,
+                                                        text: "re_send".tr,
+                                                        textSize: 15.0.sp,
+                                                        func: () {},
+                                                      )
+                                                    ],
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(32.0),
+                                                      ),
                                                     ),
-                                                    MyButton(
-                                                      width: 0.30 * w,
-                                                      heigt: 35.0,
-                                                      color: Color(0xff2D5571),
-                                                      borderRadius: 15,
-                                                      text: "resend (40)",
-                                                      textSize: 13,
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
+                                                    title: _dialogeTitle(),
+                                                    content: Container(
+                                                      padding:
+                                                          EdgeInsets.all(10),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          PinCodeTextField(
+                                                              validator: (s) {
+                                                                if (s!.length <
+                                                                    6)
+                                                                  return null;
+                                                                return s ==
+                                                                        '222222'
+                                                                    ? null
+                                                                    : 'Pin is incorrect';
+                                                              },
+                                                              pinTheme:
+                                                                  defaultPinTheme,
+                                                              appContext:
+                                                                  context,
+                                                              length: 6,
+                                                              onCompleted:
+                                                                  (value) async {
+                                                                logSuccess(
+                                                                    value);
+                                                                FocusScope.of(
+                                                                        context)
+                                                                    .unfocus();
+
+                                                                logSuccess(
+                                                                    _signUpController
+                                                                        .dataToRegister);
+                                                                formKey
+                                                                    .currentState!
+                                                                    .validate();
+                                                                var res = await _signUpController
+                                                                    .register(
+                                                                        _signUpController
+                                                                            .dataToRegister);
+
+                                                                if (res == null)
+                                                                  Get.to(() =>
+                                                                      SignUpDonePage());
+                                                                else {
+                                                                  if (res.containsKey("email") ||
+                                                                      res.containsKey(
+                                                                          "phone_number_manager") ||
+                                                                      res.containsKey(
+                                                                          "full_name") ||
+                                                                      res.containsKey(
+                                                                          "password") ||
+                                                                      res.containsKey(
+                                                                          "password_confirmation"))
+                                                                    _currentStep =
+                                                                        2;
+                                                                  else if (res
+                                                                          .containsKey(
+                                                                              "phone_number") ||
+                                                                      res.containsKey(
+                                                                          "company_name") ||
+                                                                      res.containsKey(
+                                                                          "name_en") ||
+                                                                      res.containsKey(
+                                                                          "name_ar") ||
+                                                                      res.containsKey(
+                                                                          "category_id") ||
+                                                                      res.containsKey(
+                                                                          "work_email"))
+                                                                    _currentStep =
+                                                                        0;
+                                                                  else
+                                                                    _currentStep =
+                                                                        1;
+                                                                  setState(
+                                                                      () {});
+                                                                  formKey
+                                                                      .currentState!
+                                                                      .validate();
+                                                                }
+                                                              },
+                                                              onChanged:
+                                                                  (val) {}),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              codeAutoRetrievalTimeout:
+                                                  (String verificationId) {},
                                             );
                                           },
                                           child: Container(
@@ -433,7 +456,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
       children: [
         Padding(
           padding:
-              const EdgeInsets.only(top: 25.0, left: 10, right: 25, bottom: 25),
+              const EdgeInsets.only(top: 35.0, left: 10, right: 25, bottom: 25),
           child: RichText(
             softWrap: true,
             text: TextSpan(
@@ -447,7 +470,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                   ),
                 ),
                 TextSpan(
-                  text: '+20108443369 ',
+                  text: mobileCode + " " + phoneController.text,
                   style: TextStyle(
                     color: Color(0xff76ABC2),
                     fontWeight: FontWeight.bold,
@@ -551,22 +574,11 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                         return null;
                     },
                   ),
-                  Obx(() {
-                    List countries = _signUpController.globalData['country'];
-                    List<String> ids = countries
-                        .map<String>(
-                          (e) => e['id'].toString(),
-                        )
+                  GetBuilder<GlobalDataController>(builder: (c) {
+                    List<Country> countries = _globalDataController.countries
+                        .where((element) => element.code == "+9")
                         .toList();
-                    List<String> countriesCodes = countries
-                        .map<String>(
-                          (e) => e['code'].toString(),
-                        )
-                        .toSet()
-                        .toList();
-                    logError(countriesCodes);
-                    _signUpController
-                        .selectPhoneNumberCodeDrop(countriesCodes[0]);
+
                     return SignUpTextField(
                       keyBoardType: TextInputType.number,
                       prefixIcon: SizedBox(
@@ -575,20 +587,20 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           decoration:
                               const InputDecoration(border: InputBorder.none),
                           isExpanded: true,
-                          items: countriesCodes
+                          items: countries
                               .map((e) => DropdownMenuItem<String>(
-                                    child: Center(child: Text(e)),
-                                    value: e,
+                                    child: Center(child: Text(e.code!)),
+                                    value: e.code,
                                   ))
                               .toList(),
-                          value: _signUpController.selectedPhoneNumberCodeDrop,
+                          value: countries[0].code,
                           onChanged: (value) {
-                            _signUpController.selectPhoneNumberCodeDrop(value!);
-
                             _signUpController
                                     .dataToRegister['phone_number_code_id'] =
-                                ids[countriesCodes.indexOf(_signUpController
-                                    .selectedPhoneNumberCodeDrop)];
+                                countries
+                                    .where((element) => element.code == value)
+                                    .first
+                                    .id!;
                             _signUpController.errors = {};
                           },
                         ),
@@ -725,7 +737,7 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                       child: GetBuilder<BankController>(builder: (c) {
                         List<Bank> banks = c.banks
                             .where((element) =>
-                                element.countryId ==
+                                element.countryId.toString() ==
                                 _signUpController.dataToRegister["country_id"])
                             .toList();
 
@@ -863,21 +875,10 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                       }
                     },
                   ),
-                  Obx(() {
-                    List countries = _signUpController.globalData['country'];
-                    List<String> ids = countries
-                        .map<String>(
-                          (e) => e['id'].toString(),
-                        )
+                  GetBuilder<GlobalDataController>(builder: (c) {
+                    List<Country> countries = _globalDataController.countries
+                        .where((element) => element.code == "+9")
                         .toList();
-                    List<String> countriesCodes = countries
-                        .map<String>(
-                          (e) => e['code'].toString(),
-                        )
-                        .toSet()
-                        .toList();
-                    _signUpController
-                        .selectPhoneNumberManagerCodeDrop(countriesCodes[0]);
                     return SignUpTextField(
                       keyBoardType: TextInputType.number,
                       prefixIcon: SizedBox(
@@ -886,23 +887,21 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           decoration:
                               const InputDecoration(border: InputBorder.none),
                           isExpanded: true,
-                          items: countriesCodes
+                          items: countries
                               .map((e) => DropdownMenuItem<String>(
-                                    child: Center(child: Text(e)),
-                                    value: e,
+                                    child: Center(child: Text(e.code!)),
+                                    value: e.code,
                                   ))
                               .toList(),
-                          value: _signUpController
-                              .selectedPhoneNumberManagerCodeDrop,
+                          value: countries[0].code,
                           onChanged: (value) {
-                            _signUpController
-                                .selectPhoneNumberManagerCodeDrop(value!);
-                            logError(_signUpController
-                                .selectedPhoneNumberManagerCodeDrop);
                             _signUpController.dataToRegister[
                                     'phone_number_code_manager_id'] =
-                                ids[countriesCodes.indexOf(_signUpController
-                                    .selectedPhoneNumberManagerCodeDrop)];
+                                countries
+                                    .where((element) => element.code == value)
+                                    .first
+                                    .id!;
+
                             _signUpController.errors = {};
                           },
                         ),
@@ -1042,8 +1041,35 @@ class _CompleteSignUpPageState extends State<CompleteSignUpPage> {
                           fontWeight: FontWeight.bold, fontSize: 20.0.sp),
                     ),
                   ),
-                  SignUpTextField(
-                    hintText: "00201084433369",
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: IntlPhoneField(
+                        flagsButtonPadding:
+                            EdgeInsets.symmetric(horizontal: 20),
+                        dropdownIconPosition: IconPosition.trailing,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          fillColor: Color(0xffF8F8F8),
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              borderSide: BorderSide.none),
+                        ),
+                        initialCountryCode: 'AE',
+                        onChanged: (phone) {},
+                        onCountryChanged: (value) =>
+                            mobileCode = "+${value.dialCode}",
+                        controller: phoneController,
+                        validator: (p0) {
+                          if (p0!.number.isEmpty) {
+                            return "can't be empty";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 10, left: 15, right: 15),

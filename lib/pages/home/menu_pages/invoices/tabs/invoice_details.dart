@@ -1,8 +1,10 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:safqa/admin/pages/languages/controller/language_controller.dart';
 import 'package:safqa/controllers/add_invoice_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
@@ -10,7 +12,9 @@ import 'package:safqa/models/data_to_create_invoice.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/models/invoice.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_invoice.dart';
+import 'package:safqa/utils.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InvoiceDetailsPage extends StatelessWidget {
   InvoiceDetailsPage({super.key, required this.invoiceModel});
@@ -18,6 +22,7 @@ class InvoiceDetailsPage extends StatelessWidget {
   DataToCreateInvoice? invoiceToEdit;
   GlobalDataController globalDataController = Get.find();
   AddInvoiceController addInvoiceController = Get.find();
+  LanguageController _languageController = Get.find();
   final LocalsController _localsController = Get.put(LocalsController());
 
   @override
@@ -174,7 +179,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                           ),
                           SizedBox(height: 15),
                           blackText("cus_name".tr, 14),
-                          greyText(invoiceModel.customerName!, 14),
+                          greyText(invoiceModel.customerName.toString(), 14),
                           SizedBox(height: 15),
                           blackText("cus_email".tr, 14),
                           greyText(
@@ -253,27 +258,25 @@ class InvoiceDetailsPage extends StatelessWidget {
                                   ? "Invoice"
                                   : "فاتورة",
                               title2: "views".tr,
-                              content2: "2"),
+                              content2: invoiceModel.views.length.toString()),
                           invoiceInfoMethod(
                               title1: "vendor".tr,
                               content1: "Ahmad khaled",
                               title2: "status".tr,
-                              content2: "Paid"),
+                              content2: invoiceModel.status),
                           invoiceInfoMethod(
                               title1: "invoice_id".tr,
-                              content1: "1234678765434567",
+                              content1: invoiceModel.id.toString(),
                               title2: "pay_method".tr,
                               content2: "Visa/MasterCard"),
                           invoiceInfoMethod(
                               title1: "currency".tr,
-                              content1:
-                                  "${invoiceModel.currency!.currency!} (${invoiceModel.currency!.shortCurrency!})",
+                              content1: invoiceModel.currency != null
+                                  ? "${invoiceModel.currency!.currency!} (${invoiceModel.currency!.shortCurrency!})"
+                                  : "No Currency",
                               title2: "date_created".tr,
                               content2: DateFormat('dd/M/y').format(
-                                DateTime.now().subtract(
-                                  Duration(days: 10),
-                                ),
-                              )),
+                                  DateTime.parse(invoiceModel.createdAt!))),
                           invoiceInfoMethod(
                             title1: "l_s_date".tr,
                             content1: DateFormat('dd/M/y')
@@ -289,24 +292,42 @@ class InvoiceDetailsPage extends StatelessWidget {
                           ),
                           invoiceInfoMethod(
                               title1: "remind_after".tr,
-                              content1: "${invoiceModel.remindAfter} Days",
+                              content1:
+                                  "${invoiceModel.remindAfter} ${"days".tr}",
                               title2: "",
                               content2: ""),
                           SizedBox(height: 10),
-                          blackText("invoice_url", 14),
-                          Text(
-                            "Laborum aliquip ullamco aute nisi Lorem non do sunt et aute non minim.",
-                            style: TextStyle(
-                                fontSize: 14.0.sp,
-                                decoration: TextDecoration.underline,
-                                color: Color(0xff27b4be),
-                                decorationColor: Color(0xff27b4be)),
+                          blackText("invoice_url".tr, 14),
+                          GestureDetector(
+                            onTap: () async {
+                              final Uri _url = Uri.parse(
+                                  "https://safqapay.com/payInvoice/${invoiceModel.id}");
+                              if (!await launchUrl(_url)) {
+                                Utils.showSnackBar(
+                                    context, 'Could not launch $_url');
+                                ;
+                              }
+                            },
+                            onLongPress: () async {
+                              await Clipboard.setData(ClipboardData(
+                                  text:
+                                      "https://safqapay.com/payInvoice/${invoiceModel.id}"));
+                              Utils.showSnackBar(context, "Copied");
+                            },
+                            child: Text(
+                              "https://safqapay.com/payInvoice/${invoiceModel.id}",
+                              style: TextStyle(
+                                  fontSize: 14.0.sp,
+                                  decoration: TextDecoration.underline,
+                                  color: Color(0xff27b4be),
+                                  decorationColor: Color(0xff27b4be)),
+                            ),
                           ),
                           SizedBox(height: 10),
                           invoiceInfoMethod(
                               title1: "invoice_value".tr,
                               content1:
-                                  "${invoiceModel.invoiceValue!} ${invoiceModel.currency!.shortCurrency!}",
+                                  "${invoiceModel.invoiceValue!} ${invoiceModel.currency != null ? invoiceModel.currency!.shortCurrency! : ""}",
                               title2: "discount_available".tr,
                               content2: invoiceModel.discountType == null
                                   ? "no".tr
@@ -329,7 +350,11 @@ class InvoiceDetailsPage extends StatelessWidget {
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "language_of_invoice".tr,
-                              content1: invoiceModel.languageId!.toString(),
+                              content1:
+                                  _languageController.Languages.firstWhere(
+                                      (element) =>
+                                          element.id ==
+                                          invoiceModel.languageId).shortName,
                               title2: "terms_conditions".tr,
                               content2: _localsController.currenetLocale == 0
                                   ? invoiceModel.termsAndConditions ??
@@ -340,10 +365,10 @@ class InvoiceDetailsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  invoiceModel.invoiceItem!.isEmpty
+                  invoiceModel.invoiceItem.isEmpty
                       ? Container()
                       : SizedBox(height: 20),
-                  invoiceModel.invoiceItem!.isEmpty
+                  invoiceModel.invoiceItem.isEmpty
                       ? Container()
                       : ExpandablePanel(
                           header: Container(
@@ -362,7 +387,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                           expanded: ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: invoiceModel.invoiceItem!.length,
+                            itemCount: invoiceModel.invoiceItem.length,
                             itemBuilder: (context, index) => Container(
                               margin: EdgeInsets.only(top: 10),
                               padding: const EdgeInsetsDirectional.only(
@@ -380,7 +405,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                           blackText("product_name".tr, 13),
                                           SizedBox(height: 10),
                                           greyText(
-                                              invoiceModel.invoiceItem![index]
+                                              invoiceModel.invoiceItem[index]
                                                   .productName!,
                                               13),
                                         ],
@@ -392,7 +417,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                           blackText("quantity".tr, 13),
                                           SizedBox(height: 10),
                                           greyText(
-                                              invoiceModel.invoiceItem![index]
+                                              invoiceModel.invoiceItem[index]
                                                   .productQuantity!
                                                   .toString(),
                                               13),
@@ -405,7 +430,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                           blackText("unit_price".tr, 13),
                                           SizedBox(height: 10),
                                           greyText(
-                                              "${invoiceModel.invoiceItem![index].productPrice!} ${invoiceModel.currency!.shortCurrency!}",
+                                              "${invoiceModel.invoiceItem[index].productPrice!} ${invoiceModel.currency!.shortCurrency!}",
                                               13),
                                         ],
                                       ),
@@ -423,7 +448,7 @@ class InvoiceDetailsPage extends StatelessWidget {
                                             vertical: 10, horizontal: 20),
                                         child: Center(
                                           child: whiteText(
-                                              "${"total".tr}: ${invoiceModel.invoiceItem![index].productPrice! * invoiceModel.invoiceItem![index].productQuantity!} ${invoiceModel.currency!.shortCurrency!} ",
+                                              "${"total".tr}: ${invoiceModel.invoiceItem[index].productPrice! * invoiceModel.invoiceItem[index].productQuantity!} ${invoiceModel.currency!.shortCurrency!} ",
                                               14),
                                         ),
                                       )

@@ -1,5 +1,5 @@
 import 'package:safqa/pages/home/menu_pages/settings/models/Address_type.dart';
-import 'package:safqa/pages/home/menu_pages/settings/models/Area.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/city.dart';
 
 class Address {
@@ -44,11 +44,15 @@ class Address {
     appartment = json['appartment'];
     floor = json['floor'];
     instructions = json['instructions'];
-    city = json['city'] != null ? new City.fromJson(json['city']) : null;
+    city = json['city'] != null
+        ? new City.fromJson(json['city'])
+        : City(nameAr: "لا يوجد مدينة", nameEn: "No City");
     addressType = json['address_type'] != null
         ? new AddressType.fromJson(json['address_type'])
-        : null;
-    area = json['area'] != null ? Area.fromJson(json['area']) : null;
+        : AddressType(nameAr: "لا يوجد نوع", nameEn: "No Address Type");
+    area = json['area'] != null
+        ? Area.fromJson(json['area'])
+        : Area(nameAr: "لا يوجد منطقة", nameEn: "No Area");
   }
 
   Map<String, dynamic> toJson() {

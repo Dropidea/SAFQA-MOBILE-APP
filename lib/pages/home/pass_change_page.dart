@@ -74,7 +74,7 @@ class PasswordChangePage extends StatelessWidget {
                 onTap: () {
                   if (formKey.currentState!.validate()) {
                     MyDialogs.showWarningDialoge(
-                      message: "Are you sure You want to change password?",
+                      message: "are_you_sure".tr,
                       yesBTN: "Change",
                       onProceed: () async {
                         Get.back();

@@ -29,7 +29,12 @@ class CreateBusinessTypePageState extends State<CreateBusinessTypePage> {
   @override
   void initState() {
     if (widget.businessTypeToEdit != null) {
-      logoController.text = widget.businessTypeToEdit!.businessLogo!;
+      logoController.text = widget.businessTypeToEdit!.businessLogo!
+          .toString()
+          .substring(widget.businessTypeToEdit!.businessLogo!
+                  .toString()
+                  .lastIndexOf("/") +
+              1);
     }
     super.initState();
   }
@@ -44,7 +49,11 @@ class CreateBusinessTypePageState extends State<CreateBusinessTypePage> {
           iconTheme: IconThemeData(color: Colors.black),
           elevation: 0,
           backgroundColor: Colors.white,
-          title: blackText("create_business_type".tr, 16),
+          title: blackText(
+              widget.businessTypeToEdit != null
+                  ? "edit_business_type".tr
+                  : "create_business_type".tr,
+              16),
 
           centerTitle: true,
         ),

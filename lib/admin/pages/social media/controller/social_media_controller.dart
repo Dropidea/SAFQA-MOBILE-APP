@@ -79,8 +79,8 @@ class SocialMediaController extends GetxController {
       Get.back();
       update();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "SocialMedia Deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -112,8 +112,8 @@ class SocialMediaController extends GetxController {
       await getAllSocialMedias();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Recurring Interval Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -171,8 +171,8 @@ class SocialMediaController extends GetxController {
       await getAllSocialMedias();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "SocialMedia Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -230,7 +230,7 @@ class SocialMediaController extends GetxController {
   //     Get.back();
   //     MyDialogs.showSavedSuccessfullyDialoge(
   //       title: "SocialMedia Edited Successfully",
-  //       btnTXT: "close",
+  //       btnTXT: "close".tr,
   //       onTap: () async {
   //         Get.back();
   //         Get.back();

@@ -18,6 +18,7 @@ import 'package:safqa/widgets/dialoges.dart';
 
 class AddInvoiceController extends GetxController {
   DataToCreateInvoice dataToCreateInvoice = DataToCreateInvoice();
+  double total = 0;
   DataToCreateInvoice? dataToEditInvoice;
   DataToCreateQuickInvoice dataToCreateQuickInvoice =
       DataToCreateQuickInvoice();
@@ -38,8 +39,18 @@ class AddInvoiceController extends GetxController {
   }
 
   void removeInvoiceItem(int index) {
+    total -= invoiceItems[index].productQuantity! *
+        invoiceItems[index].productPrice!;
     invoiceItems.removeAt(index);
     dataToCreateInvoice.invoiceItems.removeAt(index);
+    update();
+  }
+
+  void removeInvoiceItemEdit(int index) {
+    total -= invoiceItems[index].productQuantity! *
+        invoiceItems[index].productPrice!;
+
+    dataToEditInvoice!.invoiceItems.removeAt(index);
     update();
   }
 
@@ -67,8 +78,8 @@ class AddInvoiceController extends GetxController {
       invoiceItems = [];
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -192,7 +203,7 @@ class AddInvoiceController extends GetxController {
         if (e.response!.statusMessage == "Login Please") {
           bool res = await Utils.reLoginHelper(e);
           if (res) {
-            await createInvoice();
+            await editInvoice();
           }
         } else {
           logError(e.response!.data);
@@ -284,8 +295,8 @@ class AddInvoiceController extends GetxController {
       customerInfo = null;
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -440,6 +451,12 @@ class AddInvoiceController extends GetxController {
   void addInvoiceItem(InvoiceItem item) {
     invoiceItems.add(item);
     dataToCreateInvoice.invoiceItems.add(item);
+    update();
+  }
+
+  void addInvoiceItemEdit(InvoiceItem item) {
+    dataToEditInvoice!.invoiceItems.add(item);
+
     update();
   }
 

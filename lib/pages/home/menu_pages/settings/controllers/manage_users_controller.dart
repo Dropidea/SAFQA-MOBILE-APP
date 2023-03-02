@@ -132,8 +132,8 @@ class ManageUserController extends GetxController {
       Get.back();
       await getManageUsers();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Manager Created Successfully\nCheck your Email!!",
-        btnTXT: "close",
+        title: "manager_created_email".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -202,7 +202,7 @@ class ManageUserController extends GetxController {
       await getManageUsers();
       MyDialogs.showSavedSuccessfullyDialoge(
         title: "Edited Sucessfully",
-        btnTXT: "close",
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();

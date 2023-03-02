@@ -1,12 +1,27 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
+import 'package:csv/csv.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:printing/printing.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
 import 'package:safqa/pages/home/menu_pages/settings/controllers/manage_users_controller.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/manage_user.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/add_user_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/user_details.dart';
 import 'package:safqa/pages/home/menu_pages/settings/tabs/users_search_filter_page.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,6 +34,7 @@ class ManageUsersTab extends StatefulWidget {
 
 class _ManageUsersTabState extends State<ManageUsersTab> {
   ManageUserController _manageUserController = Get.put(ManageUserController());
+  GlobalDataController _globalDataController = Get.find();
   @override
   void initState() {
     // TODO: implement initState
@@ -124,11 +140,26 @@ class _ManageUsersTabState extends State<ManageUsersTab> {
               SizedBox(width: 5),
               listBTN(text: "copy".tr, onTap: () {}),
               SizedBox(width: 5),
-              listBTN(text: "print/pdf".tr, onTap: () {}),
+              listBTN(
+                  text: "print/pdf".tr,
+                  onTap: () {
+                    saveManageUsersPDF(
+                        _manageUserController.manageUsers, context);
+                  }),
               SizedBox(width: 5),
-              listBTN(text: "Excel", onTap: () {}),
+              listBTN(
+                  text: "Excel",
+                  onTap: () async {
+                    saveManageUsersExcel(
+                        _manageUserController.manageUsers, context);
+                  }),
               SizedBox(width: 5),
-              listBTN(text: "CSV", onTap: () {}),
+              listBTN(
+                  text: "CSV",
+                  onTap: () async {
+                    await saveManageUsersCSV(
+                        _manageUserController.manageUsers, context);
+                  }),
               SizedBox(width: 5),
             ],
           ),
@@ -231,6 +262,200 @@ class _ManageUsersTabState extends State<ManageUsersTab> {
         )
       ],
     );
+  }
+
+  saveManageUsersPDF(
+    List<ManageUser> ll,
+    BuildContext c,
+  ) async {
+    final doc = pw.Document();
+    int i = 1;
+    List<List<ManageUser>> tmp = [];
+    List<ManageUser> sybTmp = [];
+    for (var element in ll) {
+      if (i % 5 != 0)
+        sybTmp.add(element);
+      else {
+        sybTmp.add(element);
+        tmp.add(sybTmp);
+        sybTmp = [];
+      }
+      i++;
+    }
+    if (sybTmp.isNotEmpty) {
+      tmp.add(sybTmp);
+    }
+    for (var i in tmp) {
+      doc.addPage(pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          theme: pw.ThemeData.withFont(
+            base: pw.Font.ttf(
+              await rootBundle.load('assets/fonts/Tajawal-Regular.ttf'),
+            ),
+            bold: pw.Font.ttf(
+              await rootBundle.load('assets/fonts/Tajawal-Bold.ttf'),
+            ),
+          ),
+          build: (pw.Context context) {
+            return pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  pw.Text(
+                    ("Manage Users"),
+                    textDirection: pw.TextDirection.rtl,
+                    style: pw.TextStyle(
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColor.fromHex("111111"),
+                      fontSize: 20.0.sp,
+                    ),
+                  ),
+                  pw.SizedBox(height: 30),
+                  pw.Expanded(
+                      child: pw.ListView.separated(
+                    itemCount: i.length,
+                    itemBuilder: (context, index) {
+                      logSuccess(i.length);
+                      return pw.Center(
+                          child: ManageUserToPrint(
+                        manageuser: i[index],
+                        context: c,
+                      ));
+                    },
+                    separatorBuilder: (pw.Context context, int index) {
+                      return pw.SizedBox(height: 20);
+                    },
+                  ))
+                ]); // Center
+          }));
+    }
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
+  }
+
+  saveManageUsersExcel(List<ManageUser> ll, BuildContext context) async {
+    var excel = Excel.createExcel();
+
+    var sheet = excel["Sheet1"];
+    excel.rename("Sheet 1", "Manage Users");
+    CellStyle cellStyle = CellStyle(
+      bold: true,
+      italic: true,
+      textWrapping: TextWrapping.WrapText,
+      fontFamily: getFontFamily(FontFamily.Comic_Sans_MS),
+      rotation: 0,
+    );
+
+    sheet.appendRow(
+      [
+        "ID",
+        "Full Name",
+        "Enabled",
+        "Country",
+        "Phone Number",
+        "Email",
+        "User Role",
+        "Notification Settings",
+      ],
+    );
+    var cell1 = sheet.cell(CellIndex.indexByString("A1"));
+    var cell2 = sheet.cell(CellIndex.indexByString("B1"));
+    var cell3 = sheet.cell(CellIndex.indexByString("C1"));
+    var cell4 = sheet.cell(CellIndex.indexByString("D1"));
+    var cell5 = sheet.cell(CellIndex.indexByString("E1"));
+    var cell6 = sheet.cell(CellIndex.indexByString("F1"));
+    var cell7 = sheet.cell(CellIndex.indexByString("G1"));
+    var cell8 = sheet.cell(CellIndex.indexByString("H1"));
+    cell1.cellStyle = cellStyle;
+    cell2.cellStyle = cellStyle;
+    cell3.cellStyle = cellStyle;
+    cell4.cellStyle = cellStyle;
+    cell5.cellStyle = cellStyle;
+    cell6.cellStyle = cellStyle;
+    cell7.cellStyle = cellStyle;
+    cell8.cellStyle = cellStyle;
+    for (var i in ll) {
+      sheet.appendRow([
+        i.id,
+        i.fullName,
+        i.isEnable == 1 ? "Yes" : "No",
+        i.nationality!.nameEn,
+        "${_globalDataController.getCountryCode(i.phoneNumberCodeManagerId)} ${i.phoneNumberManager!}",
+        i.email,
+        i.userRole!.nameEn,
+        getNotificationString(i),
+      ]);
+    }
+    await requestPermission(Permission.manageExternalStorage);
+    if (await requestPermission(Permission.storage)) {
+      {
+        String folderInAppDocDir =
+            await AppUtil.createFolderInAppDocDir('Safqa/Manage Users/Excel');
+        logSuccess(folderInAppDocDir);
+        var now = new DateTime.now();
+        var formatter = new DateFormat('yyyy-MM-dd');
+        String outputFile = folderInAppDocDir + "${formatter.format(now)}.xlsx";
+        if (await File(outputFile).exists()) {
+          await File(outputFile).delete();
+        }
+        //stopwatch.reset();
+        List<int>? fileBytes = excel.save();
+        if (fileBytes != null) {
+          File(outputFile)
+            ..createSync(recursive: true)
+            ..writeAsBytesSync(fileBytes);
+        }
+        Utils.showSnackBar(context,
+            "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد\n$folderInAppDocDir");
+      }
+    }
+  }
+
+  saveManageUsersCSV(List<ManageUser> ll, BuildContext context) async {
+    List<List<dynamic>> rows = [];
+    List<dynamic> row = [];
+    row.add("ID");
+    row.add("Full Name");
+    row.add("Enabled");
+    row.add("Country");
+    row.add("Phone Number");
+    row.add("Email");
+    row.add("User Role");
+    row.add("Notification Settings");
+
+    rows.add(row);
+    for (var i in ll) {
+      List<dynamic> row = [];
+      row.add(i.id);
+      row.add(i.fullName);
+      row.add(i.isEnable == 1 ? "Yes" : "No");
+      row.add(i.nationality!.nameEn);
+      row.add(
+          "${_globalDataController.getCountryCode(i.phoneNumberCodeManagerId)} ${i.phoneNumberManager!}");
+      row.add(i.email);
+      row.add(i.userRole!.nameEn);
+      row.add(getNotificationString(i));
+
+      rows.add(row);
+    }
+
+    String csv = const ListToCsvConverter().convert(rows);
+    await requestPermission(Permission.manageExternalStorage);
+    if (await requestPermission(Permission.storage)) {
+      String folderInAppDocDir =
+          await AppUtil.createFolderInAppDocDir('Safqa/Manage Users/CSV');
+      logSuccess(folderInAppDocDir);
+
+      var now = new DateTime.now();
+      var formatter = new DateFormat('yyyy-MM-dd');
+      String outputFile = folderInAppDocDir + "${formatter.format(now)}.csv";
+      if (await File(outputFile).exists()) {
+        await File(outputFile).delete();
+      }
+      File f = File(outputFile);
+      await f.writeAsString(csv);
+      Utils.showSnackBar(context,
+          "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد\n$folderInAppDocDir");
+    }
   }
 }
 

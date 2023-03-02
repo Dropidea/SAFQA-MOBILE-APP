@@ -104,7 +104,7 @@ class _ContactPhonesTabState extends State<ContactPhonesTab> {
                                     onProceed: () async {
                                       Get.back();
                                     },
-                                    message: "Are You Sure");
+                                    message: "are_you_sure".tr);
                               },
                               child: Container(
                                 width: 40,

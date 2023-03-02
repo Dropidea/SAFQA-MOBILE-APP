@@ -97,7 +97,7 @@ class _SupportTypesTabState extends State<SupportTypesTab> {
                                       await c.deleteSupportType(
                                           c.supportTypes[index]);
                                     },
-                                    message: "Are You Sure");
+                                    message: "are_you_sure".tr);
                               },
                               child: Container(
                                 width: 40,

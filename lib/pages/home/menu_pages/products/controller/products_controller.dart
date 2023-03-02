@@ -398,8 +398,8 @@ class ProductsController extends GetxController {
           data: body);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created Successfully",
-        btnTXT: "Close",
+        title: "created_successfully",
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -484,7 +484,7 @@ class ProductsController extends GetxController {
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
         title: "Updated Successfully",
-        btnTXT: "Close",
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -567,8 +567,8 @@ class ProductsController extends GetxController {
       logSuccess(res.data);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Deleted Successfully",
-        btnTXT: "Close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
         },
@@ -709,8 +709,8 @@ class ProductsController extends GetxController {
       Get.back();
       await getProductCategories();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created Successfully",
-        btnTXT: "Close",
+        title: "created_successfully",
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -777,8 +777,8 @@ class ProductsController extends GetxController {
       Get.back();
       await getProductLinks();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created Successfully",
-        btnTXT: "Close",
+        title: "created_successfully",
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -844,8 +844,8 @@ class ProductsController extends GetxController {
       logSuccess(res.data);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Edited Successfully",
-        btnTXT: "Close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -915,7 +915,7 @@ class ProductsController extends GetxController {
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
         title: "Deleted Successfullt",
-        btnTXT: "close",
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -973,7 +973,7 @@ class ProductsController extends GetxController {
   //                   color: Color(0xff2D5571),
   //                   borderRadius: BorderRadius.circular(20),
   //                 ),
-  //                 child: Center(child: whiteText("close", 17)),
+  //                 child: Center(child: whiteText("close".tr, 17)),
   //               ),
   //             )
   //           ],

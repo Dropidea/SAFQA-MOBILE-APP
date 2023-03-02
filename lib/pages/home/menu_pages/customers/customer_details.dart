@@ -77,7 +77,7 @@ class CustomerDetailsPage extends StatelessWidget {
                         Get.back();
                         await _customersController.deleteCustomer(customer.id!);
                       },
-                      message: "Are you sure?");
+                      message: "are_you_sure".tr);
                 },
                 child: Container(
                   width: w / 2.5,

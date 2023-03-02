@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:safqa/admin/controller/admin_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/pages/home/home_page.dart';
@@ -23,10 +24,9 @@ class LoginController extends GetxController {
     if (res == null) {
       Navigator.of(Get.overlayContext!).pop();
     } else {
+      Map<String, dynamic> decoded = Jwt.parseJwt(res);
       await _globalDataController.getMe();
-      if (_globalDataController.me.userRole == null)
-        _adminController.setIsAdmin(true);
-      else if (_globalDataController.me.userRole!.id == 1)
+      if (decoded['role_type'] == "admin")
         _adminController.setIsAdmin(true);
       else
         _adminController.setIsAdmin(false);

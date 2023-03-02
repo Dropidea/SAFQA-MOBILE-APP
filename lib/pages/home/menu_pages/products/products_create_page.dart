@@ -653,7 +653,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                               children: [
                                 SignUpTextField(
                                   validator: (s) {
-                                    if (s!.isEmpty) return "Required";
+                                    if (s!.isEmpty) return "required".tr;
                                     return null;
                                   },
                                   hintText: "width".tr,
@@ -666,7 +666,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                 ),
                                 SignUpTextField(
                                   validator: (s) {
-                                    if (s!.isEmpty) return "Required";
+                                    if (s!.isEmpty) return "required".tr;
                                     return null;
                                   },
                                   hintText: "length".tr,
@@ -685,7 +685,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                               children: [
                                 SignUpTextField(
                                   validator: (s) {
-                                    if (s!.isEmpty) return "Required";
+                                    if (s!.isEmpty) return "required".tr;
                                     return null;
                                   },
                                   hintText: "height".tr,
@@ -698,7 +698,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
                                 ),
                                 SignUpTextField(
                                   validator: (s) {
-                                    if (s!.isEmpty) return "Required";
+                                    if (s!.isEmpty) return "required".tr;
                                     return null;
                                   },
                                   hintText: "weight".tr,

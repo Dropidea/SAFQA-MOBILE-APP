@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "955496575457",
+    "project_id": "safqa-732b9",
+    "storage_bucket": "safqa-732b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955496575457:android:4fbe857419e59c4373e2a0",
+        "android_client_info": {
+          "package_name": "com.Safqa.safqa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955496575457-574d8dsevs6g6q8dssj4ab0o44798650.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE3j0S0OmF_UsjiW3ouXHjJPGtAjt_Jgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955496575457-574d8dsevs6g6q8dssj4ab0o44798650.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

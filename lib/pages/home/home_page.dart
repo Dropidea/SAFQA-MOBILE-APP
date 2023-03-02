@@ -21,6 +21,7 @@ import 'package:safqa/pages/home/menu_pages/customers/customers_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/deposits/deposits_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/Invoices_page.dart';
 import 'package:safqa/pages/home/menu_pages/mf_auth/mf_auth_main_page.dart';
+import 'package:safqa/pages/home/menu_pages/order%20lists/order_list_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/products_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/refunds/refunds_main_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/settings_main_page.dart';
@@ -90,6 +91,8 @@ class _HomePageState extends State<HomePage> {
     switch (_currnetMenuItem) {
       case MyMenuItems.invoices:
         return const InvoicesPage();
+      case MyMenuItems.orderList:
+        return OrderListsMainPage();
       case MyMenuItems.products:
         return ProductsMainPage();
       case MyMenuItems.customers:

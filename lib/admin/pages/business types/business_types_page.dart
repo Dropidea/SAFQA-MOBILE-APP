@@ -140,8 +140,19 @@ class BusinessCategTypesageState extends State<BusinessTypesMainPage> {
                                         Row(
                                           children: [
                                             Container(
-                                              child: false
-                                                  ? Image.network("src")
+                                              child: c.businessTypes[index]
+                                                          .businessLogo !=
+                                                      null
+                                                  ? Container(
+                                                      width: 60.0.sp,
+                                                      height: 60.0.sp,
+                                                      decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(c
+                                                                  .businessTypes[
+                                                                      index]
+                                                                  .businessLogo))),
+                                                    )
                                                   : Icon(
                                                       Icons.photo_rounded,
                                                       size: 60.0.sp,
@@ -218,7 +229,8 @@ class BusinessCategTypesageState extends State<BusinessTypesMainPage> {
                                                                       index]);
                                                             },
                                                             message:
-                                                                "Are You Sure"),
+                                                                "are_you_sure"
+                                                                    .tr),
                                                   );
                                                 },
                                                 child: Row(

@@ -1,12 +1,14 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/refunds/models/refund_model.dart';
 import 'package:sizer/sizer.dart';
 
 class RefundsDetailsPage extends StatelessWidget {
-  const RefundsDetailsPage({super.key});
-
+  const RefundsDetailsPage({super.key, required this.refund});
+  final Refund refund;
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -50,18 +52,19 @@ class RefundsDetailsPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           invoiceInfoMethod(
-                              title1: "refund_ref".tr,
+                              title1: "refund_id".tr,
                               content1: "123172381992391873",
                               title2: "date_created".tr,
-                              content2: "09 Oct 2022, 21:06"),
+                              content2: DateFormat.yMMMEd().format(
+                                  DateTime.tryParse(refund.createdAt!)!)),
                           invoiceInfoMethod(
-                              title1: "invoice_ref".tr,
-                              content1: "12312123",
+                              title1: "invoice_id".tr,
+                              content1: refund.invoice!.id!.toString(),
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "customer_name".tr,
-                              content1: "lafi",
+                              content1: refund.invoice!.customerName,
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
@@ -76,12 +79,12 @@ class RefundsDetailsPage extends StatelessWidget {
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "refund_status".tr,
-                              content1: "pending",
+                              content1: refund.status,
                               title2: "",
                               content2: ""),
                           invoiceInfoMethod(
                               title1: "amount".tr,
-                              content1: "200",
+                              content1: refund.amount.toString(),
                               title2: "",
                               content2: ""),
                         ],

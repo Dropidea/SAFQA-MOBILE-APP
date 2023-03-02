@@ -80,8 +80,8 @@ class BusinessCategoryController extends GetxController {
       update();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "BusinessCategory Deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -113,8 +113,8 @@ class BusinessCategoryController extends GetxController {
       await getAllBusinessCategorys();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "BusinessCategory Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -172,8 +172,8 @@ class BusinessCategoryController extends GetxController {
       await getAllBusinessCategorys();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "BusinessCategory Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -231,7 +231,7 @@ class BusinessCategoryController extends GetxController {
   //     Get.back();
   //     MyDialogs.showSavedSuccessfullyDialoge(
   //       title: "BusinessCategory Edited Successfully",
-  //       btnTXT: "close",
+  //       btnTXT: "close".tr,
   //       onTap: () async {
   //         Get.back();
   //         Get.back();

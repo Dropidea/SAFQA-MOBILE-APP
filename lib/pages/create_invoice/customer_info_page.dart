@@ -146,10 +146,12 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
             CustomDropdown(
               items: _globalDataController.sendOptions
                   .map((e) => engFlag ? e.nameEn! : e.nameAr!)
+                  .toSet()
                   .toList(),
               selectedItem: _addInvoiceController.dataToEditInvoice != null
                   ? _globalDataController.sendOptions
                           .map((e) => engFlag ? e.nameEn! : e.nameAr!)
+                          .toSet()
                           .toList()[
                       _globalDataController.sendOptions.indexWhere((element) =>
                           element.id ==
@@ -336,7 +338,7 @@ class _CustomerInfoPageState extends State<CustomerInfoPage> {
                   FocusScope.of(context).unfocus();
                   MyDialogs.showSavedSuccessfullyDialoge(
                     title: "Customer Saved",
-                    btnTXT: "Close",
+                    btnTXT: "close".tr,
                     onTap: () {
                       Get.back();
                       Get.back();

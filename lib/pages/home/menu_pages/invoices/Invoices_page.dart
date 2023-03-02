@@ -12,7 +12,6 @@ import 'package:safqa/pages/home/menu_pages/invoices/payment_link_search_filter_
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoice_tab.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_invoice.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_payment_link.dart';
-import 'package:safqa/pages/home/menu_pages/invoices/tabs/invoices_sub_pages/create_quick_invoice.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/tabs/payment_link_tab.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:safqa/widgets/zero_app_bar.dart';
@@ -174,8 +173,6 @@ class _InvoicesPageState extends State<InvoicesPage> {
                           onTap: () {
                             if (selectedTab == 0) {
                               Get.to(() => InvoiceSubCreateInvoice());
-                            } else if (selectedTab == 1) {
-                              Get.to(() => InvoiceSubCreateQuickInvoice());
                             } else {
                               Get.to(() => InvoiceSubCreatePaymentLink());
                             }

@@ -45,7 +45,7 @@ class MyDialogs {
                       ),
                     ),
                     child: Center(
-                      child: greyText("Cancel", 14),
+                      child: greyText("cancel".tr, 14),
                     ),
                   ),
                 ),
@@ -59,7 +59,7 @@ class MyDialogs {
                       color: Color(0xffE47E7B),
                     ),
                     child: Center(
-                      child: whiteText("Delete", 14),
+                      child: whiteText("delete".tr, 14),
                     ),
                   ),
                 ),
@@ -113,7 +113,7 @@ class MyDialogs {
                       ),
                     ),
                     child: Center(
-                      child: greyText("Cancel", 14),
+                      child: greyText("cancel".tr, 14),
                     ),
                   ),
                 ),
@@ -127,7 +127,7 @@ class MyDialogs {
                       color: Color(0xffE47E7B),
                     ),
                     child: Center(
-                      child: whiteText(yesBTN, 14),
+                      child: whiteText(yesBTN, 12),
                     ),
                   ),
                 ),

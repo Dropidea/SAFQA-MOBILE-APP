@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/controller/products_controller.dart';
@@ -160,4 +162,77 @@ class _ProductWidgetState extends State<ProductWidget> {
       ),
     );
   }
+}
+
+ProductToPrint(
+    {required Product product,
+    required pw.ImageProvider image,
+    required BuildContext context}) {
+  double width = MediaQuery.of(context).size.width;
+  return pw.Container(
+    padding: pw.EdgeInsets.all(10),
+    decoration: pw.BoxDecoration(
+      color: PdfColor.fromHex("F8F8F8FF"),
+      borderRadius: pw.BorderRadius.circular(10),
+    ),
+    child: pw.Row(children: [
+      pw.Image(image, width: 120, height: 120),
+      pw.SizedBox(width: 25),
+      pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            ("Name (Ar): " + product.nameAr!),
+            style: pw.TextStyle(
+              color: PdfColor.fromHex("000000"),
+              fontSize: 13.0.sp,
+            ),
+            textDirection: pw.TextDirection.rtl,
+          ),
+          pw.SizedBox(height: 10),
+          pw.Text(
+            ("Name (EN): " + product.nameEn!),
+            style: pw.TextStyle(
+              color: PdfColor.fromHex("000000"),
+              fontSize: 13.0.sp,
+            ),
+            textDirection: pw.TextDirection.rtl,
+          ),
+          pw.SizedBox(height: 10),
+          pw.Text(
+            ("Remaining: " + product.quantity.toString()),
+            style: pw.TextStyle(
+              color: PdfColor.fromHex("000000"),
+              fontSize: 13.0.sp,
+            ),
+            textDirection: pw.TextDirection.rtl,
+          ),
+        ],
+      ),
+      pw.SizedBox(width: 25),
+      pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            ("Is Active: " + (product.isActive == 1 ? "Yes" : "No")),
+            style: pw.TextStyle(
+              color:
+                  PdfColor.fromHex(product.isActive == 1 ? "00DD00" : "DD0000"),
+              fontSize: 13.0.sp,
+            ),
+            textDirection: pw.TextDirection.rtl,
+          ),
+          pw.SizedBox(height: 10),
+          pw.Text(
+            ("Price: " + product.price.toString() + "\$"),
+            style: pw.TextStyle(
+              color: PdfColor.fromHex("0000DD"),
+              fontSize: 13.0.sp,
+            ),
+            textDirection: pw.TextDirection.rtl,
+          ),
+        ],
+      ),
+    ]),
+  );
 }

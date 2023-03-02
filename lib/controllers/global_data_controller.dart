@@ -12,7 +12,7 @@ import 'package:safqa/models/contacts.dart';
 import 'package:safqa/models/payment_link.dart';
 import 'package:safqa/models/recurring_interval.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/Address_type.dart';
-import 'package:safqa/pages/home/menu_pages/settings/models/Area.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/city.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/manage_user.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/send_options.dart';
@@ -179,8 +179,8 @@ class GlobalDataController extends GetxController {
       var res = await dio.post(EndPoints.createAddressType, data: body);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created Successfully",
-        btnTXT: "Close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -220,8 +220,8 @@ class GlobalDataController extends GetxController {
           data: body);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Edited Successfully",
-        btnTXT: "Close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -263,8 +263,8 @@ class GlobalDataController extends GetxController {
 
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "AddressType deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -324,8 +324,8 @@ class GlobalDataController extends GetxController {
       var res = await dio.post(EndPoints.createCountry, data: body);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created Successfully",
-        btnTXT: "Close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -374,8 +374,8 @@ class GlobalDataController extends GetxController {
       var res = await dio.post(EndPoints.editCountry(country.id!), data: body);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Edited Successfully",
-        btnTXT: "Close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -449,8 +449,8 @@ class GlobalDataController extends GetxController {
 
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Country deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -471,8 +471,8 @@ class GlobalDataController extends GetxController {
       var res = await dio.post(EndPoints.createCity, data: body);
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Created Successfully",
-        btnTXT: "Close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () {
           Get.back();
           Get.back();
@@ -498,6 +498,196 @@ class GlobalDataController extends GetxController {
     }
   }
 
+  Future createArea(Area area) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(area.toJson());
+
+      var res = await dio.post(EndPoints.createArea, data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getAreas();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await createArea(area);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  Future editArea(Area area) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(area.toJson());
+      body.fields.add(MapEntry("_method", "PUT"));
+      var res = await dio.post(EndPoints.editArea(area.id!), data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getAreas();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editArea(area);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  Future editCity(City city) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(city.toJson());
+      body.fields.add(MapEntry("_method", "PUT"));
+      var res = await dio.post(EndPoints.editCity(city.id!), data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
+        onTap: () {
+          Get.back();
+          Get.back();
+        },
+      );
+      await getCities();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await editCity(city);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  Future deleteCity(City city) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(city.toJson());
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res = await dio.post(EndPoints.deleteCity(city.id!), data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
+        onTap: () {
+          Get.back();
+        },
+      );
+      cities.remove(city);
+      update();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteCity(city);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
+  Future deleteArea(Area area) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      final body = d.FormData.fromMap(area.toJson());
+      body.fields.add(MapEntry("_method", "DELETE"));
+      var res = await dio.post(EndPoints.deleteArea(area.id!), data: body);
+      Get.back();
+      MyDialogs.showSavedSuccessfullyDialoge(
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
+        onTap: () {
+          Get.back();
+        },
+      );
+      areas.remove(area);
+      update();
+
+      //   return true;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login" &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await deleteArea(area);
+        }
+      } else {
+        logError(e.response!);
+        // logError(e.response!.data);
+
+      }
+    }
+  }
+
   // Future editAddressType(AddressType addressType) async {
   //   Get.dialog(Center(
   //     child: CircularProgressIndicator(),
@@ -512,8 +702,8 @@ class GlobalDataController extends GetxController {
   //         data: body);
   //     Get.back();
   //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "Edited Successfully",
-  //       btnTXT: "Close",
+  //       title: "edited_successfully".tr,
+  //       btnTXT: close,
   //       onTap: () {
   //         Get.back();
   //         Get.back();
@@ -556,7 +746,7 @@ class GlobalDataController extends GetxController {
   //     Get.back();
   //     MyDialogs.showSavedSuccessfullyDialoge(
   //       title: "AddressType deleted Successfully",
-  //       btnTXT: "close",
+  //       btnTXT: "close".tr,
   //       onTap: () async {
   //         Get.back();
   //       },
@@ -636,8 +826,7 @@ class GlobalDataController extends GetxController {
   Future getCityAreas(int id) async {
     List<Area> tmp = [];
     for (var i in areas) {
-      if (i.city!.id == id) {
-        logSuccess("added");
+      if (i.city != null && i.city!.id == id) {
         tmp.add(i);
       }
       areastoshow = tmp;

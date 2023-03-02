@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import "package:flutter/material.dart";
@@ -9,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
 import 'package:safqa/pages/home/profile/controller/docs_controller.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
 import 'package:safqa/utils.dart';
@@ -224,143 +226,143 @@ class _DocWidgetState extends State<DocWidget> {
                                   late PermissionStatus status2;
 
                                   try {
-                                    status = await Permission.storage.status;
-                                    if (!status.isGranted) {
-                                      await Permission.storage.request();
-                                    }
-                                    status2 = await Permission
-                                        .manageExternalStorage.status;
-                                    if (!status2.isGranted) {
-                                      await Permission.manageExternalStorage
-                                          .request();
-                                    }
-                                    String tmp =
-                                        dir!.parent.parent.parent.parent.path +
-                                            "/Safqa/Documents";
-                                    Directory newDir = await Directory(tmp)
-                                        .create(recursive: true);
-                                    logSuccess(newDir.path);
-                                    switch (widget.type) {
-                                      case DocTypes.civilId:
-                                        if (!_docsController
-                                            .profileDocumentToShow.civilId
-                                            .toString()
-                                            .endsWith("documents")) {
-                                          Get.dialog(const Center(
-                                            child: CircularProgressIndicator(),
-                                          ));
-                                          await Dio().download(
-                                              _docsController
-                                                  .profileDocumentToShow
-                                                  .civilId,
-                                              newDir.path +
-                                                  "/" +
-                                                  _docsController
-                                                      .profileDocumentToShow
-                                                      .civilId
-                                                      .toString()
-                                                      .substring(_docsController
-                                                              .profileDocumentToShow
-                                                              .civilId
-                                                              .toString()
-                                                              .lastIndexOf(
-                                                                  "/") +
-                                                          1));
-                                          Get.back();
-                                          Utils.showSnackBar(context,
-                                              "Saved To Safqa/Documents");
-                                        }
-                                        break;
-                                      case DocTypes.civilIdBack:
-                                        if (!_docsController
-                                            .profileDocumentToShow.civilIdBack
-                                            .toString()
-                                            .endsWith("documents")) {
-                                          Get.dialog(const Center(
-                                            child: CircularProgressIndicator(),
-                                          ));
-                                          await Dio().download(
-                                              _docsController
-                                                  .profileDocumentToShow
-                                                  .civilIdBack,
-                                              newDir.path +
-                                                  "/" +
-                                                  _docsController
-                                                      .profileDocumentToShow
-                                                      .civilIdBack
-                                                      .toString()
-                                                      .substring(_docsController
-                                                              .profileDocumentToShow
-                                                              .civilIdBack
-                                                              .toString()
-                                                              .lastIndexOf(
-                                                                  "/") +
-                                                          1));
-                                          Get.back();
-                                          Utils.showSnackBar(context,
-                                              "Saved To Safqa/Documents");
-                                        }
-                                        break;
-                                      case DocTypes.bankAccountLetter:
-                                        if (!_docsController
-                                            .profileDocumentToShow
-                                            .bankAccountLetter
-                                            .toString()
-                                            .endsWith("documents")) {
-                                          Get.dialog(const Center(
-                                            child: CircularProgressIndicator(),
-                                          ));
-                                          await Dio().download(
-                                              _docsController
-                                                  .profileDocumentToShow
-                                                  .bankAccountLetter,
-                                              newDir.path +
-                                                  "/" +
-                                                  _docsController
-                                                      .profileDocumentToShow
-                                                      .bankAccountLetter
-                                                      .toString()
-                                                      .substring(_docsController
-                                                              .profileDocumentToShow
-                                                              .bankAccountLetter
-                                                              .toString()
-                                                              .lastIndexOf(
-                                                                  "/") +
-                                                          1));
-                                          Get.back();
-                                          Utils.showSnackBar(context,
-                                              "Saved To Safqa/Documents");
-                                        }
-                                        break;
-                                      case DocTypes.other:
-                                        if (!_docsController
-                                            .profileDocumentToShow.other
-                                            .toString()
-                                            .endsWith("documents")) {
-                                          Get.dialog(const Center(
-                                            child: CircularProgressIndicator(),
-                                          ));
-                                          await Dio().download(
-                                              _docsController
-                                                  .profileDocumentToShow.other,
-                                              newDir.path +
-                                                  "/" +
-                                                  _docsController
-                                                      .profileDocumentToShow
-                                                      .other
-                                                      .toString()
-                                                      .substring(_docsController
-                                                              .profileDocumentToShow
-                                                              .other
-                                                              .toString()
-                                                              .lastIndexOf(
-                                                                  "/") +
-                                                          1));
-                                          Get.back();
-                                          Utils.showSnackBar(context,
-                                              "Saved To Safqa/Documents");
-                                        }
-                                        break;
+                                    await requestPermission(
+                                        Permission.manageExternalStorage);
+                                    if (await requestPermission(
+                                        Permission.storage)) {
+                                      String folderInAppDocDir =
+                                          await AppUtil.createFolderInAppDocDir(
+                                              'Safqa/Documents');
+                                      logError(_docsController
+                                          .profileDocumentToShow.civilId);
+
+                                      switch (widget.type) {
+                                        case DocTypes.civilId:
+                                          if (!_docsController
+                                              .profileDocumentToShow.civilId
+                                              .toString()
+                                              .endsWith("documents")) {
+                                            Get.dialog(const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ));
+                                            await Dio().download(
+                                                _docsController
+                                                    .profileDocumentToShow
+                                                    .civilId,
+                                                folderInAppDocDir +
+                                                    "/" +
+                                                    _docsController
+                                                        .profileDocumentToShow
+                                                        .civilId
+                                                        .toString()
+                                                        .substring(_docsController
+                                                                .profileDocumentToShow
+                                                                .civilId
+                                                                .toString()
+                                                                .lastIndexOf(
+                                                                    "/") +
+                                                            1));
+                                            Get.back();
+                                            Utils.showSnackBar(context,
+                                                "Saved To \n${folderInAppDocDir}");
+                                          }
+                                          break;
+                                        case DocTypes.civilIdBack:
+                                          if (!_docsController
+                                              .profileDocumentToShow.civilIdBack
+                                              .toString()
+                                              .endsWith("documents")) {
+                                            Get.dialog(const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ));
+                                            await Dio().download(
+                                                _docsController
+                                                    .profileDocumentToShow
+                                                    .civilIdBack,
+                                                folderInAppDocDir +
+                                                    "/" +
+                                                    _docsController
+                                                        .profileDocumentToShow
+                                                        .civilIdBack
+                                                        .toString()
+                                                        .substring(_docsController
+                                                                .profileDocumentToShow
+                                                                .civilIdBack
+                                                                .toString()
+                                                                .lastIndexOf(
+                                                                    "/") +
+                                                            1));
+                                            Get.back();
+                                            Utils.showSnackBar(context,
+                                                "Saved To \n${folderInAppDocDir}");
+                                          }
+                                          break;
+                                        case DocTypes.bankAccountLetter:
+                                          if (!_docsController
+                                              .profileDocumentToShow
+                                              .bankAccountLetter
+                                              .toString()
+                                              .endsWith("documents")) {
+                                            Get.dialog(const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ));
+                                            await Dio().download(
+                                                _docsController
+                                                    .profileDocumentToShow
+                                                    .bankAccountLetter,
+                                                folderInAppDocDir +
+                                                    "/" +
+                                                    _docsController
+                                                        .profileDocumentToShow
+                                                        .bankAccountLetter
+                                                        .toString()
+                                                        .substring(_docsController
+                                                                .profileDocumentToShow
+                                                                .bankAccountLetter
+                                                                .toString()
+                                                                .lastIndexOf(
+                                                                    "/") +
+                                                            1));
+                                            Get.back();
+                                            Utils.showSnackBar(context,
+                                                "Saved To \n${folderInAppDocDir}");
+                                          }
+                                          break;
+                                        case DocTypes.other:
+                                          if (!_docsController
+                                              .profileDocumentToShow.other
+                                              .toString()
+                                              .endsWith("documents")) {
+                                            Get.dialog(const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ));
+                                            await Dio().download(
+                                                _docsController
+                                                    .profileDocumentToShow
+                                                    .other,
+                                                folderInAppDocDir +
+                                                    "/" +
+                                                    _docsController
+                                                        .profileDocumentToShow
+                                                        .other
+                                                        .toString()
+                                                        .substring(_docsController
+                                                                .profileDocumentToShow
+                                                                .other
+                                                                .toString()
+                                                                .lastIndexOf(
+                                                                    "/") +
+                                                            1));
+                                            Get.back();
+                                            Utils.showSnackBar(context,
+                                                "Saved To \n${folderInAppDocDir}");
+                                          }
+                                          break;
+                                      }
                                     }
                                   } catch (e) {
                                     logError(e.toString());
@@ -383,70 +385,106 @@ class _DocWidgetState extends State<DocWidget> {
                                 ),
                               ),
                               SizedBox(width: 5),
-                              Container(
-                                width: 35,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color(0xff66B4D2).withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    EvaIcons.eye,
-                                    color: Color(0xff66B4D2),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 5),
                               GestureDetector(
                                 onTap: () {
                                   switch (widget.type) {
                                     case DocTypes.civilId:
-                                      _docsController.profileDocument.civilId =
-                                          null;
-                                      _docsController
-                                          .profileDocumentToShow.civilId = null;
+                                      showImageViewer(
+                                          context,
+                                          NetworkImage(_docsController
+                                              .profileDocumentToShow.civilId));
+
                                       break;
+
                                     case DocTypes.civilIdBack:
-                                      _docsController
-                                          .profileDocument.civilIdBack = null;
-                                      _docsController.profileDocumentToShow
-                                          .civilIdBack = null;
+                                      showImageViewer(
+                                          context,
+                                          NetworkImage(_docsController
+                                              .profileDocumentToShow
+                                              .civilIdBack));
+
                                       break;
                                     case DocTypes.bankAccountLetter:
-                                      _docsController.profileDocument
-                                          .bankAccountLetter = null;
-                                      _docsController.profileDocumentToShow
-                                          .bankAccountLetter = null;
+                                      showImageViewer(
+                                          context,
+                                          NetworkImage(_docsController
+                                              .profileDocumentToShow
+                                              .bankAccountLetter));
+
                                       break;
-                                    case DocTypes.other:
-                                      _docsController.profileDocument.other =
-                                          null;
-                                      _docsController
-                                          .profileDocumentToShow.other = null;
-                                      break;
+
+                                    default:
+                                      showImageViewer(
+                                          context,
+                                          NetworkImage(_docsController
+                                              .profileDocumentToShow.other));
                                   }
-                                  _docsController.setToTrue();
-                                  widget.fileName = "";
                                 },
                                 child: Container(
                                   width: 35,
                                   height: 35,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xffE47E7B)
+                                    color: const Color(0xff66B4D2)
                                         .withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Center(
                                     child: Icon(
-                                      EvaIcons.trash2,
-                                      color: Color(0xffE47E7B),
+                                      EvaIcons.eye,
+                                      color: Color(0xff66B4D2),
                                     ),
                                   ),
                                 ),
                               ),
                               SizedBox(width: 5),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     switch (widget.type) {
+                              //       case DocTypes.civilId:
+                              //         _docsController.profileDocument.civilId =
+                              //             null;
+                              //         _docsController
+                              //             .profileDocumentToShow.civilId = null;
+                              //         break;
+                              //       case DocTypes.civilIdBack:
+                              //         _docsController
+                              //             .profileDocument.civilIdBack = null;
+                              //         _docsController.profileDocumentToShow
+                              //             .civilIdBack = null;
+                              //         break;
+                              //       case DocTypes.bankAccountLetter:
+                              //         _docsController.profileDocument
+                              //             .bankAccountLetter = null;
+                              //         _docsController.profileDocumentToShow
+                              //             .bankAccountLetter = null;
+                              //         break;
+                              //       case DocTypes.other:
+                              //         _docsController.profileDocument.other =
+                              //             null;
+                              //         _docsController
+                              //             .profileDocumentToShow.other = null;
+                              //         break;
+                              //     }
+                              //     _docsController.setToTrue();
+                              //     widget.fileName = "";
+                              //   },
+                              //   child: Container(
+                              //     width: 35,
+                              //     height: 35,
+                              //     decoration: BoxDecoration(
+                              //       color: const Color(0xffE47E7B)
+                              //           .withOpacity(0.1),
+                              //       borderRadius: BorderRadius.circular(15),
+                              //     ),
+                              //     child: Center(
+                              //       child: Icon(
+                              //         EvaIcons.trash2,
+                              //         color: Color(0xffE47E7B),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              // SizedBox(width: 5),
                             ],
                           )
                         : Container()

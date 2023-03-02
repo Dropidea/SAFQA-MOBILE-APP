@@ -79,8 +79,8 @@ class LanguageController extends GetxController {
       update();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Language Deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -112,8 +112,8 @@ class LanguageController extends GetxController {
       await getAllLanguages();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Language Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -147,8 +147,8 @@ class LanguageController extends GetxController {
       await getAllLanguages();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Language Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();

@@ -155,8 +155,8 @@ class _CreateCategoryPageState extends State<CreateCategoryPage> {
                               await _productsController.getProductCategories();
 
                               MyDialogs.showSavedSuccessfullyDialoge(
-                                title: "Edited Successfully",
-                                btnTXT: "close",
+                                title: "edited_successfully".tr,
+                                btnTXT: "close".tr,
                                 onTap: () {
                                   Get.back();
                                   Get.back();

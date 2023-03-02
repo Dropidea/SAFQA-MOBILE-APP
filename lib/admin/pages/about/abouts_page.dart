@@ -199,7 +199,7 @@ class AboutsMainPageState extends State<AboutsMainPage> {
                                                       await c.deleteAbout(
                                                           c.abouts[index]);
                                                     },
-                                                    message: "Are You Sure");
+                                                    message: "are_you_sure".tr);
                                               },
                                               child: Container(
                                                 width: 40,

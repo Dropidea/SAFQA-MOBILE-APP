@@ -77,7 +77,7 @@ class CategoryDetailsPage extends StatelessWidget {
                         productsController
                             .deleteProductCategory(productCategory);
                       },
-                      message: "Are you sure?");
+                      message: "are_you_sure".tr);
                 },
                 child: Container(
                   width: w / 2.5,

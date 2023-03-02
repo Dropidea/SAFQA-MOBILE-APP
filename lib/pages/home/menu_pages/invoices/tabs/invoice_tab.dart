@@ -45,17 +45,23 @@ class _InvoiceTabState extends State<InvoiceTab> {
                   // physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => InvoiceWidget(
                     inv: c.invoicesToShow[index],
-                    onTap: () {
-                      logSuccess(c.invoicesToShow[index]);
+                    onTap: () async {
+                      logSuccess(c.invoicesToShow[index].toJson());
+                      Invoice i = await invoiceController
+                          .showInvoice(c.invoicesToShow[index].id!);
+                      logError(i.toJson());
                       Get.to(
-                        () => InvoiceDetailsPage(
-                            invoiceModel: c.invoicesToShow[index]),
+                        () => InvoiceDetailsPage(invoiceModel: i),
                         transition: Transition.downToUp,
                       );
                     },
                     type: c.invoicesToShow[index].status == "pending"
                         ? InvoiceTypes.pending
-                        : InvoiceTypes.canceled,
+                        : c.invoicesToShow[index].status == "canceled"
+                            ? InvoiceTypes.canceled
+                            : c.invoicesToShow[index].status == "paid"
+                                ? InvoiceTypes.paid
+                                : InvoiceTypes.canceled,
                   ),
                   itemCount: c.invoicesToShow.length,
                   separatorBuilder: (BuildContext context, int index) =>
@@ -130,10 +136,10 @@ class InvoiceWidget extends StatelessWidget {
               blackText(inv.invoiceValue!.toString(), 16),
               SizedBox(height: 10),
               greyText(
-                  inv.invoiceItem!.isEmpty
+                  inv.invoiceItem.isEmpty
                       ? "no date"
                       : DateFormat('hh:mm a').format(
-                          DateTime.parse(inv.invoiceItem![0].createdAt!)),
+                          DateTime.parse(inv.invoiceItem[0].createdAt!)),
                   12)
             ],
           )

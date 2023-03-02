@@ -164,8 +164,8 @@ class CustomersController extends GetxController {
       await getMyCustomers();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Customer Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -232,8 +232,8 @@ class CustomersController extends GetxController {
       await getMyCustomers();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Customer Deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -312,8 +312,8 @@ class CustomersController extends GetxController {
       await getMyCustomers();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Customer Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();

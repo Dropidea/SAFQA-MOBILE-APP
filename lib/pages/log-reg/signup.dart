@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/pages/business%20types/controller/business_types_controller.dart';
+import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -7,11 +9,30 @@ import '../../controllers/signup_controller.dart';
 import '../../widgets/zero_app_bar.dart';
 import 'complete_signup.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   SignUpPage({super.key});
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   PageController _pageController = PageController();
+
   SignUpController _signUpController = Get.put(SignUpController());
+
   LocalsController localsController = Get.find();
+
+  GlobalDataController _globalDataController = Get.find();
+  BusinessTypesController _businessTypesController =
+      Get.put(BusinessTypesController());
+  @override
+  void initState() {
+    _globalDataController.getCountries();
+    _businessTypesController.getAllBusinessTypes();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
@@ -63,40 +84,48 @@ class SignUpPage extends StatelessWidget {
                       topRight: Radius.circular(40),
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 10),
-                            child: Text(
-                              "signup".tr,
-                              style: TextStyle(
-                                  color: Color(0xff2F6782),
-                                  fontSize: 20.0.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5.0.sp,
-                      ),
-                      Expanded(
-                        child: PageView(
-                          controller: _pageController,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: [
-                            _signUpPage1(w, h),
-                            _signUpPage2(w, h),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                  child: GetBuilder<GlobalDataController>(builder: (c1) {
+                    return GetBuilder<BusinessTypesController>(builder: (c2) {
+                      return c1.getCountriesFlag || c2.getBusinessTypesFlag
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20, horizontal: 10),
+                                      child: Text(
+                                        "signup".tr,
+                                        style: TextStyle(
+                                            color: Color(0xff2F6782),
+                                            fontSize: 20.0.sp,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5.0.sp,
+                                ),
+                                Expanded(
+                                  child: PageView(
+                                    controller: _pageController,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    children: [
+                                      _signUpPage1(w, h),
+                                      _signUpPage2(w, h),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                    });
+                  }),
                 ),
               )
             ],
@@ -140,7 +169,12 @@ class SignUpPage extends StatelessWidget {
                       Align(
                         child: GestureDetector(
                           onTap: () {
-                            _signUpController.dataToRegister['country_id'] = 8;
+                            _signUpController.dataToRegister['country_id'] =
+                                _globalDataController.countries
+                                    .where((element) => element.code == "+9")
+                                    .first
+                                    .id
+                                    .toString();
                             _pageController.jumpToPage(1);
                           },
                           child: Card(
@@ -159,8 +193,16 @@ class SignUpPage extends StatelessWidget {
                                   ),
                                   Text(
                                     localsController.currenetLocale == 0
-                                        ? "UAE"
-                                        : "الإمارات العربية المتحدة ",
+                                        ? _globalDataController.countries
+                                            .where((element) =>
+                                                element.code == "+9")
+                                            .first
+                                            .nameEn!
+                                        : _globalDataController.countries
+                                            .where((element) =>
+                                                element.code == "+9")
+                                            .first
+                                            .nameAr!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.grey.shade500,
@@ -174,45 +216,45 @@ class SignUpPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Align(
-                        child: GestureDetector(
-                          onTap: () {
-                            _signUpController.dataToRegister['country_id'] = 2;
-                            _pageController.jumpToPage(1);
-                          },
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: Container(
-                              width: 0.5 * w,
-                              height: 0.25 * h,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                    image:
-                                        AssetImage("assets/images/Kuwait.png"),
-                                  ),
-                                  Text(
-                                    localsController.currenetLocale == 0
-                                        ? "Kuwait"
-                                        : "الكويت",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.grey.shade500,
-                                      fontSize: 16.0.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
+                      // SizedBox(height: 20),
+                      // Align(
+                      //   child: GestureDetector(
+                      //     onTap: () {
+                      //       _signUpController.dataToRegister['country_id'] = 2;
+                      //       _pageController.jumpToPage(1);
+                      //     },
+                      //     child: Card(
+                      //       elevation: 10,
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(15.0),
+                      //       ),
+                      //       child: Container(
+                      //         width: 0.5 * w,
+                      //         height: 0.25 * h,
+                      //         child: Column(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: [
+                      //             Image(
+                      //               image:
+                      //                   AssetImage("assets/images/Kuwait.png"),
+                      //             ),
+                      //             Text(
+                      //               localsController.currenetLocale == 0
+                      //                   ? "Kuwait"
+                      //                   : "الكويت",
+                      //               textAlign: TextAlign.center,
+                      //               style: TextStyle(
+                      //                 color: Colors.grey.shade500,
+                      //                 fontSize: 16.0.sp,
+                      //                 fontWeight: FontWeight.w500,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                 )
@@ -367,85 +409,55 @@ class SignUpPage extends StatelessWidget {
           height: 20.0.sp,
         ),
         Expanded(
-          child: ListView(
-            primary: false,
-            children: [
-              Align(
-                child: GestureDetector(
-                  onTap: () {
-                    _signUpController.dataToRegister['business_type_id'] = 2;
-                    Get.to(() => CompleteSignUpPage());
-                  },
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: SizedBox(
-                      width: 0.5 * w,
-                      height: 0.25 * h,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image(
-                            image: AssetImage("assets/images/licomp.png"),
+          child: ListView.separated(
+            itemCount: _businessTypesController.businessTypes.length,
+            separatorBuilder: (BuildContext context, int index) => SizedBox(
+              height: 10,
+            ),
+            itemBuilder: (BuildContext context, int index) => Align(
+              child: GestureDetector(
+                onTap: () {
+                  _signUpController.dataToRegister['business_type_id'] =
+                      _businessTypesController.businessTypes[index].id!;
+                  Get.to(() => CompleteSignUpPage());
+                },
+                child: Card(
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: SizedBox(
+                    width: 0.5 * w,
+                    height: 0.25 * h,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                          image: NetworkImage(_businessTypesController
+                              .businessTypes[index].businessLogo),
+                          width: 80.0.sp,
+                          height: 80.0.sp,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          localsController.currenetLocale == 0
+                              ? _businessTypesController
+                                  .businessTypes[index].nameEn!
+                              : _businessTypesController
+                                  .businessTypes[index].nameAr!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 16.0.sp,
+                            fontWeight: FontWeight.w500,
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            "Licensed Company",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontSize: 16.0.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              Align(
-                child: GestureDetector(
-                  onTap: () {
-                    _signUpController.dataToRegister['business_type_id'] = 1;
-
-                    Get.to(() => CompleteSignUpPage());
-                  },
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Container(
-                      width: 0.5 * w,
-                      height: 0.25 * h,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image(
-                            image:
-                                AssetImage("assets/images/home_business.png"),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            "Personal Business",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontSize: 16.0.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         )
       ],

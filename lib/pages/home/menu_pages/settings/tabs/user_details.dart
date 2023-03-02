@@ -16,44 +16,6 @@ class ManageUserDetailsPage extends StatelessWidget {
   final bool activeToEdit;
   GlobalDataController globalDataController = Get.find();
   final ManageUser manageUser;
-  String _getNotificationString() {
-    String tmp = "";
-    if (manageUser.notificationCreateInvoice == 1) {
-      tmp += "Notification Create Invoice / ";
-    }
-    if (manageUser.notificationApproveVendorAccount == 1) {
-      tmp += "Notification Approve Vendor Account / ";
-    }
-    if (manageUser.notificationCreateBatchInvoice == 1) {
-      tmp += "Notification Create Batch Invoice / ";
-    }
-    if (manageUser.notificationCreateRecurringInvoice == 1) {
-      tmp += "Notification Create Recurring Invoice / ";
-    }
-    if (manageUser.notificationCreateShippingInvoice == 1) {
-      tmp += "Notification Create Shipping Invoice / ";
-    }
-    if (manageUser.notificationDeposit == 1) {
-      tmp += "Notification Deposit / ";
-    }
-    if (manageUser.notificationInvoicePaid == 1) {
-      tmp += "Notification Invoice Paid / ";
-    }
-    if (manageUser.notificationNewOrder == 1) {
-      tmp += "Notification New Order / ";
-    }
-    if (manageUser.notificationNotificationsHourlyDepositRejected == 1) {
-      tmp += "Notification Notifications Hourly Deposit Rejected / ";
-    }
-    if (manageUser.notificationNotificationsServiceRequest == 1) {
-      tmp += "Notification Notifications Service Request / ";
-    }
-    if (manageUser.notificationRefundTransfered == 1) {
-      tmp += "Notification Refund Transfered / ";
-    }
-
-    return tmp;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +107,8 @@ class ManageUserDetailsPage extends StatelessWidget {
                   blackText("uae_notification_settings".tr, 14,
                       fontWeight: FontWeight.bold),
                   blackText(
-                      _getNotificationString()
-                          .substring(0, _getNotificationString().length - 2),
+                      getNotificationString(manageUser).substring(
+                          0, getNotificationString(manageUser).length - 2),
                       13),
                 ],
               ),
@@ -193,4 +155,43 @@ class ManageUserDetailsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+String getNotificationString(ManageUser manageUser) {
+  String tmp = "";
+  if (manageUser.notificationCreateInvoice == 1) {
+    tmp += "Notification Create Invoice / ";
+  }
+  if (manageUser.notificationApproveVendorAccount == 1) {
+    tmp += "Notification Approve Vendor Account / ";
+  }
+  if (manageUser.notificationCreateBatchInvoice == 1) {
+    tmp += "Notification Create Batch Invoice / ";
+  }
+  if (manageUser.notificationCreateRecurringInvoice == 1) {
+    tmp += "Notification Create Recurring Invoice / ";
+  }
+  if (manageUser.notificationCreateShippingInvoice == 1) {
+    tmp += "Notification Create Shipping Invoice / ";
+  }
+  if (manageUser.notificationDeposit == 1) {
+    tmp += "Notification Deposit / ";
+  }
+  if (manageUser.notificationInvoicePaid == 1) {
+    tmp += "Notification Invoice Paid / ";
+  }
+  if (manageUser.notificationNewOrder == 1) {
+    tmp += "Notification New Order / ";
+  }
+  if (manageUser.notificationNotificationsHourlyDepositRejected == 1) {
+    tmp += "Notification Notifications Hourly Deposit Rejected / ";
+  }
+  if (manageUser.notificationNotificationsServiceRequest == 1) {
+    tmp += "Notification Notifications Service Request / ";
+  }
+  if (manageUser.notificationRefundTransfered == 1) {
+    tmp += "Notification Refund Transfered / ";
+  }
+
+  return tmp;
 }

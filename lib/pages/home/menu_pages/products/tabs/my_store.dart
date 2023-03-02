@@ -9,7 +9,7 @@ import 'package:safqa/pages/home/menu_pages/products/product_store_search_filter
 import 'package:safqa/widgets/dialoges.dart';
 import 'package:safqa/widgets/popup_menu.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
-import 'package:sizer/sizer.dart';
+import "package:sizer/sizer.dart";
 
 class MyStoreTab extends StatelessWidget {
   MyStoreTab({super.key});
@@ -90,11 +90,49 @@ class MyStoreTab extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10)),
                               child: Stack(
                                 children: [
-                                  Center(
-                                    child: Icon(
-                                      Icons.photo_rounded,
-                                      size: 60.0.sp,
-                                      color: Colors.grey.shade400,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffF5F5F5),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Center(
+                                      child: c.productsStoreToShow[index]
+                                                  .productImage !=
+                                              null
+                                          ? Image(
+                                              image: NetworkImage(c
+                                                  .productsStoreToShow[index]
+                                                  .productImage),
+                                              fit: BoxFit.contain,
+                                              width: 65.0.sp,
+                                              height: 65.0.sp,
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: loadingProgress
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            loadingProgress
+                                                                .expectedTotalBytes!
+                                                        : null,
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : Icon(
+                                              Icons.photo_rounded,
+                                              size: 60.0.sp,
+                                              color: Colors.grey.shade400,
+                                            ),
                                     ),
                                   ),
                                   PositionedDirectional(

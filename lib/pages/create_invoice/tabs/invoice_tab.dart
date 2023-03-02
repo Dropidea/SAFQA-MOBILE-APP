@@ -60,11 +60,15 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
   bool engFlag = false;
   @override
   void initState() {
+    addInvoiceController.total = 0;
     engFlag = _localsController.currenetLocale == 0;
     addInvoiceController.dataToCreateInvoice.recurringIntervalId =
         globalDataController.recurringIntervals[0].id;
     if (addInvoiceController.dataToEditInvoice != null) {
       fileName = addInvoiceController.dataToEditInvoice!.attachFile ?? "";
+      for (var i in addInvoiceController.dataToEditInvoice!.invoiceItems) {
+        addInvoiceController.total += i.productQuantity! * i.productPrice!;
+      }
       logSuccess(addInvoiceController.dataToEditInvoice!.attachFile);
       if (addInvoiceController.dataToEditInvoice!.discountValue != 0) {
         discountAvailableFlag = true;
@@ -971,7 +975,9 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                   children: [
                     blackText("total".tr, 14),
                     const SizedBox(height: 5),
-                    greyText("\$ 350.00", 12),
+                    GetBuilder<AddInvoiceController>(builder: (c) {
+                      return greyText("\$ ${c.total}", 12);
+                    }),
                   ],
                 ),
                 Column(
@@ -1032,8 +1038,8 @@ class _CreateInvoiceTabState extends State<CreateInvoiceTab> {
                       if (b) {
                         await _invoicesController.getInvoices();
                         MyDialogs.showSavedSuccessfullyDialoge(
-                          title: "Edited Successfully",
-                          btnTXT: "close",
+                          title: "edited_successfully".tr,
+                          btnTXT: "close".tr,
                           onTap: () async {
                             Get.back();
                             Get.back();

@@ -59,14 +59,23 @@ class AreasTabState extends State<AreasTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(children: [
-                              blackText("type".tr + ":", 15),
+                              blackText("name_ar".tr + ":", 15),
                               SizedBox(width: 10),
-                              // greyText(c.contactPhones[index].type!, 15),
+                              greyText(c.areas[index].nameAr!, 15),
                             ]),
                             Row(children: [
-                              blackText("number".tr + ":", 15),
+                              blackText("name_en".tr + ":", 15),
                               SizedBox(width: 10),
-                              // greyText(c.contactPhones[index].number!, 15),
+                              greyText(c.areas[index].nameEn!, 15),
+                            ]),
+                            Row(children: [
+                              blackText("city".tr + ":", 15),
+                              SizedBox(width: 10),
+                              greyText(
+                                  c.areas[index].city == null
+                                      ? "No City"
+                                      : c.areas[index].city!.nameAr!,
+                                  15),
                             ]),
                           ],
                         ),
@@ -103,8 +112,9 @@ class AreasTabState extends State<AreasTab> {
                                 MyDialogs.showDeleteDialoge(
                                     onProceed: () async {
                                       Get.back();
+                                      await c.deleteArea(c.areas[index]);
                                     },
-                                    message: "Are You Sure");
+                                    message: "are_you_sure".tr);
                               },
                               child: Container(
                                 width: 40,

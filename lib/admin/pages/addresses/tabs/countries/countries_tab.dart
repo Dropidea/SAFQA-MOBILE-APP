@@ -130,7 +130,7 @@ class _CountriesTabState extends State<CountriesTab> {
                                                 c.deleteCountry(
                                                     c.countries[index]);
                                               },
-                                              message: "Are You Sure");
+                                              message: "are_you_sure".tr);
                                         },
                                         child: Container(
                                           width: 40,

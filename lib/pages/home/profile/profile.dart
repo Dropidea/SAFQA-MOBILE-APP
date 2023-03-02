@@ -1,6 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/pages/social%20media/controller/social_media_controller.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/profile/business_datails_page.dart';
@@ -19,11 +20,14 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   ProfileController _profileController = Get.put(ProfileController());
+  SocialMediaController _socialMediaController =
+      Get.put(SocialMediaController());
   GlobalDataController _globalDataController = Get.find();
   @override
   void initState() {
     _profileController.getProfileBusiness();
     _profileController.getSocialMediaLinks();
+    _socialMediaController.getAllSocialMedias();
 
     super.initState();
   }

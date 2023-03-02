@@ -81,8 +81,8 @@ class RecurringIntervalController extends GetxController {
       Get.back();
       update();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "RecurringInterval Deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -114,8 +114,8 @@ class RecurringIntervalController extends GetxController {
       await getAllRecurringIntervals();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Recurring Interval Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -173,8 +173,8 @@ class RecurringIntervalController extends GetxController {
       await getAllRecurringIntervals();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "RecurringInterval Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -231,8 +231,8 @@ class RecurringIntervalController extends GetxController {
   //     await getAllRecurringIntervals();
   //     Get.back();
   //     MyDialogs.showSavedSuccessfullyDialoge(
-  //       title: "RecurringInterval Edited Successfully",
-  //       btnTXT: "close",
+  //       title: "edited_successfully".tr,
+  //       btnTXT: "close".tr,
   //       onTap: () async {
   //         Get.back();
   //         Get.back();

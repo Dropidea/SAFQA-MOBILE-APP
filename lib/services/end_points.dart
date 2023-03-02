@@ -11,6 +11,7 @@ class EndPoints {
   static String get createInvoice => "/invoice/store";
   static String editInvoice(int id) => "$_baseURL/invoice/update/$id";
   static String get getInvoices => "$_baseURL/invoices";
+  static String showInvoices(int id) => "$_baseURL/invoice/show/$id";
   static String get getPaymentLinks => "$_baseURL/payments";
   static String get createQuickInvoice => "/invoice/quick/store";
   static String get createProduct => "/product/store";
@@ -40,6 +41,7 @@ class EndPoints {
       "$_baseURL/product/category/delete/";
   static String get editProductCategory => "$_baseURL/product/category/update/";
   static String get getMyCustomers => "$_baseURL/customers";
+  static String get getRefunds => "$_baseURL/refunds";
   static String get createCustomer => "$_baseURL/customer/store";
   static String get deleteCustomer => "$_baseURL/customer/delete/";
   static String get updateCustomer => "$_baseURL/customer/update/";
@@ -64,6 +66,7 @@ class EndPoints {
       "$_baseURLAdmin/support_type/delete/$id";
   static String get getManageUsers => "$_baseURL/manage_users";
   static String get getLanguages => "$_baseURL/languages";
+  static String get getOrders => "$_baseURL/orders";
   static String get createManageUser => "$_baseURL/manage_user/store";
   static String get editManageUser => "$_baseURL/manage_user/update/";
   static String get createAddress => "$_baseURL/addresse/store";
@@ -108,6 +111,11 @@ class EndPoints {
       "$_baseURLAdmin/address_type/update/$id";
   static String get createLanguage => "$_baseURLAdmin/language/store";
   static String get createCity => "$_baseURLAdmin/city/store";
+  static String get createArea => "$_baseURLAdmin/area/store";
+  static String editCity(int id) => "$_baseURLAdmin/city/update/$id";
+  static String editArea(int id) => "$_baseURLAdmin/area/update/$id";
+  static String deleteCity(int id) => "$_baseURLAdmin/city/delete/$id";
+  static String deleteArea(int id) => "$_baseURLAdmin/area/delete/$id";
   static String get createAddressType => "$_baseURLAdmin/address_type/store";
   static String get createBusinessType => "$_baseURLAdmin/businessType/store";
   static String get createProductLink => "$_baseURL/product_link/store";

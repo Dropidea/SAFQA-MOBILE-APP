@@ -1,6 +1,12 @@
+import 'package:flutter/cupertino.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import "package:sizer/sizer.dart";
+
 class ManageUser {
   int? id;
   int? roleId;
+  int? approvalStatus;
   int? profileBusinessId;
   int phoneNumberCodeManagerId = 1;
   String? phoneNumberManager;
@@ -48,6 +54,7 @@ class ManageUser {
   ProfileBusiness? profileBusines;
 
   ManageUser({
+    this.approvalStatus,
     this.id,
     this.isSuperAdmin,
     this.roleId,
@@ -307,6 +314,7 @@ class ManageUser {
   ManageUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     roleId = json['role_id'];
+    approvalStatus = json['approval_status'];
     profileBusinessId = json['profile_business_id'];
     phoneNumberCodeManagerId = json['phone_number_code_manager_id'];
     phoneNumberManager = json['phone_number_manager'];
@@ -369,6 +377,7 @@ class ManageUser {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = id;
     data['role_id'] = roleId;
+    data['approval_status'] = approvalStatus;
     data['profile_business_id'] = profileBusinessId;
     data['phone_number_code_manager_id'] = phoneNumberCodeManagerId;
     data['phone_number_manager'] = phoneNumberManager;
@@ -651,4 +660,48 @@ class ProfileBusiness {
     data['enable_card_view'] = this.enableCardView;
     return data;
   }
+}
+
+ManageUserToPrint(
+    {required ManageUser manageuser, required BuildContext context}) {
+  double width = MediaQuery.of(context).size.width;
+  return pw.Container(
+    width: width,
+    padding: pw.EdgeInsets.all(10),
+    decoration: pw.BoxDecoration(
+      color: PdfColor.fromHex("F8F8F8FF"),
+      borderRadius: pw.BorderRadius.circular(10),
+    ),
+    child: pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(
+          (manageuser.fullName!),
+          style: pw.TextStyle(
+            color: PdfColor.fromHex("000000"),
+            fontSize: 13.0.sp,
+          ),
+          textDirection: pw.TextDirection.rtl,
+        ),
+        pw.SizedBox(height: 10),
+        pw.Text(
+          (manageuser.email!),
+          style: pw.TextStyle(
+            color: PdfColor.fromHex("000000"),
+            fontSize: 13.0.sp,
+          ),
+          textDirection: pw.TextDirection.rtl,
+        ),
+        pw.SizedBox(height: 10),
+        pw.Text(
+          (manageuser.phoneNumberManager.toString()),
+          style: pw.TextStyle(
+            color: PdfColor.fromHex("000000"),
+            fontSize: 13.0.sp,
+          ),
+          textDirection: pw.TextDirection.rtl,
+        ),
+      ],
+    ),
+  );
 }

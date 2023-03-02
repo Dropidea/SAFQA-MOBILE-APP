@@ -160,6 +160,8 @@ class MyMenuItems {
   // static const dashboard = mi.MenuItem("Dashboard", Icons.abc);
   static const invoices = mi.MenuItem(
       titleEn: "Invoices", icon: EvaIcons.fileText, titleAr: "الفواتير");
+  static const orderList = mi.MenuItem(
+      titleEn: "Order List", icon: EvaIcons.list, titleAr: "قائمة الطلبات");
   static const products = mi.MenuItem(
       titleEn: "Products", icon: EvaIcons.shoppingBag, titleAr: "المنتجات");
   static const customers = mi.MenuItem(
@@ -191,6 +193,7 @@ class MyMenuItems {
   static const all = <mi.MenuItem>[
     // dashboard,
     invoices,
+    orderList,
     products,
     customers,
     commissions,

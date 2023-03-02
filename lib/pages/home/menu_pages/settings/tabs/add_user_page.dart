@@ -178,7 +178,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     ? widget.userToEdit!.phoneNumberManager
                     : null,
                 validator: (s) {
-                  if (s!.isEmpty) return "required";
+                  if (s!.isEmpty) return "required".tr;
                   return null;
                 },
               );
@@ -215,7 +215,7 @@ class _AddUserPageState extends State<AddUserPage> {
               },
               validator: (s) {
                 if (s!.isEmpty) {
-                  return "required";
+                  return "required".tr;
                 } else if (!EmailValidator.validate(s)) {
                   return "please enter a valid email!";
                 }

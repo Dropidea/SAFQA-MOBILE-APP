@@ -91,7 +91,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 padding: EdgeInsets.all(0),
                 controller: fullNameController,
                 validator: (s) {
-                  if (s!.isEmpty) return "required";
+                  if (s!.isEmpty) return "required".tr;
                   return null;
                 },
               ),
@@ -155,7 +155,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               }),
               // IntlPhoneField(
               //   validator: (s) {
-              //     if (s!.number.isEmpty) return "required";
+              //     if (s!.number.isEmpty) return "required".tr;
               //     return null;
               //   },
               //   flagsButtonPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -184,7 +184,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 keyBoardType: TextInputType.emailAddress,
                 validator: (s) {
                   if (s!.isEmpty) {
-                    return "required";
+                    return "required".tr;
                   } else if (!EmailValidator.validate(s)) {
                     return "please enter a valid email!";
                   }

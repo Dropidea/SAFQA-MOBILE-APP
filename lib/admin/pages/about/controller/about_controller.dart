@@ -76,8 +76,8 @@ class AboutController extends GetxController {
       Get.back();
       update();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "About Deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -109,8 +109,8 @@ class AboutController extends GetxController {
       await getAllAbouts();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Recurring Interval Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -167,8 +167,8 @@ class AboutController extends GetxController {
       await getAllAbouts();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "About Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();

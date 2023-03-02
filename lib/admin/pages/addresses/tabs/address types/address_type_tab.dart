@@ -103,7 +103,7 @@ class _AddressTypesTabState extends State<AddressTypesTab> {
                                       await c.deleteAddressType(
                                           c.addressTypes[index]);
                                     },
-                                    message: "Are You Sure");
+                                    message: "are_you_sure".tr);
                               },
                               child: Container(
                                 width: 40,

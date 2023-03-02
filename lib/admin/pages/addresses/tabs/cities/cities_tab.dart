@@ -59,14 +59,19 @@ class _CitiesTabState extends State<CitiesTab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(children: [
-                              blackText("type".tr + ":", 15),
+                              blackText("name_ar".tr + ":", 15),
                               SizedBox(width: 10),
-                              // greyText(c.contactPhones[index].type!, 15),
+                              greyText(c.cities[index].nameAr!, 15),
                             ]),
                             Row(children: [
-                              blackText("number".tr + ":", 15),
+                              blackText("name_en".tr + ":", 15),
                               SizedBox(width: 10),
-                              // greyText(c.contactPhones[index].number!, 15),
+                              greyText(c.cities[index].nameEn!, 15),
+                            ]),
+                            Row(children: [
+                              blackText("country".tr + ":", 15),
+                              SizedBox(width: 10),
+                              greyText(c.cities[index].country!.nameAr!, 15),
                             ]),
                           ],
                         ),
@@ -103,8 +108,9 @@ class _CitiesTabState extends State<CitiesTab> {
                                 MyDialogs.showDeleteDialoge(
                                     onProceed: () async {
                                       Get.back();
+                                      await c.deleteCity(c.cities[index]);
                                     },
-                                    message: "Are You Sure");
+                                    message: "are_you_sure".tr);
                               },
                               child: Container(
                                 width: 40,

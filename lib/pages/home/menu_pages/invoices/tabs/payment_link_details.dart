@@ -91,7 +91,7 @@ class _PaymentLinkDetailsPageState extends State<PaymentLinkDetailsPage> {
               GestureDetector(
                 onTap: () {
                   MyDialogs.showDeleteDialoge(
-                      message: 'Are You Sure?',
+                      message: 'are_you_sure',
                       onProceed: () async {
                         Get.back();
                         await _paymentLinkController

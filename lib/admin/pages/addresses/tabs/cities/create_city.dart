@@ -97,8 +97,18 @@ class CreateCityState extends State<CreateCityPage> {
                           .toSet()
                           .toList(),
                       hint: "choose".tr,
+                      selectedItem: widget.cityToEdit != null
+                          ? _localsController.currenetLocale == 0
+                              ? widget.cityToEdit!.country!.nameEn
+                              : widget.cityToEdit!.country!.nameAr
+                          : null,
                       onchanged: (s) {
                         if (widget.cityToEdit != null) {
+                          widget.cityToEdit!.countryId = _globalDataController
+                              .countries
+                              .firstWhere((element) =>
+                                  element.nameAr == s || element.nameEn == s)
+                              .id;
                         } else {
                           cityToCreate.countryId = _globalDataController
                               .countries
@@ -122,8 +132,8 @@ class CreateCityState extends State<CreateCityPage> {
                             FocusScope.of(context).unfocus();
                             if (formKey.currentState!.validate()) {
                               if (widget.cityToEdit != null) {
-                                // await _globalDataController
-                                //     .editContactPhone(widget.cityToEdit!);
+                                await _globalDataController
+                                    .editCity(widget.cityToEdit!);
                               } else {
                                 await _globalDataController
                                     .createCity(cityToCreate);

@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
@@ -378,8 +377,8 @@ saveProductCategoryExcel(List<ProductCategory> ll, BuildContext context) async {
   var cell1 = sheet.cell(CellIndex.indexByString("A1"));
   var cell2 = sheet.cell(CellIndex.indexByString("B1"));
   var cell3 = sheet.cell(CellIndex.indexByString("C1"));
-  var cell4 = sheet.cell(CellIndex.indexByString("C1"));
-  var cell5 = sheet.cell(CellIndex.indexByString("C1"));
+  var cell4 = sheet.cell(CellIndex.indexByString("D1"));
+  var cell5 = sheet.cell(CellIndex.indexByString("E1"));
   cell1.cellStyle = cellStyle;
   cell2.cellStyle = cellStyle;
   cell3.cellStyle = cellStyle;
@@ -394,41 +393,28 @@ saveProductCategoryExcel(List<ProductCategory> ll, BuildContext context) async {
       i.updatedAt,
     ]);
   }
-
-  Directory? dir = await getExternalStorageDirectory();
-  late PermissionStatus status;
-  late PermissionStatus status2;
-  try {
-    status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
+  await requestPermission(Permission.manageExternalStorage);
+  if (await requestPermission(Permission.storage)) {
+    {
+      String folderInAppDocDir = await AppUtil.createFolderInAppDocDir(
+          'Safqa/Products Categories/Excel');
+      logSuccess(folderInAppDocDir);
+      var now = new DateTime.now();
+      var formatter = new DateFormat('yyyy-MM-dd');
+      String outputFile = folderInAppDocDir + "${formatter.format(now)}.xlsx";
+      if (await File(outputFile).exists()) {
+        await File(outputFile).delete();
+      }
+      //stopwatch.reset();
+      List<int>? fileBytes = excel.save();
+      if (fileBytes != null) {
+        File(outputFile)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(fileBytes);
+      }
+      Utils.showSnackBar(context,
+          "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد\n$folderInAppDocDir");
     }
-    status2 = await Permission.manageExternalStorage.status;
-    if (!status2.isGranted) {
-      await Permission.manageExternalStorage.request();
-    }
-  } catch (e) {
-    logError(e);
-  }
-  if (status.isGranted || status2.isGranted) {
-    String tmp = dir!.parent.parent.parent.parent.path +
-        "/Safqa/Product Categories/Excel";
-    Directory newDir = await Directory(tmp).create(recursive: true);
-    var now = new DateTime.now();
-    var formatter = new DateFormat('yyyy-MM-dd');
-    String outputFile = newDir.path + "/${formatter.format(now)}.xlsx";
-    if (await File(outputFile).exists()) {
-      await File(outputFile).delete();
-    }
-    //stopwatch.reset();
-    List<int>? fileBytes = excel.save();
-    if (fileBytes != null) {
-      File(outputFile)
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(fileBytes);
-    }
-    Utils.showSnackBar(
-        context, "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد Safqa!!");
   }
 }
 
@@ -452,69 +438,88 @@ saveProductCategoryCSV(List<ProductCategory> ll, BuildContext context) async {
   }
 
   String csv = const ListToCsvConverter().convert(rows);
+  await requestPermission(Permission.manageExternalStorage);
+  if (await requestPermission(Permission.storage)) {
+    String folderInAppDocDir =
+        await AppUtil.createFolderInAppDocDir('Safqa/Products Categories/CSV');
+    logSuccess(folderInAppDocDir);
 
-  Directory? dir = await getExternalStorageDirectory();
-  late PermissionStatus status;
-  late PermissionStatus status2;
-  try {
-    status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    status2 = await Permission.manageExternalStorage.status;
-    if (!status2.isGranted) {
-      await Permission.manageExternalStorage.request();
-    }
-  } catch (e) {
-    logError(e);
-  }
-  if (status.isGranted || status2.isGranted) {
-    String tmp =
-        dir!.parent.parent.parent.parent.path + "/Safqa/Product Categories/CSV";
-    Directory newDir = await Directory(tmp).create(recursive: true);
     var now = new DateTime.now();
     var formatter = new DateFormat('yyyy-MM-dd');
-    String outputFile = newDir.path + "/${formatter.format(now)}.csv";
+    String outputFile = folderInAppDocDir + "${formatter.format(now)}.csv";
     if (await File(outputFile).exists()) {
       await File(outputFile).delete();
     }
     File f = File(outputFile);
     await f.writeAsString(csv);
+    Utils.showSnackBar(context,
+        "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد\n$folderInAppDocDir");
   }
-  Utils.showSnackBar(
-      context, "تم حفظ الملف في الذاكرة الداخلية ضمن مجلد Safqa!!");
 }
 
 saveProductCategoryPDF(
     List<ProductCategory> ll, BuildContext context, double w) async {
   final doc = pw.Document();
-  doc.addPage(pw.Page(
-      pageFormat: PdfPageFormat.a4,
-      theme: pw.ThemeData.withFont(
-        base: pw.Font.ttf(
-          await rootBundle.load('assets/fonts/Tajawal-Regular.ttf'),
+  int i = 1;
+  List<List<ProductCategory>> tmp = [];
+  List<ProductCategory> sybTmp = [];
+  for (var element in ll) {
+    if (i % 5 != 0)
+      sybTmp.add(element);
+    else {
+      sybTmp.add(element);
+      tmp.add(sybTmp);
+      sybTmp = [];
+    }
+    i++;
+  }
+  if (sybTmp.isNotEmpty) {
+    tmp.add(sybTmp);
+  }
+  for (var i in tmp) {
+    doc.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        theme: pw.ThemeData.withFont(
+          base: pw.Font.ttf(
+            await rootBundle.load('assets/fonts/Tajawal-Regular.ttf'),
+          ),
+          bold: pw.Font.ttf(
+            await rootBundle.load('assets/fonts/Tajawal-Bold.ttf'),
+          ),
         ),
-        bold: pw.Font.ttf(
-          await rootBundle.load('assets/fonts/Tajawal-Bold.ttf'),
-        ),
-      ),
-      build: (pw.Context context) {
-        return pw.ListView.separated(
-          itemCount: ll.length,
-          itemBuilder: (context, index) {
-            return CategoryForPrint(
-              isToggled: ll[index].isActive == 1,
-              width: w,
-              nameAr: ll[index].nameAr,
-              nameEn: ll[index].nameEn,
-            );
-          },
-          separatorBuilder: (pw.Context context, int index) {
-            return pw.SizedBox(height: 10);
-          },
-        ); // Center
-      }));
-
+        build: (pw.Context context) {
+          return pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text(
+                  ("Product Categories"),
+                  textDirection: pw.TextDirection.rtl,
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColor.fromHex("111111"),
+                    fontSize: 20.0.sp,
+                  ),
+                ),
+                pw.SizedBox(height: 30),
+                pw.Expanded(
+                    child: pw.ListView.separated(
+                  itemCount: i.length,
+                  itemBuilder: (context, index) {
+                    logSuccess(i.length);
+                    return CategoryForPrint(
+                      isToggled: i[index].isActive == 1,
+                      width: w,
+                      nameAr: i[index].nameAr,
+                      nameEn: i[index].nameEn,
+                    );
+                  },
+                  separatorBuilder: (pw.Context context, int index) {
+                    return pw.SizedBox(height: 20);
+                  },
+                ))
+              ]); // Center
+        }));
+  }
   await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => doc.save());
 }

@@ -52,8 +52,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: MyAppBar(
-          title:
-              widget.addressToEdit != null ? "Edit address" : "Create Address"),
+          title: widget.addressToEdit != null
+              ? "edit_address".tr
+              : "create_address".tr),
       body: Form(
         key: formKey,
         child: SingleChildScrollView(
@@ -62,7 +63,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              blackText("Address Type", 15),
+              blackText("address_type".tr, 15),
               CustomDropdownV2(
                 width: w,
                 items: globalDataController.addressTypes
@@ -90,10 +91,10 @@ class _AddAddressPageState extends State<AddAddressPage> {
                         .toString();
                   }
                 },
-                hint: "choose",
+                hint: "choose".tr,
                 validator: (p0) {
                   if (p0 == null || p0.isEmpty) {
-                    return "required";
+                    return "required".tr;
                   }
                   return null;
                 },
@@ -113,7 +114,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     : null,
                 validator: (p0) {
                   if (p0 == null || p0.isEmpty) {
-                    return "required";
+                    return "required".tr;
                   }
                   return null;
                 },
@@ -141,15 +142,15 @@ class _AddAddressPageState extends State<AddAddressPage> {
                             : globalDataController.areastoshow[0].id.toString();
                   }
                 },
-                hint: "choose",
+                hint: "choose".tr,
               ),
               SizedBox(height: 20),
-              blackText("Area", 15),
+              blackText("area".tr, 15),
               GetBuilder<GlobalDataController>(builder: (c) {
                 return CustomDropdownV2(
                   validator: (p0) {
                     if (p0 == null || p0.isEmpty) {
-                      return "required";
+                      return "required".tr;
                     }
                     return null;
                   },
@@ -179,11 +180,11 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       : c.areastoshow.isEmpty
                           ? null
                           : c.areastoshow[0].nameEn,
-                  hint: "choose",
+                  hint: "choose".tr,
                 );
               }),
               SizedBox(height: 20),
-              blackText("block", 15),
+              blackText("block".tr, 15),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
                 onchanged: (s) {
@@ -198,13 +199,13 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     : null,
                 validator: (p0) {
                   if (p0!.isEmpty) {
-                    return "required";
+                    return "required".tr;
                   }
                   return null;
                 },
               ),
               SizedBox(height: 20),
-              blackText("Avenue", 15),
+              blackText("avenue".tr, 15),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
                 onchanged: (s) {
@@ -219,13 +220,13 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     : null,
                 validator: (p0) {
                   if (p0!.isEmpty) {
-                    return "required";
+                    return "required".tr;
                   }
                   return null;
                 },
               ),
               SizedBox(height: 20),
-              blackText("Street", 15),
+              blackText("street".tr, 15),
               SignUpTextField(
                 padding: EdgeInsets.all(0),
                 onchanged: (s) {
@@ -240,7 +241,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                     : null,
                 validator: (p0) {
                   if (p0!.isEmpty) {
-                    return "required";
+                    return "required".tr;
                   }
                   return null;
                 },
@@ -248,9 +249,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  blackText("House/Bldg No.", 15),
+                  blackText("house/bldg_no", 15),
                   SizedBox(width: 10),
-                  greyText("(Optional)", 13)
+                  greyText("(${"optional".tr})", 13)
                 ],
               ),
               SignUpTextField(
@@ -269,9 +270,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  blackText("Appartment", 15),
+                  blackText("appartment".tr, 15),
                   SizedBox(width: 10),
-                  greyText("(Optional)", 13)
+                  greyText("(${"optional".tr})", 13)
                 ],
               ),
               SignUpTextField(
@@ -290,9 +291,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  blackText("Floor", 15),
+                  blackText("floor".tr, 15),
                   SizedBox(width: 10),
-                  greyText("(Optional)", 13)
+                  greyText("(${"optional".tr})", 13)
                 ],
               ),
               SignUpTextField(
@@ -311,9 +312,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  blackText("Instructions", 15),
+                  blackText("instructions".tr, 15),
                   SizedBox(width: 10),
-                  greyText("(Optional)", 13)
+                  greyText("(${"optional".tr})", 13)
                 ],
               ),
               SignUpTextField(
@@ -331,7 +332,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
               ),
               SizedBox(height: 50),
               CircularGoBTN(
-                text: widget.addressToEdit != null ? "Edit" : "Create",
+                text: widget.addressToEdit != null
+                    ? "edit_address".tr
+                    : "create_address".tr,
                 onTap: () async {
                   FocusScope.of(context).unfocus();
                   if (formKey.currentState!.validate()) {

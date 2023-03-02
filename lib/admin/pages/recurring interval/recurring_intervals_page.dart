@@ -249,7 +249,8 @@ class RecurringIntervalsMainPageState
                                                                         index]);
                                                           },
                                                           message:
-                                                              "Are You Sure"));
+                                                              "are_you_sure"
+                                                                  .tr));
                                                 },
                                                 child: Row(
                                                   children: [

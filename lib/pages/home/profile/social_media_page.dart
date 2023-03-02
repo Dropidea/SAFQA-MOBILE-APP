@@ -1,16 +1,17 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:safqa/admin/pages/social%20media/controller/social_media_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/profile/controller/profile_controller.dart';
 import 'package:safqa/pages/home/profile/models/social_media_link.dart';
 import 'package:safqa/pages/home/profile/pr_bank_details.dart';
+import 'package:safqa/utils.dart';
 import 'package:safqa/widgets/dialoges.dart';
-import 'package:safqa/widgets/gradient_icon.dart';
 import 'package:safqa/widgets/my_button.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaPage extends StatefulWidget {
   SocialMediaPage({super.key});
@@ -21,9 +22,10 @@ class SocialMediaPage extends StatefulWidget {
 
 class _SocialMediaPageState extends State<SocialMediaPage> {
   int? selectedItemId;
-  String? selectedItem;
+  SocialMedia? selectedItem;
   TextEditingController socialMediaURLController = TextEditingController();
   ProfileController _profileController = Get.find();
+  SocialMediaController _socialMediaController = Get.find();
   final LocalsController _localsController = Get.put(LocalsController());
   bool engflag = true;
   @override
@@ -55,69 +57,79 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
             child: DropdownButtonFormField(
               onSaved: (newValue) {},
               decoration: InputDecoration(border: InputBorder.none),
-              items: ["Facebook", "Instagram", "Twitter", "Whatsapp"]
-                  .map(
-                    (e) => DropdownMenuItem(
-                      onTap: () {
-                        socialMediaURLController.text = "https://www.$e.com/";
-                      },
-                      value: e,
-                      child: DropdownMenuItem(
-                        child: Row(
-                          children: [
-                            e == "Instagram"
-                                ? GradientIcon(
-                                    FontAwesomeIcons.instagram,
-                                    24,
-                                    LinearGradient(
-                                      begin: Alignment.bottomLeft,
-                                      end: Alignment.topRight,
-                                      colors: [
-                                        Color(0xfffbad50),
-                                        Color(0xffe95950),
-                                        Color(0xff8a3ab9),
-                                      ],
-                                    ))
-                                : Icon(
-                                    e == "Facebook"
-                                        ? FontAwesomeIcons.facebook
-                                        : e == "Twitter"
-                                            ? FontAwesomeIcons.twitter
-                                            : FontAwesomeIcons.whatsapp,
-                                    color: e == "Facebook"
-                                        ? Color(0xff4267B2)
-                                        : e == "Twitter"
-                                            ? Color(0xff1DA1F2)
-                                            : Color(0xff4FCE5D),
-                                  ),
-                            const SizedBox(width: 10),
-                            blackText(e, 13)
-                          ],
+              items:
+                  // ["Facebook", "Instagram", "Twitter", "Whatsapp"]
+                  _socialMediaController.socialMedias
+                      .map(
+                        (e) => DropdownMenuItem(
+                          onTap: () {
+                            socialMediaURLController.text =
+                                "https://www.${e.nameEn}.com/";
+                          },
+                          value: e,
+                          child: DropdownMenuItem(
+                            child: Row(
+                              children: [
+                                // e == "Instagram"
+                                //     ? GradientIcon(
+                                //         FontAwesomeIcons.instagram,
+                                //         24,
+                                //         LinearGradient(
+                                //           begin: Alignment.bottomLeft,
+                                //           end: Alignment.topRight,
+                                //           colors: [
+                                //             Color(0xfffbad50),
+                                //             Color(0xffe95950),
+                                //             Color(0xff8a3ab9),
+                                //           ],
+                                //         ))
+                                //     : Icon(
+                                //         e == "Facebook"
+                                //             ? FontAwesomeIcons.facebook
+                                //             : e == "Twitter"
+                                //                 ? FontAwesomeIcons.twitter
+                                //                 : FontAwesomeIcons.whatsapp,
+                                //         color: e == "Facebook"
+                                //             ? Color(0xff4267B2)
+                                //             : e == "Twitter"
+                                //                 ? Color(0xff1DA1F2)
+                                //                 : Color(0xff4FCE5D),
+                                //       ),
+                                // const SizedBox(width: 10),
+                                blackText(
+                                    _localsController.currenetLocale == 0
+                                        ? e.nameEn!
+                                        : e.nameAr!,
+                                    13)
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
-                  .toList(),
+                      )
+                      .toList(),
               value: selectedItem,
               hint: greyText("choose".tr, 15),
               onChanged: (value) {
                 setState(() {
+                  final x = value as SocialMedia;
+
                   selectedItem = value;
-                  switch (value) {
-                    case "Facebook":
-                      selectedItemId = 1;
-                      break;
-                    case "Instagram":
-                      selectedItemId = 2;
-                      break;
-                    case "Twitter":
-                      selectedItemId = 3;
-                      break;
-                    case "Whatsapp":
-                      selectedItemId = 4;
-                      break;
-                    default:
-                  }
+                  selectedItemId = x.id;
+                  // // switch (value) {
+                  // //   case "Facebook":
+                  // //     selectedItemId = 1;
+                  // //     break;
+                  // //   case "Instagram":
+                  // //     selectedItemId = 2;
+                  // //     break;
+                  // //   case "Twitter":
+                  // //     selectedItemId = 3;
+                  // //     break;
+                  // //   case "Whatsapp":
+                  // //     selectedItemId = 4;
+                  // //     break;
+                  // //   default:
+                  // }
                 });
               },
             ),
@@ -211,7 +223,7 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                                         c.socialMediaLinks[index].id!);
                                     Get.back();
                                   },
-                                  message: "Are You Sure?",
+                                  message: "are_you_sure".tr,
                                 );
                               },
                               child: Container(
@@ -230,9 +242,20 @@ class _SocialMediaPageState extends State<SocialMediaPage> {
                       ],
                     ),
                     SizedBox(height: 5),
-                    greyText(
-                      c.socialMediaLinks[index].url!,
-                      15,
+                    GestureDetector(
+                      onTap: () async {
+                        final Uri _url =
+                            Uri.parse(c.socialMediaLinks[index].url!);
+
+                        if (!await launchUrl(_url)) {
+                          Utils.showSnackBar(context, 'Could not launch $_url');
+                          ;
+                        }
+                      },
+                      child: greyText(
+                        c.socialMediaLinks[index].url!,
+                        15,
+                      ),
                     ),
                   ],
                 ),

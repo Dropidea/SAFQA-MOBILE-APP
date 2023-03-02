@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/home/menu_pages/invoices/models/invoice.dart';
@@ -173,6 +175,32 @@ class InvoicesController extends GetxController {
         logError(e.response!);
       }
       update();
+      return null;
+    }
+  }
+
+  Future showInvoice(int id) async {
+    Get.dialog(Center(
+      child: CircularProgressIndicator(),
+    ));
+    try {
+      await sslProblem();
+      var res = await dio.get(EndPoints.showInvoices(id));
+      Invoice tmp = Invoice.fromJson(res.data['data']);
+      Get.back();
+      return tmp;
+    } on DioError catch (e) {
+      Get.back();
+      if (e.response!.statusCode == 404 &&
+          e.response!.data["message"] == "Please Login") {
+        bool res = await Utils.reLoginHelper(e);
+        if (res) {
+          await showInvoice(id);
+        }
+      } else {
+        logError(e.response!);
+      }
+
       return null;
     }
   }

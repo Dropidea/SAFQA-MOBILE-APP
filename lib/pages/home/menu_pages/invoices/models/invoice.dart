@@ -248,49 +248,49 @@ class Invoice {
   String? createdAt;
   Currency? currency;
   MobileCode? mobileCode;
-  List<Null>? transaction;
+  List transaction = [];
   RecurringInterval? recurringInterval;
   Language? language;
   SendOption? sendInvoiceOption;
-  List<InvoiceItem>? invoiceItem;
+  List<InvoiceItem> invoiceItem = [];
+  List views = [];
 
-  Invoice(
-      {this.id,
-      this.customerName,
-      this.customerMobile,
-      this.customerEmail,
-      this.customerReference,
-      this.isOpenInvoice,
-      this.discountType,
-      this.discountValue,
-      this.minInvoice,
-      this.maxInvoice,
-      this.invoiceValue,
-      this.invoiceDisplayValue,
-      this.expiryDate,
-      this.attachFile,
-      this.remindAfter = 0,
-      this.comments,
-      this.termsAndConditions,
-      this.managerUserId,
-      this.profileBusinessId,
-      this.sendInvoiceOptionId,
-      this.recurringIntervalId,
-      this.recurringStartDate,
-      this.recurringEndDate,
-      this.languageId,
-      this.status,
-      this.isOrder,
-      this.invoiceType,
-      this.civilId,
-      this.createdAt,
-      this.currency,
-      this.mobileCode,
-      this.transaction,
-      this.recurringInterval,
-      this.language,
-      this.sendInvoiceOption,
-      this.invoiceItem});
+  Invoice({
+    this.id,
+    this.customerName,
+    this.customerMobile,
+    this.customerEmail,
+    this.customerReference,
+    this.isOpenInvoice,
+    this.discountType,
+    this.discountValue,
+    this.minInvoice,
+    this.maxInvoice,
+    this.invoiceValue,
+    this.invoiceDisplayValue,
+    this.expiryDate,
+    this.attachFile,
+    this.remindAfter = 0,
+    this.comments,
+    this.termsAndConditions,
+    this.managerUserId,
+    this.profileBusinessId,
+    this.sendInvoiceOptionId,
+    this.recurringIntervalId,
+    this.recurringStartDate,
+    this.recurringEndDate,
+    this.languageId,
+    this.status,
+    this.isOrder,
+    this.invoiceType,
+    this.civilId,
+    this.createdAt,
+    this.currency,
+    this.mobileCode,
+    this.recurringInterval,
+    this.language,
+    this.sendInvoiceOption,
+  });
 
   Invoice.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -301,8 +301,8 @@ class Invoice {
     isOpenInvoice = json['is_open_invoice'];
     discountType = json['discount_type'];
     discountValue = json['discount_value'];
-    minInvoice = json['min_invoice'];
-    maxInvoice = json['max_invoice'];
+    minInvoice = json['min_invoice'].toString();
+    maxInvoice = json['max_invoice'].toString();
     invoiceValue = json['invoice_value'];
     invoiceDisplayValue = json['invoice_display_value'];
     expiryDate = json['expiry_date'];
@@ -344,7 +344,7 @@ class Invoice {
     if (json['invoice_item'] != null) {
       invoiceItem = <InvoiceItem>[];
       json['invoice_item'].forEach((v) {
-        invoiceItem!.add(new InvoiceItem.fromJson(v));
+        invoiceItem.add(new InvoiceItem.fromJson(v));
       });
     }
   }
@@ -399,7 +399,7 @@ class Invoice {
       data['send_invoice_option'] = this.sendInvoiceOption!.toJson();
     }
     if (this.invoiceItem != null) {
-      data['invoice_item'] = this.invoiceItem!.map((v) => v.toJson()).toList();
+      data['invoice_item'] = this.invoiceItem.map((v) => v.toJson()).toList();
     }
     return data;
   }

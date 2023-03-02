@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/controllers/global_data_controller.dart';
 import 'package:safqa/controllers/locals_controller.dart';
+import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
-import 'package:safqa/pages/home/menu_pages/settings/models/Area.dart';
+import 'package:safqa/pages/home/menu_pages/settings/models/area.dart';
 import 'package:safqa/widgets/custom_drop_down.dart';
 import 'package:safqa/widgets/signup_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -24,7 +25,9 @@ class CreateAreaState extends State<CreateAreaPage> {
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    if (widget.areaToEdit != null) {}
+    if (widget.areaToEdit != null && widget.areaToEdit!.city != null) {
+      widget.areaToEdit!.cityId = widget.areaToEdit!.city!.id!.toString();
+    }
     super.initState();
   }
 
@@ -96,7 +99,27 @@ class CreateAreaState extends State<CreateAreaPage> {
                         .toSet()
                         .toList(),
                     hint: "choose".tr,
-                    onchanged: (s) {}),
+                    selectedItem: widget.areaToEdit != null &&
+                            widget.areaToEdit!.city != null
+                        ? _localsController.currenetLocale == 0
+                            ? widget.areaToEdit!.city!.nameEn!
+                            : widget.areaToEdit!.city!.nameAr!
+                        : null,
+                    onchanged: (s) {
+                      if (widget.areaToEdit != null) {
+                        widget.areaToEdit!.cityId = _globalDataController.cities
+                            .firstWhere((element) =>
+                                element.nameAr == s || element.nameEn == s)
+                            .id
+                            .toString();
+                      } else {
+                        areaToCreate.cityId = _globalDataController.cities
+                            .firstWhere((element) =>
+                                element.nameAr == s || element.nameEn == s)
+                            .id
+                            .toString();
+                      }
+                    }),
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -112,11 +135,12 @@ class CreateAreaState extends State<CreateAreaPage> {
                           FocusScope.of(context).unfocus();
                           if (formKey.currentState!.validate()) {
                             if (widget.areaToEdit != null) {
-                              // await _globalDataController
-                              //     .editContactPhone(widget.areaToEdit!);
+                              logSuccess(widget.areaToEdit!.toJson());
+                              await _globalDataController
+                                  .editArea(widget.areaToEdit!);
                             } else {
-                              // await _globalDataController
-                              //     .createContactPhone(areaToCreate);
+                              await _globalDataController
+                                  .createArea(areaToCreate);
                             }
                           }
                         },

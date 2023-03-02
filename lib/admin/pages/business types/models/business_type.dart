@@ -2,17 +2,17 @@ class BusinessType {
   int? id;
   String? nameEn;
   String? nameAr;
-  String? businessLogo;
+  var businessLogo;
   int? cdefault;
 
   BusinessType(
       {this.id, this.nameEn, this.nameAr, this.businessLogo, this.cdefault});
 
-  BusinessType.fromJson(Map<String, dynamic> json) {
+  BusinessType.fromJson(Map<String, dynamic> json, String imageUrl) {
     id = json['id'];
     nameEn = json['name_en'];
     nameAr = json['name_ar'];
-    businessLogo = json['business_logo'];
+    businessLogo = imageUrl + "/" + json['business_logo'];
     cdefault = json['default'];
   }
 

@@ -139,7 +139,7 @@ class ContactController extends GetxController {
   //     update();
   //     MyDialogs.showSavedSuccessfullyDialoge(
   //       title: "ContactUsInfo Deleted Successfully",
-  //       btnTXT: "close",
+  //       btnTXT: "close".tr,
   //       onTap: () async {
   //         Get.back();
   //       },
@@ -171,8 +171,8 @@ class ContactController extends GetxController {
       await getContactPhones();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Contact Phone Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -229,8 +229,8 @@ class ContactController extends GetxController {
       await getSupportTypes();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Contact Phone Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -288,8 +288,8 @@ class ContactController extends GetxController {
       await getContactPhones();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Contact Phone edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -347,8 +347,8 @@ class ContactController extends GetxController {
       await getSupportTypes();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Support Type edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -407,8 +407,8 @@ class ContactController extends GetxController {
 
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Support Type deleted Successfully",
-        btnTXT: "close",
+        title: "deleted_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -463,8 +463,8 @@ class ContactController extends GetxController {
       Get.back();
       update();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "ContactUsInfo Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },

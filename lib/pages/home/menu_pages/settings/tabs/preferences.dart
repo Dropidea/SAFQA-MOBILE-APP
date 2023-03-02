@@ -8,6 +8,7 @@ import 'package:restart_app/restart_app.dart';
 import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/main.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
+import 'package:safqa/utils.dart';
 import 'package:sizer/sizer.dart';
 
 class PreferencesTab extends StatefulWidget {
@@ -200,6 +201,7 @@ class _PreferencesTabState extends State<PreferencesTab> {
                       setState(() {
                         sv = value;
                       });
+                      Utils.showSnackBar(context, "Coming Soon!!");
                     },
                   ),
                   SizedBox(width: 10),

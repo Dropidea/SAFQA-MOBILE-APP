@@ -105,7 +105,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                   ? widget.paymentLinkToEdit!.paymentTitle
                   : null,
               validator: (s) {
-                if (s!.isEmpty) return "required";
+                if (s!.isEmpty) return "required".tr;
               },
             ),
             const SizedBox(height: 20),
@@ -276,7 +276,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                       }
                     },
                     validator: (s) {
-                      if (s!.isEmpty) return "required";
+                      if (s!.isEmpty) return "required".tr;
                     },
                     initialValue: widget.paymentLinkToEdit != null
                         ? widget.paymentLinkToEdit!.paymentAmount
@@ -305,7 +305,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                                 ? widget.paymentLinkToEdit!.minAmount
                                 : null,
                             validator: (s) {
-                              if (s!.isEmpty) return "required";
+                              if (s!.isEmpty) return "required".tr;
                             },
                           )
                         ],
@@ -328,7 +328,7 @@ class _CreatePaymentLinkTabState extends State<CreatePaymentLinkTab> {
                               }
                             },
                             validator: (s) {
-                              if (s!.isEmpty) return "required";
+                              if (s!.isEmpty) return "required".tr;
                             },
                           )
                         ],

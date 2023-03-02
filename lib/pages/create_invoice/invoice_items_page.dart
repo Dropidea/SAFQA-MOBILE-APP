@@ -124,6 +124,8 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                           productPrice: int.tryParse(t2.text),
                           productQuantity: quantity,
                         );
+                        addInvoiceController.total +=
+                            quantity * int.tryParse(t2.text)!;
                         if (formKey.currentState!.validate()) {
                           // logSuccess(int.tryParse(t2.text))
                           InvoiceItem item = InvoiceItem(
@@ -136,8 +138,7 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                           quantity = 0;
                           setState(() {});
                           if (addInvoiceController.dataToEditInvoice != null) {
-                            addInvoiceController.dataToEditInvoice!.invoiceItems
-                                .add(item);
+                            addInvoiceController.addInvoiceItemEdit(item);
                           } else {
                             addInvoiceController.addInvoiceItem(item);
                           }
@@ -146,7 +147,8 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                           FocusScope.of(context).unfocus();
 
                           MyDialogs.showSavedSuccessfullyDialoge(
-                              title: "Added Successfully", btnTXT: "close");
+                              title: "added_successfully".tr,
+                              btnTXT: "close".tr);
                         }
                       },
                       child: Container(
@@ -252,9 +254,8 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                                                 .dataToEditInvoice !=
                                                             null) {
                                                           addInvoiceController
-                                                              .dataToEditInvoice!
-                                                              .invoiceItems
-                                                              .removeAt(index);
+                                                              .removeInvoiceItemEdit(
+                                                                  index);
                                                           setState(() {});
                                                         } else {
                                                           c.removeInvoiceItem(
@@ -262,7 +263,8 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                                         }
                                                         Get.back();
                                                       },
-                                                      message: "Are you sure?");
+                                                      message:
+                                                          "are_you_sure".tr);
                                                 },
                                                 child: Container(
                                                   padding: EdgeInsets.all(3),
@@ -289,9 +291,8 @@ class _InvoiceItemsPageState extends State<InvoiceItemsPage> {
                                                           .dataToEditInvoice !=
                                                       null) {
                                                     addInvoiceController
-                                                        .dataToEditInvoice!
-                                                        .invoiceItems
-                                                        .removeAt(index);
+                                                        .removeInvoiceItemEdit(
+                                                            index);
                                                   } else {
                                                     c.removeInvoiceItem(index);
                                                   }

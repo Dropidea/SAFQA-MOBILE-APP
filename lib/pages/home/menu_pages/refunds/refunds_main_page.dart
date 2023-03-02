@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/products/tabs/product_tab.dart';
+import 'package:safqa/pages/home/menu_pages/refunds/controller/refunds_controller.dart';
 import 'package:safqa/pages/home/menu_pages/refunds/refund_details_page.dart';
 import 'package:safqa/pages/home/menu_pages/refunds/refunds_search_filter.dart';
 import 'package:safqa/pages/home/menu_pages/refunds/widgets/refund_widget.dart';
@@ -18,9 +19,10 @@ class RefundsMainPage extends StatefulWidget {
 }
 
 class _RefundsMainPageState extends State<RefundsMainPage> {
+  RefundsController _refundsController = Get.put(RefundsController());
   @override
   void initState() {
-    // TODO: implement initState
+    _refundsController.getMyRefunds();
     super.initState();
   }
 
@@ -122,30 +124,60 @@ class _RefundsMainPageState extends State<RefundsMainPage> {
                               height: 40,
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
+                                physics: BouncingScrollPhysics(),
                                 children: [
-                                  listBTN(text: "copy".tr, onTap: () {}),
+                                  listBTN(
+                                      text: "copy".tr,
+                                      onTap: () {},
+                                      width: w / 4.5),
                                   SizedBox(width: 5),
-                                  listBTN(text: "print/pdf".tr, onTap: () {}),
+                                  listBTN(
+                                    text: "print/pdf".tr,
+                                    onTap: () async {},
+                                  ),
                                   SizedBox(width: 5),
-                                  listBTN(text: "Excel", onTap: () {}),
+                                  listBTN(
+                                      text: "Excel",
+                                      onTap: () async {},
+                                      width: w / 4.5),
                                   SizedBox(width: 5),
-                                  listBTN(text: "CSV", onTap: () {}),
-                                  SizedBox(width: 5),
+                                  listBTN(
+                                      text: "CSV",
+                                      onTap: () async {},
+                                      width: w / 4.5),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20),
                             Expanded(
-                              child: ListView.separated(
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) => RefundWidget(
-                                        onTap: () {
-                                          Get.to(() => RefundsDetailsPage());
-                                        },
-                                      ),
-                                  separatorBuilder: (context, index) =>
-                                      SizedBox(height: 10),
-                                  itemCount: 10),
+                              child:
+                                  GetBuilder<RefundsController>(builder: (c) {
+                                return c.getRefundsFlag
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : c.refundsToShow.isEmpty
+                                        ? greyText("nothing_to_show".tr, 15)
+                                        : ListView.separated(
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) =>
+                                                RefundWidget(
+                                                  refund:
+                                                      c.refundsToShow[index],
+                                                  onTap: () {
+                                                    Future(() => Get.to(() =>
+                                                        RefundsDetailsPage(
+                                                          refund:
+                                                              c.refundsToShow[
+                                                                  index],
+                                                        )));
+                                                  },
+                                                ),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    SizedBox(height: 10),
+                                            itemCount: c.refundsToShow.length);
+                              }),
                             )
                           ],
                         )),

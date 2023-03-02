@@ -149,8 +149,8 @@ class BankController extends GetxController {
       await getAllBanks();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Bank Created Successfully",
-        btnTXT: "close",
+        title: "created_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();
@@ -214,8 +214,8 @@ class BankController extends GetxController {
       await getAllBanks();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Bank Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
           Get.back();

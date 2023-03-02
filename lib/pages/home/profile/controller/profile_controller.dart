@@ -88,8 +88,8 @@ class ProfileController extends GetxController {
       await getProfileBusiness();
       Get.back();
       MyDialogs.showSavedSuccessfullyDialoge(
-        title: "Profile Business Edited Successfully",
-        btnTXT: "close",
+        title: "edited_successfully".tr,
+        btnTXT: "close".tr,
         onTap: () async {
           Get.back();
         },
@@ -156,13 +156,14 @@ class ProfileController extends GetxController {
       Get.back();
       return true;
     } on DioError catch (e) {
+      Get.back();
+
       MyDialogs.showWarningDialoge(
           onProceed: () {
             Get.back();
           },
-          message: "Failed",
-          yesBTN: "close");
-      Get.back();
+          message: e.response!.data.toString(),
+          yesBTN: "close".tr);
 
       return false;
     }
@@ -189,7 +190,7 @@ class ProfileController extends GetxController {
             Get.back();
           },
           message: "Failed",
-          yesBTN: "close");
+          yesBTN: "close".tr);
       Get.back();
 
       return false;

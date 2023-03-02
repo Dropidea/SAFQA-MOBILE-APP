@@ -2,6 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:safqa/controllers/locals_controller.dart';
 import 'package:safqa/pages/create_invoice/customer_info_page.dart';
 import 'package:safqa/pages/home/menu_pages/settings/controllers/addresses_controller.dart';
 import 'package:safqa/pages/home/menu_pages/settings/models/address.dart';
@@ -14,12 +15,13 @@ class AddressDetailsPage extends StatelessWidget {
   AddressDetailsPage({super.key, required this.address});
   final Address address;
   AddressesController addressessController = Get.find();
+  LocalsController _localsController = Get.put(LocalsController());
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: MyAppBar(title: "Address Details"),
+      appBar: MyAppBar(title: "address_details".tr),
       body: Column(
         children: [
           Row(
@@ -52,7 +54,7 @@ class AddressDetailsPage extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        "Edit",
+                        "edit".tr,
                         style: TextStyle(
                           fontSize: 14.0.sp,
                           color: Color(0xff58D241),
@@ -70,7 +72,7 @@ class AddressDetailsPage extends StatelessWidget {
                         Get.back();
                         addressessController.deleteAddress(address);
                       },
-                      message: "Are you sure");
+                      message: "are_you_sure".tr);
                 },
                 child: Container(
                   width: w / 2.5,
@@ -93,7 +95,7 @@ class AddressDetailsPage extends StatelessWidget {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        "Remove",
+                        "remove".tr,
                         style: TextStyle(
                           fontSize: 14.0.sp,
                           color: Color(0xffE47E7B),
@@ -116,34 +118,40 @@ class AddressDetailsPage extends StatelessWidget {
                 primary: false,
                 children: [
                   invoiceInfoMethod(
-                    title1: "Address Type",
-                    content1: address.addressType!.nameEn,
-                    title2: "City",
-                    content2: address.city!.nameEn,
+                    title1: "address_type".tr,
+                    content1: _localsController.currenetLocale == 0
+                        ? address.addressType!.nameEn
+                        : address.addressType!.nameAr,
+                    title2: "city".tr,
+                    content2: _localsController.currenetLocale == 0
+                        ? address.city!.nameEn
+                        : address.city!.nameAr,
                   ),
                   invoiceInfoMethod(
-                    title1: "Area",
-                    content1: address.area!.nameEn,
-                    title2: "Block",
-                    content2: address.block,
+                    title1: "area".tr,
+                    content1: _localsController.currenetLocale == 0
+                        ? address.area!.nameEn
+                        : address.area!.nameAr,
+                    title2: "block".tr,
+                    content2: address.block ?? "not_available".tr,
                   ),
                   invoiceInfoMethod(
-                    title1: "Avenue",
+                    title1: "avenue".tr,
                     content1: address.avenue,
-                    title2: "House/Bldg No.",
-                    content2: address.bldgNo ?? "Not Found",
+                    title2: "house/bldg_no".tr,
+                    content2: address.bldgNo ?? "not_available".tr,
                   ),
                   invoiceInfoMethod(
-                    title1: "Street",
+                    title1: "street".tr,
                     content1: address.street,
-                    title2: "Floor",
-                    content2: address.floor ?? "Not Found",
+                    title2: "floor".tr,
+                    content2: address.floor ?? "not_available".tr,
                   ),
                   invoiceInfoMethod(
-                    title1: "Appartment",
-                    content1: address.appartment ?? "Not Found",
-                    title2: "Instructions",
-                    content2: address.instructions ?? "Not Found",
+                    title1: "appartment".tr,
+                    content1: address.appartment ?? "not_available".tr,
+                    title2: "instructions".tr,
+                    content2: address.instructions ?? "not_available".tr,
                   ),
                 ],
               ),
